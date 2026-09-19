@@ -85,3 +85,94 @@
     display: none !important;
   }
 }
+
+/* Portrait phone: rotate the complete website left so it appears horizontal
+   without physically rotating the phone. */
+@media (max-width: 900px) and (orientation: portrait) {
+  html,
+  body {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  body {
+    padding: 0;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
+
+  .wrap {
+    width: 100vh;
+    height: 100vw;
+    max-width: none;
+    margin: 0;
+    padding: 12px 14px 10px;
+    transform: rotate(-90deg) translateY(-100%);
+    transform-origin: top left;
+    overflow: hidden;
+  }
+
+  .masthead {
+    gap: 8px 16px;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+  }
+
+  .masthead h1 {
+    font-size: clamp(22px, 4vw, 28px);
+  }
+
+  .updated,
+  .month {
+    font-size: 11px;
+  }
+
+  .grid-scroll {
+    max-width: 100%;
+    max-height: calc(100vw - 155px);
+  }
+
+  table.roster {
+    min-width: 760px;
+  }
+
+  table.roster th,
+  table.roster td {
+    padding: 8px 10px;
+    font-size: 11px;
+  }
+
+  table.roster thead th .wd {
+    font-size: 9px;
+  }
+
+  .chip {
+    min-width: 32px;
+    padding: 4px 8px;
+    font-size: 11px;
+  }
+
+  .legend {
+    margin-top: 8px;
+    gap: 6px 10px;
+  }
+
+  .legend-item {
+    font-size: 11px;
+  }
+
+  .legend-item .note {
+    font-size: 10px;
+  }
+
+  .foot {
+    margin-top: 8px;
+    font-size: 11px;
+  }
+
+  .day-cards {
+    display: none !important;
+  }
+}
