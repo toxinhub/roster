@@ -18,7 +18,7 @@
       <div class="month" id="monthLine"></div>
     </header>
 
-    <!-- Desktop / wide screens: full table -->
+    <!-- Desktop and mobile: full table with horizontal scrolling on narrow screens -->
     <div class="grid-scroll">
       <table class="roster" id="rosterTable">
         <thead id="rosterHead"></thead>
@@ -26,7 +26,6 @@
       </table>
     </div>
 
-    <!-- Narrow screens: one card per day, easier to scan without side-scrolling -->
     <div class="day-cards" id="dayCards"></div>
 
     <div class="legend" id="legend"></div>
@@ -40,8 +39,6 @@
 
   <script>
     const todayIso = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Dhaka' }); // YYYY-MM-DD
-
-    function initial(name){ return (name || '?').trim().charAt(0); }
 
     fetch('schedule.json?_=' + Date.now())
       .then(r => r.json())
@@ -57,7 +54,7 @@
       })
       .catch(() => {
         document.getElementById('rosterBody').innerHTML =
-          '<tr><td style="padding:20px;color:#B3462C;">রোস্টার লোড করা যায়নি — schedule.json ফাইলটা একই ফোল্ডারে আছে কিনা দেখুন।</td></tr>';
+          '<tr><td style="padding:20px;color:#B3462C;">রোস্টার লোড করা যায়নি — schedule.json ফাইলটা একই ফোল্ডারে আছে কি না দেখুন।</td></tr>';
       });
 
     function renderTable(data){
@@ -80,7 +77,7 @@
         const tr = document.createElement('tr');
         const nameTd = document.createElement('td');
         nameTd.className = 'name-col';
-        nameTd.innerHTML = `<span class="name-cell"><span class="avatar">${initial(emp.name)}</span>${emp.name}</span>`;
+        nameTd.textContent = emp.name;
         tr.appendChild(nameTd);
 
         emp.shifts.forEach((code, i) => {
@@ -116,7 +113,7 @@
           const type = data.shiftTypes[code] || { label: code, color: '#888' };
           const row = document.createElement('div');
           row.className = 'person-row';
-          row.innerHTML = `<span class="who"><span class="avatar">${initial(emp.name)}</span>${emp.name}</span>
+          row.innerHTML = `<span class="who">${emp.name}</span>
             <span class="chip${code === 'OFF' ? ' off' : ''}" style="background:${type.color}">${code}</span>`;
           card.appendChild(row);
         });
