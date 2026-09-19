@@ -29,8 +29,8 @@ const SCHEDULE_DATA = {
   ],
 
   employees: [
-    { name: "আরমান", shifts: ["A", "OFF", "C", "B", "B", "B", "B"] },
-    { name: "তন্ময়", shifts: ["B", "B", "OFF", "A", "A", "A", "A"] },
-    { name: "আশিক", shifts: ["C", "C", "B", "C", "C", "C", "C"] },
+    { name: "আরমান", shifts: ["B", "B", "B", "B", "B", "B", "B"] },
+    { name: "তন্ময়", shifts: ["A", "A", "OFF", "A", "A", "A", "A"] },
+    { name: "আশিক", shifts: ["C", "C", "C", "C", "C", "C", "C"] },
   ]
 };
