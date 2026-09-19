@@ -13,44 +13,141 @@
     <header class="masthead">
       <div>
         <h1>রোস্টার সম্পাদনা</h1>
-        <div class="updated">এখানে পরিবর্তন করলে সাথে সাথে লাইভ সাইটে আপডেট হবে না — নিচের ধাপ অনুসরণ করুন</div>
+        <div class="updated">শিফটে ক্লিক করুন, নতুন কোড বাছুন — সংরক্ষণ চাপলেই লাইভ সাইটে চলে যাবে</div>
       </div>
+      <span class="status-badge warn" id="statusBadge"><span class="dot2"></span> যাচাই করা হচ্ছে…</span>
     </header>
 
-    <div class="hint">
-      <b>যেভাবে কাজ করে:</b> নিচের টেবিলে যে কারো যেকোনো দিনের শিফট বদলান (ড্রপডাউন থেকে <b>OFF</b> বেছে নিলে ছুটি হয়ে যাবে), প্রয়োজনে নতুন কর্মী বা নতুন তারিখ যোগ করুন। তারপর <b>"কোড তৈরি করুন"</b>-এ চাপুন, পুরো কোডটা কপি করুন, GitHub রিপোজিটরির <b>schedule.js</b> ফাইল খুলে (পেন্সিল আইকনে ক্লিক) পুরনো লেখা মুছে এটা পেস্ট করে <b>Commit</b> করুন। ১ মিনিটের মধ্যে লাইভ সাইট আপডেট হয়ে যাবে।
+    <div class="panel collapsed" id="settingsPanel">
+      <div class="panel-title" onclick="document.getElementById('settingsPanel').classList.toggle('collapsed')">
+        <span>⚙️ GitHub সংযোগ সেটআপ (একবার করলেই হবে)</span>
+        <span class="caret">▾</span>
+      </div>
+      <div class="panel-body">
+        <div class="hint">
+          <b>এক-ক্লিকে সংরক্ষণ করতে চাইলে</b> একটা GitHub টোকেন দরকার — এটা একবার বানিয়ে এখানে বসিয়ে দিলে পরে থেকে শুধু ক্লিক করেই শিফট বদলানো যাবে, GitHub-এ গিয়ে আর কোড পেস্ট করতে হবে না।<br><br>
+          <b>টোকেন যেভাবে বানাবেন:</b><br>
+          ১. এই লিংকে যান: <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">github.com/settings/personal-access-tokens/new</a><br>
+          ২. <b>Repository access</b> এ "Only select repositories" বেছে আপনার রোস্টার রিপোজিটরি সিলেক্ট করুন<br>
+          ৩. <b>Permissions → Repository permissions → Contents</b> এ "Read and write" বাছুন<br>
+          ৪. নিচে <b>Generate token</b> চাপুন, যে কোডটা দেখাবে (শুরু হয় <code>github_pat_</code> দিয়ে) সেটা কপি করে নিচে পেস্ট করুন<br><br>
+          <b>নিরাপত্তা:</b> এই টোকেন শুধু আপনার এই ব্রাউজারে সংরক্ষিত থাকবে (localStorage), অন্য কারো কাছে যাবে না। পাবলিক/শেয়ার করা কম্পিউটারে এটা ব্যবহার না করাই ভালো। যেকোনো সময় GitHub থেকে টোকেনটা বাতিল করতে পারবেন।
+        </div>
+        <div class="field">
+          <label>GitHub ইউজারনেম</label>
+          <input type="text" id="ghOwner" placeholder="যেমন: tonmoy123">
+        </div>
+        <div class="field">
+          <label>রিপোজিটরির নাম</label>
+          <input type="text" id="ghRepo" placeholder="যেমন: roster">
+        </div>
+        <div class="field">
+          <label>ব্রাঞ্চ (সাধারণত পরিবর্তন লাগে না)</label>
+          <input type="text" id="ghBranch" placeholder="main">
+        </div>
+        <div class="field">
+          <label>Personal Access Token</label>
+          <input type="password" id="ghToken" placeholder="github_pat_...">
+        </div>
+        <div class="toolbar">
+          <button onclick="saveSettings()">সংযোগ সংরক্ষণ করুন</button>
+          <button class="ghost" onclick="clearSettings()">সংযোগ মুছে ফেলুন</button>
+        </div>
+      </div>
     </div>
 
     <div class="toolbar">
-      <button onclick="addDay()">+ নতুন তারিখ যোগ করুন</button>
-      <button onclick="addEmployee()">+ নতুন কর্মী যোগ করুন</button>
+      <button class="secondary" onclick="addDay()">+ নতুন তারিখ</button>
+      <button class="secondary" onclick="addEmployee()">+ নতুন কর্মী</button>
       <button class="secondary" onclick="location.href='index.html'">লাইভ রোস্টার দেখুন</button>
     </div>
 
     <div class="grid-scroll">
-      <table class="roster admin-table" id="editTable"></table>
+      <table class="edit-table" id="editTable"></table>
     </div>
 
-    <div class="toolbar">
+    <div class="toolbar" style="margin-top:22px;">
       <label style="display:flex;align-items:center;gap:8px;font-size:14px;">
-        মাস/শিরোনাম: <input type="text" id="monthInput" style="width:220px">
+        মাস/শিরোনাম: <input type="text" id="monthInput" style="width:200px;padding:8px 10px;border:1px solid var(--line);border-radius:6px;font-family:'Hind Siliguri';">
       </label>
-      <button onclick="generate()">কোড তৈরি করুন</button>
-      <button class="secondary" onclick="copyOutput()">কপি করুন</button>
+      <button onclick="saveToGitHub()" id="saveBtn">✓ সংরক্ষণ করুন (লাইভ সাইটে পাঠান)</button>
+      <button class="ghost" onclick="toggleManual()">বা কোড ম্যানুয়ালি কপি করুন</button>
     </div>
 
-    <textarea class="output" id="output" readonly placeholder="এখানে জেনারেট করা কোড দেখাবে..."></textarea>
+    <div id="manualBox" style="display:none;">
+      <div class="hint">টোকেন সেটআপ না করে থাকলে এই কোডটা কপি করে GitHub রিপোজিটরির <b>schedule.json</b> ফাইলে গিয়ে পুরনো লেখা মুছে পেস্ট করে Commit করুন।</div>
+      <textarea class="output" id="output" readonly></textarea>
+      <div class="toolbar"><button class="secondary" onclick="copyOutput()">কপি করুন</button></div>
+    </div>
 
   </div>
 
-  <script src="schedule.js"></script>
-  <script>
-    // Deep-clone the current data so edits here never touch the live file directly
-    let state = JSON.parse(JSON.stringify(SCHEDULE_DATA));
+  <div class="toast" id="toast"></div>
 
+  <script>
+    let state = null;
+
+    // ---------- settings ----------
+    function loadSettings(){
+      try{ return JSON.parse(localStorage.getItem('roster_gh_settings') || 'null'); }
+      catch(e){ return null; }
+    }
+    function saveSettings(){
+      const s = {
+        owner: document.getElementById('ghOwner').value.trim(),
+        repo: document.getElementById('ghRepo').value.trim(),
+        branch: document.getElementById('ghBranch').value.trim() || 'main',
+        token: document.getElementById('ghToken').value.trim(),
+        path: 'schedule.json'
+      };
+      if(!s.owner || !s.repo || !s.token){
+        showToast('ইউজারনেম, রিপোজিটরি ও টোকেন — তিনটাই দিন', true);
+        return;
+      }
+      localStorage.setItem('roster_gh_settings', JSON.stringify(s));
+      document.getElementById('settingsPanel').classList.add('collapsed');
+      showToast('সংযোগ সংরক্ষিত হয়েছে');
+      updateStatusBadge();
+    }
+    function clearSettings(){
+      localStorage.removeItem('roster_gh_settings');
+      ['ghOwner','ghRepo','ghBranch','ghToken'].forEach(id => document.getElementById(id).value = '');
+      updateStatusBadge();
+      showToast('সংযোগ মুছে ফেলা হয়েছে');
+    }
+    function fillSettingsForm(){
+      const s = loadSettings();
+      if(!s) return;
+      document.getElementById('ghOwner').value = s.owner || '';
+      document.getElementById('ghRepo').value = s.repo || '';
+      document.getElementById('ghBranch').value = s.branch || 'main';
+      document.getElementById('ghToken').value = s.token || '';
+    }
+    function updateStatusBadge(){
+      const s = loadSettings();
+      const badge = document.getElementById('statusBadge');
+      if(s && s.owner && s.repo && s.token){
+        badge.className = 'status-badge ok';
+        badge.innerHTML = '<span class="dot2"></span> এক-ক্লিক সংরক্ষণ চালু আছে';
+      } else {
+        badge.className = 'status-badge warn';
+        badge.innerHTML = '<span class="dot2"></span> সংযোগ সেটআপ করুন';
+        document.getElementById('settingsPanel').classList.remove('collapsed');
+      }
+    }
+
+    // ---------- data load ----------
+    fetch('schedule.json?_=' + Date.now())
+      .then(r => r.json())
+      .then(data => { state = data; render(); })
+      .catch(() => showToast('schedule.json লোড করা যায়নি', true));
+
+    fillSettingsForm();
+    updateStatusBadge();
+
+    // ---------- render editable grid ----------
     function render(){
       document.getElementById('monthInput').value = state.month;
-
       const table = document.getElementById('editTable');
       table.innerHTML = '';
 
@@ -60,14 +157,14 @@
       state.days.forEach((d, di) => {
         const th = document.createElement('th');
         const dateInput = document.createElement('input');
-        dateInput.type = 'text'; dateInput.value = d.date;
+        dateInput.value = d.date;
         dateInput.onchange = e => d.date = e.target.value;
         const wdInput = document.createElement('input');
-        wdInput.type = 'text'; wdInput.value = d.weekday; wdInput.style.marginTop = '4px';
+        wdInput.value = d.weekday;
         wdInput.onchange = e => d.weekday = e.target.value;
         const rm = document.createElement('button');
-        rm.textContent = '✕'; rm.className = 'secondary';
-        rm.style.marginTop = '4px'; rm.style.padding = '2px 8px'; rm.style.fontSize = '11px';
+        rm.textContent = '✕'; rm.className = 'ghost col-rm';
+        rm.style.color = '#E8ECF2';
         rm.onclick = () => { state.days.splice(di,1); state.employees.forEach(e=>e.shifts.splice(di,1)); render(); };
         th.appendChild(dateInput); th.appendChild(document.createElement('br'));
         th.appendChild(wdInput); th.appendChild(document.createElement('br'));
@@ -86,23 +183,18 @@
         nameInput.type = 'text'; nameInput.value = emp.name;
         nameInput.onchange = e => emp.name = e.target.value;
         const rmEmp = document.createElement('button');
-        rmEmp.textContent = '✕ বাদ দিন'; rmEmp.className = 'secondary';
-        rmEmp.style.marginTop = '6px'; rmEmp.style.padding = '3px 8px'; rmEmp.style.fontSize = '11px';
+        rmEmp.textContent = '✕ বাদ দিন'; rmEmp.className = 'ghost';
         rmEmp.onclick = () => { state.employees.splice(ei,1); render(); };
         nameTd.appendChild(nameInput); nameTd.appendChild(document.createElement('br')); nameTd.appendChild(rmEmp);
         tr.appendChild(nameTd);
 
         emp.shifts.forEach((code, di) => {
           const td = document.createElement('td');
-          const sel = document.createElement('select');
-          Object.keys(state.shiftTypes).forEach(c => {
-            const opt = document.createElement('option');
-            opt.value = c; opt.textContent = c;
-            if(c === code) opt.selected = true;
-            sel.appendChild(opt);
-          });
-          sel.onchange = e => emp.shifts[di] = e.target.value;
-          td.appendChild(sel);
+          const btn = document.createElement('button');
+          btn.className = 'shift-btn';
+          styleShiftBtn(btn, code);
+          btn.onclick = (ev) => openPopover(ev.currentTarget, ei, di);
+          td.appendChild(btn);
           tr.appendChild(td);
         });
         tbody.appendChild(tr);
@@ -110,58 +202,144 @@
       table.appendChild(tbody);
     }
 
+    function styleShiftBtn(btn, code){
+      const type = state.shiftTypes[code] || { color: '#888' };
+      btn.textContent = code;
+      btn.style.background = type.color;
+    }
+
+    // ---------- click-to-pick popover ----------
+    let openPop = null;
+    function closePopover(){ if(openPop){ openPop.remove(); openPop = null; } }
+    document.addEventListener('click', (e) => {
+      if(openPop && !openPop.contains(e.target) && !e.target.classList.contains('shift-btn')) closePopover();
+    });
+
+    function openPopover(btn, ei, di){
+      closePopover();
+      const pop = document.createElement('div');
+      pop.className = 'popover';
+      Object.entries(state.shiftTypes).forEach(([code, type]) => {
+        const opt = document.createElement('button');
+        opt.innerHTML = `<span class="sw" style="background:${type.color}"></span> ${code} — ${type.label}`;
+        opt.onclick = (ev) => {
+          ev.stopPropagation();
+          state.employees[ei].shifts[di] = code;
+          styleShiftBtn(btn, code);
+          closePopover();
+        };
+        pop.appendChild(opt);
+      });
+      document.body.appendChild(pop);
+      const r = btn.getBoundingClientRect();
+      const popH = pop.offsetHeight, popW = pop.offsetWidth;
+      let top = r.bottom + 6;
+      if (top + popH > window.innerHeight) top = r.top - popH - 6;
+      let left = r.left;
+      if (left + popW > window.innerWidth) left = window.innerWidth - popW - 10;
+      pop.style.top = top + 'px';
+      pop.style.left = left + 'px';
+      openPop = pop;
+    }
+
+    // ---------- add rows/cols ----------
     function addDay(){
       const n = state.days.length + 1;
       state.days.push({ date: String(n), weekday: 'বার লিখুন' });
       state.employees.forEach(e => e.shifts.push(Object.keys(state.shiftTypes)[0]));
       render();
     }
-
     function addEmployee(){
       state.employees.push({ name: 'নতুন কর্মী', shifts: state.days.map(() => Object.keys(state.shiftTypes)[0]) });
       render();
     }
 
-    function jsString(s){ return JSON.stringify(s); }
-
-    function generate(){
+    // ---------- build output JSON ----------
+    function buildContent(){
       state.month = document.getElementById('monthInput').value;
-      const today = new Date();
-      const bnDate = today.toLocaleDateString('bn-BD', { day:'numeric', month:'long', year:'numeric' });
-      state.updatedAt = bnDate;
-
-      let out = `/*\n  এই ফাইলটাই রোস্টারের "ডেটা"। শিফট পরিবর্তন, অফ যোগ, নতুন কর্মী বা নতুন তারিখ —\n  সবকিছু এই ফাইল পরিবর্তন করলেই ওয়েবসাইটে সাথে সাথে দেখা যাবে।\n\n  সহজ উপায়: admin.html পেজ থেকে ড্রপডাউন দিয়ে পরিবর্তন করে "কোড তৈরি করুন" চাপুন,\n  তারপর যে কোডটা পাবেন সেটা কপি করে GitHub-এ এই ফাইলের জায়গায় পেস্ট করে Commit করুন।\n*/\n\nconst SCHEDULE_DATA = {\n`;
-      out += `  month: ${jsString(state.month)},\n\n`;
-      out += `  updatedAt: ${jsString(state.updatedAt)},\n\n`;
-      out += `  shiftTypes: {\n`;
-      Object.entries(state.shiftTypes).forEach(([code, t]) => {
-        out += `    ${code}: { label: ${jsString(t.label)}, note: ${jsString(t.note||'')}, color: ${jsString(t.color)} },\n`;
-      });
-      out += `  },\n\n`;
-      out += `  days: [\n`;
-      state.days.forEach(d => { out += `    { date: ${jsString(d.date)}, weekday: ${jsString(d.weekday)} },\n`; });
-      out += `  ],\n\n`;
-      out += `  employees: [\n`;
-      state.employees.forEach(e => {
-        out += `    { name: ${jsString(e.name)}, shifts: [${e.shifts.map(jsString).join(', ')}] },\n`;
-      });
-      out += `  ]\n};\n`;
-
-      document.getElementById('output').value = out;
+      state.updatedAt = new Date().toLocaleDateString('bn-BD', { day:'numeric', month:'long', year:'numeric', timeZone: 'Asia/Dhaka' });
+      return JSON.stringify(state, null, 2);
     }
 
+    function toggleManual(){
+      const box = document.getElementById('manualBox');
+      box.style.display = box.style.display === 'none' ? 'block' : 'none';
+      if(box.style.display === 'block') document.getElementById('output').value = buildContent();
+    }
     function copyOutput(){
       const box = document.getElementById('output');
-      if(!box.value){ generate(); }
+      box.value = buildContent();
       box.select();
-      navigator.clipboard.writeText(box.value).then(() => {
-        alert('কপি হয়ে গেছে — এখন GitHub-এ schedule.js ফাইলে পেস্ট করুন।');
-      }).catch(() => {
-        document.execCommand('copy');
-      });
+      navigator.clipboard.writeText(box.value).then(() => showToast('কপি হয়ে গেছে'))
+        .catch(() => document.execCommand('copy'));
     }
 
-    render();
+    // ---------- utf8-safe base64 ----------
+    function utf8ToB64(str){ return btoa(unescape(encodeURIComponent(str))); }
+    function b64ToUtf8(str){ return decodeURIComponent(escape(atob(str))); }
+
+    // ---------- direct save via GitHub API ----------
+    async function saveToGitHub(){
+      const s = loadSettings();
+      if(!s || !s.owner || !s.repo || !s.token){
+        showToast('আগে উপরে GitHub সংযোগ সেটআপ করুন', true);
+        document.getElementById('settingsPanel').classList.remove('collapsed');
+        return;
+      }
+      const btn = document.getElementById('saveBtn');
+      btn.disabled = true;
+      const originalText = btn.textContent;
+      btn.textContent = 'সংরক্ষণ হচ্ছে…';
+
+      const api = `https://api.github.com/repos/${s.owner}/${s.repo}/contents/${s.path}`;
+      const headers = {
+        'Authorization': 'Bearer ' + s.token,
+        'Accept': 'application/vnd.github+json'
+      };
+
+      try{
+        // get latest sha (avoids overwrite conflicts)
+        const getRes = await fetch(`${api}?ref=${encodeURIComponent(s.branch)}&_=${Date.now()}`, { headers });
+        if(!getRes.ok){
+          if(getRes.status === 401) throw new Error('টোকেন সঠিক নয় বা মেয়াদ শেষ — নতুন টোকেন বানিয়ে দিন');
+          if(getRes.status === 404) throw new Error('রিপোজিটরি/ফাইল খুঁজে পাওয়া যায়নি — ইউজারনেম, রিপো নাম ঠিক আছে কিনা দেখুন');
+          throw new Error('তথ্য আনতে সমস্যা (কোড ' + getRes.status + ')');
+        }
+        const getData = await getRes.json();
+        const content = buildContent();
+
+        const putRes = await fetch(api, {
+          method: 'PUT',
+          headers: { ...headers, 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            message: 'রোস্টার আপডেট — ' + new Date().toLocaleString('bn-BD', { timeZone: 'Asia/Dhaka' }),
+            content: utf8ToB64(content),
+            sha: getData.sha,
+            branch: s.branch
+          })
+        });
+        if(!putRes.ok){
+          const errBody = await putRes.json().catch(() => ({}));
+          throw new Error(errBody.message || ('সংরক্ষণ ব্যর্থ (কোড ' + putRes.status + ')'));
+        }
+        showToast('✓ সংরক্ষিত হয়েছে — ৩০-৬০ সেকেন্ডে লাইভ সাইটে দেখা যাবে');
+      } catch(err){
+        showToast(err.message || 'একটা সমস্যা হয়েছে', true);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = originalText;
+      }
+    }
+
+    // ---------- toast ----------
+    let toastTimer = null;
+    function showToast(msg, isErr){
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.className = 'toast show' + (isErr ? ' err' : '');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => t.classList.remove('show'), 4200);
+    }
   </script>
 </body>
 </html>
