@@ -6,124 +6,50 @@
 <title>ডিউটি রোস্টার</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🗓️</text></svg>">
 <link rel="stylesheet" href="style.css">
-<link rel="stylesheet" href="landscape.css">
 </head>
 <body>
   <div class="wrap">
-
     <header class="masthead">
       <div>
-        <h1>ডিউটি রোস্টার</h1>
+        <h1>ডিউটি রোস্���ার</h1>
         <div class="updated">CCTV - PJL</div>
         <div class="updated" id="updatedLine"></div>
       </div>
       <div class="month" id="monthLine"></div>
     </header>
-
     <div class="grid-scroll">
       <table class="roster" id="rosterTable">
         <thead id="rosterHead"></thead>
         <tbody id="rosterBody"></tbody>
       </table>
     </div>
-
     <div class="day-cards" id="dayCards"></div>
     <div class="legend" id="legend"></div>
-
     <div class="foot">
       <span>মোট কর্মী: <span id="empCount"></span> জন · মোট দিন: <span id="dayCount"></span> দিন</span>
       <a href="admin.html">✏️ শিফট পরিবর্তন করুন</a>
     </div>
   </div>
-
   <script>
     const todayIso = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Dhaka' });
-
-    fetch('schedule.json?_=' + Date.now())
-      .then(r => r.json())
-      .then(data => {
-        document.getElementById('monthLine').textContent = data.month;
-        document.getElementById('updatedLine').textContent = 'সর্বশেষ হালনাগাদ: ' + data.updatedAt;
-        document.getElementById('empCount').textContent = data.employees.length;
-        document.getElementById('dayCount').textContent = data.days.length;
-        renderTable(data);
-        renderDayCards(data);
-        renderLegend(data);
-      })
-      .catch(() => {
-        document.getElementById('rosterBody').innerHTML =
-          '<tr><td style="padding:20px;color:#B3462C;">রোস্টার লোড করা যায়নি — schedule.json ফাইলটা একই ফোল্ডারে আছে কি না দেখুন।</td></tr>';
-      });
-
-    function renderTable(data){
-      const head = document.getElementById('rosterHead');
-      const headRow = document.createElement('tr');
-      const nameTh = document.createElement('th');
-      nameTh.className = 'name-col';
-      nameTh.textContent = 'কর্মী';
-      headRow.appendChild(nameTh);
-      data.days.forEach(d => {
-        const th = document.createElement('th');
-        if (d.isoDate === todayIso) th.classList.add('is-today');
-        th.innerHTML = d.date + '<span class="wd">' + d.weekday + '</span>';
-        headRow.appendChild(th);
-      });
-      head.appendChild(headRow);
-
-      const body = document.getElementById('rosterBody');
-      data.employees.forEach(emp => {
-        const tr = document.createElement('tr');
-        const nameTd = document.createElement('td');
-        nameTd.className = 'name-col';
-        nameTd.textContent = emp.name;
-        tr.appendChild(nameTd);
-        emp.shifts.forEach((code, i) => {
-          const td = document.createElement('td');
-          td.className = 'shift-cell';
-          if (data.days[i] && data.days[i].isoDate === todayIso) td.classList.add('is-today');
-          const type = data.shiftTypes[code] || { color: '#888' };
-          const chip = document.createElement('span');
-          chip.className = 'chip' + (code === 'OFF' ? ' off' : '');
-          chip.style.background = type.color;
-          chip.textContent = code;
-          td.appendChild(chip);
-          tr.appendChild(td);
-        });
-        body.appendChild(tr);
-      });
+    fetch('schedule.json?_=' + Date.now()).then(r => r.json()).then(data => {
+      document.getElementById('monthLine').textContent = data.month;
+      document.getElementById('updatedLine').textContent = 'সর্বশেষ হালনাগাদ: ' + data.updatedAt;
+      document.getElementById('empCount').textContent = data.employees.length;
+      document.getElementById('dayCount').textContent = data.days.length;
+      renderTable(data); renderDayCards(data); renderLegend(data);
+    }).catch(() => {
+      document.getElementById('rosterBody').innerHTML = '<tr><td colspan="99" style="padding:20px;color:#b64d37;">রোস্টার লোড করা যায়নি — schedule.json ফাইলটি পরীক্ষা করুন।</td></tr>';
+    });
+    function renderTable(data) {
+      const row = document.createElement('tr'), name = document.createElement('th');
+      name.className = 'name-col'; name.textContent = 'কর্মী'; row.appendChild(name);
+      data.days.forEach(d => { const th = document.createElement('th'); if (d.isoDate === todayIso) th.className = 'is-today'; th.innerHTML = d.date + '<span class="wd">' + d.weekday + '</span>'; row.appendChild(th); });
+      document.getElementById('rosterHead').appendChild(row);
+      data.employees.forEach(emp => { const tr = document.createElement('tr'), td = document.createElement('td'); td.className = 'name-col'; td.textContent = emp.name; tr.appendChild(td); emp.shifts.forEach((code, i) => { const cell = document.createElement('td'); if (data.days[i]?.isoDate === todayIso) cell.className = 'is-today'; const type = data.shiftTypes[code] || { color: '#888' }; const chip = document.createElement('span'); chip.className = 'chip' + (code === 'OFF' ? ' off' : ''); chip.style.background = type.color; chip.textContent = code; cell.appendChild(chip); tr.appendChild(cell); }); document.getElementById('rosterBody').appendChild(tr); });
     }
-
-    function renderDayCards(data){
-      const wrap = document.getElementById('dayCards');
-      data.days.forEach((d, di) => {
-        const card = document.createElement('div');
-        card.className = 'day-card' + (d.isoDate === todayIso ? ' is-today' : '');
-        const head = document.createElement('div');
-        head.className = 'day-head';
-        head.innerHTML = `<span class="dnum">${d.date}</span><span class="dname">${d.weekday}</span>` +
-          (d.isoDate === todayIso ? '<span class="today-badge">আজ</span>' : '');
-        card.appendChild(head);
-        data.employees.forEach(emp => {
-          const code = emp.shifts[di];
-          const type = data.shiftTypes[code] || { color: '#888' };
-          const row = document.createElement('div');
-          row.className = 'person-row';
-          row.innerHTML = `<span class="who">${emp.name}</span><span class="chip${code === 'OFF' ? ' off' : ''}" style="background:${type.color}">${code}</span>`;
-          card.appendChild(row);
-        });
-        wrap.appendChild(card);
-      });
-    }
-
-    function renderLegend(data){
-      const legend = document.getElementById('legend');
-      Object.entries(data.shiftTypes).forEach(([code, type]) => {
-        const item = document.createElement('div');
-        item.className = 'legend-item';
-        item.innerHTML = `<span class="dot" style="background:${type.color}"></span><span><strong>${code}</strong> — ${type.label}</span><span class="note">${type.note || ''}</span>`;
-        legend.appendChild(item);
-      });
-    }
+    function renderDayCards(data) { const wrap = document.getElementById('dayCards'); data.days.forEach((d, di) => { const card = document.createElement('div'); card.className = 'day-card' + (d.isoDate === todayIso ? ' is-today' : ''); const head = document.createElement('div'); head.className = 'day-head'; head.innerHTML = `<span class="dnum">${d.date}</span><span class="dname">${d.weekday}</span>`; card.appendChild(head); data.employees.forEach(emp => { const code = emp.shifts[di], type = data.shiftTypes[code] || { color: '#888' }, row = document.createElement('div'); row.className = 'person-row'; row.innerHTML = `<span class="who">${emp.name}</span><span class="chip${code === 'OFF' ? ' off' : ''}" style="background:${type.color}">${code}</span>`; card.appendChild(row); }); wrap.appendChild(card); }); }
+    function renderLegend(data) { const legend = document.getElementById('legend'); Object.entries(data.shiftTypes).forEach(([code, type]) => { const item = document.createElement('div'); item.className = 'legend-item'; item.innerHTML = `<span class="dot" style="background:${type.color}"></span><span><strong>${code}</strong> — ${type.label}</span><span class="note">${type.note || ''}</span>`; legend.appendChild(item); }); }
   </script>
 </body>
 </html>
