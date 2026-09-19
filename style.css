@@ -225,7 +225,30 @@ td.shift-cell{ font-family: 'IBM Plex Mono', monospace; font-weight: 600; font-s
 
 @media (max-width: 680px){
   .grid-scroll{ display:none; }
-  .day-cards{ display:block; }
+
+  .day-cards{
+    display:flex;
+    gap: 12px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x proximity;
+  }
+
+  .day-card{
+    flex: 0 0 260px;
+    min-width: 260px;
+    margin-bottom: 0;
+    scroll-snap-align: start;
+  }
+
+  .day-card .person-row{
+    gap: 8px;
+  }
+
+  .day-card .person-row .who{
+    font-size: 13.5px;
+  }
 }
 
 /* ================= Admin page ================= */
