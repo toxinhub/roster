@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>রোস্টার সম্পাদনা</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>✏️</text></svg>">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="wrap">
+
+    <header class="masthead">
+      <div>
+        <h1>রোস্টার সম্পাদনা</h1>
+        <div class="updated">এখানে পরিবর্তন করলে সাথে সাথে লাইভ সাইটে আপডেট হবে না — নিচের ধাপ অনুসরণ করুন</div>
+      </div>
+    </header>
+
+    <div class="hint">
+      <b>যেভাবে কাজ করে:</b> নিচের টেবিলে যে কারো যেকোনো দিনের শিফট বদলান (ড্রপডাউন থেকে <b>OFF</b> বেছে নিলে ছুটি হয়ে যাবে), প্রয়োজনে নতুন কর্মী বা নতুন তারিখ যোগ করুন। তারপর <b>"কোড তৈরি করুন"</b>-এ চাপুন, পুরো কোডটা কপি করুন, GitHub রিপোজিটরির <b>schedule.js</b> ফাইল খুলে (পেন্সিল আইকনে ক্লিক) পুরনো লেখা মুছে এটা পেস্ট করে <b>Commit</b> করুন। ১ মিনিটের মধ্যে লাইভ সাইট আপডেট হয়ে যাবে।
+    </div>
+
+    <div class="toolbar">
+      <button onclick="addDay()">+ নতুন তারিখ যোগ করুন</button>
+      <button onclick="addEmployee()">+ নতুন কর্মী যোগ করুন</button>
+      <button class="secondary" onclick="location.href='index.html'">লাইভ রোস্টার দেখুন</button>
+    </div>
+
+    <div class="grid-scroll">
+      <table class="roster admin-table" id="editTable"></table>
+    </div>
+
+    <div class="toolbar">
+      <label style="display:flex;align-items:center;gap:8px;font-size:14px;">
+        মাস/শিরোনাম: <input type="text" id="monthInput" style="width:220px">
+      </label>
+      <button onclick="generate()">কোড তৈরি করুন</button>
+      <button class="secondary" onclick="copyOutput()">কপি করুন</button>
+    </div>
+
+    <textarea class="output" id="output" readonly placeholder="এখানে জেনারেট করা কোড দেখাবে..."></textarea>
+
+  </div>
+
+  <script src="schedule.js"></script>
+  <script>
+    // Deep-clone the current data so edits here never touch the live file directly
+    let state = JSON.parse(JSON.stringify(SCHEDULE_DATA));
+
+    function render(){
+      document.getElementById('monthInput').value = state.month;
+
+      const table = document.getElementById('editTable');
+      table.innerHTML = '';
+
+      const thead = document.createElement('thead');
+      const headRow = document.createElement('tr');
+      headRow.appendChild(document.createElement('th')).textContent = 'কর্মী';
+      state.days.forEach((d, di) => {
+        const th = document.createElement('th');
+        const dateInput = document.createElement('input');
+        dateInput.type = 'text'; dateInput.value = d.date;
+        dateInput.onchange = e => d.date = e.target.value;
+        const wdInput = document.createElement('input');
+        wdInput.type = 'text'; wdInput.value = d.weekday; wdInput.style.marginTop = '4px';
+        wdInput.onchange = e => d.weekday = e.target.value;
+        const rm = document.createElement('button');
+        rm.textContent = '✕'; rm.className = 'secondary';
+        rm.style.marginTop = '4px'; rm.style.padding = '2px 8px'; rm.style.fontSize = '11px';
+        rm.onclick = () => { state.days.splice(di,1); state.employees.forEach(e=>e.shifts.splice(di,1)); render(); };
+        th.appendChild(dateInput); th.appendChild(document.createElement('br'));
+        th.appendChild(wdInput); th.appendChild(document.createElement('br'));
+        th.appendChild(rm);
+        headRow.appendChild(th);
+      });
+      thead.appendChild(headRow);
+      table.appendChild(thead);
+
+      const tbody = document.createElement('tbody');
+      state.employees.forEach((emp, ei) => {
+        const tr = document.createElement('tr');
+        const nameTd = document.createElement('td');
+        nameTd.className = 'name-col';
+        const nameInput = document.createElement('input');
+        nameInput.type = 'text'; nameInput.value = emp.name;
+        nameInput.onchange = e => emp.name = e.target.value;
+        const rmEmp = document.createElement('button');
+        rmEmp.textContent = '✕ বাদ দিন'; rmEmp.className = 'secondary';
+        rmEmp.style.marginTop = '6px'; rmEmp.style.padding = '3px 8px'; rmEmp.style.fontSize = '11px';
+        rmEmp.onclick = () => { state.employees.splice(ei,1); render(); };
+        nameTd.appendChild(nameInput); nameTd.appendChild(document.createElement('br')); nameTd.appendChild(rmEmp);
+        tr.appendChild(nameTd);
+
+        emp.shifts.forEach((code, di) => {
+          const td = document.createElement('td');
+          const sel = document.createElement('select');
+          Object.keys(state.shiftTypes).forEach(c => {
+            const opt = document.createElement('option');
+            opt.value = c; opt.textContent = c;
+            if(c === code) opt.selected = true;
+            sel.appendChild(opt);
+          });
+          sel.onchange = e => emp.shifts[di] = e.target.value;
+          td.appendChild(sel);
+          tr.appendChild(td);
+        });
+        tbody.appendChild(tr);
+      });
+      table.appendChild(tbody);
+    }
+
+    function addDay(){
+      const n = state.days.length + 1;
+      state.days.push({ date: String(n), weekday: 'বার লিখুন' });
+      state.employees.forEach(e => e.shifts.push(Object.keys(state.shiftTypes)[0]));
+      render();
+    }
+
+    function addEmployee(){
+      state.employees.push({ name: 'নতুন কর্মী', shifts: state.days.map(() => Object.keys(state.shiftTypes)[0]) });
+      render();
+    }
+
+    function jsString(s){ return JSON.stringify(s); }
+
+    function generate(){
+      state.month = document.getElementById('monthInput').value;
+      const today = new Date();
+      const bnDate = today.toLocaleDateString('bn-BD', { day:'numeric', month:'long', year:'numeric' });
+      state.updatedAt = bnDate;
+
+      let out = `/*\n  এই ফাইলটাই রোস্টারের "ডেটা"। শিফট পরিবর্তন, অফ যোগ, নতুন কর্মী বা নতুন তারিখ —\n  সবকিছু এই ফাইল পরিবর্তন করলেই ওয়েবসাইটে সাথে সাথে দেখা যাবে।\n\n  সহজ উপায়: admin.html পেজ থেকে ড্রপডাউন দিয়ে পরিবর্তন করে "কোড তৈরি করুন" চাপুন,\n  তারপর যে কোডটা পাবেন সেটা কপি করে GitHub-এ এই ফাইলের জায়গায় পেস্ট করে Commit করুন।\n*/\n\nconst SCHEDULE_DATA = {\n`;
+      out += `  month: ${jsString(state.month)},\n\n`;
+      out += `  updatedAt: ${jsString(state.updatedAt)},\n\n`;
+      out += `  shiftTypes: {\n`;
+      Object.entries(state.shiftTypes).forEach(([code, t]) => {
+        out += `    ${code}: { label: ${jsString(t.label)}, note: ${jsString(t.note||'')}, color: ${jsString(t.color)} },\n`;
+      });
+      out += `  },\n\n`;
+      out += `  days: [\n`;
+      state.days.forEach(d => { out += `    { date: ${jsString(d.date)}, weekday: ${jsString(d.weekday)} },\n`; });
+      out += `  ],\n\n`;
+      out += `  employees: [\n`;
+      state.employees.forEach(e => {
+        out += `    { name: ${jsString(e.name)}, shifts: [${e.shifts.map(jsString).join(', ')}] },\n`;
+      });
+      out += `  ]\n};\n`;
+
+      document.getElementById('output').value = out;
+    }
+
+    function copyOutput(){
+      const box = document.getElementById('output');
+      if(!box.value){ generate(); }
+      box.select();
+      navigator.clipboard.writeText(box.value).then(() => {
+        alert('কপি হয়ে গেছে — এখন GitHub-এ schedule.js ফাইলে পেস্ট করুন।');
+      }).catch(() => {
+        document.execCommand('copy');
+      });
+    }
+
+    render();
+  </script>
+</body>
+</html>

@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ডিউটি রোস্টার</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🗓️</text></svg>">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="wrap">
+
+    <header class="masthead">
+      <div>
+        <h1>ডিউটি রোস্টার</h1>
+        <div class="updated" id="updatedLine"></div>
+      </div>
+      <div class="month" id="monthLine"></div>
+    </header>
+
+    <div class="grid-scroll">
+      <table class="roster" id="rosterTable">
+        <thead id="rosterHead"></thead>
+        <tbody id="rosterBody"></tbody>
+      </table>
+    </div>
+
+    <div class="legend" id="legend"></div>
+
+    <div class="foot">
+      <span>মোট কর্মী: <span id="empCount"></span> জন · মোট দিন: <span id="dayCount"></span> দিন</span>
+      <a href="admin.html">শিফট পরিবর্তন করুন →</a>
+    </div>
+
+  </div>
+
+  <script src="schedule.js"></script>
+  <script>
+    const data = SCHEDULE_DATA;
+
+    document.getElementById('monthLine').textContent = data.month;
+    document.getElementById('updatedLine').textContent = 'সর্বশেষ হালনাগাদ: ' + data.updatedAt;
+    document.getElementById('empCount').textContent = data.employees.length;
+    document.getElementById('dayCount').textContent = data.days.length;
+
+    // Head row
+    const head = document.getElementById('rosterHead');
+    const headRow = document.createElement('tr');
+    const nameTh = document.createElement('th');
+    nameTh.className = 'name-col';
+    nameTh.textContent = 'কর্মী';
+    headRow.appendChild(nameTh);
+    data.days.forEach(d => {
+      const th = document.createElement('th');
+      th.innerHTML = d.date + '<span class="wd">' + d.weekday + '</span>';
+      headRow.appendChild(th);
+    });
+    head.appendChild(headRow);
+
+    // Body rows
+    const body = document.getElementById('rosterBody');
+    data.employees.forEach(emp => {
+      const tr = document.createElement('tr');
+      const nameTd = document.createElement('td');
+      nameTd.className = 'name-col';
+      nameTd.textContent = emp.name;
+      tr.appendChild(nameTd);
+
+      emp.shifts.forEach(code => {
+        const td = document.createElement('td');
+        td.className = 'shift-cell';
+        const type = data.shiftTypes[code] || { label: code, color: '#888' };
+        const chip = document.createElement('span');
+        chip.className = 'chip';
+        chip.style.background = type.color;
+        chip.textContent = code;
+        td.appendChild(chip);
+        tr.appendChild(td);
+      });
+      body.appendChild(tr);
+    });
+
+    // Legend
+    const legend = document.getElementById('legend');
+    Object.entries(data.shiftTypes).forEach(([code, type]) => {
+      const item = document.createElement('div');
+      item.className = 'legend-item';
+      item.innerHTML = `<span class="dot" style="background:${type.color}"></span>
+        <span><strong>${code}</strong> — ${type.label}</span>
+        <span class="note">${type.note || ''}</span>`;
+      legend.appendChild(item);
+    });
+  </script>
+</body>
+</html>
