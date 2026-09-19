@@ -1,0 +1,87 @@
+/* Landscape phone layout: use the phone sideways to see the full roster clearly. */
+@media (orientation: landscape) and (max-height: 600px) {
+  body {
+    min-width: 100vw;
+    padding: 10px 16px 20px;
+  }
+
+  .wrap {
+    max-width: 100%;
+  }
+
+  .masthead {
+    align-items: center;
+    gap: 8px 20px;
+    padding-bottom: 8px;
+    margin-bottom: 12px;
+  }
+
+  .masthead h1 {
+    font-size: clamp(22px, 5vw, 30px);
+  }
+
+  .updated {
+    font-size: 10px;
+  }
+
+  .grid-scroll {
+    overflow-x: auto;
+    max-height: calc(100vh - 150px);
+    -webkit-overflow-scrolling: touch;
+  }
+
+  table.roster {
+    min-width: 0;
+    width: 100%;
+  }
+
+  table.roster th,
+  table.roster td {
+    padding: 7px 9px;
+    font-size: 12px;
+  }
+
+  table.roster thead th {
+    font-size: 12px;
+  }
+
+  table.roster thead th .wd {
+    font-size: 9px;
+  }
+
+  table.roster th.name-col,
+  table.roster td.name-col {
+    min-width: 90px;
+    position: sticky;
+    left: 0;
+  }
+
+  .chip {
+    min-width: 34px;
+    padding: 4px 7px;
+    font-size: 12px;
+  }
+
+  .legend {
+    margin-top: 10px;
+    gap: 5px 12px;
+  }
+
+  .legend-item {
+    font-size: 11px;
+  }
+
+  .legend-item .note {
+    font-size: 10px;
+  }
+
+  .foot {
+    margin-top: 10px;
+    padding-top: 8px;
+    font-size: 11px;
+  }
+
+  .day-cards {
+    display: none !important;
+  }
+}
