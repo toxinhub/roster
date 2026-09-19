@@ -1,181 +1,109 @@
-/* Force the roster to stay on-screen in a sideways horizontal layout on mobile devices. */
+/* Restored mobile layout: no forced rotation and no full-page overflow. */
 @media (max-width: 900px) {
   html,
   body {
-    width: 100vw;
-    height: 100vh;
-    overflow: hidden;
-    background: var(--paper);
+    width: auto !important;
+    height: auto !important;
+    min-width: 0 !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
   }
 
   body {
-    padding: 0;
-    margin: 0;
-    display: flex;
-    align-items: flex-start;
-    justify-content: flex-start;
+    display: block !important;
+    padding: 10px !important;
+    margin: 0 !important;
   }
 
   .wrap {
-    width: 100vh;
-    height: 100vw;
-    max-width: none;
-    margin: 0;
-    padding: 12px 14px 10px;
-    box-sizing: border-box;
-    transform: rotate(-90deg) translateY(-100%);
-    transform-origin: top left;
-    overflow: hidden;
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    transform: none !important;
+    transform-origin: initial !important;
+    overflow: visible !important;
   }
 
   .masthead {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 8px 16px;
-    padding-bottom: 8px;
-    margin-bottom: 10px;
+    display: flex !important;
+    align-items: flex-start !important;
+    justify-content: space-between !important;
+    flex-wrap: wrap !important;
+    gap: 12px !important;
+    padding-bottom: 16px !important;
+    margin-bottom: 24px !important;
   }
 
   .masthead h1 {
-    font-size: clamp(22px, 4vw, 28px);
+    font-size: revert !important;
   }
 
   .updated,
   .month {
-    font-size: 11px;
+    font-size: revert !important;
   }
 
   .grid-scroll {
-    overflow-x: auto;
-    overflow-y: hidden;
-    max-height: calc(100vw - 160px);
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    max-height: none !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    -webkit-overflow-scrolling: touch !important;
+    touch-action: pan-x !important;
+    border: 0 !important;
+    box-shadow: none !important;
   }
 
   table.roster {
-    min-width: 760px;
-    width: 100%;
-  }
-
-  table.roster th,
-  table.roster td {
-    padding: 7px 9px;
-    font-size: 11px;
-  }
-
-  table.roster thead th .wd {
-    font-size: 9px;
-  }
-
-  .chip {
-    min-width: 32px;
-    padding: 4px 8px;
-    font-size: 11px;
-  }
-
-  .legend {
-    margin-top: 8px;
-    gap: 6px 10px;
-  }
-
-  .legend-item {
-    font-size: 11px;
-  }
-
-  .foot {
-    font-size: 11px;
-    margin-top: 8px;
-  }
-
-  .day-cards {
-    display: none !important;
-  }
-}
-
-/* Extra compact layout for true landscape orientation. */
-@media (orientation: landscape) and (max-height: 600px) {
-  body {
-    min-width: 100vw;
-    padding: 10px 16px 20px;
-  }
-
-  .wrap {
-    max-width: 100%;
-  }
-
-  .masthead {
-    align-items: center;
-    gap: 8px 20px;
-    padding-bottom: 8px;
-    margin-bottom: 12px;
-  }
-
-  .masthead h1 {
-    font-size: clamp(22px, 5vw, 30px);
-  }
-
-  .updated {
-    font-size: 10px;
-  }
-
-  .grid-scroll {
-    overflow-x: auto;
-    max-height: calc(100vh - 150px);
-    -webkit-overflow-scrolling: touch;
-  }
-
-  table.roster {
-    min-width: 0;
-    width: 100%;
-  }
-
-  table.roster th,
-  table.roster td {
-    padding: 7px 9px;
-    font-size: 12px;
+    width: max-content !important;
+    min-width: 760px !important;
+    border-collapse: separate !important;
+    border-spacing: 0 8px !important;
   }
 
   table.roster thead th {
-    font-size: 12px;
+    min-width: 72px !important;
+    padding: 10px 8px !important;
   }
 
-  table.roster thead th .wd {
-    font-size: 9px;
+  table.roster tbody tr td {
+    min-width: 72px !important;
+    padding: 12px 10px !important;
   }
 
   table.roster th.name-col,
   table.roster td.name-col {
-    min-width: 90px;
-    position: sticky;
-    left: 0;
+    min-width: 130px !important;
+    position: sticky !important;
+    left: 0 !important;
+    z-index: 2 !important;
   }
 
   .chip {
-    min-width: 34px;
-    padding: 4px 7px;
-    font-size: 12px;
-  }
-
-  .legend {
-    margin-top: 10px;
-    gap: 5px 12px;
-  }
-
-  .legend-item {
-    font-size: 11px;
-  }
-
-  .legend-item .note {
-    font-size: 10px;
-  }
-
-  .foot {
-    margin-top: 10px;
-    padding-top: 8px;
-    font-size: 11px;
+    min-width: 38px !important;
+    padding: 5px 8px !important;
   }
 
   .day-cards {
     display: none !important;
+  }
+
+  .legend {
+    margin-top: 22px !important;
+    gap: 8px 14px !important;
+  }
+
+  .legend-item {
+    font-size: 13px !important;
+  }
+
+  .foot {
+    margin-top: revert !important;
+    font-size: revert !important;
   }
 }
