@@ -425,3 +425,133 @@
     font-size:18px;
   }
 }
+
+
+/* FINAL MOBILE GEOMETRY
+   The roster is rotated 90deg, so its PRE-ROTATION HEIGHT becomes the
+   visible LEFT-to-RIGHT width on a portrait phone.  Keep date columns fixed;
+   allocate the full CSS viewport width to the roster itself. */
+@media (max-width:600px){
+  body > .app main{
+    height:100vw;
+    min-height:100vw;
+    padding:0;
+    overflow:visible;
+  }
+
+  body > .app .sheetbar{
+    height:34px;
+    min-height:34px;
+    padding:4px 9px;
+  }
+
+  body > .app .sheet-wrap{
+    height:100vw;
+    min-height:100vw;
+    max-height:none;
+    overflow:auto;
+    border-radius:0;
+  }
+
+  body > .app .sheet-wrap table{
+    width:max-content;
+    min-width:0;
+    height:100vw;
+    min-height:100vw;
+    table-layout:fixed;
+  }
+
+  /* Header stays compact. Three employee rows share all remaining width. */
+  body > .app .sheet-wrap thead tr,
+  body > .app .sheet-wrap thead th{
+    height:46px;
+  }
+
+  body > .app .sheet-wrap tbody tr{
+    height:calc((100vw - 46px) / 3);
+  }
+
+  body > .app .sheet-wrap tbody th,
+  body > .app .sheet-wrap tbody td{
+    height:auto;
+    vertical-align:middle;
+  }
+
+  /* Do NOT widen date columns. */
+  body > .app .sheet-wrap .name-col{
+    min-width:80px;
+    width:80px;
+  }
+
+  body > .app .sheet-wrap thead th:not(.name-col),
+  body > .app .sheet-wrap tbody td{
+    min-width:46px;
+    width:46px;
+  }
+
+  body > .app .sheet-wrap .date-head{
+    font-size:14px;
+  }
+
+  body > .app .sheet-wrap th small,
+  body > .app .sheet-wrap td small{
+    font-size:9px;
+  }
+
+  body > .app .sheet-wrap tbody th{
+    font-size:14px;
+    padding:6px 5px;
+  }
+
+  body > .app .sheet-wrap .chip{
+    min-width:42px;
+    min-height:42px;
+    padding:7px 10px;
+    border-radius:8px;
+    font-size:20px;
+    line-height:1;
+  }
+}
+
+@media (max-width:380px){
+  body > .app .sheetbar{
+    height:32px;
+    min-height:32px;
+  }
+
+  body > .app .sheet-wrap{
+    height:100vw;
+    min-height:100vw;
+  }
+
+  body > .app .sheet-wrap table{
+    height:100vw;
+    min-height:100vw;
+  }
+
+  body > .app .sheet-wrap thead tr,
+  body > .app .sheet-wrap thead th{
+    height:42px;
+  }
+
+  body > .app .sheet-wrap tbody tr{
+    height:calc((100vw - 42px) / 3);
+  }
+
+  body > .app .sheet-wrap .name-col{
+    min-width:74px;
+    width:74px;
+  }
+
+  body > .app .sheet-wrap thead th:not(.name-col),
+  body > .app .sheet-wrap tbody td{
+    min-width:44px;
+    width:44px;
+  }
+
+  body > .app .sheet-wrap .chip{
+    min-width:38px;
+    min-height:38px;
+    font-size:18px;
+  }
+}
