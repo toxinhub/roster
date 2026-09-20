@@ -216,3 +216,48 @@
   body > .app td small{font-size:8px}
   body > .app .chip{min-width:28px;font-size:9px}
 }
+
+/* Weekly-at-a-glance mobile tuning */
+@media (max-width:600px){
+  body > .app .name-col{
+    min-width:80px;
+    width:80px;
+  }
+  body > .app thead th:not(.name-col),
+  body > .app tbody td{
+    min-width:46px;
+    width:46px;
+  }
+  body > .app th,
+  body > .app td{
+    height:37px;
+    padding:3px 2px;
+  }
+  body > .app tbody th{
+    font-size:11px;
+  }
+  body > .app .date-head{
+    font-size:11px;
+  }
+  body > .app th small,
+  body > .app td small{
+    font-size:8.5px;
+  }
+  body > .app .chip{
+    min-width:32px;
+    min-height:23px;
+    padding:2px 4px;
+    font-size:11px;
+    line-height:1;
+  }
+}
+@media (max-width:380px){
+  body > .app .name-col{min-width:74px;width:74px}
+  body > .app thead th:not(.name-col),
+  body > .app tbody td{min-width:44px;width:44px}
+  body > .app .chip{
+    min-width:30px;
+    min-height:22px;
+    font-size:10px;
+  }
+}
