@@ -58,8 +58,8 @@
 
  /* Compact month title and shift legend */
  .intro h1{font-size:clamp(24px,2.4vw,30px);letter-spacing:-.035em}
- .legend span{font-size:7px;padding:3px 5px}
- .legend b{font-size:7.5px}
- .legend small{font-size:5.8px}
- @media(max-width:900px){.intro h1{font-size:27px}}
- @media(max-width:520px){.intro h1{font-size:24px}.legend span{font-size:6px}.legend b{font-size:6.5px}.legend small{font-size:5px}}
+ .legend span{font-size:9px;padding:5px 7px}
+ .legend b{font-size:9px}
+ .legend small{font-size:7.5px}
+ @media(max-width:900px){.intro h1{font-size:27px}.legend span{font-size:7px;padding:4px 6px}.legend b{font-size:7px}.legend small{font-size:6px}}
+ @media(max-width:520px){.intro h1{font-size:24px}.legend span{font-size:6.5px}.legend b{font-size:6.5px}.legend small{font-size:5.5px}}
