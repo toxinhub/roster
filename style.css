@@ -301,3 +301,439 @@ body.dark{--bg:#101d1f;--surface:#132a2b;--surface-2:#183436;--surface-3:#1f4043
     font-size:17px;
   }
 }
+
+/* SIGNATURE ROSTER REDESIGN */
+/* Inspired by modern workforce schedulers: clear hierarchy, compact grid,
+   strong today-state, and spreadsheet-like density without visual clutter. */
+body:not(.dark){
+  --bg:#f3f7f6;
+  --surface:#ffffff;
+  --surface-soft:#f7fbfa;
+  --surface-muted:#edf4f2;
+  --line:#d6e3df;
+  --line-strong:#bfd2cc;
+  --ink:#102f2c;
+  --muted:#69807c;
+  --accent:#0d756a;
+  --accent-dark:#095b53;
+  --accent-soft:#e2f2ee;
+}
+
+body{
+  background:
+    radial-gradient(circle at 8% -10%,rgba(13,117,106,.09),transparent 30rem),
+    radial-gradient(circle at 92% 0%,rgba(35,102,127,.06),transparent 28rem),
+    var(--bg);
+}
+
+.topbar{
+  min-height:68px;
+  padding:10px max(22px,calc((100vw - 1480px)/2));
+  background:rgba(255,255,255,.88);
+  border-bottom:1px solid rgba(191,210,204,.8);
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+}
+
+.brand{gap:11px}
+.brand-icon{
+  width:38px;height:38px;
+  border-radius:10px;
+  border:1px solid #b8d8d1;
+  background:linear-gradient(145deg,#e8f6f2,#d6eee9);
+  box-shadow:inset 0 1px rgba(255,255,255,.9),0 4px 12px rgba(13,117,106,.08);
+  font-size:16px;
+}
+.brand strong{font-size:17px;letter-spacing:-.02em}
+.brand small{font-size:11px;letter-spacing:.08em;text-transform:uppercase}
+.top-actions{gap:7px}
+.live-pill{
+  display:inline-flex;align-items:center;gap:6px;
+  height:30px;padding:0 9px;
+  border:1px solid #bfe0d9;border-radius:999px;
+  background:#eff9f6;color:#17685f;
+  font-size:10px;font-weight:900;letter-spacing:.08em;
+}
+.live-pill i{
+  width:6px;height:6px;border-radius:50%;
+  background:#16a184;
+  box-shadow:0 0 0 4px rgba(22,161,132,.11);
+}
+.icon-btn,.back{
+  border-radius:8px;
+  min-height:34px;
+}
+.back{font-size:11px;font-weight:800}
+
+main{
+  max-width:1480px;
+  margin:0 auto;
+  padding:28px 22px 12px;
+}
+
+.hero{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:28px;
+  margin:0 auto 18px;
+}
+.hero-copy{min-width:0}
+.eyebrow{
+  display:block;
+  margin-bottom:5px;
+  color:var(--accent);
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:.16em;
+}
+.hero h1{
+  margin:0;
+  color:var(--ink);
+  font-size:clamp(25px,3vw,38px);
+  line-height:1.08;
+  letter-spacing:-.045em;
+}
+.hero p{
+  max-width:690px;
+  margin:8px 0 0;
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.55;
+}
+
+.stats{
+  display:flex;
+  flex:0 0 auto;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:rgba(255,255,255,.76);
+  box-shadow:0 8px 24px rgba(18,55,50,.06);
+  overflow:hidden;
+}
+.stat{
+  min-width:76px;
+  padding:11px 14px;
+  text-align:center;
+  border-right:1px solid var(--line);
+}
+.stat:last-child{border-right:0}
+.stat b{display:block;color:var(--ink);font-size:18px;line-height:1.1}
+.stat small{display:block;margin-top:3px;color:var(--muted);font-size:9px;font-weight:800}
+.accent-stat{background:var(--accent-soft)}
+.accent-stat b{color:var(--accent)}
+
+.schedule-card{
+  overflow:hidden;
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:var(--surface);
+  box-shadow:0 12px 32px rgba(18,55,50,.07);
+}
+.schedule-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+  padding:13px 16px;
+  background:linear-gradient(180deg,var(--surface),var(--surface-soft));
+  border-bottom:1px solid var(--line);
+}
+.schedule-head .eyebrow{margin:0 0 2px;font-size:8px}
+.schedule-head strong{font-size:15px;letter-spacing:-.015em}
+.today-label{
+  padding:6px 9px;
+  border:1px solid #c5e1da;
+  border-radius:7px;
+  background:var(--accent-soft);
+  color:var(--accent);
+  font-size:10px;
+  font-weight:800;
+  white-space:nowrap;
+}
+
+.schedule-card .sheet-wrap{
+  max-width:none;
+  border:0;
+  border-radius:0;
+  box-shadow:none;
+}
+.schedule-card table{min-width:720px}
+.schedule-card th,.schedule-card td{padding:13px 10px}
+.schedule-card thead th{
+  background:#f1f6f4;
+  color:#4b6661;
+  border-color:var(--line);
+}
+.schedule-card tbody th{
+  background:var(--surface);
+  color:var(--ink);
+  font-size:13px;
+}
+.schedule-card tbody tr:hover th,
+.schedule-card tbody tr:hover td{
+  background:#f8fcfb;
+}
+.schedule-card td.today,
+.schedule-card th.today{
+  background:#e7f5f1;
+  box-shadow:inset 0 2px 0 #43a99a;
+}
+.schedule-card .chip{
+  min-width:38px;
+  min-height:30px;
+  padding:5px 9px;
+  border-radius:8px;
+  background:color-mix(in srgb,var(--chip) 8%,var(--surface));
+  box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--chip) 12%,transparent);
+  font-size:12px;
+}
+
+.legend{
+  max-width:none;
+  margin-top:10px;
+  padding:0 2px;
+  gap:7px;
+}
+.legend span{
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  padding:5px 8px;
+  border:1px solid var(--line);
+  border-radius:999px;
+  background:rgba(255,255,255,.62);
+}
+.legend i{width:7px;height:7px;margin-right:1px}
+.legend b{font-size:10px}
+
+footer{
+  max-width:1480px;
+  padding:13px 22px 22px;
+  margin:0 auto;
+  font-size:10px;
+}
+.footer-dot{
+  display:inline-block;
+  width:6px;height:6px;
+  margin-right:5px;
+  border-radius:50%;
+  background:#1aa786;
+}
+.footer-note{letter-spacing:.12em;font-weight:800}
+
+body.dark .topbar{
+  background:rgba(26,52,54,.88);
+  border-bottom-color:rgba(74,108,111,.7);
+}
+body.dark .brand-icon{
+  background:linear-gradient(145deg,#214b48,#1c403e);
+  border-color:#376d67;
+}
+body.dark .live-pill{
+  background:#204a46;
+  border-color:#3d716b;
+  color:#b8e7df;
+}
+body.dark .stats{background:rgba(26,52,54,.82)}
+body.dark .schedule-card{box-shadow:0 12px 32px rgba(0,0,0,.18)}
+body.dark .schedule-head{background:linear-gradient(180deg,#1a3436,#1d3a3c)}
+body.dark .schedule-card thead th{background:#244548}
+body.dark .schedule-card tbody tr:hover th,
+body.dark .schedule-card tbody tr:hover td{background:#1d3b3d}
+body.dark .legend span{background:rgba(26,52,54,.7)}
+
+@media (max-width:900px){
+  main{padding:20px 14px 10px}
+  .hero{align-items:flex-start;flex-direction:column;gap:14px}
+  .stats{width:100%}
+  .stat{flex:1}
+}
+
+/* Mobile: keep the requested rotated landscape worksheet, but give it a
+   deliberate app-like header and maximize the readable roster surface. */
+@media (max-width:600px){
+  html,body{
+    width:100%;height:100%;min-height:100%;
+    margin:0;overflow:hidden;
+  }
+  body{background:var(--bg)}
+  body > .app{
+    position:fixed;
+    left:0;top:0;
+    width:100vh;height:100vw;
+    min-height:0;max-height:none;overflow:hidden;
+    transform-origin:top left;
+    transform:rotate(90deg) translateY(-100%);
+  }
+
+  body > .app .topbar{
+    width:100%;
+    height:40px;min-height:40px;flex:0 0 40px;
+    padding:4px 8px;
+  }
+  body > .app .brand{gap:6px}
+  body > .app .brand-icon{width:24px;height:24px;font-size:11px;border-radius:6px}
+  body > .app .brand strong{font-size:14px}
+  body > .app .brand small{font-size:8px}
+  body > .app .live-pill{
+    height:23px;padding:0 7px;font-size:8px;
+  }
+  body > .app .live-pill i{width:5px;height:5px}
+  body > .app .icon-btn{width:26px;min-height:26px;font-size:15px}
+  body > .app .back{min-height:26px;padding:3px 6px;font-size:9px}
+
+  body > .app main{
+    width:100%;
+    height:calc(100vw - 40px);
+    min-height:0;max-height:none;
+    padding:0;overflow:hidden;
+  }
+
+  /* Desktop hero becomes a tiny information rail above the roster. */
+  body > .app .hero{
+    width:100%;
+    height:42px;
+    min-height:42px;
+    margin:0;
+    padding:4px 9px;
+    display:flex;
+    flex-direction:row;
+    align-items:center;
+    justify-content:space-between;
+    gap:8px;
+    border-bottom:1px solid var(--line);
+    background:var(--surface);
+  }
+  body > .app .hero-copy{display:flex;align-items:center;gap:6px;min-width:0}
+  body > .app .hero .eyebrow{display:none}
+  body > .app .hero h1{
+    margin:0;
+    font-size:15px;
+    white-space:nowrap;
+    letter-spacing:-.025em;
+  }
+  body > .app .hero p{display:none}
+  body > .app .stats{
+    width:auto;
+    border:0;
+    box-shadow:none;
+    background:transparent;
+    overflow:visible;
+  }
+  body > .app .stat{
+    min-width:34px;
+    padding:2px 5px;
+    border-right:1px solid var(--line);
+  }
+  body > .app .stat b{font-size:11px}
+  body > .app .stat small{font-size:6px;margin-top:1px}
+  body > .app .accent-stat{background:transparent}
+
+  body > .app .schedule-card{
+    width:100%;
+    height:calc(100% - 42px);
+    min-height:0;
+    border:0;
+    border-radius:0;
+    box-shadow:none;
+  }
+  body > .app .schedule-head{
+    height:27px;
+    min-height:27px;
+    padding:2px 8px;
+    border-bottom:1px solid var(--line);
+  }
+  body > .app .schedule-head .eyebrow{display:none}
+  body > .app .schedule-head strong{font-size:10px}
+  body > .app .today-label{padding:3px 6px;font-size:7px}
+
+  body > .app .schedule-card .sheet-wrap{
+    width:100%;
+    height:calc(100% - 27px);
+    min-height:0;
+    max-height:none;
+    overflow:hidden;
+    border:0;
+  }
+  body > .app .schedule-card table{
+    width:max-content;
+    min-width:0;
+    height:100%;
+    min-height:0;
+    table-layout:fixed;
+  }
+  body > .app .schedule-card thead,
+  body > .app .schedule-card thead tr,
+  body > .app .schedule-card thead th{
+    height:36px;
+  }
+  body > .app .schedule-card tbody{
+    height:calc(100% - 36px);
+  }
+  body > .app .schedule-card tbody tr{height:33.333333%}
+
+  body > .app .schedule-card th,
+  body > .app .schedule-card td{
+    padding:3px 2px;
+    line-height:1;
+    vertical-align:middle;
+    overflow:hidden;
+  }
+
+  /* Keep dates compact; make the three employee ROWS occupy the screen. */
+  body > .app .schedule-card .name-col{
+    width:82px;min-width:82px;max-width:82px;
+    white-space:nowrap;
+  }
+  body > .app .schedule-card thead th:not(.name-col),
+  body > .app .schedule-card tbody td{
+    width:46px;min-width:46px;max-width:46px;
+  }
+  body > .app .schedule-card thead th{
+    font-size:10px;
+  }
+  body > .app .schedule-card tbody th{
+    font-size:15px;
+    font-weight:900;
+    text-align:center;
+  }
+  body > .app .schedule-card .date-head{
+    font-size:13px;
+    white-space:nowrap;
+  }
+  body > .app .schedule-card th small,
+  body > .app .schedule-card td small{
+    font-size:8px;
+    white-space:nowrap;
+  }
+  body > .app .schedule-card .chip{
+    min-width:36px;
+    min-height:36px;
+    padding:5px 7px;
+    border-radius:7px;
+    font-size:18px;
+  }
+
+  body > .app .legend,
+  body > .app footer{display:none}
+}
+
+@media (max-width:380px){
+  body > .app .topbar{height:37px;min-height:37px;flex-basis:37px}
+  body > .app main{height:calc(100vw - 37px)}
+  body > .app .hero{height:38px;min-height:38px}
+  body > .app .schedule-card{height:calc(100% - 38px)}
+  body > .app .schedule-head{height:25px;min-height:25px}
+  body > .app .schedule-card .sheet-wrap{height:calc(100% - 25px)}
+  body > .app .schedule-card thead,
+  body > .app .schedule-card thead tr,
+  body > .app .schedule-card thead th{height:34px}
+  body > .app .schedule-card tbody{height:calc(100% - 34px)}
+  body > .app .schedule-card .name-col{width:76px;min-width:76px;max-width:76px}
+  body > .app .schedule-card thead th:not(.name-col),
+  body > .app .schedule-card tbody td{width:44px;min-width:44px;max-width:44px}
+  body > .app .schedule-card tbody th{font-size:14px}
+  body > .app .schedule-card .date-head{font-size:12px}
+  body > .app .schedule-card .chip{min-width:34px;min-height:34px;font-size:17px}
+}
