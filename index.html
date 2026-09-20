@@ -119,7 +119,6 @@ function render(){
       return '<div class="shift-cell '+(isToday?'is-today':'')+'">'+
         '<span class="shift" style="--c:'+esc(type.color||'#64748b')+'">'+
           '<b>'+esc(code)+'</b>'+
-          '<small>'+esc(type.note||'')+'</small>'+
         '</span>'+
       '</div>';
     }).join('');
