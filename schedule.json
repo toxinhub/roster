@@ -1,6 +1,6 @@
 {
   "month": "সেপ্টেম্বর ২০২৬",
-  "updatedAt": "2026-09-20T04:40:37.250Z",
+  "updatedAt": "2026-09-20T07:24:49Z",
   "shiftTypes": {
     "A": {
       "label": "শিফট A",
@@ -41,7 +41,7 @@
     },
     {
       "date": "২৮",
-      "weekday": "সোম maandag",
+      "weekday": "সোমবার",
       "isoDate": "2026-09-28"
     },
     {
