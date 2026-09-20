@@ -19,7 +19,7 @@
     width:100vh;
     min-height:100vw;
     transform-origin:top left;
-    transform:rotate(-90deg) translateX(-100%);
+    transform:rotate(90deg) translateY(-100%);
   }
   body > .app .topbar{
     width:100%;
