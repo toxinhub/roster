@@ -43,6 +43,7 @@
       <div class="section-head"><div><span class="eyebrow">ROSTER</span><h2>সম্পূর্ণ রোস্টার</h2></div></div>
       <div id="legend" class="legend"></div>
       <div id="tableWrap" class="table-wrap"></div>
+      <div class="mobile-roster-intro">তারিখ অনুযায়ী ডিউটি</div>
       <div id="cards" class="cards"></div>
     </section>
   </main>
@@ -77,7 +78,7 @@ function render(d){
  $('legend').innerHTML=Object.entries(d.shiftTypes).map(([c,s])=>'<span><i style="background:'+s.color+'"></i><b>'+c+'</b> '+s.label+' <small>'+s.note+'</small></span>').join('');
  const heads=d.days.map(x=>'<th class="'+(x.isoDate===today?'today':'')+'">'+x.date+'<small>'+x.weekday+'</small></th>').join('');
  $('tableWrap').innerHTML='<table><thead><tr><th>কর্মী</th>'+heads+'</tr></thead><tbody>'+d.employees.map(e=>'<tr><th>'+e.name+'</th>'+e.shifts.map((c,i)=>'<td class="'+(d.days[i]?.isoDate===today?'today':'')+'"><b class="shift" style="background:'+(d.shiftTypes[c]?.color||'#64748b')+'">'+c+'</b></td>').join('')+'</tr>').join('')+'</tbody></table>';
- $('cards').innerHTML=d.days.map((day,i)=>'<article class="day-card '+(day.isoDate===today?'today-card':'')+'"><div class="day-title"><b>'+day.date+'</b><span>'+day.weekday+'</span></div>'+d.employees.map(e=>{const c=e.shifts[i];return '<div class="person"><span>'+e.name+'</span><b class="shift mini" style="background:'+(d.shiftTypes[c]?.color||'#64748b')+'">'+c+'</b></div>'}).join('')+'</article>').join('');
+ $('cards').innerHTML=d.days.map((day,i)=>'<article class="day-card '+(day.isoDate===today?'today-card':'')+'"><div class="day-title"><div><span class="date-num">'+day.date+'</span><span class="weekday">'+day.weekday+'</span></div><span class="date-status">'+(day.isoDate===today?'আজ':'')+'</span></div><div class="day-people">'+d.employees.map(e=>{const c=e.shifts[i],s=d.shiftTypes[c]||{};return '<div class="person"><span class="person-name">'+e.name+'</span><span class="shift-detail"><b class="shift mini" style="background:'+(s.color||'#64748b')+'">'+c+'</b><small>'+(s.label||'')+'</small></span></div>'}).join('')+'</div></article>').join('');
  const td=d.days.findIndex(x=>x.isoDate===today); $('todayBadge').textContent=td>=0?'আজ • '+d.days[td].date+' '+d.days[td].weekday:'রোস্টার';
 }
 function showMember(name){
