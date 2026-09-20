@@ -222,3 +222,25 @@ input:focus{outline:2px solid rgba(200,243,107,.25);border-color:#91b94e}
 .picker i{display:inline-block;width:7px;height:7px;margin-right:5px;border-radius:50%}
 @media(max-width:900px){.form-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:600px){.form-grid{grid-template-columns:1fr}.panel,.admin-note{padding:14px}.topbar .brand{min-width:0}}
+
+
+/* Final typography polish */
+.board-head h2{font-size:17px;font-weight:850}
+.day-head span{font-size:10px;font-weight:750}
+.day-head strong{font-size:18px;font-weight:900}
+.person strong{font-size:14px;font-weight:850}
+.shift{min-height:38px;max-width:88px;padding:5px 9px}
+.shift b{font-size:12px;font-weight:950;letter-spacing:.01em}
+.legend b{font-size:9px;font-weight:900}
+.legend small{font-size:8px}
+.intro p{font-size:12px}
+.intro-meta b{font-size:9px}
+footer{font-size:9px}
+@media(max-width:520px){
+  .intro h1{font-size:31px}
+  .intro p{font-size:11px}
+  .day-head span{font-size:9px}
+  .day-head strong{font-size:17px}
+  .person strong{font-size:13px}
+  .shift b{font-size:11px}
+}
