@@ -1,16 +1,16 @@
 {
   "month": "সেপ্টেম্বর ২০২৬",
-  "updatedAt": "2026-09-20T14:10:49.645Z",
+  "updatedAt": "2026-09-20T15:14:19.810Z",
   "shiftTypes": {
     "A": {
       "label": "শিফট A",
       "note": "06:00–14:00",
-      "color": "#2563EB"
+      "color": "#F59E0B"
     },
     "B": {
       "label": "শিফট B",
       "note": "14:00–22:00",
-      "color": "#F59E0B"
+      "color": "#F97316"
     },
     "C": {
       "label": "শিফট C",
