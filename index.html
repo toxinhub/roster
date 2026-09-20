@@ -9,18 +9,19 @@
 <div class="app">
 <header class="topbar">
 <a class="brand" href="index.html"><span class="brand-icon">✓</span><span><strong>ডিউটি রোস্টার</strong><small>CCTV - PJL</small></span></a>
-<div class="top-actions"><button class="icon-btn" id="refresh" aria-label="রিফ্রেশ" title="রিফ্রেশ">↻</button><button class="icon-btn" id="theme" aria-label="থিম পরিবর্তন" title="থিম পরিবর্তন">☾</button><a class="back" href="admin.html">এডমিন</a></div>
+<div class="top-actions"><button class="icon-btn" id="theme" aria-label="থিম পরিবর্তন" title="থিম পরিবর্তন">☾</button><a class="back" href="admin.html">এডমিন</a></div>
 </header>
 <main>
-<div class="sheetbar"><div><strong class="page-title">ডিউটি রোস্টার</strong><small>CCTV - PJL</small></div><span class="sheet-title" id="month">লোড হচ্ছে…</span></div>
+<div class="sheetbar"><span class="sheet-title" id="month">লোড হচ্ছে…</span></div>
 <div class="sheet-wrap" id="tableWrap"></div><div id="legend" class="legend"></div>
 </main>
-<footer><span>শেষ আপডেট: <b id="footerUpdate">—</b></span><a href="admin.html">এডমিন প্যানেল</a></footer>
+<footer><span>শেষ আপডেট: <b id="footerUpdate">—</b></span></footer>
 </div><div id="toast" class="toast"></div>
 <script>
 let DATA=null;const TODAY=new Date().toLocaleDateString('en-CA',{timeZone:'Asia/Dhaka'}),$=id=>document.getElementById(id);const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));const fmt=d=>d?new Date(d).toLocaleString('bn-BD',{timeZone:'Asia/Dhaka',dateStyle:'medium',timeStyle:'short'}):'—';
 function applyTheme(){const d=localStorage.getItem('roster-theme')==='dark';document.body.classList.toggle('dark',d);$('theme').textContent=d?'☀':'☾'}
 async function load(){try{const r=await fetch('schedule.json?v='+Date.now());if(!r.ok)throw Error();DATA=await r.json();render()}catch{toast('রোস্টার লোড করা যায়নি',true)}}
 function render(){$('month').textContent=DATA.month||'—';$('footerUpdate').textContent=fmt(DATA.updatedAt);$('legend').innerHTML=Object.entries(DATA.shiftTypes||{}).map(([k,v])=>`<span><i style="background:${esc(v.color||'#777')}"></i><b>${esc(k)}</b> ${esc(v.label||'')}</span>`).join('');const h=(DATA.days||[]).map(d=>`<th class="${d.isoDate===TODAY?'today':''}"><span class="date-head">${esc(d.date)}</span><small>${esc(d.weekday)}</small></th>`).join('');const rows=(DATA.employees||[]).map(e=>`<tr><th class="name-col">${esc(e.name)}</th>${(e.shifts||[]).map((c,i)=>{const s=DATA.shiftTypes[c]||{};return `<td class="${DATA.days[i]?.isoDate===TODAY?'today':''}"><span class="chip" style="--chip:${esc(s.color||'#64748b')}">${esc(c)}</span><small>${esc(s.label||'')}</small></td>`}).join('')}</tr>`).join('');$('tableWrap').innerHTML=`<table><thead><tr><th class="name-col">কর্মী</th>${h}</tr></thead><tbody>${rows}</tbody></table>`}
-function toast(m,e=false){const t=$('toast');t.textContent=m;t.className='toast show'+(e?' err':'');setTimeout(()=>t.className='toast',3000)}$('refresh').onclick=load;$('theme').onclick=()=>{localStorage.setItem('roster-theme',document.body.classList.contains('dark')?'light':'dark');applyTheme()};applyTheme();load();
+function toast(m,e=false){const t=$('toast');t.textContent=m;t.className='toast show'+(e?' err':'');setTimeout(()=>t.className='toast',3000)}
+$('theme').onclick=()=>{localStorage.setItem('roster-theme',document.body.classList.contains('dark')?'light':'dark');applyTheme()};applyTheme();load();
 </script></body></html>
