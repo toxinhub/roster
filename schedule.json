@@ -1,26 +1,26 @@
 {
   "month": "সেপ্টেম্বর ২০২৬",
-  "updatedAt": "2026-09-20T15:25:46.793Z",
+  "updatedAt": "2026-09-20T15:27:55.175Z",
   "shiftTypes": {
     "A": {
       "label": "শিফট A",
       "note": "06:00–14:00",
-      "color": "#2563EB"
+      "color": "#FCA5A5"
     },
     "B": {
       "label": "শিফট B",
       "note": "14:00–22:00",
-      "color": "#F59E0B"
+      "color": "#93C5FD"
     },
     "C": {
       "label": "শিফট C",
       "note": "22:00–06:00",
-      "color": "#4F46E5"
+      "color": "#86EFAC"
     },
     "OFF": {
       "label": "ছুটি",
       "note": "নির্ধারিত ছুটি",
-      "color": "#64748B"
+      "color": "#CBD5E1"
     }
   },
   "days": [
