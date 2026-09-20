@@ -47,7 +47,7 @@ button,a{touch-action:manipulation}
 main{max-width:1440px;margin:0 auto;padding:42px 18px 18px}
 .intro{
   display:flex;align-items:flex-end;justify-content:space-between;
-  gap:30px;margin-bottom:22px
+  gap:30px;margin-bottom:20px
 }
 .kicker{display:block;color:#85919c;font-size:9px;font-weight:950;letter-spacing:.18em}
 .intro h1{
@@ -60,14 +60,14 @@ main{max-width:1440px;margin:0 auto;padding:42px 18px 18px}
 .intro-meta b{display:block;margin-top:3px;font-size:10px;color:var(--muted)}
 
 .board{
-  background:var(--panel);border:1px solid var(--line);border-radius:18px;
+  background:var(--panel);border:1px solid var(--line);border-radius:16px;
   box-shadow:var(--shadow);overflow:hidden
 }
 .board-head{
-  min-height:76px;padding:16px 18px;display:flex;align-items:center;
+  min-height:72px;padding:14px 18px;display:flex;align-items:center;
   justify-content:space-between;gap:20px;border-bottom:1px solid var(--line)
 }
-.board-head h2{margin:3px 0 0;font-size:18px;letter-spacing:-.02em}
+.board-head h2{margin:3px 0 0;font-size:17px;letter-spacing:-.02em}
 
 .legend{display:flex;align-items:center;justify-content:flex-end;gap:6px;flex-wrap:wrap}
 .legend span{
@@ -84,7 +84,7 @@ main{max-width:1440px;margin:0 auto;padding:42px 18px 18px}
 .roster-wrap{overflow-x:auto;overflow-y:hidden}
 .day-grid,.person-row{
   display:grid;
-  grid-template-columns:128px minmax(760px,1fr);
+  grid-template-columns:126px minmax(760px,1fr);
   min-width:900px
 }
 .day-grid{
@@ -111,7 +111,7 @@ main{max-width:1440px;margin:0 auto;padding:42px 18px 18px}
 }
 .day-head.is-today{background:#fbfff3}
 
-.person-row{min-height:76px;border-bottom:1px solid var(--line)}
+.person-row{min-height:74px;border-bottom:1px solid var(--line)}
 .person-row:last-child{border-bottom:0}
 .person{
   display:flex;align-items:center;padding:0 16px;
@@ -119,13 +119,13 @@ main{max-width:1440px;margin:0 auto;padding:42px 18px 18px}
 }
 .person strong{font-size:14px;letter-spacing:-.01em}
 .shift-cell{
-  min-height:76px;display:flex;align-items:center;justify-content:center;
-  padding:9px 7px;border-right:1px solid var(--line);background:var(--panel)
+  min-height:74px;display:flex;align-items:center;justify-content:center;
+  padding:8px 7px;border-right:1px solid var(--line);background:var(--panel)
 }
 .shift-cell:last-child{border-right:0}
 .shift-cell.is-today{background:#fbfff3}
 .shift{
-  width:100%;max-width:98px;min-height:38px;padding:5px 8px;
+  width:100%;max-width:94px;min-height:36px;padding:5px 8px;
   display:flex;align-items:center;justify-content:center;gap:6px;
   border-radius:9px;background:color-mix(in srgb,var(--c) 10%,white);
   color:color-mix(in srgb,var(--c) 78%,#111);
@@ -176,9 +176,9 @@ body.dark .shift{
   .legend{justify-content:flex-start}
   .day-grid,.person-row{grid-template-columns:112px minmax(760px,1fr);min-width:880px}
   .days{grid-template-columns:repeat(7,minmax(104px,1fr))}
-  .day-head{min-height:62px}
-  .person-row{min-height:70px}
-  .shift-cell{min-height:70px}
+  .day-head{min-height:60px}
+  .person-row{min-height:68px}
+  .shift-cell{min-height:68px}
   .shift{max-width:90px}
   footer{padding:12px 12px 20px}
   footer span:last-child{display:none}
@@ -189,7 +189,7 @@ body.dark .shift{
   .brand-mark{width:31px;height:31px}
   .intro h1{font-size:31px}
   .intro p{font-size:11px}
-  .board-head h2{font-size:16px}
+  .board-head h2{font-size:15px}
   .legend span{padding:4px 6px;font-size:7px}
   .legend b{font-size:7px}
   .legend small{font-size:6px}
@@ -235,7 +235,7 @@ input:focus{outline:2px solid rgba(200,243,107,.25);border-color:#91b94e}
 .day-head span{font-size:10px;font-weight:750}
 .day-head strong{font-size:18px;font-weight:900}
 .person strong{font-size:14px;font-weight:850}
-.shift{min-height:38px;max-width:90px;padding:5px 9px}
+.shift{min-height:36px;max-width:90px;padding:5px 9px}
 .shift b{font-size:11.5px;font-weight:950;letter-spacing:.01em}
 .legend b{font-size:8.5px;font-weight:900}
 .legend small{font-size:7px}
