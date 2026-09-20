@@ -24,3 +24,280 @@ body.dark{--bg:#101d1f;--surface:#132a2b;--surface-2:#183436;--surface-3:#1f4043
 
 @media (max-width:900px){.topbar{padding-left:14px;padding-right:14px}main{padding-top:18px}.form-grid{grid-template-columns:repeat(2,1fr)}}
 @media (max-width:600px){.topbar{min-height:58px;gap:10px}.brand strong{font-size:16px}.brand-icon{width:31px;height:31px}.top-actions{gap:4px}.back{padding:6px 8px;font-size:11px}main{padding:12px 8px 8px}.sheetbar{padding:11px 12px}.page-title{font-size:16px}.sheet-title{font-size:12px}.sheet-wrap{box-shadow:none}th,td{padding:10px 8px}.panel,.admin-note{padding:14px}.section-head{align-items:flex-start}.section-head h2{font-size:16px}.form-grid{grid-template-columns:1fr;gap:10px}.form-row label{min-width:100%}footer{padding:12px 8px 20px}}@media (max-width:380px){.brand small{font-size:11px}.icon-btn{width:34px}.back{font-size:10px}.sheetbar{gap:8px}}
+
+/* MOBILE ROSTER — REFERENCE MATCH */
+@media (max-width:600px){
+  html,body{
+    width:100%;
+    height:100%;
+    min-height:100%;
+    margin:0;
+    overflow:hidden;
+  }
+
+  body{
+    min-width:0;
+    background:var(--bg);
+  }
+
+  body > .app{
+    position:fixed;
+    left:0;
+    top:0;
+    width:100vh;
+    height:100vw;
+    min-height:0;
+    max-height:none;
+    overflow:hidden;
+    transform-origin:top left;
+    transform:rotate(90deg) translateY(-100%);
+  }
+
+  /* Compact controls stay on the same rotated screen, like the reference. */
+  body > .app .topbar{
+    width:100%;
+    height:42px;
+    min-height:42px;
+    flex:0 0 42px;
+    padding:4px 9px;
+    gap:8px;
+  }
+
+  body > .app .brand{
+    gap:6px;
+  }
+
+  body > .app .brand-icon{
+    width:25px;
+    height:25px;
+    font-size:12px;
+    border-radius:5px;
+  }
+
+  body > .app .brand strong{
+    font-size:15px;
+    line-height:1.05;
+  }
+
+  body > .app .brand small{
+    font-size:9px;
+    line-height:1.05;
+  }
+
+  body > .app .top-actions{
+    gap:3px;
+  }
+
+  body > .app .icon-btn{
+    width:29px;
+    min-height:29px;
+    font-size:16px;
+    padding:0;
+  }
+
+  body > .app .back{
+    min-height:29px;
+    padding:4px 7px;
+    font-size:10px;
+  }
+
+  body > .app main{
+    width:100%;
+    height:calc(100vw - 42px);
+    min-height:0;
+    max-height:none;
+    padding:0;
+    margin:0;
+    overflow:hidden;
+  }
+
+  body > .app .sheetbar{
+    width:100%;
+    height:32px;
+    min-height:32px;
+    max-width:none;
+    margin:0;
+    padding:3px 8px;
+    border-radius:0;
+    border-left:0;
+    border-right:0;
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+  }
+
+  body > .app .sheet-title{
+    font-size:11px;
+  }
+
+  /* The table area gets almost the entire phone width before rotation.
+     After rotation this becomes the visible left-to-right width. */
+  body > .app .sheet-wrap{
+    width:100%;
+    height:calc(100% - 32px);
+    min-height:0;
+    max-height:none;
+    max-width:none;
+    margin:0;
+    overflow:hidden;
+    border:0;
+    border-radius:0;
+    box-shadow:none;
+  }
+
+  body > .app .sheet-wrap table{
+    width:max-content;
+    min-width:0;
+    height:100%;
+    min-height:0;
+    max-height:none;
+    table-layout:fixed;
+    border-collapse:separate;
+    border-spacing:0;
+  }
+
+  /* Header + three large employee rows fill the available screen. */
+  body > .app .sheet-wrap thead,
+  body > .app .sheet-wrap thead tr,
+  body > .app .sheet-wrap thead th{
+    height:40px;
+  }
+
+  body > .app .sheet-wrap tbody{
+    height:calc(100% - 40px);
+  }
+
+  body > .app .sheet-wrap tbody tr{
+    height:33.333333%;
+  }
+
+  body > .app .sheet-wrap th,
+  body > .app .sheet-wrap td{
+    padding:4px 3px;
+    line-height:1.05;
+    vertical-align:middle;
+    overflow:hidden;
+  }
+
+  /* Date columns remain narrow — this is intentional. */
+  body > .app .sheet-wrap .name-col{
+    width:82px;
+    min-width:82px;
+    max-width:82px;
+    white-space:nowrap;
+  }
+
+  body > .app .sheet-wrap thead th:not(.name-col),
+  body > .app .sheet-wrap tbody td{
+    width:46px;
+    min-width:46px;
+    max-width:46px;
+  }
+
+  body > .app .sheet-wrap thead th{
+    font-size:11px;
+    font-weight:800;
+  }
+
+  body > .app .sheet-wrap tbody th{
+    font-size:15px;
+    font-weight:800;
+    text-align:center;
+    white-space:nowrap;
+  }
+
+  body > .app .sheet-wrap .date-head{
+    font-size:14px;
+    line-height:1;
+    white-space:nowrap;
+  }
+
+  body > .app .sheet-wrap th small,
+  body > .app .sheet-wrap td small{
+    font-size:9px;
+    line-height:1;
+    white-space:nowrap;
+  }
+
+  /* Large, readable A/B/C cells without widening the date columns. */
+  body > .app .sheet-wrap .chip{
+    display:inline-grid;
+    place-items:center;
+    min-width:36px;
+    min-height:36px;
+    padding:5px 7px;
+    border-radius:6px;
+    font-size:18px;
+    line-height:1;
+    font-weight:900;
+  }
+
+  /* The reference view keeps the actual roster clean; these are not needed
+     when everything must fit on one mobile screen. */
+  body > .app .legend,
+  body > .app footer{
+    display:none;
+  }
+}
+
+@media (max-width:380px){
+  body > .app .topbar{
+    height:39px;
+    min-height:39px;
+    flex-basis:39px;
+  }
+
+  body > .app main{
+    height:calc(100vw - 39px);
+  }
+
+  body > .app .sheetbar{
+    height:29px;
+    min-height:29px;
+  }
+
+  body > .app .sheet-wrap{
+    height:calc(100% - 29px);
+  }
+
+  body > .app .sheet-wrap thead,
+  body > .app .sheet-wrap thead tr,
+  body > .app .sheet-wrap thead th{
+    height:36px;
+  }
+
+  body > .app .sheet-wrap tbody{
+    height:calc(100% - 36px);
+  }
+
+  body > .app .sheet-wrap .name-col{
+    width:76px;
+    min-width:76px;
+    max-width:76px;
+  }
+
+  body > .app .sheet-wrap thead th:not(.name-col),
+  body > .app .sheet-wrap tbody td{
+    width:44px;
+    min-width:44px;
+    max-width:44px;
+  }
+
+  body > .app .sheet-wrap tbody th{
+    font-size:14px;
+  }
+
+  body > .app .sheet-wrap .date-head{
+    font-size:13px;
+  }
+
+  body > .app .sheet-wrap th small,
+  body > .app .sheet-wrap td small{
+    font-size:8px;
+  }
+
+  body > .app .sheet-wrap .chip{
+    min-width:34px;
+    min-height:34px;
+    font-size:17px;
+  }
+}
