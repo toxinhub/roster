@@ -58,7 +58,12 @@ let DATA=null;
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}[m]));
 const today=()=>new Date().toLocaleDateString('en-CA',{timeZone:'Asia/Dhaka'});
-const timeLabel=d=>d?new Date(d).toLocaleString('bn-BD',{timeZone:'Asia/Dhaka',dateStyle:'medium',timeStyle:'short'}):'—';
+const timeLabel=d=>{
+  if(!d) return '—';
+  const date=new Date(d);
+  if(Number.isNaN(date.getTime())) return '—';
+  return date.toLocaleString('bn-BD',{timeZone:'Asia/Dhaka',dateStyle:'medium',timeStyle:'short'});
+};
 
 function applyTheme(){
   const dark=localStorage.getItem('roster-theme')==='dark';
