@@ -4,17 +4,17 @@
   "shiftTypes": {
     "A": {
       "label": "শিফট A",
-      "note": "০৬:০০–১৪:০০",
+      "note": "",
       "color": "#2563eb"
     },
     "B": {
       "label": "শিফট B",
-      "note": "১৪:০০–২২:০০",
+      "note": "",
       "color": "#7c3aed"
     },
     "C": {
       "label": "শিফট C",
-      "note": "২২:০০–০৬:০০",
+      "note": "",
       "color": "#0891b2"
     },
     "OFF": {
@@ -41,7 +41,7 @@
     },
     {
       "date": "২৮",
-      "weekday": "সোমবার",
+      "weekday": "সোম maandag",
       "isoDate": "2026-09-28"
     },
     {
