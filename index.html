@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#111827">
+<meta name="theme-color" content="#101828">
 <meta name="description" content="CCTV - PJL duty roster">
 <title>Duty Roster • CCTV - PJL</title>
 <link rel="stylesheet" href="style.css">
@@ -11,9 +11,9 @@
 <body>
 <div class="app">
   <header class="topbar">
-    <a class="brand" href="index.html">
+    <a class="brand" href="index.html" aria-label="CCTV PJL Duty Roster">
       <span class="brand-mark">C</span>
-      <span><strong>CCTV · PJL</strong><small>Duty Control</small></span>
+      <span class="brand-copy"><strong>CCTV · PJL</strong><small>Duty Control</small></span>
     </a>
     <div class="top-actions">
       <span class="status-live"><i></i> LIVE BOARD</span>
@@ -27,7 +27,11 @@
       <div>
         <span class="kicker">OPERATIONS / ROSTER</span>
         <h1 id="month">লোড হচ্ছে…</h1>
-        <p>কে কখন ডিউটিতে থাকছেন—একটি পরিষ্কার, দ্রুত এবং শেয়ারযোগ্য বোর্ডে।</p>
+        <p>সবার ডিউটি এক নজরে দেখা যাবে—দিন, শিফট ও সময় একই জায়গায়।</p>
+      </div>
+      <div class="intro-meta">
+        <span>UPDATED</span>
+        <b id="updated">—</b>
       </div>
     </section>
 
@@ -35,7 +39,7 @@
       <div class="board-head">
         <div>
           <span class="kicker">DUTY MATRIX</span>
-          <h2>সাপ্তাহিক ডিউটি প্ল্যান</h2>
+          <h2>ডিউটি রোস্টার</h2>
         </div>
         <div id="legend" class="legend"></div>
       </div>
@@ -44,8 +48,8 @@
   </main>
 
   <footer>
-    <span><i></i> সর্বশেষ ডেটা: <b id="updated">—</b></span>
-    <span>CCTV · PJL / Duty Control</span>
+    <span><i></i> CCTV · PJL / Duty Control</span>
+    <span>Live roster · Shared view</span>
   </footer>
 </div>
 <div id="toast" class="toast"></div>
@@ -55,7 +59,6 @@ let DATA=null;
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 const today=()=>new Date().toLocaleDateString('en-CA',{timeZone:'Asia/Dhaka'});
-const dateLabel=d=>d?new Date(d+'T00:00:00').toLocaleDateString('bn-BD',{timeZone:'Asia/Dhaka',day:'numeric',month:'long'}):'—';
 const timeLabel=d=>d?new Date(d).toLocaleString('bn-BD',{timeZone:'Asia/Dhaka',dateStyle:'medium',timeStyle:'short'}):'—';
 
 function applyTheme(){
@@ -63,62 +66,80 @@ function applyTheme(){
   document.body.classList.toggle('dark',dark);
   $('theme').textContent=dark?'☀':'☾';
 }
+
 function toast(m,e=false){
-  const t=$('toast');t.textContent=m;t.className='toast show'+(e?' err':'');
+  const t=$('toast');
+  t.textContent=m;
+  t.className='toast show'+(e?' err':'');
   setTimeout(()=>t.className='toast',2800);
 }
+
 async function load(){
   try{
     const r=await fetch('schedule.json?v='+Date.now());
-    if(!r.ok)throw Error();
-    DATA=await r.json();render();
-  }catch{toast('রোস্টার লোড করা যায়নি',true)}
+    if(!r.ok) throw Error();
+    DATA=await r.json();
+    render();
+  }catch{
+    toast('রোস্টার লোড করা যায়নি',true);
+  }
 }
+
 function render(){
-  const days=DATA.days||[], people=DATA.employees||[], types=DATA.shiftTypes||{};
-  const now=today(), idx=days.findIndex(d=>d.isoDate===now);
+  const days=DATA.days||[];
+  const people=DATA.employees||[];
+  const types=DATA.shiftTypes||{};
+  const now=today();
 
   $('month').textContent=DATA.month||'Duty Roster';
   $('updated').textContent=timeLabel(DATA.updatedAt);
 
-  if(idx>=0){
-    const d=days[idx];
-    $('todayValue').textContent='ON DUTY';
-    $('todaySub').textContent=d.date+' · '+d.weekday;
-    $('todayTitle').textContent='TODAY';
-  }
-
   $('legend').innerHTML=Object.entries(types).map(([k,v])=>
-    '<span><i style="--c:'+esc(v.color||'#64748b')+'"></i>'+esc(k)+'</span>'
+    '<span><i style="--c:'+esc(v.color||'#64748b')+'"></i><b>'+esc(k)+'</b><small>'+esc(v.note||'')+'</small></span>'
   ).join('');
 
   const head=days.map(d=>{
     const isToday=d.isoDate===now;
     return '<div class="day-head '+(isToday?'is-today':'')+'">'+
-      '<span>'+esc(d.weekday||'')+'</span><strong>'+esc(d.date||'')+'</strong>'+
-      (isToday?'<em>আজ</em>':'')+'</div>';
+      '<span>'+esc(d.weekday||'')+'</span>'+
+      '<strong>'+esc(d.date||'')+'</strong>'+
+      (isToday?'<em>আজ</em>':'')+
+    '</div>';
   }).join('');
 
   const rows=people.map(p=>{
     const cells=days.map((d,di)=>{
-      const code=p.shifts?.[di]||'—', type=types[code]||{};
+      const code=p.shifts?.[di]||'—';
+      const type=types[code]||{};
       const isToday=d.isoDate===now;
       return '<div class="shift-cell '+(isToday?'is-today':'')+'">'+
-        '<span class="shift" style="--c:'+esc(type.color||'#64748b')+'"><b>'+esc(code)+'</b><small>'+esc(type.note||'')+'</small></span>'+
+        '<span class="shift" style="--c:'+esc(type.color||'#64748b')+'">'+
+          '<b>'+esc(code)+'</b>'+
+          '<small>'+esc(type.note||'')+'</small>'+
+        '</span>'+
       '</div>';
     }).join('');
+
     return '<div class="person-row">'+
       '<div class="person"><strong>'+esc(p.name)+'</strong></div>'+
-      '<div class="days">'+cells+'</div></div>';
+      '<div class="days">'+cells+'</div>'+
+    '</div>';
   }).join('');
 
-  $('roster').innerHTML='<div class="day-grid"><div class="person-head">TEAM</div><div class="days">'+head+'</div></div>'+rows;
+  $('roster').innerHTML=
+    '<div class="day-grid">'+
+      '<div class="person-head">TEAM</div>'+
+      '<div class="days">'+head+'</div>'+
+    '</div>'+rows;
 }
+
 $('theme').onclick=()=>{
   localStorage.setItem('roster-theme',document.body.classList.contains('dark')?'light':'dark');
   applyTheme();
 };
-applyTheme();load();
+
+applyTheme();
+load();
 </script>
 </body>
 </html>
