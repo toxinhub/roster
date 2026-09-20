@@ -356,3 +356,72 @@
     font-size:17px;
   }
 }
+
+/* Mobile: enlarge ROWS (not date columns) so the rotated roster fills the
+   portrait screen from left to right. */
+@media (max-width:600px){
+  body > .app main{
+    height:100vw;
+    min-height:100vw;
+    overflow:visible;
+  }
+
+  body > .app .sheetbar{
+    height:42px;
+    min-height:42px;
+  }
+
+  body > .app .sheet-wrap{
+    height:calc(100vw - 54px);
+    min-height:calc(100vw - 54px);
+    overflow:auto;
+  }
+
+  body > .app .sheet-wrap table{
+    width:max-content;
+    min-width:0;
+    height:100%;
+    min-height:0;
+  }
+
+  /* Keep seven date columns compact; increase each employee ROW instead. */
+  body > .app .sheet-wrap tbody tr{
+    height:calc((100vw - 116px) / 3);
+  }
+
+  body > .app .sheet-wrap tbody th,
+  body > .app .sheet-wrap tbody td{
+    height:auto;
+    vertical-align:middle;
+  }
+
+  body > .app .sheet-wrap .chip{
+    min-width:42px;
+    min-height:42px;
+    padding:7px 10px;
+    font-size:20px;
+    border-radius:8px;
+  }
+}
+
+@media (max-width:380px){
+  body > .app .sheetbar{
+    height:40px;
+    min-height:40px;
+  }
+
+  body > .app .sheet-wrap{
+    height:calc(100vw - 50px);
+    min-height:calc(100vw - 50px);
+  }
+
+  body > .app .sheet-wrap tbody tr{
+    height:calc((100vw - 106px) / 3);
+  }
+
+  body > .app .sheet-wrap .chip{
+    min-width:38px;
+    min-height:38px;
+    font-size:18px;
+  }
+}
