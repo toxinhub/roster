@@ -190,9 +190,16 @@ body.dark .shift{
   .intro h1{font-size:32px}
   .intro p{font-size:12px}
   .board-head h2{font-size:16px}
-  .legend span{padding:5px 7px}
+  .legend span{padding:5px 7px;font-size:7px}
+  .legend b{font-size:7px}
+  .legend small{font-size:6px}
+  .day-head span{font-size:9px}
+  .day-head strong{font-size:17px}
+  .person strong{font-size:13px}
+  .shift b{font-size:11px}
+  .person-head{padding:0 10px}
 }
- 
+
 .panel,.admin-note{max-width:1120px;margin:0 auto 16px;padding:20px;background:var(--panel);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow)}
 .admin-note{border-left:3px solid var(--accent);font-size:12px;color:var(--muted)}
 .admin-note b{color:var(--ink)}
@@ -206,7 +213,7 @@ input:focus{outline:2px solid rgba(200,243,107,.25);border-color:#91b94e}
 .actions,.form-row{display:flex;align-items:flex-end;flex-wrap:wrap;gap:7px}
 .form-row{margin-top:15px}
 .form-row label{flex:1;min-width:220px}
-.primary,.actions button,.form-row button{min-height:36px;border:1px solid var(--line-strong);border-radius:8px;padding:7px 11px;background:var(--panel-soft);color:var(--ink);cursor:pointer;font-size:11px;font-weight:800}
+.primary,.actions button,.form-row button{min-height:36px;border:1px solid var(--line-strong);border-radius:8px;padding:7px 11px;background:var(--panel-soft);color:var(--ink);cursor:pointer;font-weight:800}
 .primary{border-color:var(--accent);background:var(--accent);color:var(--accent-ink)}
 .status{padding:4px 8px;border:1px solid var(--line);border-radius:99px;color:var(--muted);font-size:9px}
 .grid-scroll{overflow:auto;border:1px solid var(--line);border-radius:9px}
@@ -244,3 +251,4 @@ footer{font-size:9px}
   .person strong{font-size:13px}
   .shift b{font-size:11px}
 }
+
