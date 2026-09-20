@@ -29,26 +29,6 @@
         <h1 id="month">লোড হচ্ছে…</h1>
         <p>কে কখন ডিউটিতে থাকছেন—একটি পরিষ্কার, দ্রুত এবং শেয়ারযোগ্য বোর্ডে।</p>
       </div>
-      <div class="next-card">
-        <span>পরবর্তী রোস্টার</span>
-        <strong id="nextDate">—</strong>
-        <small id="nextDay">—</small>
-      </div>
-    </section>
-
-    <section class="overview">
-      <article class="metric">
-        <span>TEAM</span><strong id="teamCount">—</strong><small>জন কর্মী</small>
-      </article>
-      <article class="metric">
-        <span>DAYS</span><strong id="dayCount">—</strong><small>রোস্টার দিন</small>
-      </article>
-      <article class="metric">
-        <span>SHIFTS</span><strong id="shiftCount">—</strong><small>মোট assignment</small>
-      </article>
-      <article class="metric today-metric">
-        <span id="todayTitle">TODAY</span><strong id="todayValue">—</strong><small id="todaySub">স্ট্যাটাস</small>
-      </article>
     </section>
 
     <section class="board">
@@ -60,14 +40,6 @@
         <div id="legend" class="legend"></div>
       </div>
       <div class="roster-wrap" id="roster"></div>
-    </section>
-
-    <section class="coverage">
-      <div class="coverage-head">
-        <div><span class="kicker">COVERAGE</span><h2>শিফট বিতরণ</h2></div>
-        <span id="coverageNote">রোস্টারের বর্তমান ডেটা</span>
-      </div>
-      <div id="coverageGrid" class="coverage-grid"></div>
     </section>
   </main>
 
@@ -105,26 +77,14 @@ async function load(){
 function render(){
   const days=DATA.days||[], people=DATA.employees||[], types=DATA.shiftTypes||{};
   const now=today(), idx=days.findIndex(d=>d.isoDate===now);
-  const next=days.find(d=>d.isoDate>=now)||days[0];
 
   $('month').textContent=DATA.month||'Duty Roster';
-  $('teamCount').textContent=people.length;
-  $('dayCount').textContent=days.length;
-  $('shiftCount').textContent=people.reduce((n,e)=>n+(e.shifts||[]).length,0);
   $('updated').textContent=timeLabel(DATA.updatedAt);
 
-  if(next){
-    $('nextDate').textContent=dateLabel(next.isoDate);
-    $('nextDay').textContent=next.weekday||'';
-  }
   if(idx>=0){
     const d=days[idx];
     $('todayValue').textContent='ON DUTY';
     $('todaySub').textContent=d.date+' · '+d.weekday;
-    $('todayTitle').textContent='TODAY';
-  }else{
-    $('todayValue').textContent='PLANNED';
-    $('todaySub').textContent=next?'পরবর্তী ডিউটি সামনে':'ডেটা নেই';
     $('todayTitle').textContent='TODAY';
   }
 
@@ -139,29 +99,20 @@ function render(){
       (isToday?'<em>আজ</em>':'')+'</div>';
   }).join('');
 
-  const rows=people.map((p,pi)=>{
-    const initial=esc((p.name||'?').trim().slice(0,1));
+  const rows=people.map(p=>{
     const cells=days.map((d,di)=>{
       const code=p.shifts?.[di]||'—', type=types[code]||{};
       const isToday=d.isoDate===now;
       return '<div class="shift-cell '+(isToday?'is-today':'')+'">'+
-        '<span class="shift" style="--c:'+esc(type.color||'#64748b')+'">'+esc(code)+'</span>'+
-        '<small>'+esc(type.note||'')+'</small></div>';
+        '<span class="shift" style="--c:'+esc(type.color||'#64748b')+'"><b>'+esc(code)+'</b><small>'+esc(type.note||'')+'</small></span>'+
+      '</div>';
     }).join('');
     return '<div class="person-row">'+
-      '<div class="person"><span class="avatar">'+initial+'</span><div><strong>'+esc(p.name)+'</strong><small>Team member '+String(pi+1).padStart(2,'0')+'</small></div></div>'+
+      '<div class="person"><strong>'+esc(p.name)+'</strong></div>'+
       '<div class="days">'+cells+'</div></div>';
   }).join('');
 
   $('roster').innerHTML='<div class="day-grid"><div class="person-head">TEAM</div><div class="days">'+head+'</div></div>'+rows;
-
-  const counts={};
-  Object.keys(types).forEach(k=>counts[k]=0);
-  people.forEach(p=>(p.shifts||[]).forEach(c=>{if(counts[c]!==undefined)counts[c]++}));
-  $('coverageGrid').innerHTML=Object.entries(types).map(([k,v])=>
-    '<div class="coverage-card"><span class="coverage-dot" style="--c:'+esc(v.color||'#64748b')+'"></span><div><b>'+esc(v.label||k)+'</b><small>'+esc(v.note||'')+'</small></div><strong>'+counts[k]+'</strong></div>'
-  ).join('');
-  $('coverageNote').textContent=days.length+' দিন × '+people.length+' জন';
 }
 $('theme').onclick=()=>{
   localStorage.setItem('roster-theme',document.body.classList.contains('dark')?'light':'dark');
