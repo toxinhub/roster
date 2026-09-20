@@ -133,3 +133,86 @@
   body > .app .date-head{font-size:10px}
   body > .app .chip{min-width:24px;font-size:8px}
 }
+
+/* Final mobile readability pass for typical 6–6.7 inch phones */
+@media (max-width:600px){
+  body > .app .topbar{min-height:46px;padding:5px 10px}
+  body > .app .brand{gap:6px}
+  body > .app .brand-icon{width:26px;height:26px;font-size:12px}
+  body > .app .brand strong{font-size:15px}
+  body > .app .brand small{font-size:9px}
+  body > .app .icon-btn{width:30px;min-height:30px;font-size:17px}
+  body > .app .back{min-height:30px;padding:4px 7px;font-size:10px}
+
+  body > .app main{padding:5px 5px 4px;min-height:calc(100vw - 46px)}
+  body > .app .sheetbar{min-height:39px;padding:6px 9px;gap:8px}
+  body > .app .page-title{font-size:15px;line-height:1.15}
+  body > .app .sheetbar small{font-size:9px;margin-top:1px}
+  body > .app .sheet-title{font-size:11px}
+
+  body > .app th,
+  body > .app td{
+    padding:3px 3px;
+    height:36px;
+    line-height:1.1;
+    font-size:11px;
+  }
+  body > .app thead th{
+    height:43px;
+    font-size:10px;
+  }
+  body > .app tbody th{
+    font-size:11px;
+    font-weight:700;
+  }
+
+  body > .app .name-col{
+    min-width:88px;
+    width:88px;
+    padding-left:6px;
+    padding-right:6px;
+  }
+  body > .app thead th:not(.name-col),
+  body > .app tbody td{
+    min-width:48px;
+    width:48px;
+  }
+
+  body > .app .date-head{
+    font-size:12px;
+    font-weight:700;
+    line-height:1.05;
+  }
+  body > .app th small,
+  body > .app td small{
+    font-size:9px;
+    line-height:1.05;
+  }
+  body > .app .chip{
+    min-width:30px;
+    min-height:20px;
+    padding:2px 5px;
+    border-radius:4px;
+    font-size:10px;
+    font-weight:800;
+  }
+
+  body > .app .legend{
+    gap:4px 9px;
+    padding:5px 1px 1px;
+    font-size:9px;
+  }
+  body > .app footer{padding:6px 1px 10px;font-size:9px}
+}
+
+@media (max-width:380px){
+  body > .app .name-col{min-width:82px;width:82px}
+  body > .app thead th:not(.name-col),
+  body > .app tbody td{min-width:45px;width:45px}
+  body > .app th,
+  body > .app td{height:34px;padding:3px 2px}
+  body > .app .date-head{font-size:11px}
+  body > .app th small,
+  body > .app td small{font-size:8px}
+  body > .app .chip{min-width:28px;font-size:9px}
+}
