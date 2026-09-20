@@ -1,64 +1,92 @@
 <!doctype html>
 <html lang="bn">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ডিউটি রোস্টার</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🗓️</text></svg>">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0f172a">
+<meta name="description" content="CCTV Team Duty Roster">
+<title>CCTV • Duty Roster</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="wrap">
-    <header class="masthead">
+<div class="app">
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-icon">◫</div>
+      <div><strong>CCTV • Duty Roster</strong><small id="subtitle">Team Schedule</small></div>
+    </div>
+    <button class="icon-btn" id="refreshBtn" aria-label="Refresh">↻</button>
+  </header>
+
+  <main>
+    <section class="hero">
       <div>
-        <h1>ডিউটি রোস্টার</h1>
-        <div class="updated">CCTV - PJL</div>
-        <div class="updated" id="updatedLine"></div>
+        <span class="eyebrow">CURRENT SCHEDULE</span>
+        <h1 id="monthTitle">Loading…</h1>
+        <p id="updatedText">লোড হচ্ছে…</p>
       </div>
-      <div class="month" id="monthLine"></div>
-    </header>
-    <div class="grid-scroll">
-      <table class="roster" id="rosterTable">
-        <thead id="rosterHead"></thead>
-        <tbody id="rosterBody"></tbody>
-      </table>
-    </div>
-    <div class="day-cards" id="dayCards"></div>
-    <div class="legend" id="legend"></div>
-    <div class="foot">
-      <span>মোট কর্মী: <span id="empCount"></span> জন · মোট দিন: <span id="dayCount"></span> দিন</span>
-      <a href="admin.html">✏️ শিফট পরিবর্তন করুন</a>
-    </div>
-    <div class="last-change" id="lastChangeStamp" aria-live="polite"></div>
-  </div>
-  <script>
-    const todayIso = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Dhaka' });
-    const bengaliTime = new Intl.DateTimeFormat('bn-BD', { dateStyle: 'medium', timeStyle: 'short', timeZone: 'Asia/Dhaka' });
-    fetch('schedule.json?_=' + Date.now())
-      .then(r => { if (!r.ok) throw new Error('schedule load failed'); return r.json(); })
-      .then(data => {
-        document.getElementById('monthLine').textContent = data.month;
-        document.getElementById('updatedLine').textContent = 'সর্বশেষ হালনাগাদ: ' + data.updatedAt;
-        document.getElementById('lastChangeStamp').textContent = data.updatedAt
-          ? 'শেষ শিফট পরিবর্তন: ' + bengaliTime.format(new Date(data.updatedAt))
-          : 'শেষ শিফট পরিবর্তনের সময় পাওয়া যায়নি';
-        document.getElementById('empCount').textContent = data.employees.length;
-        document.getElementById('dayCount').textContent = data.days.length;
-        renderTable(data); renderDayCards(data); renderLegend(data);
-      })
-      .catch(() => {
-        document.getElementById('rosterBody').innerHTML = '<tr><td colspan="99" style="padding:20px;color:#b64d37;">রোস্টার লোড করা যায়নি — schedule.json ফাইলটি পরীক্ষা করুন।</td></tr>';
-      });
-    function renderTable(data) {
-      const headRow = document.createElement('tr');
-      const nameTh = document.createElement('th'); nameTh.className = 'name-col'; nameTh.textContent = 'কর্মী'; headRow.appendChild(nameTh);
-      data.days.forEach(d => { const th = document.createElement('th'); if (d.isoDate === todayIso) th.classList.add('is-today'); th.innerHTML = d.date + '<span class="wd">' + d.weekday + '</span>'; headRow.appendChild(th); });
-      document.getElementById('rosterHead').appendChild(headRow);
-      const body = document.getElementById('rosterBody');
-      data.employees.forEach(emp => { const tr = document.createElement('tr'); const nameTd = document.createElement('td'); nameTd.className = 'name-col'; nameTd.textContent = emp.name; tr.appendChild(nameTd); emp.shifts.forEach((code, i) => { const td = document.createElement('td'); if (data.days[i]?.isoDate === todayIso) td.classList.add('is-today'); const type = data.shiftTypes[code] || { color: '#888' }; const chip = document.createElement('span'); chip.className = 'chip' + (code === 'OFF' ? ' off' : ''); chip.style.background = type.color; chip.textContent = code; td.appendChild(chip); tr.appendChild(td); }); body.appendChild(tr); });
-    }
-    function renderDayCards(data) { const wrap = document.getElementById('dayCards'); data.days.forEach((d, di) => { const card = document.createElement('div'); card.className = 'day-card' + (d.isoDate === todayIso ? ' is-today' : ''); const head = document.createElement('div'); head.className = 'day-head'; head.innerHTML = '<span class="dnum">' + d.date + '</span><span class="dname">' + d.weekday + '</span>'; card.appendChild(head); data.employees.forEach(emp => { const code = emp.shifts[di], type = data.shiftTypes[code] || { color: '#888' }, row = document.createElement('div'); row.className = 'person-row'; row.innerHTML = '<span class="who">' + emp.name + '</span><span class="chip' + (code === 'OFF' ? ' off' : '') + '" style="background:' + type.color + '">' + code + '</span>'; card.appendChild(row); }); wrap.appendChild(card); }); }
-    function renderLegend(data) { const legend = document.getElementById('legend'); Object.entries(data.shiftTypes).forEach(([code, type]) => { const item = document.createElement('div'); item.className = 'legend-item'; item.innerHTML = '<span class="dot" style="background:' + type.color + '"></span><span><strong>' + code + '</strong> — ' + type.label + '</span><span class="note">' + (type.note || '') + '</span>'; legend.appendChild(item); }); }
-  </script>
+      <div class="hero-badge" id="todayBadge">আজ</div>
+    </section>
+
+    <section class="my-duty">
+      <div class="section-head">
+        <div><span class="eyebrow">MY DUTY</span><h2>নিজের ডিউটি দেখুন</h2></div>
+        <button class="link-btn" id="copyLink">লিংক কপি</button>
+      </div>
+      <select id="memberSelect" aria-label="কর্মী নির্বাচন করুন">
+        <option value="">— নিজের নাম নির্বাচন করুন —</option>
+      </select>
+      <div id="myDutyCard" class="my-duty-card empty">উপরের তালিকা থেকে আপনার নাম নির্বাচন করুন।</div>
+    </section>
+
+    <section>
+      <div class="section-head"><div><span class="eyebrow">ROSTER</span><h2>সম্পূর্ণ রোস্টার</h2></div></div>
+      <div id="legend" class="legend"></div>
+      <div id="tableWrap" class="table-wrap"></div>
+      <div id="cards" class="cards"></div>
+    </section>
+  </main>
+
+  <footer>
+    <span>শেষ আপডেট: <b id="footerUpdate">—</b></span>
+    <a href="admin.html">Admin ↗</a>
+  </footer>
+</div>
+<div id="toast" class="toast"></div>
+<script>
+let DATA=null;
+const today=new Date().toLocaleDateString('en-CA',{timeZone:'Asia/Dhaka'});
+const $=id=>document.getElementById(id);
+const bnDate=iso=>new Intl.DateTimeFormat('bn-BD',{day:'numeric',month:'long',year:'numeric',timeZone:'Asia/Dhaka'}).format(new Date(iso+'T00:00:00+06:00'));
+
+fetch('schedule.json?v='+Date.now()).then(r=>r.json()).then(data=>{
+ DATA=data; render(data);
+ const p=new URLSearchParams(location.search), name=p.get('member');
+ if(name && data.employees.some(e=>e.name===name)){ $('memberSelect').value=name; showMember(name); }
+}).catch(()=>toast('রোস্টার লোড করা যায়নি',true));
+
+$('refreshBtn').onclick=()=>location.reload();
+$('memberSelect').onchange=e=>{ const n=e.target.value; if(n){ history.replaceState({},'', '?member='+encodeURIComponent(n)); showMember(n); } else { history.replaceState({},'', location.pathname); $('myDutyCard').className='my-duty-card empty'; $('myDutyCard').textContent='উপরের তালিকা থেকে আপনার নাম নির্বাচন করুন।'; } };
+$('copyLink').onclick=async()=>{ const n=$('memberSelect').value; if(!n){toast('আগে আপনার নাম নির্বাচন করুন',true);return;} const url=location.origin+location.pathname+'?member='+encodeURIComponent(n); try{await navigator.clipboard.writeText(url);toast('আপনার ব্যক্তিগত roster link কপি হয়েছে');}catch{toast(url)} };
+
+function render(d){
+ $('monthTitle').textContent=d.month||'Duty Roster';
+ $('updatedText').textContent='সর্বশেষ পরিবর্তন: '+(d.updatedAt?new Date(d.updatedAt).toLocaleString('bn-BD',{timeZone:'Asia/Dhaka'}):'—');
+ $('footerUpdate').textContent=d.updatedAt?new Date(d.updatedAt).toLocaleString('bn-BD',{timeZone:'Asia/Dhaka'}):'—';
+ d.employees.forEach(e=>{const o=document.createElement('option');o.value=e.name;o.textContent=e.name;$('memberSelect').appendChild(o)});
+ $('legend').innerHTML=Object.entries(d.shiftTypes).map(([c,s])=>'<span><i style="background:'+s.color+'"></i><b>'+c+'</b> '+s.label+' <small>'+s.note+'</small></span>').join('');
+ const heads=d.days.map(x=>'<th class="'+(x.isoDate===today?'today':'')+'">'+x.date+'<small>'+x.weekday+'</small></th>').join('');
+ $('tableWrap').innerHTML='<table><thead><tr><th>কর্মী</th>'+heads+'</tr></thead><tbody>'+d.employees.map(e=>'<tr><th>'+e.name+'</th>'+e.shifts.map((c,i)=>'<td class="'+(d.days[i]?.isoDate===today?'today':'')+'"><b class="shift" style="background:'+(d.shiftTypes[c]?.color||'#64748b')+'">'+c+'</b></td>').join('')+'</tr>').join('')+'</tbody></table>';
+ $('cards').innerHTML=d.days.map((day,i)=>'<article class="day-card '+(day.isoDate===today?'today-card':'')+'"><div class="day-title"><b>'+day.date+'</b><span>'+day.weekday+'</span></div>'+d.employees.map(e=>{const c=e.shifts[i];return '<div class="person"><span>'+e.name+'</span><b class="shift mini" style="background:'+(d.shiftTypes[c]?.color||'#64748b')+'">'+c+'</b></div>'}).join('')+'</article>').join('');
+ const td=d.days.findIndex(x=>x.isoDate===today); $('todayBadge').textContent=td>=0?'আজ • '+d.days[td].date+' '+d.days[td].weekday:'রোস্টার';
+}
+function showMember(name){
+ const e=DATA.employees.find(x=>x.name===name), i=DATA.days.findIndex(x=>x.isoDate===today);
+ const c=i>=0?e.shifts[i]:null, s=c?DATA.shiftTypes[c]:null;
+ $('myDutyCard').className='my-duty-card';
+ $('myDutyCard').innerHTML='<div><span class="member-name">'+e.name+'</span><small>আজকের ডিউটি</small></div><div class="big-shift" style="background:'+(s?.color||'#64748b')+'">'+(c||'—')+'</div><div class="duty-meta">'+(s?.label||'কোনো ডিউটি নির্ধারিত নেই')+(s?.note?' • '+s.note:'')+'</div>';
+}
+function toast(msg,err=false){const t=$('toast');t.textContent=msg;t.className='toast show'+(err?' err':'');setTimeout(()=>t.className='toast',3200)}
+</script>
 </body>
 </html>
