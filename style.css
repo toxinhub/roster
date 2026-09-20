@@ -261,3 +261,98 @@
     font-size:10px;
   }
 }
+
+/* Mobile full-height roster: use the available screen for the actual duty grid */
+@media (max-width:600px){
+  body > .app .sheet-wrap{
+    overflow:auto;
+  }
+
+  /* The public roster has three employee rows. Give those rows the available
+     vertical space so the worksheet does not leave a large empty area. */
+  body > .app .sheet-wrap table{
+    height:calc(100vh - 112px);
+    min-height:0;
+  }
+
+  body > .app .sheet-wrap thead tr{
+    height:58px;
+  }
+
+  body > .app .sheet-wrap tbody tr{
+    height:calc((100vh - 170px) / 3);
+  }
+
+  body > .app .sheet-wrap thead th{
+    height:58px;
+    padding:5px 3px;
+    font-size:12px;
+  }
+
+  body > .app .sheet-wrap tbody th,
+  body > .app .sheet-wrap tbody td{
+    height:auto;
+    padding:6px 3px;
+    font-size:14px;
+    vertical-align:middle;
+  }
+
+  body > .app .sheet-wrap .name-col{
+    min-width:88px;
+    width:88px;
+    font-size:14px;
+  }
+
+  body > .app .sheet-wrap .date-head{
+    font-size:15px;
+    line-height:1.1;
+  }
+
+  body > .app .sheet-wrap th small,
+  body > .app .sheet-wrap td small{
+    font-size:10px;
+    line-height:1.1;
+  }
+
+  body > .app .sheet-wrap .chip{
+    min-width:40px;
+    min-height:40px;
+    padding:6px 9px;
+    border-radius:7px;
+    font-size:19px;
+    line-height:1;
+    font-weight:800;
+  }
+}
+
+/* Smaller phones: keep the enlarged shift controls without overflowing */
+@media (max-width:380px){
+  body > .app .sheet-wrap table{
+    height:calc(100vh - 104px);
+  }
+
+  body > .app .sheet-wrap tbody tr{
+    height:calc((100vh - 160px) / 3);
+  }
+
+  body > .app .sheet-wrap thead tr,
+  body > .app .sheet-wrap thead th{
+    height:52px;
+  }
+
+  body > .app .sheet-wrap .name-col{
+    min-width:78px;
+    width:78px;
+    font-size:13px;
+  }
+
+  body > .app .sheet-wrap .date-head{
+    font-size:14px;
+  }
+
+  body > .app .sheet-wrap .chip{
+    min-width:36px;
+    min-height:36px;
+    font-size:17px;
+  }
+}
