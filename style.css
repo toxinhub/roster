@@ -31,3 +31,105 @@
     overflow:auto;
   }
 }
+
+/* Mobile roster optimization: compact spreadsheet proportions */
+@media (max-width:600px){
+  body > .app .topbar{
+    min-height:48px;
+    padding:6px 12px;
+  }
+  body > .app .brand{gap:7px}
+  body > .app .brand-icon{width:27px;height:27px;font-size:13px}
+  body > .app .brand strong{font-size:14px}
+  body > .app .brand small{font-size:9px}
+  body > .app .top-actions{gap:3px}
+  body > .app .icon-btn{width:31px;min-height:31px;font-size:17px}
+  body > .app .back{min-height:31px;padding:4px 7px;font-size:10px}
+
+  body > .app main{
+    padding:7px 6px 5px;
+    min-height:calc(100vw - 48px);
+  }
+  body > .app .sheetbar{
+    min-height:42px;
+    padding:7px 10px;
+    gap:10px;
+  }
+  body > .app .page-title{font-size:14px}
+  body > .app .sheetbar small{font-size:9px}
+  body > .app .sheet-title{font-size:10px}
+
+  body > .app .sheet-wrap{
+    max-width:none;
+    border-radius:0 0 5px 5px;
+  }
+  body > .app table{
+    min-width:0;
+    width:max-content;
+    table-layout:fixed;
+  }
+  body > .app th,
+  body > .app td{
+    padding:5px 4px;
+    height:38px;
+    line-height:1.15;
+    font-size:10px;
+  }
+  body > .app thead th{
+    height:42px;
+    font-size:9px;
+  }
+  body > .app tbody th{
+    font-size:10px;
+  }
+  body > .app .name-col{
+    min-width:82px;
+    width:82px;
+  }
+  body > .app thead th:not(.name-col),
+  body > .app tbody td{
+    min-width:46px;
+    width:46px;
+  }
+  body > .app .date-head{
+    font-size:11px;
+    line-height:1.05;
+  }
+  body > .app th small,
+  body > .app td small{
+    font-size:8px;
+    line-height:1.05;
+  }
+  body > .app .chip{
+    min-width:27px;
+    padding:2px 4px;
+    border-radius:4px;
+    font-size:9px;
+    line-height:1.1;
+  }
+  body > .app .legend{
+    gap:5px 10px;
+    padding:7px 1px 2px;
+    font-size:9px;
+  }
+  body > .app .legend i{
+    width:7px;
+    height:7px;
+    margin-right:3px;
+  }
+  body > .app footer{
+    padding:8px 1px 12px;
+    font-size:9px;
+  }
+}
+
+/* Extra-small phones: squeeze columns slightly while keeping names readable */
+@media (max-width:380px){
+  body > .app .name-col{min-width:74px;width:74px}
+  body > .app thead th:not(.name-col),
+  body > .app tbody td{min-width:42px;width:42px}
+  body > .app th,
+  body > .app td{height:35px;padding:4px 3px}
+  body > .app .date-head{font-size:10px}
+  body > .app .chip{min-width:24px;font-size:8px}
+}
