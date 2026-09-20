@@ -1,49 +1,56 @@
 <!doctype html>
 <html lang="bn">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#107c41"><meta name="description" content="CCTV Team duty roster">
-<title>CCTV Team • Duty Roster</title><link rel="stylesheet" href="style.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0f766e">
+<meta name="description" content="CCTV - PJL duty roster">
+<title>ডিউটি রোস্টার • CCTV - PJL</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div class="app">
-<header class="topbar">
-<a class="brand" href="index.html"><span class="brand-icon">✓</span><span><strong>CCTV TEAM</strong><small>Duty Roster • Worksheet</small></span></a>
-<div class="top-actions"><button class="icon-btn" id="refresh" aria-label="Refresh">↻ Refresh</button><a class="back" href="admin.html">Admin</a></div>
-</header>
-<main>
-<div class="sheetbar"><span class="sheet-title" id="month">Loading…</span><span class="sheet-sub" id="updated">Loading…</span></div>
-<section class="my-duty">
-<label for="member">আমার ডিউটি:</label><select id="member"><option value="">নাম নির্বাচন করুন</option></select>
-<button class="link-btn" id="copyLink">ব্যক্তিগত লিংক কপি</button>
-<div id="myDuty" class="my-duty-card empty">নাম নির্বাচন করলে আজকের ডিউটি দেখাবে</div>
-</section>
-<div class="sheet-wrap" id="tableWrap"></div>
-<div id="legend" class="legend"></div>
-</main>
-<footer><span>শেষ আপডেট: <b id="footerUpdate">—</b></span><a href="admin.html">Roster Admin</a></footer>
+  <header class="topbar">
+    <a class="brand" href="index.html" aria-label="ডিউটি রোস্টার হোম">
+      <span class="brand-icon">✓</span>
+      <span><strong>ডিউটি রোস্টার</strong><small>CCTV - PJL</small></span>
+    </a>
+    <div class="top-actions">
+      <button class="icon-btn" id="refresh" aria-label="রিফ্রেশ" title="রিফ্রেশ">↻</button>
+      <button class="icon-btn" id="theme" aria-label="থিম পরিবর্তন" title="থিম পরিবর্তন">☾</button>
+      <a class="back" href="admin.html">এডমিন</a>
+    </div>
+  </header>
+  <main>
+    <div class="sheetbar">
+      <div><strong class="page-title">ডিউটি রোস্টার</strong><small>CCTV - PJL</small></div>
+      <span class="sheet-title" id="month">লোড হচ্ছে…</span>
+    </div>
+    <div class="sheet-wrap" id="tableWrap"></div>
+    <div id="legend" class="legend"></div>
+  </main>
+  <footer><span>শেষ আপডেট: <b id="footerUpdate">—</b></span><a href="admin.html">এডমিন প্যানেল</a></footer>
 </div>
 <div id="toast" class="toast"></div>
 <script>
-let DATA=null;
-const TODAY=new Date().toLocaleDateString('en-CA',{timeZone:'Asia/Dhaka'}),$=id=>document.getElementById(id);
-const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
-const fmt=d=>d?new Date(d).toLocaleString('bn-BD',{timeZone:'Asia/Dhaka',dateStyle:'medium',timeStyle:'short'}):'—';
-async function load(){try{const r=await fetch('schedule.json?v='+Date.now());if(!r.ok)throw 0;DATA=await r.json();render();openMember()}catch{toast('রোস্টার লোড করা যায়নি',true)}}
+let DATA = null;
+const TODAY = new Date().toLocaleDateString('en-CA', {timeZone:'Asia/Dhaka'});
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+const fmt = d => d ? new Date(d).toLocaleString('bn-BD',{timeZone:'Asia/Dhaka',dateStyle:'medium',timeStyle:'short'}) : '—';
+function applyTheme(){const dark=localStorage.getItem('roster-theme')==='dark';document.body.classList.toggle('dark',dark);$('theme').textContent=dark?'☀':'☾';$('theme').setAttribute('aria-label',dark?'লাইট থিম':'ডার্ক থিম');}
+async function load(){try{const r=await fetch('schedule.json?v='+Date.now());if(!r.ok)throw Error();DATA=await r.json();render();}catch{toast('রোস্টার লোড করা যায়নি',true)}}
 function render(){
-$('month').textContent=DATA.month||'CCTV Duty Roster';$('updated').textContent='শেষ পরিবর্তন: '+fmt(DATA.updatedAt);$('footerUpdate').textContent=fmt(DATA.updatedAt);
-$('member').innerHTML='<option value="">নাম নির্বাচন করুন</option>'+DATA.employees.map(e=>'<option value="'+esc(e.name)+'">'+esc(e.name)+'</option>').join('');
-$('legend').innerHTML=Object.entries(DATA.shiftTypes).map(([k,v])=>'<span><i style="background:'+esc(v.color||'#777')+'"></i><b>'+esc(k)+'</b> '+esc(v.label||'')+'</span>').join('');
-const heads=DATA.days.map(d=>'<th class="'+(d.isoDate===TODAY?'today':'')+'"><span class="date-head">'+esc(d.date)+'</span><small>'+esc(d.weekday)+'</small></th>').join('');
-const rows=DATA.employees.map(e=>'<tr><th>'+esc(e.name)+'</th>'+e.shifts.map((c,i)=>{const s=DATA.shiftTypes[c]||{};return '<td class="'+(DATA.days[i]?.isoDate===TODAY?'today':'')+'"><span class="shift" style="background:'+esc(s.color||'#777')+'">'+esc(c)+'</span></td>'}).join('')+'</tr>').join('');
-$('tableWrap').innerHTML='<table><thead><tr><th>কর্মী</th>'+heads+'</tr></thead><tbody>'+rows+'</tbody></table>';
+ $('month').textContent=DATA.month||'—'; $('footerUpdate').textContent=fmt(DATA.updatedAt);
+ $('legend').innerHTML=Object.entries(DATA.shiftTypes||{}).map(([k,v])=>`<span><i style="background:${esc(v.color||'#777')}"></i><b>${esc(k)}</b> ${esc(v.label||'')}</span>`).join('');
+ const heads=(DATA.days||[]).map(d=>`<th class="${d.isoDate===TODAY?'today':''}"><span class="date-head">${esc(d.date)}</span><small>${esc(d.weekday)}</small></th>`).join('');
+ const rows=(DATA.employees||[]).map(e=>`<tr><th class="name-col">${esc(e.name)}</th>${(e.shifts||[]).map((c,i)=>{const s=DATA.shiftTypes[c]||{};return `<td class="${DATA.days[i]?.isoDate===TODAY?'today':''}"><span class="chip" style="--chip:${esc(s.color||'#64748b')}">${esc(c)}</span><small>${esc(s.label||'')}</small></td>`}).join('')}</tr>`).join('');
+ $('tableWrap').innerHTML=`<table><thead><tr><th class="name-col">কর্মী</th>${heads}</tr></thead><tbody>${rows}</tbody></table>`;
 }
-function showMember(name){const e=DATA.employees.find(x=>x.name===name),i=DATA.days.findIndex(d=>d.isoDate===TODAY);if(!e){$('myDuty').className='my-duty-card empty';$('myDuty').textContent='নাম নির্বাচন করলে আজকের ডিউটি দেখাবে';return}const c=i>=0?e.shifts[i]:null,s=c?DATA.shiftTypes[c]:null;$('myDuty').className='my-duty-card';$('myDuty').innerHTML='<span><span class="member-name">'+esc(e.name)+'</span> • আজ</span><span class="big-shift" style="background:'+esc(s?.color||'#777')+'">'+esc(c||'—')+'</span><span class="duty-meta">'+esc(s?.label||'ডিউটি নির্ধারিত নেই')+'</span>'}
-function openMember(){const n=new URLSearchParams(location.search).get('member');if(n&&DATA.employees.some(e=>e.name===n)){$('member').value=n;showMember(n)}}
-$('member').onchange=e=>{const n=e.target.value;if(n){history.replaceState({},'','?member='+encodeURIComponent(n));showMember(n)}else{history.replaceState({},'','index.html');showMember('')}};
-$('copyLink').onclick=async()=>{const n=$('member').value;if(!n){toast('আগে নাম নির্বাচন করুন',true);return}const u=location.origin+location.pathname+'?member='+encodeURIComponent(n);try{await navigator.clipboard.writeText(u);toast('ব্যক্তিগত লিংক কপি হয়েছে')}catch{toast(u)}};
+function toast(message,error=false){const t=$('toast');t.textContent=message;t.className='toast show'+(error?' err':'');setTimeout(()=>t.className='toast',3000)}
 $('refresh').onclick=load;
-function toast(m,e=false){const t=$('toast');t.textContent=m;t.className='toast show'+(e?' err':'');setTimeout(()=>t.className='toast',3000)}
-load();
+$('theme').onclick=()=>{localStorage.setItem('roster-theme',document.body.classList.contains('dark')?'light':'dark');applyTheme()};
+applyTheme();load();
 </script>
-</body></html>
+</body>
+</html>
