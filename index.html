@@ -1,27 +1,147 @@
 <!doctype html>
 <html lang="bn">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#0f766e"><meta name="description" content="CCTV - PJL duty roster">
-<title>ডিউটি রোস্টার • CCTV - PJL</title><link rel="stylesheet" href="style.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0d6b63">
+<meta name="description" content="CCTV - PJL live duty roster">
+<title>ডিউটি রোস্টার • CCTV - PJL</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div class="app">
-<header class="topbar">
-<a class="brand" href="index.html"><span class="brand-icon">✓</span><span><strong>ডিউটি রোস্টার</strong><small>CCTV - PJL</small></span></a>
-<div class="top-actions"><button class="icon-btn" id="theme" aria-label="থিম পরিবর্তন" title="থিম পরিবর্তন">☾</button><a class="back" href="admin.html">এডমিন</a></div>
-</header>
-<main>
-<div class="sheetbar"><span class="sheet-title" id="month">লোড হচ্ছে…</span></div>
-<div class="sheet-wrap" id="tableWrap"></div><div id="legend" class="legend"></div>
-</main>
-<footer><span>শেষ আপডেট: <b id="footerUpdate">—</b></span></footer>
-</div><div id="toast" class="toast"></div>
+  <header class="topbar">
+    <a class="brand" href="index.html" aria-label="ডিউটি রোস্টার">
+      <span class="brand-icon">✓</span>
+      <span class="brand-copy">
+        <strong>ডিউটি রোস্টার</strong>
+        <small>CCTV · PJL</small>
+      </span>
+    </a>
+    <div class="top-actions">
+      <span class="live-pill"><i></i> LIVE</span>
+      <button class="icon-btn" id="theme" aria-label="থিম পরিবর্তন" title="থিম পরিবর্তন">☾</button>
+      <a class="back" href="admin.html">এডমিন</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-copy">
+        <span class="eyebrow">CCTV · DUTY BOARD</span>
+        <h1 id="month">লোড হচ্ছে…</h1>
+        <p>আজকের ডিউটি এক নজরে দেখুন — তারিখ অনুযায়ী শিফট পরিবর্তন হলে এই বোর্ডটি স্বয়ংক্রিয়ভাবে আপডেট হবে।</p>
+      </div>
+      <div class="stats" aria-label="রোস্টার সারাংশ">
+        <div class="stat"><b id="teamCount">—</b><small>কর্মী</small></div>
+        <div class="stat"><b id="dayCount">—</b><small>দিন</small></div>
+        <div class="stat accent-stat"><b id="todayShift">—</b><small>আজ</small></div>
+      </div>
+    </section>
+
+    <section class="schedule-card">
+      <div class="schedule-head">
+        <div>
+          <span class="eyebrow">SCHEDULE</span>
+          <strong>ডিউটি ম্যাট্রিক্স</strong>
+        </div>
+        <span id="todayLabel" class="today-label">ঢাকা সময়</span>
+      </div>
+      <div class="sheet-wrap" id="tableWrap"></div>
+    </section>
+
+    <div id="legend" class="legend"></div>
+  </main>
+
+  <footer>
+    <span><i class="footer-dot"></i> শেষ আপডেট: <b id="footerUpdate">—</b></span>
+    <span class="footer-note">CCTV · PJL</span>
+  </footer>
+</div>
+<div id="toast" class="toast"></div>
+
 <script>
-let DATA=null;const TODAY=new Date().toLocaleDateString('en-CA',{timeZone:'Asia/Dhaka'}),$=id=>document.getElementById(id);const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));const fmt=d=>d?new Date(d).toLocaleString('bn-BD',{timeZone:'Asia/Dhaka',dateStyle:'medium',timeStyle:'short'}):'—';
-function applyTheme(){const d=localStorage.getItem('roster-theme')==='dark';document.body.classList.toggle('dark',d);$('theme').textContent=d?'☀':'☾'}
-async function load(){try{const r=await fetch('schedule.json?v='+Date.now());if(!r.ok)throw Error();DATA=await r.json();render()}catch{toast('রোস্টার লোড করা যায়নি',true)}}
-function render(){$('month').textContent=DATA.month||'—';$('footerUpdate').textContent=fmt(DATA.updatedAt);$('legend').innerHTML=Object.entries(DATA.shiftTypes||{}).map(([k,v])=>`<span><i style="background:${esc(v.color||'#777')}"></i><b>${esc(k)}</b></span>`).join('');const h=(DATA.days||[]).map(d=>`<th class="${d.isoDate===TODAY?'today':''}"><span class="date-head">${esc(d.date)}</span><small>${esc(d.weekday)}</small></th>`).join('');const rows=(DATA.employees||[]).map(e=>`<tr><th class="name-col">${esc(e.name)}</th>${(e.shifts||[]).map((c,i)=>{const s=DATA.shiftTypes[c]||{};return `<td class="${DATA.days[i]?.isoDate===TODAY?'today':''}"><span class="chip" style="--chip:${esc(s.color||'#64748b')}">${esc(c)}</span></td>`}).join('')}</tr>`).join('');$('tableWrap').innerHTML=`<table><thead><tr><th class="name-col">কর্মী</th>${h}</tr></thead><tbody>${rows}</tbody></table>`}
-function toast(m,e=false){const t=$('toast');t.textContent=m;t.className='toast show'+(e?' err':'');setTimeout(()=>t.className='toast',3000)}
-$('theme').onclick=()=>{localStorage.setItem('roster-theme',document.body.classList.contains('dark')?'light':'dark');applyTheme()};applyTheme();load();
-</script></body></html>
+let DATA=null;
+const TODAY=new Date().toLocaleDateString('en-CA',{timeZone:'Asia/Dhaka'});
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+const fmt=d=>d?new Date(d).toLocaleString('bn-BD',{timeZone:'Asia/Dhaka',dateStyle:'medium',timeStyle:'short'}):'—';
+
+function applyTheme(){
+  const d=localStorage.getItem('roster-theme')==='dark';
+  document.body.classList.toggle('dark',d);
+  $('theme').textContent=d?'☀':'☾';
+}
+
+async function load(){
+  try{
+    const r=await fetch('schedule.json?v='+Date.now());
+    if(!r.ok)throw Error();
+    DATA=await r.json();
+    render();
+  }catch{
+    toast('রোস্টার লোড করা যায়নি',true);
+  }
+}
+
+function render(){
+  const days=DATA.days||[];
+  const employees=DATA.employees||[];
+  const todayIndex=days.findIndex(d=>d.isoDate===TODAY);
+
+  $('month').textContent=DATA.month||'—';
+  $('teamCount').textContent=employees.length;
+  $('dayCount').textContent=days.length;
+  $('todayShift').textContent=todayIndex>=0?'LIVE':'—';
+  $('footerUpdate').textContent=fmt(DATA.updatedAt);
+
+  if(todayIndex>=0){
+    const d=days[todayIndex];
+    $('todayLabel').textContent='আজ · '+(d.date||'')+' · '+(d.weekday||'');
+  }else{
+    $('todayLabel').textContent='ঢাকা সময়';
+  }
+
+  $('legend').innerHTML=Object.entries(DATA.shiftTypes||{}).map(([k,v])=>
+    '<span><i style="background:'+esc(v.color||'#777')+'"></i><b>'+esc(k)+'</b></span>'
+  ).join('');
+
+  const h=days.map(d=>
+    '<th class="'+(d.isoDate===TODAY?'today':'')+'">'+
+      '<span class="date-head">'+esc(d.date)+'</span>'+
+      '<small>'+esc(d.weekday)+'</small>'+
+    '</th>'
+  ).join('');
+
+  const rows=employees.map(e=>{
+    const cells=(e.shifts||[]).map((c,i)=>{
+      const s=DATA.shiftTypes[c]||{};
+      return '<td class="'+(days[i]?.isoDate===TODAY?'today':'')+'">'+
+        '<span class="chip" style="--chip:'+esc(s.color||'#64748b')+'">'+esc(c)+'</span>'+
+      '</td>';
+    }).join('');
+    return '<tr><th class="name-col">'+esc(e.name)+'</th>'+cells+'</tr>';
+  }).join('');
+
+  $('tableWrap').innerHTML=
+    '<table><thead><tr><th class="name-col">কর্মী</th>'+h+
+    '</tr></thead><tbody>'+rows+'</tbody></table>';
+}
+
+function toast(m,e=false){
+  const t=$('toast');
+  t.textContent=m;
+  t.className='toast show'+(e?' err':'');
+  setTimeout(()=>t.className='toast',3000);
+}
+
+$('theme').onclick=()=>{
+  localStorage.setItem('roster-theme',document.body.classList.contains('dark')?'light':'dark');
+  applyTheme();
+};
+
+applyTheme();
+load();
+</script>
+</body>
+</html>
