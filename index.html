@@ -56,7 +56,7 @@
 <script>
 let DATA=null;
 const $=id=>document.getElementById(id);
-const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}[m]));
+const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\\'':'&#39;'}[m]));
 const today=()=>new Date().toLocaleDateString('en-CA',{timeZone:'Asia/Dhaka'});
 const timeLabel=d=>{
   if(!d) return '—';
@@ -131,7 +131,7 @@ function render(){
 
   $('roster').innerHTML=
     '<div class="day-grid">'+
-      '<div class="person-head">TEAM</div>'+
+      '<div class="person-head" aria-label="CCTV">📹</div>'+
       '<div class="days">'+head+'</div>'+
     '</div>'+rows;
 }
