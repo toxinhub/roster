@@ -4,17 +4,17 @@
   "shiftTypes": {
     "A": {
       "label": "শিফট A",
-      "note": "",
+      "note": "06:00–14:00",
       "color": "#2563eb"
     },
     "B": {
       "label": "শিফট B",
-      "note": "",
+      "note": "14:00–22:00",
       "color": "#7c3aed"
     },
     "C": {
       "label": "শিফট C",
-      "note": "",
+      "note": "22:00–06:00",
       "color": "#0891b2"
     },
     "OFF": {
