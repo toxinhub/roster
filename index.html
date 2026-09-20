@@ -3,91 +3,48 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#0f172a">
-<meta name="description" content="CCTV Team Duty Roster">
-<title>CCTV • Duty Roster</title>
+<meta name="theme-color" content="#0b1220">
+<meta name="description" content="CCTV Team live duty roster">
+<title>CCTV Team • Duty Roster</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div class="app">
-  <header class="topbar">
-    <div class="brand">
-      <div class="brand-icon">◫</div>
-      <div><strong>CCTV • Duty Roster</strong><small id="subtitle">Team Schedule</small></div>
-    </div>
-    <button class="icon-btn" id="refreshBtn" aria-label="Refresh">↻</button>
-  </header>
-
-  <main>
-    <section class="hero">
-      <div>
-        <span class="eyebrow">CURRENT SCHEDULE</span>
-        <h1 id="monthTitle">Loading…</h1>
-        <p id="updatedText">লোড হচ্ছে…</p>
-      </div>
-      <div class="hero-badge" id="todayBadge">আজ</div>
-    </section>
-
-    <section class="my-duty">
-      <div class="section-head">
-        <div><span class="eyebrow">MY DUTY</span><h2>নিজের ডিউটি দেখুন</h2></div>
-        <button class="link-btn" id="copyLink">লিংক কপি</button>
-      </div>
-      <select id="memberSelect" aria-label="কর্মী নির্বাচন করুন">
-        <option value="">— নিজের নাম নির্বাচন করুন —</option>
-      </select>
-      <div id="myDutyCard" class="my-duty-card empty">উপরের তালিকা থেকে আপনার নাম নির্বাচন করুন।</div>
-    </section>
-
-    <section>
-      <div class="section-head"><div><span class="eyebrow">ROSTER</span><h2>সম্পূর্ণ রোস্টার</h2></div></div>
-      <div id="legend" class="legend"></div>
-      <div id="tableWrap" class="table-wrap"></div>
-      <div class="mobile-roster-intro">তারিখ অনুযায়ী ডিউটি</div>
-      <div id="cards" class="cards"></div>
-    </section>
-  </main>
-
-  <footer>
-    <span>শেষ আপডেট: <b id="footerUpdate">—</b></span>
-    <a href="admin.html">Admin ↗</a>
-  </footer>
-</div>
-<div id="toast" class="toast"></div>
+<header class="topbar"><a class="brand" href="index.html"><span class="brand-icon">◉</span><span><strong>CCTV TEAM</strong><small>Duty Roster</small></span></a><button class="icon-btn" id="refresh" aria-label="Refresh roster">↻</button></header>
+<main>
+<section class="hero"><div><span class="eyebrow">LIVE DUTY SCHEDULE</span><h1 id="month">Loading…</h1><p id="updated">লোড হচ্ছে…</p></div><div class="today-pill" id="todayPill">আজ</div></section>
+<section class="my-duty">
+<div class="section-head"><div><span class="eyebrow">PERSONAL VIEW</span><h2>আমার ডিউটি</h2></div><button class="link-btn" id="copyLink">লিংক কপি</button></div>
+<select id="member"><option value="">নিজের নাম নির্বাচন করুন</option></select>
+<div id="myDuty" class="my-duty-card empty">নাম নির্বাচন করলে আজকের ডিউটি এখানে দেখা যাবে।</div>
+</section>
+<section>
+<div class="section-head"><div><span class="eyebrow">ROSTER</span><h2>সম্পূর্ণ রোস্টার</h2></div></div>
+<div id="legend" class="legend"></div><div id="tableWrap" class="table-wrap"></div>
+<div class="mobile-roster-intro">তারিখ অনুযায়ী ডিউটি</div><div id="cards" class="cards"></div>
+</section>
+</main>
+<footer><span>শেষ আপডেট: <b id="footerUpdate">—</b></span><a href="admin.html">Admin ↗</a></footer>
+</div><div id="toast" class="toast"></div>
 <script>
-let DATA=null;
-const today=new Date().toLocaleDateString('en-CA',{timeZone:'Asia/Dhaka'});
-const $=id=>document.getElementById(id);
-const bnDate=iso=>new Intl.DateTimeFormat('bn-BD',{day:'numeric',month:'long',year:'numeric',timeZone:'Asia/Dhaka'}).format(new Date(iso+'T00:00:00+06:00'));
-
-fetch('schedule.json?v='+Date.now()).then(r=>r.json()).then(data=>{
- DATA=data; render(data);
- const p=new URLSearchParams(location.search), name=p.get('member');
- if(name && data.employees.some(e=>e.name===name)){ $('memberSelect').value=name; showMember(name); }
-}).catch(()=>toast('রোস্টার লোড করা যায়নি',true));
-
-$('refreshBtn').onclick=()=>location.reload();
-$('memberSelect').onchange=e=>{ const n=e.target.value; if(n){ history.replaceState({},'', '?member='+encodeURIComponent(n)); showMember(n); } else { history.replaceState({},'', location.pathname); $('myDutyCard').className='my-duty-card empty'; $('myDutyCard').textContent='উপরের তালিকা থেকে আপনার নাম নির্বাচন করুন।'; } };
-$('copyLink').onclick=async()=>{ const n=$('memberSelect').value; if(!n){toast('আগে আপনার নাম নির্বাচন করুন',true);return;} const url=location.origin+location.pathname+'?member='+encodeURIComponent(n); try{await navigator.clipboard.writeText(url);toast('আপনার ব্যক্তিগত roster link কপি হয়েছে');}catch{toast(url)} };
-
-function render(d){
- $('monthTitle').textContent=d.month||'Duty Roster';
- $('updatedText').textContent='সর্বশেষ পরিবর্তন: '+(d.updatedAt?new Date(d.updatedAt).toLocaleString('bn-BD',{timeZone:'Asia/Dhaka'}):'—');
- $('footerUpdate').textContent=d.updatedAt?new Date(d.updatedAt).toLocaleString('bn-BD',{timeZone:'Asia/Dhaka'}):'—';
- d.employees.forEach(e=>{const o=document.createElement('option');o.value=e.name;o.textContent=e.name;$('memberSelect').appendChild(o)});
- $('legend').innerHTML=Object.entries(d.shiftTypes).map(([c,s])=>'<span><i style="background:'+s.color+'"></i><b>'+c+'</b> '+s.label+' <small>'+s.note+'</small></span>').join('');
- const heads=d.days.map(x=>'<th class="'+(x.isoDate===today?'today':'')+'">'+x.date+'<small>'+x.weekday+'</small></th>').join('');
- $('tableWrap').innerHTML='<table><thead><tr><th>কর্মী</th>'+heads+'</tr></thead><tbody>'+d.employees.map(e=>'<tr><th>'+e.name+'</th>'+e.shifts.map((c,i)=>'<td class="'+(d.days[i]?.isoDate===today?'today':'')+'"><b class="shift" style="background:'+(d.shiftTypes[c]?.color||'#64748b')+'">'+c+'</b></td>').join('')+'</tr>').join('')+'</tbody></table>';
- $('cards').innerHTML=d.days.map((day,i)=>'<article class="day-card '+(day.isoDate===today?'today-card':'')+'"><div class="day-title"><div><span class="date-num">'+day.date+'</span><span class="weekday">'+day.weekday+'</span></div><span class="date-status">'+(day.isoDate===today?'আজ':'')+'</span></div><div class="day-people">'+d.employees.map(e=>{const c=e.shifts[i],s=d.shiftTypes[c]||{};return '<div class="person"><span class="person-name">'+e.name+'</span><span class="shift-detail"><b class="shift mini" style="background:'+(s.color||'#64748b')+'">'+c+'</b><small>'+(s.label||'')+'</small></span></div>'}).join('')+'</div></article>').join('');
- const td=d.days.findIndex(x=>x.isoDate===today); $('todayBadge').textContent=td>=0?'আজ • '+d.days[td].date+' '+d.days[td].weekday:'রোস্টার';
+let DATA=null;const TODAY=new Date().toLocaleDateString('en-CA',{timeZone:'Asia/Dhaka'}),$=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+const fmt=d=>d?new Date(d).toLocaleString('bn-BD',{timeZone:'Asia/Dhaka',dateStyle:'medium',timeStyle:'short'}):'—';
+async function load(){try{const r=await fetch('schedule.json?v='+Date.now());if(!r.ok)throw 0;DATA=await r.json();render();openMember()}catch{toast('রোস্টার লোড করা যায়নি',true)}}
+function render(){
+$('month').textContent=DATA.month||'CCTV Duty Roster';$('updated').textContent='সর্বশেষ পরিবর্তন: '+fmt(DATA.updatedAt);$('footerUpdate').textContent=fmt(DATA.updatedAt);
+$('member').innerHTML='<option value="">নিজের নাম নির্বাচন করুন</option>'+DATA.employees.map(e=>'<option value="'+esc(e.name)+'">'+esc(e.name)+'</option>').join('');
+$('legend').innerHTML=Object.entries(DATA.shiftTypes).map(([k,v])=>'<span><i style="background:'+v.color+'"></i><b>'+esc(k)+'</b> '+esc(v.label)+' <small>'+esc(v.note)+'</small></span>').join('');
+const heads=DATA.days.map(d=>'<th class="'+(d.isoDate===TODAY?'today':'')+'">'+esc(d.date)+'<small>'+esc(d.weekday)+'</small></th>').join('');
+const rows=DATA.employees.map(e=>'<tr><th>'+esc(e.name)+'</th>'+e.shifts.map((c,i)=>{const s=DATA.shiftTypes[c]||{};return '<td class="'+(DATA.days[i]?.isoDate===TODAY?'today':'')+'"><b class="shift" style="background:'+esc(s.color||'#64748b')+'">'+esc(c)+'</b></td>'}).join('')+'</tr>').join('');
+$('tableWrap').innerHTML='<table><thead><tr><th>কর্মী</th>'+heads+'</tr></thead><tbody>'+rows+'</tbody></table>';
+$('cards').innerHTML=DATA.days.map((d,i)=>'<article class="day-card '+(d.isoDate===TODAY?'today-card':'')+'"><div class="day-title"><div><span class="date-num">'+esc(d.date)+'</span><span class="weekday">'+esc(d.weekday)+'</span></div>'+(d.isoDate===TODAY?'<span class="date-status">আজ</span>':'')+'</div>'+DATA.employees.map(e=>{const c=e.shifts[i],s=DATA.shiftTypes[c]||{};return '<div class="person"><b>'+esc(e.name)+'</b><span class="shift-detail"><i class="shift mini" style="background:'+esc(s.color||'#64748b')+'">'+esc(c)+'</i><small>'+esc(s.label||'')+'</small></span></div>'}).join('')+'</article>').join('');
+const i=DATA.days.findIndex(d=>d.isoDate===TODAY);$('todayPill').textContent=i>=0?'আজ • '+DATA.days[i].date+' '+DATA.days[i].weekday:'রোস্টার';
 }
-function showMember(name){
- const e=DATA.employees.find(x=>x.name===name), i=DATA.days.findIndex(x=>x.isoDate===today);
- const c=i>=0?e.shifts[i]:null, s=c?DATA.shiftTypes[c]:null;
- $('myDutyCard').className='my-duty-card';
- $('myDutyCard').innerHTML='<div><span class="member-name">'+e.name+'</span><small>আজকের ডিউটি</small></div><div class="big-shift" style="background:'+(s?.color||'#64748b')+'">'+(c||'—')+'</div><div class="duty-meta">'+(s?.label||'কোনো ডিউটি নির্ধারিত নেই')+(s?.note?' • '+s.note:'')+'</div>';
-}
-function toast(msg,err=false){const t=$('toast');t.textContent=msg;t.className='toast show'+(err?' err':'');setTimeout(()=>t.className='toast',3200)}
+function showMember(name){const e=DATA.employees.find(x=>x.name===name),i=DATA.days.findIndex(d=>d.isoDate===TODAY);if(!e){$('myDuty').className='my-duty-card empty';$('myDuty').textContent='নাম নির্বাচন করলে আজকের ডিউটি এখানে দেখা যাবে।';return}const c=i>=0?e.shifts[i]:null,s=c?DATA.shiftTypes[c]:null;$('myDuty').className='my-duty-card';$('myDuty').innerHTML='<div><span class="member-name">'+esc(e.name)+'</span><small>আজকের ডিউটি</small></div><b class="big-shift" style="background:'+esc(s?.color||'#64748b')+'">'+esc(c||'—')+'</b><div class="duty-meta">'+esc(s?.label||'ডিউটি নির্ধারিত নেই')+(s?.note?' • '+esc(s.note):'')+'</div>'}
+function openMember(){const n=new URLSearchParams(location.search).get('member');if(n&&DATA.employees.some(e=>e.name===n)){$('member').value=n;showMember(n)}}
+$('member').onchange=e=>{const n=e.target.value;if(n){history.replaceState({},'','?member='+encodeURIComponent(n));showMember(n)}else{history.replaceState({},'',location.pathname);showMember('')}};
+$('copyLink').onclick=async()=>{const n=$('member').value;if(!n){toast('আগে আপনার নাম নির্বাচন করুন',true);return}const u=location.origin+location.pathname+'?member='+encodeURIComponent(n);try{await navigator.clipboard.writeText(u);toast('ব্যক্তিগত roster link কপি হয়েছে')}catch{toast(u)}};
+$('refresh').onclick=load;function toast(m,e=false){const t=$('toast');t.textContent=m;t.className='toast show'+(e?' err':'');setTimeout(()=>t.className='toast',3000)}load();
 </script>
-</body>
-</html>
+</body></html>
