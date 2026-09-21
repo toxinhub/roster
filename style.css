@@ -1001,3 +1001,34 @@ main{
   .person-name{gap:5px}
   .name-active-dot{width:6px;height:6px;flex-basis:6px}
 }
+
+
+/* Improve live status readability on light roster backgrounds */
+.duty-status{
+  padding:3px 6px;
+  border-radius:999px;
+  background:color-mix(in srgb,var(--status-color,#64748b) 10%,#fff);
+  border:1px solid color-mix(in srgb,var(--status-color,#64748b) 18%,transparent);
+}
+.duty-status b{
+  font-size:7px;
+  font-weight:950;
+  letter-spacing:.04em;
+  text-shadow:0 1px 0 rgba(255,255,255,.72);
+}
+.duty-status.is-active{
+  background:color-mix(in srgb,var(--status-color,#16a34a) 12%,#fff);
+  border-color:color-mix(in srgb,var(--status-color,#16a34a) 24%,transparent);
+  box-shadow:0 2px 7px color-mix(in srgb,var(--status-color,#16a34a) 10%,transparent);
+}
+body.dark .duty-status{
+  background:color-mix(in srgb,var(--status-color,#64748b) 14%,#111a24);
+  border-color:color-mix(in srgb,var(--status-color,#64748b) 22%,transparent);
+}
+body.dark .duty-status b{text-shadow:none}
+@media(max-width:900px){
+  .duty-status{
+    padding:2px 5px;
+  }
+  .duty-status b{font-size:6.5px}
+}
