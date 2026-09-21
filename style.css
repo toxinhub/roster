@@ -368,3 +368,89 @@
     border-right-color:#657384 !important;
   }
 }
+
+@media(min-width:901px){
+  /* Neutralize the old position-based separators.
+     Week boundaries are controlled only by the actual Friday/Thursday classes. */
+  .day-grid .days .day-head:nth-child(1),
+  .day-grid .days .day-head:nth-child(8),
+  .day-grid .days .day-head:nth-child(15),
+  .day-grid .days .day-head:nth-child(22),
+  .day-grid .days .day-head:nth-child(29),
+  .person-row .days .shift-cell:nth-child(1),
+  .person-row .days .shift-cell:nth-child(8),
+  .person-row .days .shift-cell:nth-child(15),
+  .person-row .days .shift-cell:nth-child(22),
+  .person-row .days .shift-cell:nth-child(29),
+  .day-grid .days .day-head:nth-child(7),
+  .day-grid .days .day-head:nth-child(14),
+  .day-grid .days .day-head:nth-child(21),
+  .day-grid .days .day-head:nth-child(28),
+  .day-grid .days .day-head:nth-child(32),
+  .person-row .days .shift-cell:nth-child(7),
+  .person-row .days .shift-cell:nth-child(14),
+  .person-row .days .shift-cell:nth-child(21),
+  .person-row .days .shift-cell:nth-child(28),
+  .person-row .days .shift-cell:nth-child(32){
+    border-left:1px solid var(--line) !important;
+    border-right:1px solid var(--line) !important;
+  }
+  .day-head.week-start,
+  .shift-cell.week-start{
+    border-left:3px solid rgba(16,24,40,.55) !important;
+  }
+  .day-head.week-end,
+  .shift-cell.week-end{
+    border-right:3px solid rgba(16,24,40,.55) !important;
+  }
+  body.dark .day-head.week-start,
+  body.dark .shift-cell.week-start{
+    border-left-color:rgba(255,255,255,.40) !important;
+  }
+  body.dark .day-head.week-end,
+  body.dark .shift-cell.week-end{
+    border-right-color:rgba(255,255,255,.40) !important;
+  }
+}
+
+@media(max-width:900px){
+  .day-grid .days .day-head:nth-child(1),
+  .day-grid .days .day-head:nth-child(8),
+  .day-grid .days .day-head:nth-child(15),
+  .day-grid .days .day-head:nth-child(22),
+  .day-grid .days .day-head:nth-child(29),
+  .person-row .days .shift-cell:nth-child(1),
+  .person-row .days .shift-cell:nth-child(8),
+  .person-row .days .shift-cell:nth-child(15),
+  .person-row .days .shift-cell:nth-child(22),
+  .person-row .days .shift-cell:nth-child(29),
+  .day-grid .days .day-head:nth-child(7),
+  .day-grid .days .day-head:nth-child(14),
+  .day-grid .days .day-head:nth-child(21),
+  .day-grid .days .day-head:nth-child(28),
+  .day-grid .days .day-head:nth-child(32),
+  .person-row .days .shift-cell:nth-child(7),
+  .person-row .days .shift-cell:nth-child(14),
+  .person-row .days .shift-cell:nth-child(21),
+  .person-row .days .shift-cell:nth-child(28),
+  .person-row .days .shift-cell:nth-child(32){
+    border-left:1px solid var(--line) !important;
+    border-right:1px solid var(--line) !important;
+  }
+  .day-head.week-start,
+  .shift-cell.week-start{
+    border-left:2px solid #8a96a3 !important;
+  }
+  .day-head.week-end,
+  .shift-cell.week-end{
+    border-right:2px solid #8a96a3 !important;
+  }
+  body.dark .day-head.week-start,
+  body.dark .shift-cell.week-start{
+    border-left-color:#657384 !important;
+  }
+  body.dark .day-head.week-end,
+  body.dark .shift-cell.week-end{
+    border-right-color:#657384 !important;
+  }
+}
