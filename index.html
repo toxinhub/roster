@@ -185,21 +185,49 @@ function render(){
       '</div>';
     }).join('');
 
-    const currentCode=p.shifts?.[days.findIndex(d=>d.isoDate===now)]||'—';
-    let status='OFF', statusText='OFF';
+    const todayIndex=days.findIndex(d=>d.isoDate===now);
+    const currentCode=todayIndex>=0 ? (p.shifts?.[todayIndex]||'—') : '—';
+    let status='OFF', statusText='OFF', displayCode=currentCode;
     const currentType=types[currentCode]||{};
     const nowParts=new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Dhaka',hour:'2-digit',minute:'2-digit',hour12:false}).formatToParts(new Date());
     const nowMinutes=(Number(nowParts.find(x=>x.type==='hour')?.value||0)*60)+Number(nowParts.find(x=>x.type==='minute')?.value||0);
     const ranges={A:[360,840],B:[840,1320],C:[1320,360]};
+    let currentShiftActive=false;
+    let currentShiftUpcoming=false;
+
     if(['A','B','C'].includes(currentCode)){
       const range=ranges[currentCode];
-      const active=range[0]<range[1] ? nowMinutes>=range[0]&&nowMinutes<range[1] : nowMinutes>=range[0]||nowMinutes<range[1];
-      const beforeStart=range[0]<range[1] ? nowMinutes<range[0] : nowMinutes>=range[1]&&nowMinutes<range[0];
-      if(active){status='ON DUTY';statusText='ON DUTY - '+currentCode;}
-      else if(beforeStart){status='UPCOMING';statusText='UPCOMING - '+currentCode;}
-      else{status='OFF';statusText='OFF';}
+      currentShiftActive=range[0]<range[1]
+        ? nowMinutes>=range[0]&&nowMinutes<range[1]
+        : nowMinutes>=range[0]||nowMinutes<range[1];
+      currentShiftUpcoming=range[0]<range[1]
+        ? nowMinutes<range[0]
+        : nowMinutes>=range[1]&&nowMinutes<range[0];
     }
-    const statusColor=currentType.color||types.OFF?.color||'#64748b';
+
+    if(currentShiftActive){
+      status='ON DUTY';
+      statusText='ON DUTY - '+currentCode;
+      displayCode=currentCode;
+    }else if(currentShiftUpcoming){
+      status='UPCOMING';
+      statusText='UPCOMING - '+currentCode;
+      displayCode=currentCode;
+    }else{
+      // Today's shift is finished/OFF: find the next actual A/B/C shift.
+      for(let i=Math.max(todayIndex+1,0);i<days.length;i++){
+        const nextCode=p.shifts?.[i];
+        if(['A','B','C'].includes(nextCode)){
+          displayCode=nextCode;
+          status='UPCOMING';
+          statusText='UPCOMING - '+nextCode;
+          break;
+        }
+      }
+    }
+
+    const displayType=types[displayCode]||{};
+    const statusColor=displayType.color||types.OFF?.color||'#64748b';
     const statusHtml='<span class="duty-status status-'+status.toLowerCase().replace(/\s+/g,'-')+(status==='ON DUTY'?' is-active':'')+'" style="--status-color:'+esc(statusColor)+'"><b>'+esc(statusText)+'</b></span>';
 
     return '<div class="person-row">'+
