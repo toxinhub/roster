@@ -37,11 +37,12 @@
     {"date":"২৭","weekday":"রবিবার","isoDate":"2026-09-27"},
     {"date":"২৮","weekday":"সোমবার","isoDate":"2026-09-28"},
     {"date":"২৯","weekday":"মঙ্গলবার","isoDate":"2026-09-29"},
-    {"date":"৩০","weekday":"বুধবার","isoDate":"2026-09-30"}
+    {"date":"৩০","weekday":"বুধবার","isoDate":"2026-09-30"},
+    {"date":"১","weekday":"বৃহস্পতিবার","isoDate":"2026-10-01"}
   ],
   "employees": [
-    {"name":"আরমান","shifts":["A","A","A","OFF","B","B","B","B","B","B","OFF","C","C","C","C","C","C","OFF","A","A","B","B","B","B","OFF","C","C","C","C","C"]},
-    {"name":"তন্ময়","shifts":["B","B","B","OFF","C","C","C","C","C","C","OFF","A","A","A","A","A","A","OFF","B","B","C","C","C","C","OFF","A","A","A","A","A"]},
-    {"name":"আশিক","shifts":["C","C","C","OFF","A","A","A","A","A","A","OFF","B","B","B","B","B","B","OFF","C","C","A","A","A","A","OFF","B","B","B","B","B"]}
+    {"name":"আরমান","shifts":["A","A","A","OFF","B","B","B","B","B","B","OFF","C","C","C","C","C","C","OFF","A","A","B","B","B","B","OFF","C","C","C","C","C","C"]},
+    {"name":"তন্ময়","shifts":["B","B","B","OFF","C","C","C","C","C","C","OFF","A","A","A","A","A","A","OFF","B","B","C","C","C","C","OFF","A","A","A","A","A","A"]},
+    {"name":"আশিক","shifts":["C","C","C","OFF","A","A","A","A","A","A","OFF","B","B","B","B","B","B","OFF","C","C","A","A","A","A","OFF","B","B","B","B","B","B"]}
   ]
 }
