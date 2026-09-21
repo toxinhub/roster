@@ -649,30 +649,40 @@
 }
 
 
-/* Light blue roster date header */
+/* Refined day/date header — subtle liquid-glass blue */
 .day-head{
-  background:linear-gradient(180deg,rgba(219,234,254,.72),rgba(239,246,255,.52));
-  border-color:rgba(147,197,253,.34);
+  background:linear-gradient(180deg,rgba(248,250,252,.76),rgba(239,244,249,.48));
+  border-color:rgba(148,163,184,.22);
 }
-.day-head strong,
+.day-head strong{
+  color:#334155;
+  text-shadow:0 1px 0 rgba(255,255,255,.72);
+}
 .day-head span{
-  color:#4b6b8c;
+  color:#64748b;
+  letter-spacing:.02em;
 }
 .day-head em{
-  background:rgba(147,197,253,.24);
-  color:#3b82b6;
+  background:rgba(96,165,250,.13);
+  color:#3f6f9f;
+  border:1px solid rgba(96,165,250,.12);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.55);
 }
 body.dark .day-head{
-  background:linear-gradient(180deg,rgba(59,130,246,.16),rgba(59,130,246,.08));
-  border-color:rgba(96,165,250,.16);
+  background:linear-gradient(180deg,rgba(30,41,59,.68),rgba(20,30,43,.52));
+  border-color:rgba(148,163,184,.14);
 }
-body.dark .day-head strong,
+body.dark .day-head strong{
+  color:#e2e8f0;
+  text-shadow:0 1px 8px rgba(96,165,250,.12);
+}
 body.dark .day-head span{
-  color:#b9d3ef;
+  color:#9aa9b8;
 }
 body.dark .day-head em{
-  background:rgba(96,165,250,.16);
-  color:#93c5fd;
+  background:rgba(96,165,250,.13);
+  color:#9bc5ee;
+  border-color:rgba(96,165,250,.12);
 }
 
 /* Smooth, touch-friendly roster scrolling */
