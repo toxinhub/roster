@@ -6,6 +6,7 @@
 <meta name="theme-color" content="#101828">
 <meta name="description" content="CCTV - PJL duty roster">
 <title>Duty Roster • CCTV - PJL</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -199,7 +200,7 @@ function render(){
       else{status='OFF';statusText='OFF';}
     }
     const statusColor=currentType.color||types.OFF?.color||'#64748b';
-    const statusHtml='<span class="duty-status status-'+status.toLowerCase().replace(/\\s+/g,'-')+(status==='ON DUTY'?' is-active':'')+'" style="--status-color:'+esc(statusColor)+'"><b>'+esc(statusText)+'</b></span>';
+    const statusHtml='<span class="duty-status status-'+status.toLowerCase().replace(/\s+/g,'-')+(status==='ON DUTY'?' is-active':'')+'" style="--status-color:'+esc(statusColor)+'"><b>'+esc(statusText)+'</b></span>';
 
     return '<div class="person-row">'+
       '<div class="person"><div class="person-name"><strong>'+esc(p.name)+'</strong>'+(status==='ON DUTY'?'<i class="name-active-dot" style="--status-color:'+esc(statusColor)+'" aria-hidden="true"></i>':'')+'</div>'+statusHtml+'</div>'+
@@ -226,17 +227,14 @@ load();
 (function(){
   const wrap=$('roster');
   if(!wrap) return;
-
   let dragging=false;
   let startX=0;
   let startScroll=0;
   let moved=false;
-
   const stop=()=>{
     dragging=false;
     wrap.classList.remove('is-dragging');
   };
-
   wrap.addEventListener('pointerdown',e=>{
     if(e.pointerType==='mouse' && e.button!==0) return;
     dragging=true;
@@ -246,7 +244,6 @@ load();
     wrap.classList.add('is-dragging');
     try{wrap.setPointerCapture(e.pointerId)}catch{}
   });
-
   wrap.addEventListener('pointermove',e=>{
     if(!dragging) return;
     const dx=e.clientX-startX;
@@ -254,13 +251,11 @@ load();
     wrap.scrollLeft=startScroll-dx;
     if(moved) e.preventDefault();
   },{passive:false});
-
   const release=e=>{
     if(!dragging) return;
     stop();
     try{wrap.releasePointerCapture(e.pointerId)}catch{}
   };
-
   wrap.addEventListener('pointerup',release);
   wrap.addEventListener('pointercancel',release);
 })();
