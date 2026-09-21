@@ -472,3 +472,16 @@
     border-right-color:#657384 !important;
   }
 }
+
+@media(min-width:901px){
+  /* Desktop scrollbar: thicker for easier mouse dragging */
+  .roster-wrap{scrollbar-width:auto;scrollbar-color:#9aa6b2 #e7ebef;}
+  .roster-wrap::-webkit-scrollbar{height:14px;}
+  .roster-wrap::-webkit-scrollbar-track{background:#e7ebef;border-radius:10px;}
+  .roster-wrap::-webkit-scrollbar-thumb{background:#9aa6b2;border-radius:10px;border:2px solid #e7ebef;}
+  .roster-wrap::-webkit-scrollbar-thumb:hover{background:#788695;}
+  body.dark .roster-wrap{scrollbar-color:#667586 #1a2530;}
+  body.dark .roster-wrap::-webkit-scrollbar-track{background:#1a2530;}
+  body.dark .roster-wrap::-webkit-scrollbar-thumb{background:#667586;border-color:#1a2530;}
+  body.dark .roster-wrap::-webkit-scrollbar-thumb:hover{background:#8190a0;}
+}
