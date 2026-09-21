@@ -155,6 +155,21 @@
 }
 
 @media(max-width:900px){
+  /* Mobile: same soft lavender Today highlight as desktop */
+  .day-head.is-today,
+  .shift-cell.is-today{background:#f3efff !important;}
+  .day-head.is-today .day-head strong{color:#3f3560 !important;}
+  .day-head em{color:#5b4b83 !important;background:#eee7ff !important;}
+}
+
+@media(max-width:900px){
+  /* Mobile: dark-mode lavender Today highlight */
+  body.dark .day-head.is-today,
+  body.dark .shift-cell.is-today{background:#28233a !important;}
+  body.dark .day-head em{color:#d9cfff !important;background:#40385a !important;}
+}
+
+@media(max-width:900px){
   /* Mobile dark-mode readability fixes */
   body.dark .kicker,
   body.dark .intro-meta span,
