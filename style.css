@@ -549,3 +549,22 @@
     .day-head.is-today,.shift-cell.is-today .shift{animation:none}
   }
 }
+
+
+/* Live duty status beside employee names */
+.person-name{display:flex;flex-direction:column;align-items:flex-start;gap:4px;min-width:0}
+.person-status{display:inline-flex;align-items:center;gap:4px;width:max-content;padding:3px 6px;border-radius:999px;font-size:7px;font-weight:950;letter-spacing:.04em;line-height:1;border:1px solid transparent;white-space:nowrap}
+.person-status i{font-style:normal;font-size:7px;line-height:1}
+.person-status.on-duty{color:#15803d;background:#dcfce7;border-color:#bbf7d0}
+.person-status.upcoming{color:#9a6700;background:#fef3c7;border-color:#fde68a}
+.person-status.off{color:#64748b;background:#f1f5f9;border-color:#e2e8f0}
+.person-status.done{color:#64748b;background:#f8fafc;border-color:#e5e7eb}
+.person-status.unknown{color:#64748b;background:#f1f5f9;border-color:#e2e8f0}
+body.dark .person-status.on-duty{color:#86efac;background:#123522;border-color:#245d3b}
+body.dark .person-status.upcoming{color:#fde68a;background:#3a3013;border-color:#66551b}
+body.dark .person-status.off,body.dark .person-status.done,body.dark .person-status.unknown{color:#aeb9c5;background:#1a2530;border-color:#334250}
+@media(max-width:520px){
+  .person-name{gap:3px}
+  .person-status{font-size:6px;padding:3px 5px}
+  .person-status i{font-size:6px}
+}
