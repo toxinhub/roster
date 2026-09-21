@@ -163,7 +163,8 @@ function render(){
     const todayIndex=days.findIndex(d=>d.isoDate===now);
     const todayCode=todayIndex>=0 ? (p.shifts?.[todayIndex]||'—') : '—';
     const status=getCurrentStatus(todayCode);
-    return '<div class="person-row">'+
+    const rowActive=status.cls==='on-duty';
+    return '<div class="person-row '+(rowActive?'is-active':'')+'">'+
       '<div class="person"><div class="person-name"><strong>'+esc(p.name)+'</strong>'+
       '<span class="person-status '+status.cls+'"><i>'+status.icon+'</i>'+esc(status.label)+'</span></div></div>'+
       '<div class="days" style="'+gridStyle+'">'+cells+'</div>'+
