@@ -123,7 +123,7 @@ function renderUpcomingInfo(){
       if(nextChange&&nextOff) break;
     }
     return '<article class="info-card">'+
-      '<div class="info-person"><strong>'+esc(p.name)+'</strong><span>বর্তমান: '+esc(shiftLabel(p.shifts?.[todayIndex]))+'</span></div>'+
+      '<div class="info-person"><strong>'+esc(p.name)+'</strong><span class="current-shift" style="--current-color:'+esc(((DATA.shiftTypes||{})[p.shifts?.[todayIndex]]||{}).color||"#64748b")+'">বর্তমান: <b>'+esc(shiftLabel(p.shifts?.[todayIndex]))+'</b></span></div>'+
       '<div class="info-item shift-change"><span class="info-label">পরবর্তী শিফট চেঞ্জ</span>'+
         (nextChange?'<b>'+esc(formatDay(nextChange.day))+'</b><small>'+esc(shiftLabel(nextChange.from))+' → '+esc(shiftLabel(nextChange.to))+'</small>':'<b>—</b><small>আগাম তথ্য নেই</small>')+
       '</div>'+
