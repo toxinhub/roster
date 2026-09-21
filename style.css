@@ -217,3 +217,114 @@
     contain:layout paint;
   }
 }
+
+
+@media(min-width:901px){
+  /* Clearly separate each Friday-to-Thursday shift week */
+  .day-grid .days .day-head:nth-child(1),
+  .day-grid .days .day-head:nth-child(8),
+  .day-grid .days .day-head:nth-child(15),
+  .day-grid .days .day-head:nth-child(22),
+  .day-grid .days .day-head:nth-child(29),
+  .person-row .days .shift-cell:nth-child(1),
+  .person-row .days .shift-cell:nth-child(8),
+  .person-row .days .shift-cell:nth-child(15),
+  .person-row .days .shift-cell:nth-child(22),
+  .person-row .days .shift-cell:nth-child(29){
+    border-left:3px solid rgba(16,24,40,.48);
+  }
+
+  .day-grid .days .day-head:nth-child(7),
+  .day-grid .days .day-head:nth-child(14),
+  .day-grid .days .day-head:nth-child(21),
+  .day-grid .days .day-head:nth-child(28),
+  .day-grid .days .day-head:nth-child(32),
+  .person-row .days .shift-cell:nth-child(7),
+  .person-row .days .shift-cell:nth-child(14),
+  .person-row .days .shift-cell:nth-child(21),
+  .person-row .days .shift-cell:nth-child(28),
+  .person-row .days .shift-cell:nth-child(32){
+    border-right:3px solid rgba(16,24,40,.48);
+  }
+
+  body.dark .day-grid .days .day-head:nth-child(1),
+  body.dark .day-grid .days .day-head:nth-child(8),
+  body.dark .day-grid .days .day-head:nth-child(15),
+  body.dark .day-grid .days .day-head:nth-child(22),
+  body.dark .day-grid .days .day-head:nth-child(29),
+  body.dark .person-row .days .shift-cell:nth-child(1),
+  body.dark .person-row .days .shift-cell:nth-child(8),
+  body.dark .person-row .days .shift-cell:nth-child(15),
+  body.dark .person-row .days .shift-cell:nth-child(22),
+  body.dark .person-row .days .shift-cell:nth-child(29){
+    border-left-color:rgba(255,255,255,.36);
+  }
+
+  body.dark .day-grid .days .day-head:nth-child(7),
+  body.dark .day-grid .days .day-head:nth-child(14),
+  body.dark .day-grid .days .day-head:nth-child(21),
+  body.dark .day-grid .days .day-head:nth-child(28),
+  body.dark .day-grid .days .day-head:nth-child(32),
+  body.dark .person-row .days .shift-cell:nth-child(7),
+  body.dark .person-row .days .shift-cell:nth-child(14),
+  body.dark .person-row .days .shift-cell:nth-child(21),
+  body.dark .person-row .days .shift-cell:nth-child(28),
+  body.dark .person-row .days .shift-cell:nth-child(32){
+    border-right-color:rgba(255,255,255,.36);
+  }
+}
+
+@media(max-width:900px){
+  /* Same Friday-to-Thursday week markers on mobile */
+  .day-grid .days .day-head:nth-child(1),
+  .day-grid .days .day-head:nth-child(8),
+  .day-grid .days .day-head:nth-child(15),
+  .day-grid .days .day-head:nth-child(22),
+  .day-grid .days .day-head:nth-child(29),
+  .person-row .days .shift-cell:nth-child(1),
+  .person-row .days .shift-cell:nth-child(8),
+  .person-row .days .shift-cell:nth-child(15),
+  .person-row .days .shift-cell:nth-child(22),
+  .person-row .days .shift-cell:nth-child(29){
+    border-left:2px solid #8a96a3;
+  }
+
+  .day-grid .days .day-head:nth-child(7),
+  .day-grid .days .day-head:nth-child(14),
+  .day-grid .days .day-head:nth-child(21),
+  .day-grid .days .day-head:nth-child(28),
+  .day-grid .days .day-head:nth-child(32),
+  .person-row .days .shift-cell:nth-child(7),
+  .person-row .days .shift-cell:nth-child(14),
+  .person-row .days .shift-cell:nth-child(21),
+  .person-row .days .shift-cell:nth-child(28),
+  .person-row .days .shift-cell:nth-child(32){
+    border-right:2px solid #8a96a3;
+  }
+
+  body.dark .day-grid .days .day-head:nth-child(1),
+  body.dark .day-grid .days .day-head:nth-child(8),
+  body.dark .day-grid .days .day-head:nth-child(15),
+  body.dark .day-grid .days .day-head:nth-child(22),
+  body.dark .day-grid .days .day-head:nth-child(29),
+  body.dark .person-row .days .shift-cell:nth-child(1),
+  body.dark .person-row .days .shift-cell:nth-child(8),
+  body.dark .person-row .days .shift-cell:nth-child(15),
+  body.dark .person-row .days .shift-cell:nth-child(22),
+  body.dark .person-row .days .shift-cell:nth-child(29){
+    border-left-color:#657384;
+  }
+
+  body.dark .day-grid .days .day-head:nth-child(7),
+  body.dark .day-grid .days .day-head:nth-child(14),
+  body.dark .day-grid .days .day-head:nth-child(21),
+  body.dark .day-grid .days .day-head:nth-child(28),
+  body.dark .day-grid .days .day-head:nth-child(32),
+  body.dark .person-row .days .shift-cell:nth-child(7),
+  body.dark .person-row .days .shift-cell:nth-child(14),
+  body.dark .person-row .days .shift-cell:nth-child(21),
+  body.dark .person-row .days .shift-cell:nth-child(28),
+  body.dark .person-row .days .shift-cell:nth-child(32){
+    border-right-color:#657384;
+  }
+}
