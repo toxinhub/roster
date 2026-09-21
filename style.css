@@ -670,12 +670,11 @@
   }
   .current-shift::before{
     content:"";
-    width:6px;
-    height:6px;
-    flex:0 0 6px;
-    border-radius:50%;
+    width:8px;
+    height:8px;
+    flex:0 0 8px;
+    border-radius:3px;
     background:var(--current-color,#64748b);
-    box-shadow:0 0 7px color-mix(in srgb,var(--current-color,#64748b) 65%,transparent);
   }
   .current-shift b{
     color:var(--current-color,#64748b);
