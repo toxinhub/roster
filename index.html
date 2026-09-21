@@ -295,11 +295,19 @@ setInterval(()=>{ if(DATA) render(); },30000);
     wrap.classList.add('is-dragging');
     try{wrap.setPointerCapture(e.pointerId)}catch{}
   });
+  let raf=0;
+  let pendingX=null;
   wrap.addEventListener('pointermove',e=>{
     if(!dragging) return;
     const dx=e.clientX-startX;
     if(Math.abs(dx)>2) moved=true;
-    wrap.scrollLeft=startScroll-dx;
+    pendingX=startScroll-dx;
+    if(!raf){
+      raf=requestAnimationFrame(()=>{
+        if(pendingX!==null) wrap.scrollLeft=pendingX;
+        raf=0;
+      });
+    }
     if(moved) e.preventDefault();
   },{passive:false});
   const release=e=>{
