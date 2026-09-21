@@ -221,7 +221,8 @@
 
       Object.entries(S.shiftTypes).forEach(([c, v]) => {
         const b = document.createElement('button');
-        b.innerHTML = `<i style="background:${v.color}"></i>${esc(c)} — ${esc(v.label)}`;
+        b.className = 'shift-option shift-'+esc(c.toLowerCase());
+        b.innerHTML = `<strong>${esc(c)}</strong><small>${esc(v.label)}</small>`;
         b.onclick = () => {
           S.employees[+btn.dataset.ei].shifts[+btn.dataset.di] = c;
           p.remove();
