@@ -180,8 +180,7 @@ function render(){
     }).join('');
 
     const currentCode=p.shifts?.[days.findIndex(d=>d.isoDate===now)]||'—';
-    let status='OFF', statusLabel='OFF';
-    let statusShift='';
+    let status='OFF', statusText='OFF';
     const currentType=types[currentCode]||{};
     const nowParts=new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Dhaka',hour:'2-digit',minute:'2-digit',hour12:false}).formatToParts(new Date());
     const nowMinutes=(Number(nowParts.find(x=>x.type==='hour')?.value||0)*60)+Number(nowParts.find(x=>x.type==='minute')?.value||0);
@@ -190,13 +189,12 @@ function render(){
       const range=ranges[currentCode];
       const active=range[0]<range[1] ? nowMinutes>=range[0]&&nowMinutes<range[1] : nowMinutes>=range[0]||nowMinutes<range[1];
       const beforeStart=range[0]<range[1] ? nowMinutes<range[0] : nowMinutes<range[1];
-      if(active){status='ON DUTY';statusLabel='ON DUTY';}
-      else if(beforeStart){status='UPCOMING';statusLabel='UPCOMING';}
-      else{status='OFF';statusLabel='OFF';}
-      statusShift=currentType.label||('শিফট '+currentCode);
+      if(active){status='ON DUTY';statusText='ON DUTY - '+currentCode;}
+      else if(beforeStart){status='UPCOMING';statusText='UPCOMING - '+currentCode;}
+      else{status='OFF';statusText='OFF';}
     }
     const statusColor=currentType.color||types.OFF?.color||'#64748b';
-    const statusHtml='<span class="duty-status status-'+status.toLowerCase().replace(/\s+/g,'-')+(status==='ON DUTY'?' is-active':'')+'" style="--status-color:'+esc(statusColor)+'"><i></i><b>'+statusLabel+'</b>'+(statusShift?'<small>'+esc(statusShift)+'</small>':'')+'</span>';
+    const statusHtml='<span class="duty-status status-'+status.toLowerCase().replace(/\\s+/g,'-')+(status==='ON DUTY'?' is-active':'')+'" style="--status-color:'+esc(statusColor)+'"><i></i><b>'+esc(statusText)+'</b></span>';
 
     return '<div class="person-row">'+
       '<div class="person"><strong>'+esc(p.name)+'</strong>'+statusHtml+'</div>'+
