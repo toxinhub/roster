@@ -199,7 +199,7 @@ function render(){
       else{status='OFF';statusText='OFF';}
     }
     const statusColor=currentType.color||types.OFF?.color||'#64748b';
-    const statusHtml='<span class="duty-status status-'+status.toLowerCase().replace(/\\s+/g,'-')+(status==='ON DUTY'?' is-active':'')+'" style="--status-color:'+esc(statusColor)+'">'+(status==='ON DUTY'?'<i></i>':'')+'<b>'+esc(statusText)+'</b></span>';
+    const statusHtml='<span class="duty-status status-'+status.toLowerCase().replace(/\\s+/g,'-')+(status==='ON DUTY'?' is-active':'')+'" style="--status-color:'+esc(statusColor)+'"><b>'+esc(statusText)+'</b></span>';
 
     return '<div class="person-row">'+
       '<div class="person"><div class="person-name"><strong>'+esc(p.name)+'</strong>'+(status==='ON DUTY'?'<i class="name-active-dot" style="--status-color:'+esc(statusColor)+'" aria-hidden="true"></i>':'')+'</div>'+statusHtml+'</div>'+
