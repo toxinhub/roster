@@ -721,7 +721,7 @@ body.dark .day-head em{
   width:6px;
   height:6px;
   flex:0 0 6px;
-  border-radius:2px;
+  border-radius:50%;
   background:currentColor;
 }
 .status-on-duty{color:#16a34a}
