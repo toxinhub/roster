@@ -213,9 +213,9 @@ body.dark .picker{box-shadow:0 18px 50px rgba(0,0,0,.45)}
 
       $('editor').innerHTML = '<thead>' + h + '</thead><tbody>' + b + '</tbody>';
 
-      $('editor').querySelectorAll('[data-day]').forEach(x => x.onchange = e => S.days[+e.target.dataset.day].date = e.target.value; markDirty());
-      $('editor').querySelectorAll('[data-wd]').forEach(x => x.onchange = e => S.days[+e.target.dataset.wd].weekday = e.target.value; markDirty());
-      $('editor').querySelectorAll('[data-name]').forEach(x => x.onchange = e => S.employees[+e.target.dataset.name].name = e.target.value; markDirty());
+      $('editor').querySelectorAll('[data-day]').forEach(x => x.onchange = e => { S.days[+e.target.dataset.day].date = e.target.value; markDirty(); });
+      $('editor').querySelectorAll('[data-wd]').forEach(x => x.onchange = e => { S.days[+e.target.dataset.wd].weekday = e.target.value; markDirty(); });
+      $('editor').querySelectorAll('[data-name]').forEach(x => x.onchange = e => { S.employees[+e.target.dataset.name].name = e.target.value; markDirty(); });
       $('editor').querySelectorAll('[data-rmday]').forEach(x => x.onclick = e => {
         const i = +e.target.dataset.rmday;
         S.days.splice(i, 1);
