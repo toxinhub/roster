@@ -687,6 +687,34 @@ body.dark .day-head.is-today{
 body.dark .day-head.is-today strong{color:#e4f2ff;}
 body.dark .day-head.is-today span{color:#a6c9e4;}
 
+/* Soft separation between day/date headers and shift cells */
+.day-head{
+  border-bottom:1px solid rgba(71,85,105,.18);
+  box-shadow:
+    inset 0 -1px 0 rgba(255,255,255,.72),
+    0 2px 7px rgba(71,85,105,.055);
+}
+.day-grid{
+  border-bottom:1px solid rgba(71,85,105,.20);
+  box-shadow:0 2px 8px rgba(71,85,105,.045);
+}
+.shift-cell{
+  border-top:1px solid rgba(255,255,255,.72);
+}
+body.dark .day-head{
+  border-bottom-color:rgba(148,163,184,.18);
+  box-shadow:
+    inset 0 -1px 0 rgba(255,255,255,.06),
+    0 2px 8px rgba(0,0,0,.16);
+}
+body.dark .day-grid{
+  border-bottom-color:rgba(148,163,184,.20);
+  box-shadow:0 2px 9px rgba(0,0,0,.14);
+}
+body.dark .shift-cell{
+  border-top-color:rgba(255,255,255,.045);
+}
+
 /* Smooth, touch-friendly roster scrolling */
 .roster-wrap{
   scroll-behavior:smooth;
