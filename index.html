@@ -251,6 +251,8 @@ $('theme').onclick=()=>{
 
 applyTheme();
 load();
+// Recalculate live duty status as shift boundaries are crossed.
+setInterval(()=>{ if(DATA) render(); },30000);
 
 (function(){
   const wrap=$('roster');
