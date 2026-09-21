@@ -188,7 +188,7 @@ function render(){
     if(['A','B','C'].includes(currentCode)){
       const range=ranges[currentCode];
       const active=range[0]<range[1] ? nowMinutes>=range[0]&&nowMinutes<range[1] : nowMinutes>=range[0]||nowMinutes<range[1];
-      const beforeStart=range[0]<range[1] ? nowMinutes<range[0] : nowMinutes<range[1];
+      const beforeStart=range[0]<range[1] ? nowMinutes<range[0] : nowMinutes>=range[1]&&nowMinutes<range[0];
       if(active){status='ON DUTY';statusText='ON DUTY - '+currentCode;}
       else if(beforeStart){status='UPCOMING';statusText='UPCOMING - '+currentCode;}
       else{status='OFF';statusText='OFF';}
