@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="bn">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#0e2c2d">
+  <title>এডমিন • ডিউটি রোস্টার</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand" aria-label="রোস্টার এডমিন">
+        <span class="brand-icon">⚙</span>
+        <div>
+          <strong>রোস্টার এডমিন</strong>
+          <small>CCTV - PJL • ব্যবস্থাপনা</small>
+        </div>
+      </div>
+      <div class="top-actions">
+        <button class="icon-btn" id="theme" aria-label="থিম পরিবর্তন" title="থিম পরিবর্তন">☾</button>
+        <a class="back" href="index.html">লাইভ রোস্টার</a>
+      </div>
+    </header>
+
+    <main class="page-shell">
+      <section class="admin-note">
+        <b>নিরাপত্তা:</b> Save করলে <code>schedule.json</code> GitHub-এ আপডেট হবে। Token-এ শুধু এই repository-এর <b>Contents: Read and write</b> permission দিন।
+      </section>
+
+      <section class="panel">
+        <div class="section-head">
+          <div>
+            <span class="eyebrow">CONNECTION</span>
+            <h2>GitHub সংযোগ</h2>
+          </div>
+          <span id="status" class="status">সংযুক্ত নয়</span>
+        </div>
+        <div class="form-grid">
+          <label>Username<input id="owner" value="toxinhub"></label>
+          <label>Repository<input id="repo" value="roster"></label>
+          <label>Branch<input id="branch" value="main"></label>
+          <label>Fine-grained token<input id="token" type="password" placeholder="github_pat_…"></label>
+        </div>
+        <p class="muted">Token browser tab বন্ধ হলে <b>sessionStorage</b>-এ সংরক্ষিত থাকবে।</p>
+        <button class="primary" id="connect">সংযোগ যাচাই / সংরক্ষণ</button>
+      </section>
+
+      <section class="panel">
+        <div class="section-head">
+          <div>
+            <span class="eyebrow">EDITOR</span>
+            <h2 id="monthHead">রোস্টার সম্পাদনা</h2>
+          </div>
+          <div class="actions">
+            <button id="addDay">+ তারিখ</button>
+            <button id="addEmp">+ কর্মী</button>
+          </div>
+        </div>
+
+        <div class="form-grid">
+          <label>রোস্টারের শিরোনাম<input id="month"></label>
+          <label>মাস ও সাল<input id="monthPicker" type="month"></label>
+        </div>
+
+        <p class="muted">মাস ও সাল নির্বাচন করলে শিরোনাম স্বয়ংক্রিয়ভাবে আপডেট হবে। নিচের টেবিল থেকে প্রতিটি তারিখ ও দিন পরিবর্তন করুন।</p>
+
+        <div class="grid-scroll">
+          <table id="editor"></table>
+        </div>
+
+        <div class="form-row">
+          <button class="primary" id="save">✓ GitHub-এ Save</button>
+          <button id="download">JSON Download</button>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <a href="index.html">← লাইভ রোস্টার</a>
+      <span>Admin changes publish to GitHub</span>
+    </footer>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script>
+    let S = null;
+    let sha = null;
+    const $ = id => document.getElementById(id);
+    const key = 'cctv_roster_admin';
+
+    const esc = s => String(s ?? '').replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
+
+    function toast(message, error = false) {
+      const t = $('toast');
+      t.textContent = message;
+      t.className = 'toast show' + (error ? ' err' : '');
+      setTimeout(() => t.className = 'toast', 3500);
+    }
+
+    function applyTheme() {
+      const dark = localStorage.getItem('roster-theme') === 'dark';
+      document.body.classList.toggle('dark', dark);
+      $('theme').textContent = dark ? '☀' : '☾';
+      $('theme').setAttribute('aria-label', dark ? 'লাইট থিম' : 'ডার্ক থিম');
+    }
+
+    function settings() {
+      return {
+        owner: $('owner').value.trim(),
+        repo: $('repo').value.trim(),
+        branch: $('branch').value.trim() || 'main',
+        token: $('token').value.trim()
+      };
+    }
+
+    function loadSaved() {
+      try {
+        const s = JSON.parse(sessionStorage.getItem(key) || 'null');
+        if (s) {
+          $('owner').value = s.owner || 'toxinhub';
+          $('repo').value = s.repo || 'roster';
+          $('branch').value = s.branch || 'main';
+          $('token').value = s.token || '';
+        }
+      } catch {}
+    }
+
+    async function api(url, opt = {}) {
+      const s = settings();
+      return fetch(url, {
+        ...opt,
+        headers: {
+          Accept: 'application/vnd.github+json',
+          Authorization: 'Bearer ' + s.token,
+          'X-GitHub-Api-Version': '2022-11-28',
+          'Content-Type': 'application/json'
+        }
+      });
+    }
+
+    function syncMonth() {
+      const value = $('monthPicker').value;
+      if (!value) return;
+      const [year, month] = value.split('-').map(Number);
+      const monthName = new Intl.DateTimeFormat('bn-BD', { month: 'long', year: 'numeric' }).format(new Date(year, month - 1, 1));
+      $('month').value = monthName;
+      S.month = monthName;
+      $('monthHead').textContent = monthName;
+    }
+
+    function setPicker() {
+      const match = String(S.month || '').match(/(\d{4})/);
+      if (!match) return;
+      const year = Number(match[1]);
+      const months = ['জানুয়ারি', 'ফেব্রুয়ারি', 'মার্চ', 'এপ্রিল', 'মে', 'জুন', 'জুলাই', 'আগস্ট', 'সেপ্টেম্বর', 'অক্টোবর', 'নভেম্বর', 'ডিসেম্বর'];
+      const monthIndex = months.findIndex(x => String(S.month).includes(x));
+      if (monthIndex >= 0) {
+        $('monthPicker').value = `${year}-${String(monthIndex + 1).padStart(2, '0')}`;
+      }
+    }
+
+    async function load() {
+      try {
+        const r = await fetch('schedule.json?v=' + Date.now());
+        S = await r.json();
+        $('month').value = S.month || '';
+        $('monthHead').textContent = S.month || 'রোস্টার সম্পাদনা';
+        render();
+        setPicker();
+      } catch {
+        toast('schedule.json লোড হয়নি', true);
+      }
+    }
+
+    function render() {
+      $('monthHead').textContent = S.month || 'রোস্টার সম্পাদনা';
+      $('month').value = S.month || '';
+
+      const h = '<tr><th>কর্মী</th>' + S.days.map((d, i) => `
+        <th>
+          <input value="${esc(d.date)}" data-day="${i}">
+          <small><input value="${esc(d.weekday)}" data-wd="${i}"></small>
+          <button class="remove" data-rmday="${i}">বাদ</button>
+        </th>
+      `).join('') + '</tr>';
+
+      const b = S.employees.map((e, ei) => `
+        <tr>
+          <th>
+            <input value="${esc(e.name)}" data-name="${ei}">
+            <button class="remove" data-rmemp="${ei}">বাদ</button>
+          </th>
+          ${e.shifts.map((c, di) => `<td><button class="edit" data-ei="${ei}" data-di="${di}">${esc(c)}</button></td>`).join('')}
+        </tr>
+      `).join('');
+
+      $('editor').innerHTML = '<thead>' + h + '</thead><tbody>' + b + '</tbody>';
+
+      $('editor').querySelectorAll('[data-day]').forEach(x => x.onchange = e => S.days[+e.target.dataset.day].date = e.target.value);
+      $('editor').querySelectorAll('[data-wd]').forEach(x => x.onchange = e => S.days[+e.target.dataset.wd].weekday = e.target.value);
+      $('editor').querySelectorAll('[data-name]').forEach(x => x.onchange = e => S.employees[+e.target.dataset.name].name = e.target.value);
+      $('editor').querySelectorAll('[data-rmday]').forEach(x => x.onclick = e => {
+        const i = +e.target.dataset.rmday;
+        S.days.splice(i, 1);
+        S.employees.forEach(emp => emp.shifts.splice(i, 1));
+        render();
+      });
+      $('editor').querySelectorAll('[data-rmemp]').forEach(x => x.onclick = e => {
+        S.employees.splice(+e.target.dataset.rmemp, 1);
+        render();
+      });
+      $('editor').querySelectorAll('.edit').forEach(x => x.onclick = () => pick(x));
+    }
+
+    function pick(btn) {
+      document.querySelector('.picker')?.remove();
+      const p = document.createElement('div');
+      p.className = 'picker';
+
+      Object.entries(S.shiftTypes).forEach(([c, v]) => {
+        const b = document.createElement('button');
+        b.innerHTML = `<i style="background:${v.color}"></i>${esc(c)} — ${esc(v.label)}`;
+        b.onclick = () => {
+          S.employees[+btn.dataset.ei].shifts[+btn.dataset.di] = c;
+          p.remove();
+          render();
+        };
+        p.appendChild(b);
+      });
+
+      document.body.appendChild(p);
+      const r = btn.getBoundingClientRect();
+      p.style.left = Math.min(r.left, innerWidth - 220) + 'px';
+      p.style.top = (r.bottom + 6) + 'px';
+    }
+
+    $('month').onchange = e => {
+      S.month = e.target.value;
+      $('monthHead').textContent = S.month;
+    };
+    $('monthPicker').onchange = syncMonth;
+
+    $('addDay').onclick = () => {
+      S.days.push({ date: String(S.days.length + 1), weekday: 'নতুন দিন', isoDate: '' });
+      S.employees.forEach(emp => emp.shifts.push('OFF'));
+      render();
+    };
+
+    $('addEmp').onclick = () => {
+      S.employees.push({ name: 'নতুন কর্মী', shifts: S.days.map(() => 'OFF') });
+      render();
+    };
+
+    $('download').onclick = () => {
+      S.month = $('month').value;
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(new Blob([JSON.stringify(S, null, 2)], { type: 'application/json' }));
+      a.download = 'schedule.json';
+      a.click();
+    };
+
+    $('connect').onclick = async () => {
+      const s = settings();
+      if (!s.token) return toast('Token দিন', true);
+      try {
+        const r = await api('https://api.github.com/repos/' + s.owner + '/' + s.repo);
+        if (!r.ok) throw new Error('api check failed');
+        sessionStorage.setItem(key, JSON.stringify(s));
+        $('status').textContent = 'সংযুক্ত';
+        toast('GitHub সংযোগ সফল');
+      } catch {
+        toast('সংযোগ যাচাই করা যায়নি', true);
+      }
+    };
+
+    $('save').onclick = async () => {
+      const s = settings();
+      if (!s.token) return toast('আগে GitHub connection সেট করুন', true);
+      S.month = $('month').value;
+      S.updatedAt = new Date().toISOString();
+
+      try {
+        if (!sha) {
+          const g = await api('https://api.github.com/repos/' + s.owner + '/' + s.repo + '/contents/schedule.json?ref=' + encodeURIComponent(s.branch));
+          if (g.ok) {
+            const x = await g.json();
+            sha = x.sha;
+          }
+        }
+
+        const r = await api('https://api.github.com/repos/' + s.owner + '/' + s.repo + '/contents/schedule.json', {
+          method: 'PUT',
+          body: JSON.stringify({
+            message: 'Update duty roster',
+            content: btoa(unescape(encodeURIComponent(JSON.stringify(S, null, 2)))),
+            branch: s.branch,
+            sha: sha
+          })
+        });
+
+        if (!r.ok) throw new Error('save failed');
+        const data = await r.json();
+        sha = data.content?.sha || sha;
+        toast('রোস্টার GitHub-এ সংরক্ষিত');
+      } catch {
+        toast('Save করা যায়নি', true);
+      }
+    };
+
+    $('theme').onclick = () => {
+      localStorage.setItem('roster-theme', document.body.classList.contains('dark') ? 'light' : 'dark');
+      applyTheme();
+    };
+
+    loadSaved();
+    applyTheme();
+    load();
+  </script>
+</body>
+</html>
