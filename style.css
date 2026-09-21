@@ -594,3 +594,38 @@ body.dark .day-grid .day-head{background:#182738;}
   .person-head{padding:0 5px;font-size:20px;}
   .person{padding:0 7px;}
 }
+
+
+/* Mobile: smoother swipe-friendly horizontal roster */
+@media(max-width:900px){
+  .roster-wrap{
+    overflow-x:auto;
+    overflow-y:hidden;
+    -webkit-overflow-scrolling:touch;
+    touch-action:pan-x pan-y;
+    overscroll-behavior-x:contain;
+    overscroll-behavior-y:auto;
+    scroll-snap-type:none;
+    scroll-behavior:smooth;
+    scrollbar-width:none;
+    -webkit-user-select:none;
+    user-select:none;
+  }
+  .roster-wrap::-webkit-scrollbar{display:none;width:0;height:0}
+  .day-grid,.person-row{
+    transform:translateZ(0);
+    -webkit-transform:translateZ(0);
+    backface-visibility:hidden;
+    -webkit-backface-visibility:hidden;
+  }
+  .day-head,.shift-cell,.person{
+    -webkit-user-select:none;
+    user-select:none;
+  }
+}
+@media(max-width:520px){
+  .roster-wrap{
+    scroll-padding-inline:4px;
+    -webkit-overflow-scrolling:touch;
+  }
+}
