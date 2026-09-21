@@ -202,7 +202,7 @@ function render(){
     const statusHtml='<span class="duty-status status-'+status.toLowerCase().replace(/\\s+/g,'-')+(status==='ON DUTY'?' is-active':'')+'" style="--status-color:'+esc(statusColor)+'">'+(status==='ON DUTY'?'<i></i>':'')+'<b>'+esc(statusText)+'</b></span>';
 
     return '<div class="person-row">'+
-      '<div class="person"><strong>'+esc(p.name)+'</strong>'+statusHtml+'</div>'+
+      '<div class="person"><div class="person-name"><strong>'+esc(p.name)+'</strong>'+(status==='ON DUTY'?'<i class="name-active-dot" style="--status-color:'+esc(statusColor)+'" aria-hidden="true"></i>':'')+'</div>'+statusHtml+'</div>'+
       '<div class="days" style="'+gridStyle+'">'+cells+'</div>'+
     '</div>';
   }).join('');
