@@ -204,55 +204,43 @@ load();
 (function(){
   const wrap=$('roster');
   if(!wrap) return;
-  let dragging=false,startX=0,startScroll=0,lastX=0,lastTime=0,velocity=0,raf=0;
 
-  const stopMomentum=()=>{
-    if(raf) cancelAnimationFrame(raf);
-    raf=0;
-  };
+  let dragging=false;
+  let startX=0;
+  let startScroll=0;
+  let moved=false;
 
-  const momentum=()=>{
-    velocity*=0.94;
-    if(Math.abs(velocity)<0.15){raf=0;return;}
-    wrap.scrollLeft-=velocity;
-    raf=requestAnimationFrame(momentum);
+  const stop=()=>{
+    dragging=false;
+    wrap.classList.remove('is-dragging');
   };
 
   wrap.addEventListener('pointerdown',e=>{
     if(e.pointerType==='mouse' && e.button!==0) return;
     dragging=true;
-    stopMomentum();
-    startX=lastX=e.clientX;
+    moved=false;
+    startX=e.clientX;
     startScroll=wrap.scrollLeft;
-    lastTime=performance.now();
-    velocity=0;
     wrap.classList.add('is-dragging');
     try{wrap.setPointerCapture(e.pointerId)}catch{}
   });
 
   wrap.addEventListener('pointermove',e=>{
     if(!dragging) return;
-    const now=performance.now();
     const dx=e.clientX-startX;
-    const dt=Math.max(now-lastTime,1);
-    const step=e.clientX-lastX;
-    velocity=step/(dt/16.67);
+    if(Math.abs(dx)>2) moved=true;
     wrap.scrollLeft=startScroll-dx;
-    lastX=e.clientX;
-    lastTime=now;
-    if(Math.abs(dx)>3) e.preventDefault();
+    if(moved) e.preventDefault();
   },{passive:false});
 
   const release=e=>{
     if(!dragging) return;
-    dragging=false;
-    wrap.classList.remove('is-dragging');
+    stop();
     try{wrap.releasePointerCapture(e.pointerId)}catch{}
-    raf=requestAnimationFrame(momentum);
   };
+
   wrap.addEventListener('pointerup',release);
   wrap.addEventListener('pointercancel',release);
-  wrap.addEventListener('pointerleave',e=>{if(e.pointerType==='mouse'&&dragging) release(e)});
 })();
 </script>
 </body>
