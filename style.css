@@ -938,3 +938,37 @@ body.dark .footer-fun{color:#7f8c99}
     font-size:6px;
   }
 }
+
+
+/* Compact minimal top area */
+.topbar{
+  height:52px;
+  padding-top:0;
+  padding-bottom:0;
+}
+.brand{gap:8px}
+.brand-mark{
+  width:28px;
+  height:28px;
+  border-radius:8px;
+  font-size:13px;
+}
+.brand strong{font-size:12px}
+.top-actions{gap:6px}
+.icon-btn,.admin-link{
+  min-height:29px;
+  padding:5px 8px;
+  border-radius:8px;
+  font-size:10px;
+}
+main{
+  padding-top:18px;
+}
+.intro{
+  margin-bottom:14px;
+}
+@media(max-width:900px){
+  .topbar{height:48px}
+  main{padding-top:16px}
+  .intro{margin-bottom:12px}
+}
