@@ -972,3 +972,32 @@ main{
   main{padding-top:16px}
   .intro{margin-bottom:12px}
 }
+
+
+/* Active duty indicator beside the member name */
+.person-name{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  min-width:0;
+}
+.name-active-dot{
+  width:7px;
+  height:7px;
+  flex:0 0 7px;
+  border-radius:50%;
+  background:var(--status-color,#16a34a);
+  box-shadow:
+    0 0 0 2px color-mix(in srgb,var(--status-color,#16a34a) 18%,transparent),
+    0 0 0 5px color-mix(in srgb,var(--status-color,#16a34a) 8%,transparent),
+    0 0 12px color-mix(in srgb,var(--status-color,#16a34a) 95%,transparent);
+  animation:activeNameDotGlow 1.7s ease-in-out infinite;
+}
+@keyframes activeNameDotGlow{
+  0%,100%{opacity:.82;transform:scale(.94)}
+  50%{opacity:1;transform:scale(1.08)}
+}
+@media(max-width:900px){
+  .person-name{gap:5px}
+  .name-active-dot{width:6px;height:6px;flex-basis:6px}
+}
