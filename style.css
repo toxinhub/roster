@@ -1066,3 +1066,22 @@ body.dark .duty-status b{
     font-size:7px;
   }
 }
+
+
+/* Slightly larger day labels for better visual balance */
+.day-head span{
+  font-size:12px;
+  font-weight:850;
+}
+@media(max-width:900px){
+  .day-head span{
+    font-size:9px;
+    font-weight:900;
+  }
+}
+@media(max-width:520px){
+  .day-head span{
+    font-size:9px;
+    font-weight:900;
+  }
+}
