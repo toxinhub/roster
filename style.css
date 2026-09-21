@@ -762,19 +762,19 @@ body.dark .status-off{color:#94a3b8}
   font-weight:950;
   letter-spacing:.035em;
 }
-.duty-status small{
-  color:var(--status-color,#64748b);
-  font-size:6.5px;
-  font-weight:850;
-  opacity:.82;
-}
 .duty-status.is-active i{
-  box-shadow:0 0 0 3px color-mix(in srgb,var(--status-color,#64748b) 13%,transparent),0 0 8px color-mix(in srgb,var(--status-color,#64748b) 72%,transparent);
+  box-shadow:0 0 0 3px color-mix(in srgb,var(--status-color,#64748b) 16%,transparent),
+             0 0 9px color-mix(in srgb,var(--status-color,#64748b) 88%,transparent);
+  animation:activeDutyGlow 1.8s ease-in-out infinite;
 }
 .duty-status.is-active b{
-  text-shadow:0 0 7px color-mix(in srgb,var(--status-color,#64748b) 30%,transparent);
+  color:var(--status-color,#64748b);
+  text-shadow:0 0 7px color-mix(in srgb,var(--status-color,#64748b) 48%,transparent);
+}
+@keyframes activeDutyGlow{
+  0%,100%{opacity:.78;filter:brightness(1)}
+  50%{opacity:1;filter:brightness(1.18)}
 }
 @media(max-width:900px){
   .duty-status b{font-size:6.5px}
-  .duty-status small{font-size:6px}
 }
