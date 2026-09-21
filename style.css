@@ -328,3 +328,43 @@
     border-right-color:#657384;
   }
 }
+
+
+@media(min-width:901px){
+  /* Actual shift-week boundaries: Friday starts, Thursday ends */
+  .day-head.week-start,
+  .shift-cell.week-start{
+    border-left:3px solid rgba(16,24,40,.55) !important;
+  }
+  .day-head.week-end,
+  .shift-cell.week-end{
+    border-right:3px solid rgba(16,24,40,.55) !important;
+  }
+  body.dark .day-head.week-start,
+  body.dark .shift-cell.week-start{
+    border-left-color:rgba(255,255,255,.40) !important;
+  }
+  body.dark .day-head.week-end,
+  body.dark .shift-cell.week-end{
+    border-right-color:rgba(255,255,255,.40) !important;
+  }
+}
+
+@media(max-width:900px){
+  .day-head.week-start,
+  .shift-cell.week-start{
+    border-left:2px solid #8a96a3 !important;
+  }
+  .day-head.week-end,
+  .shift-cell.week-end{
+    border-right:2px solid #8a96a3 !important;
+  }
+  body.dark .day-head.week-start,
+  body.dark .shift-cell.week-start{
+    border-left-color:#657384 !important;
+  }
+  body.dark .day-head.week-end,
+  body.dark .shift-cell.week-end{
+    border-right-color:#657384 !important;
+  }
+}
