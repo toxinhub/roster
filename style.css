@@ -697,3 +697,42 @@ body.dark .day-head em{
     display:none;
   }
 }
+
+
+/* Live duty status beside member names */
+.person{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:7px;
+}
+.duty-status{
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  flex:0 0 auto;
+  font-size:7px;
+  line-height:1;
+  font-weight:950;
+  letter-spacing:.04em;
+  white-space:nowrap;
+}
+.duty-status i{
+  width:6px;
+  height:6px;
+  flex:0 0 6px;
+  border-radius:2px;
+  background:currentColor;
+}
+.status-on-duty{color:#16a34a}
+.status-upcoming{color:#2563eb}
+.status-off{color:#64748b}
+body.dark .status-on-duty{color:#4ade80}
+body.dark .status-upcoming{color:#60a5fa}
+body.dark .status-off{color:#94a3b8}
+
+@media(max-width:900px){
+  .duty-status{
+    font-size:6.5px;
+  }
+}
