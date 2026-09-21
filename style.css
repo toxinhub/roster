@@ -716,3 +716,17 @@ body.dark .day-grid .day-head{background:#182738;}
     font-weight:950;
   }
 }
+
+
+.person-status i:empty{display:none}
+.person-status.on-duty,
+.person-status.upcoming{
+  font-size:8px;
+  font-weight:950;
+}
+@media(max-width:520px){
+  .person-status.on-duty,
+  .person-status.upcoming{
+    font-size:7px;
+  }
+}
