@@ -649,6 +649,32 @@
 }
 
 
+/* Light blue roster date header */
+.day-head{
+  background:linear-gradient(180deg,rgba(219,234,254,.72),rgba(239,246,255,.52));
+  border-color:rgba(147,197,253,.34);
+}
+.day-head strong,
+.day-head span{
+  color:#4b6b8c;
+}
+.day-head em{
+  background:rgba(147,197,253,.24);
+  color:#3b82b6;
+}
+body.dark .day-head{
+  background:linear-gradient(180deg,rgba(59,130,246,.16),rgba(59,130,246,.08));
+  border-color:rgba(96,165,250,.16);
+}
+body.dark .day-head strong,
+body.dark .day-head span{
+  color:#b9d3ef;
+}
+body.dark .day-head em{
+  background:rgba(96,165,250,.16);
+  color:#93c5fd;
+}
+
 /* Smooth, touch-friendly roster scrolling */
 .roster-wrap{
   scroll-behavior:smooth;
