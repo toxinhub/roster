@@ -75,13 +75,27 @@
 
 @media(max-width:900px){
   html,body{scroll-behavior:auto;overscroll-behavior-x:none}
-  body{background:var(--bg)}
-  .topbar{backdrop-filter:none;-webkit-backdrop-filter:none;box-shadow:0 4px 14px rgba(16,24,40,.10)}
-  .board,.board-head,.legend span{backdrop-filter:none;-webkit-backdrop-filter:none}
-  .board{background:var(--panel);box-shadow:0 8px 22px rgba(16,24,40,.07)}
-  .board-head{background:var(--panel);box-shadow:none}
-  .legend span{background:var(--panel-soft);box-shadow:none}
   .roster-wrap{
+    overflow-x:auto;
+    overflow-y:hidden;
+    -webkit-overflow-scrolling:touch;
+    overscroll-behavior-x:contain;
+    scroll-behavior:auto;
+    touch-action:pan-x;
+    contain:layout paint;
+    transform:translateZ(0);
+    -webkit-transform:translateZ(0);
+  }
+  .roster-wrap::-webkit-scrollbar{height:10px}
+  .roster-wrap::-webkit-scrollbar-track{background:transparent}
+  .roster-wrap::-webkit-scrollbar-thumb{background:rgba(100,116,139,.45);border-radius:999px;border:2px solid transparent;background-clip:padding-box}
+  .roster-wrap.is-dragging{cursor:grabbing;user-select:none}
+  .roster-wrap.is-dragging *{pointer-events:none}
+  @media(max-width:900px){
+    .roster-wrap{scrollbar-width:none;-ms-overflow-style:none}
+    .roster-wrap::-webkit-scrollbar{display:none}
+  }
+.roster-wrap{
     -webkit-overflow-scrolling:touch;
     overscroll-behavior-x:contain;
     scroll-behavior:auto;
