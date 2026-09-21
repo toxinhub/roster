@@ -6,7 +6,13 @@
   <meta name="theme-color" content="#0e2c2d">
   <title>এডমিন • ডিউটি রোস্টার</title>
   <link rel="stylesheet" href="style.css">
-</head>
+<style>
+.editor-meta{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:12px;padding:8px 10px;border:1px solid var(--line);border-radius:9px;background:var(--panel-soft)}.change-status{font-size:10px;font-weight:900;color:#16a34a}.change-status.dirty{color:#d97706}.quiet{border:0;background:transparent;color:var(--muted);font-size:9px;font-weight:800;cursor:pointer}.quiet:disabled{opacity:.35;cursor:default}.change-summary{margin-top:8px;padding:10px 12px;border:1px solid rgba(217,119,6,.22);border-radius:9px;background:rgba(245,158,11,.07);color:var(--ink);font-size:10px}.change-summary ul{margin:6px 0 0;padding-left:18px}.change-summary li{margin:2px 0;color:var(--muted)}
+.edit{min-width:42px;min-height:34px;font-size:13px;transition:.12s ease}.edit:hover{transform:translateY(-1px);box-shadow:0 3px 9px rgba(16,24,40,.10)}.edit:focus-visible{outline:2px solid #60a5fa;outline-offset:1px}
+.picker{grid-template-columns:repeat(5,minmax(48px,1fr));gap:6px;min-width:282px;padding:7px;border-radius:12px;background:var(--panel);box-shadow:0 18px 45px rgba(16,24,40,.18);border:1px solid var(--line)}.picker .shift-option{min-height:54px;padding:6px 4px;border:1px solid color-mix(in srgb,var(--line) 85%,transparent);border-radius:9px;background:var(--panel-soft);color:var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;text-align:center;cursor:pointer;transition:.12s ease}.picker .shift-option:hover{transform:translateY(-1px);box-shadow:0 4px 10px rgba(16,24,40,.10)}.picker .shift-option.selected{outline:2px solid currentColor;outline-offset:-2px;box-shadow:0 0 0 2px rgba(255,255,255,.7),0 5px 14px rgba(16,24,40,.12)}.picker .shift-option strong{font-size:16px;font-weight:950;line-height:1}.picker .shift-option small{font-size:6.5px;font-weight:800;color:var(--muted);white-space:nowrap}.picker .shift-A{background:rgba(252,165,165,.24);color:#b42318;border-color:rgba(252,165,165,.7)}.picker .shift-B{background:rgba(147,197,253,.24);color:#175ea8;border-color:rgba(147,197,253,.7)}.picker .shift-C{background:rgba(134,239,172,.24);color:#16803c;border-color:rgba(134,239,172,.7)}.picker .shift-OFF{background:rgba(203,213,225,.32);color:#475569;border-color:rgba(148,163,184,.55)}.picker .shift-L{background:rgba(252,211,77,.24);color:#8a5a00;border-color:rgba(252,211,77,.7)}
+@media(max-width:600px){.picker{position:fixed!important;left:10px!important;right:10px!important;bottom:12px!important;top:auto!important;width:auto;min-width:0;grid-template-columns:repeat(5,1fr);padding:9px;gap:5px;border-radius:16px;box-shadow:0 -12px 40px rgba(16,24,40,.22);z-index:100}.picker .shift-option{min-height:62px}.picker .shift-option strong{font-size:17px}}
+body.dark .picker{box-shadow:0 18px 50px rgba(0,0,0,.45)}
+</style></head>
 <body>
   <div class="app">
     <header class="topbar">
@@ -69,6 +75,7 @@
           <table id="editor"></table>
         </div>
 
+        <div class="editor-meta"><span id="changeStatus" class="change-status clean">● কোনো পরিবর্তন নেই</span><button id="clearChanges" class="quiet" type="button" disabled>পরিবর্তন বাতিল</button></div><div id="changeSummary" class="change-summary" hidden></div>
         <div class="form-row">
           <button class="primary" id="save">✓ GitHub-এ Save</button>
           <button id="download">JSON Download</button>
@@ -87,6 +94,8 @@
   <script>
     let S = null;
     let sha = null;
+    let cleanSnapshot = '';
+    let dirty = false;
     const $ = id => document.getElementById(id);
     const key = 'cctv_roster_admin';
 
@@ -169,10 +178,16 @@
         $('monthHead').textContent = S.month || 'রোস্টার সম্পাদনা';
         render();
         setPicker();
+        cleanSnapshot=snapshot(); dirty=false; updateChangeUI();
       } catch {
         toast('schedule.json লোড হয়নি', true);
       }
     }
+
+    function snapshot(){return JSON.stringify(S);}
+    function diffChanges(){if(!cleanSnapshot)return [];let before;try{before=JSON.parse(cleanSnapshot)}catch{return []}const out=[];(S.employees||[]).forEach((e,ei)=>{const old=before.employees?.[ei];if(old&&e.name!==old.name)out.push(`${old.name||'কর্মী'} → ${e.name||'নামহীন'}`);e.shifts.forEach((code,di)=>{const oldCode=old?.shifts?.[di];if(oldCode!==code)out.push(`${e.name||'কর্মী'} • ${S.days?.[di]?.date||di+1} তারিখ: ${oldCode||'—'} → ${code}`)})});if(before.month!==S.month)out.push(`রোস্টার: ${before.month||'—'} → ${S.month||'—'}`);return out}
+    function markDirty(){dirty=snapshot()!==cleanSnapshot;updateChangeUI()}
+    function updateChangeUI(){const el=$('changeStatus'),summary=$('changeSummary');if(!el||!summary)return;const changes=diffChanges();el.textContent=dirty?`● ${changes.length||1}টি পরিবর্তন অসম্পূর্ণ`:'● কোনো পরিবর্তন নেই';el.className='change-status '+(dirty?'dirty':'clean');$('clearChanges').disabled=!dirty;if(!dirty){summary.hidden=true;summary.innerHTML='';return}summary.hidden=false;summary.innerHTML='<strong>Save করার আগে পরিবর্তনগুলো:</strong><ul>'+changes.slice(0,12).map(x=>'<li>'+esc(x)+'</li>').join('')+(changes.length>12?'<li>আরও '+(changes.length-12)+'টি পরিবর্তন…</li>':'')+'</ul>'}
 
     function render() {
       $('monthHead').textContent = S.month || 'রোস্টার সম্পাদনা';
@@ -198,60 +213,46 @@
 
       $('editor').innerHTML = '<thead>' + h + '</thead><tbody>' + b + '</tbody>';
 
-      $('editor').querySelectorAll('[data-day]').forEach(x => x.onchange = e => S.days[+e.target.dataset.day].date = e.target.value);
-      $('editor').querySelectorAll('[data-wd]').forEach(x => x.onchange = e => S.days[+e.target.dataset.wd].weekday = e.target.value);
-      $('editor').querySelectorAll('[data-name]').forEach(x => x.onchange = e => S.employees[+e.target.dataset.name].name = e.target.value);
+      $('editor').querySelectorAll('[data-day]').forEach(x => x.onchange = e => S.days[+e.target.dataset.day].date = e.target.value; markDirty());
+      $('editor').querySelectorAll('[data-wd]').forEach(x => x.onchange = e => S.days[+e.target.dataset.wd].weekday = e.target.value; markDirty());
+      $('editor').querySelectorAll('[data-name]').forEach(x => x.onchange = e => S.employees[+e.target.dataset.name].name = e.target.value; markDirty());
       $('editor').querySelectorAll('[data-rmday]').forEach(x => x.onclick = e => {
         const i = +e.target.dataset.rmday;
         S.days.splice(i, 1);
         S.employees.forEach(emp => emp.shifts.splice(i, 1));
-        render();
+        markDirty(); render();
       });
       $('editor').querySelectorAll('[data-rmemp]').forEach(x => x.onclick = e => {
         S.employees.splice(+e.target.dataset.rmemp, 1);
-        render();
+        markDirty(); render();
       });
       $('editor').querySelectorAll('.edit').forEach(x => x.onclick = () => pick(x));
     }
 
-    function pick(btn) {
-      document.querySelector('.picker')?.remove();
-      const p = document.createElement('div');
-      p.className = 'picker';
-
-      Object.entries(S.shiftTypes).forEach(([c, v]) => {
-        const b = document.createElement('button');
-        b.className = 'shift-option shift-'+esc(c.toLowerCase());
-        b.innerHTML = `<strong>${esc(c)}</strong><small>${esc(v.label)}</small>`;
-        b.onclick = () => {
-          S.employees[+btn.dataset.ei].shifts[+btn.dataset.di] = c;
-          p.remove();
-          render();
-        };
-        p.appendChild(b);
-      });
-
-      document.body.appendChild(p);
-      const r = btn.getBoundingClientRect();
-      p.style.left = Math.min(r.left, innerWidth - 220) + 'px';
-      p.style.top = (r.bottom + 6) + 'px';
+    function closePicker(){ document.querySelector('.picker')?.remove(); document.removeEventListener('pointerdown',outsidePicker); }
+    function outsidePicker(e){ const p=document.querySelector('.picker'); if(p && !p.contains(e.target) && !e.target.closest('.edit')) closePicker(); }
+    function pick(btn){
+      closePicker(); const p=document.createElement('div'); p.className='picker';
+      const ei=+btn.dataset.ei, di=+btn.dataset.di, current=S.employees[ei].shifts[di];
+      Object.entries(S.shiftTypes).forEach(([code,v])=>{ const b=document.createElement('button'); b.type='button'; b.className='shift-option shift-'+code.toLowerCase()+(code===current?' selected':''); b.innerHTML='<strong>'+esc(code)+'</strong><small>'+esc(v.label)+'</small>'; b.onclick=()=>{ if(S.employees[ei].shifts[di]!==code){S.employees[ei].shifts[di]=code;markDirty();} closePicker();render(); }; p.appendChild(b); });
+      document.body.appendChild(p); const r=btn.getBoundingClientRect();
+      if(innerWidth<=600){p.style.left='10px';p.style.right='10px';p.style.bottom='12px';} else {p.style.left=Math.max(10,Math.min(r.left,innerWidth-292))+'px';p.style.top=Math.min(r.bottom+6,innerHeight-120)+'px';}
+      requestAnimationFrame(()=>document.addEventListener('pointerdown',outsidePicker));
     }
 
-    $('month').onchange = e => {
-      S.month = e.target.value;
-      $('monthHead').textContent = S.month;
-    };
+    $('month').onchange=e=>{S.month=e.target.value;$('monthHead').textContent=S.month;markDirty()};
+    $('clearChanges').onclick=()=>{if(!dirty)return;if(!confirm('সব অসম্পূর্ণ পরিবর্তন বাতিল করবেন?'))return;S=JSON.parse(cleanSnapshot);render();markDirty();toast('পরিবর্তন বাতিল হয়েছে')};
     $('monthPicker').onchange = syncMonth;
 
     $('addDay').onclick = () => {
       S.days.push({ date: String(S.days.length + 1), weekday: 'নতুন দিন', isoDate: '' });
       S.employees.forEach(emp => emp.shifts.push('OFF'));
-      render();
+      markDirty(); render();
     };
 
     $('addEmp').onclick = () => {
       S.employees.push({ name: 'নতুন কর্মী', shifts: S.days.map(() => 'OFF') });
-      render();
+      markDirty(); render();
     };
 
     $('download').onclick = () => {
@@ -304,6 +305,7 @@
         if (!r.ok) throw new Error('save failed');
         const data = await r.json();
         sha = data.content?.sha || sha;
+        cleanSnapshot=snapshot(); dirty=false; updateChangeUI();
         toast('রোস্টার GitHub-এ সংরক্ষিত');
       } catch {
         toast('Save করা যায়নি', true);
