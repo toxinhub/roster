@@ -188,42 +188,39 @@ function render(){
     const todayIndex=days.findIndex(d=>d.isoDate===now);
     const currentCode=todayIndex>=0 ? (p.shifts?.[todayIndex]||'—') : '—';
     let status='OFF', statusText='OFF', displayCode=currentCode;
-    const currentType=types[currentCode]||{};
-    const nowParts=new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Dhaka',hour:'2-digit',minute:'2-digit',hour12:false}).formatToParts(new Date());
-    const nowMinutes=(Number(nowParts.find(x=>x.type==='hour')?.value||0)*60)+Number(nowParts.find(x=>x.type==='minute')?.value||0);
-    const ranges={A:[360,840],B:[840,1320],C:[1320,360]};
-    let currentShiftActive=false;
-    let currentShiftUpcoming=false;
 
-    if(['A','B','C'].includes(currentCode)){
-      const range=ranges[currentCode];
-      currentShiftActive=range[0]<range[1]
-        ? nowMinutes>=range[0]&&nowMinutes<range[1]
-        : nowMinutes>=range[0]||nowMinutes<range[1];
-      currentShiftUpcoming=range[0]<range[1]
-        ? nowMinutes<range[0]
-        : nowMinutes>=range[1]&&nowMinutes<range[0];
+    // Calculate duty status from the actual shift timeline in Dhaka time.
+    // This correctly handles shift boundaries and C's overnight span.
+    const nowMs=Date.now();
+    const shiftTimes={A:[6*60,14*60],B:[14*60,22*60],C:[22*60,6*60]};
+    let activeShift=null;
+    let nextShift=null;
+
+    for(let i=0;i<days.length;i++){
+      const code=p.shifts?.[i];
+      if(!shiftTimes[code]) continue;
+      const [startMin,endMin]=shiftTimes[code];
+      const startDate=new Date(days[i].isoDate+'T00:00:00+06:00');
+      const startMs=startDate.getTime()+startMin*60000;
+      const endMs=startDate.getTime()+endMin*60000+(endMin<=startMin?24*60*60000:0);
+
+      if(nowMs>=startMs && nowMs<endMs){
+        activeShift={code,startMs,endMs};
+        break;
+      }
+      if(startMs>nowMs && !nextShift){
+        nextShift={code,startMs};
+      }
     }
 
-    if(currentShiftActive){
+    if(activeShift){
       status='ON DUTY';
-      statusText='ON DUTY - '+currentCode;
-      displayCode=currentCode;
-    }else if(currentShiftUpcoming){
+      statusText='ON DUTY - '+activeShift.code;
+      displayCode=activeShift.code;
+    }else if(nextShift){
       status='UPCOMING';
-      statusText='UPCOMING - '+currentCode;
-      displayCode=currentCode;
-    }else{
-      // Today's shift is finished/OFF: find the next actual A/B/C shift.
-      for(let i=Math.max(todayIndex+1,0);i<days.length;i++){
-        const nextCode=p.shifts?.[i];
-        if(['A','B','C'].includes(nextCode)){
-          displayCode=nextCode;
-          status='UPCOMING';
-          statusText='UPCOMING - '+nextCode;
-          break;
-        }
-      }
+      statusText='UPCOMING - '+nextShift.code;
+      displayCode=nextShift.code;
     }
 
     const displayType=types[displayCode]||{};
