@@ -36,12 +36,23 @@
     <section class="board">
       <div class="board-head">
         <div>
-          
           <h2>ডিউটি রোস্টার</h2>
         </div>
         <div id="legend" class="legend"></div>
       </div>
       <div class="roster-wrap" id="roster"></div>
+    </section>
+
+    <section class="upcoming-info" aria-labelledby="upcomingTitle">
+      <div class="upcoming-head">
+        <div>
+          <span class="upcoming-kicker">DESKTOP INFO</span>
+          <h2 id="upcomingTitle">পরবর্তী ডিউটি তথ্য</h2>
+          <p>প্রতিটি সদস্যের পরবর্তী অফ ডে ও শিফট পরিবর্তনের তথ্য</p>
+        </div>
+        <span class="upcoming-mark">NEXT</span>
+      </div>
+      <div class="info-board-grid" id="infoBoardGrid"></div>
     </section>
   </main>
 </div>
@@ -145,7 +156,7 @@ function render(){
   const head=days.map(d=>{
     const isToday=d.isoDate===now;
     const dateObj=new Date(d.isoDate+'T12:00:00');
-    const dayNo=dateObj.getDay(); // Friday=5, Thursday=4
+    const dayNo=dateObj.getDay();
     const weekStart=dayNo===5;
     const weekEnd=dayNo===4;
     return '<div class="day-head '+(isToday?'is-today ':'')+(weekStart?'week-start ':'')+(weekEnd?'week-end':'')+'">'+
@@ -193,7 +204,6 @@ $('theme').onclick=()=>{
 applyTheme();
 load();
 
-/* Buttery horizontal roster scrolling */
 (function(){
   const wrap=$('roster');
   if(!wrap) return;
