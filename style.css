@@ -762,18 +762,51 @@ body.dark .status-off{color:#94a3b8}
   font-weight:950;
   letter-spacing:.035em;
 }
+.duty-status.is-active{
+  gap:5px;
+  font-weight:950;
+}
 .duty-status.is-active i{
-  box-shadow:0 0 0 3px color-mix(in srgb,var(--status-color,#64748b) 16%,transparent),
-             0 0 9px color-mix(in srgb,var(--status-color,#64748b) 88%,transparent);
-  animation:activeDutyGlow 1.8s ease-in-out infinite;
+  width:8px;
+  height:8px;
+  flex-basis:8px;
+  position:relative;
+  background:var(--status-color,#16a34a);
+  box-shadow:
+    0 0 0 2px color-mix(in srgb,var(--status-color,#16a34a) 18%,transparent),
+    0 0 0 5px color-mix(in srgb,var(--status-color,#16a34a) 8%,transparent),
+    0 0 12px color-mix(in srgb,var(--status-color,#16a34a) 95%,transparent);
+  animation:activeDutyGlow 1.7s ease-in-out infinite;
 }
 .duty-status.is-active b{
-  color:var(--status-color,#64748b);
-  text-shadow:0 0 7px color-mix(in srgb,var(--status-color,#64748b) 48%,transparent);
+  color:var(--status-color,#16a34a);
+  text-shadow:0 0 8px color-mix(in srgb,var(--status-color,#16a34a) 42%,transparent);
 }
 @keyframes activeDutyGlow{
-  0%,100%{opacity:.78;filter:brightness(1)}
-  50%{opacity:1;filter:brightness(1.18)}
+  0%,100%{
+    opacity:.82;
+    transform:scale(.94);
+    box-shadow:
+      0 0 0 2px color-mix(in srgb,var(--status-color,#16a34a) 16%,transparent),
+      0 0 0 5px color-mix(in srgb,var(--status-color,#16a34a) 7%,transparent),
+      0 0 9px color-mix(in srgb,var(--status-color,#16a34a) 78%,transparent);
+  }
+  50%{
+    opacity:1;
+    transform:scale(1.08);
+    box-shadow:
+      0 0 0 2px color-mix(in srgb,var(--status-color,#16a34a) 25%,transparent),
+      0 0 0 6px color-mix(in srgb,var(--status-color,#16a34a) 12%,transparent),
+      0 0 16px color-mix(in srgb,var(--status-color,#16a34a) 100%,transparent);
+  }
+}
+@media(max-width:900px){
+  .duty-status b{font-size:6.5px}
+  .duty-status.is-active i{
+    width:7px;
+    height:7px;
+    flex-basis:7px;
+  }
 }
 @media(max-width:900px){
   .duty-status b{font-size:6.5px}
