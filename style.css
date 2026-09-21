@@ -697,3 +697,22 @@ body.dark .day-grid .day-head{background:#182738;}
     font-weight:1000;
   }
 }
+
+
+/* Slightly larger day-name labels */
+.day-head span{
+  font-size:14px;
+  font-weight:950;
+}
+@media(max-width:900px){
+  .day-head span{
+    font-size:12px;
+    font-weight:950;
+  }
+}
+@media(max-width:520px){
+  .day-head span{
+    font-size:11px;
+    font-weight:950;
+  }
+}
