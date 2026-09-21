@@ -577,3 +577,20 @@ body.dark .day-grid .day-head{background:#182738;}
   .day-grid .day-head{background:#eef6ff;}
   body.dark .day-grid .day-head{background:#182738;}
 }
+
+
+/* Compact left-side heading/name column */
+@media(min-width:901px){
+  .day-grid,.person-row{grid-template-columns:100px minmax(760px,1fr);}
+  .person-head{padding:0 8px;font-size:23px;}
+  .person{padding:0 10px;}
+}
+@media(max-width:900px){
+  .day-grid,.person-row{grid-template-columns:92px minmax(760px,1fr);}
+  .person-head{padding:0 6px;}
+}
+@media(max-width:520px){
+  .day-grid,.person-row{grid-template-columns:76px minmax(546px,1fr);}
+  .person-head{padding:0 5px;font-size:20px;}
+  .person{padding:0 7px;}
+}
