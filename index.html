@@ -94,6 +94,8 @@ function render(){
   const people=DATA.employees||[];
   const types=DATA.shiftTypes||{};
   const now=today();
+  const cols=Math.max(days.length,1);
+  const gridStyle='grid-template-columns:repeat('+cols+',minmax(78px,1fr));';
 
   $('month').textContent=DATA.month||'Duty Roster';
   $('updated').textContent=timeLabel(DATA.updatedAt);
@@ -125,14 +127,14 @@ function render(){
 
     return '<div class="person-row">'+
       '<div class="person"><strong>'+esc(p.name)+'</strong></div>'+
-      '<div class="days">'+cells+'</div>'+
+      '<div class="days" style="'+gridStyle+'">'+cells+'</div>'+
     '</div>';
   }).join('');
 
   $('roster').innerHTML=
     '<div class="day-grid">'+
       '<div class="person-head" aria-label="CCTV">📹</div>'+
-      '<div class="days">'+head+'</div>'+
+      '<div class="days" style="'+gridStyle+'">'+head+'</div>'+
     '</div>'+rows;
 }
 
