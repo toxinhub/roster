@@ -179,8 +179,21 @@ function render(){
       '</div>';
     }).join('');
 
+    const currentCode=p.shifts?.[days.findIndex(d=>d.isoDate===now)]||'—';
+    let status='OFF', statusLabel='OFF';
+    if(['A','B','C'].includes(currentCode)){
+      const currentType=types[currentCode]||{};
+      const nowMinutes=(new Date().getHours()*60)+new Date().getMinutes();
+      const ranges={A:[360,840],B:[840,1320],C:[1320,360]};
+      const range=ranges[currentCode];
+      const active=range ? (range[0]<range[1] ? nowMinutes>=range[0]&&nowMinutes<range[1] : nowMinutes>=range[0]||nowMinutes<range[1]) : false;
+      if(active){status='ON DUTY';statusLabel='ON DUTY';}
+      else{status='UPCOMING';statusLabel='UPCOMING';}
+    }
+    const statusHtml='<span class="duty-status status-'+status.toLowerCase().replace(/\\s+/g,'-')+'"><i></i>'+statusLabel+'</span>';
+
     return '<div class="person-row">'+
-      '<div class="person"><strong>'+esc(p.name)+'</strong></div>'+
+      '<div class="person"><strong>'+esc(p.name)+'</strong>'+statusHtml+'</div>'+
       '<div class="days" style="'+gridStyle+'">'+cells+'</div>'+
     '</div>';
   }).join('');
