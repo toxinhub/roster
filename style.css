@@ -568,3 +568,12 @@ body.dark .person-status.off,body.dark .person-status.done,body.dark .person-sta
   .person-status{font-size:6px;padding:3px 5px}
   .person-status i{font-size:6px}
 }
+
+
+/* Soft blue date/day header row */
+.day-grid .day-head{background:#eef6ff;}
+body.dark .day-grid .day-head{background:#182738;}
+@media(max-width:900px){
+  .day-grid .day-head{background:#eef6ff;}
+  body.dark .day-grid .day-head{background:#182738;}
+}
