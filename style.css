@@ -574,11 +574,11 @@
   }
   .info-label{
     display:block;
-    margin-bottom:4px;
+    margin-bottom:5px;
     color:#8995a1;
-    font-size:7px;
+    font-size:8.5px;
     font-weight:950;
-    letter-spacing:.035em;
+    letter-spacing:.025em;
   }
   .info-item b{
     display:block;
