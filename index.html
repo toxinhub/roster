@@ -63,6 +63,35 @@ const timeLabel=d=>{
   return date.toLocaleString('bn-BD',{timeZone:'Asia/Dhaka',dateStyle:'medium',timeStyle:'short'});
 };
 
+function getCurrentStatus(code){
+  if(code==='OFF' || code==='L') return {
+    cls:'off', icon:'●', label:code==='L'?'LEAVE':'OFF DAY'
+  };
+  const ranges={
+    A:[6,14],
+    B:[14,22],
+    C:[22,30]
+  };
+  const range=ranges[code];
+  if(!range) return {cls:'unknown',icon:'—',label:'NO DUTY'};
+  const now=new Date();
+  const parts=new Intl.DateTimeFormat('en-US',{
+    timeZone:'Asia/Dhaka',hour:'numeric',hour12:false
+  }).formatToParts(now);
+  const hour=Number(parts.find(x=>x.type==='hour')?.value||0);
+  const minute=Number(parts.find(x=>x.type==='minute')?.value||0);
+  const current=hour*60+minute;
+  const start=range[0]*60;
+  const end=range[1]*60;
+  const normalizedEnd=end>=1440?end-1440:end;
+  const active=end>=1440
+    ? (current>=start || current<normalizedEnd)
+    : (current>=start && current<end);
+  if(active) return {cls:'on-duty',icon:'●',label:'ON DUTY'};
+  if(current<start) return {cls:'upcoming',icon:'●',label:'UPCOMING'};
+  return {cls:'done',icon:'●',label:'COMPLETED'};
+}
+
 function applyTheme(){
   const dark=localStorage.getItem('roster-theme')==='dark';
   document.body.classList.toggle('dark',dark);
@@ -131,8 +160,12 @@ function render(){
       '</div>';
     }).join('');
 
+    const todayIndex=days.findIndex(d=>d.isoDate===now);
+    const todayCode=todayIndex>=0 ? (p.shifts?.[todayIndex]||'—') : '—';
+    const status=getCurrentStatus(todayCode);
     return '<div class="person-row">'+
-      '<div class="person"><strong>'+esc(p.name)+'</strong></div>'+
+      '<div class="person"><div class="person-name"><strong>'+esc(p.name)+'</strong>'+
+      '<span class="person-status '+status.cls+'"><i>'+status.icon+'</i>'+esc(status.label)+'</span></div></div>'+
       '<div class="days" style="'+gridStyle+'">'+cells+'</div>'+
     '</div>';
   }).join('');
@@ -151,6 +184,7 @@ $('theme').onclick=()=>{
 
 applyTheme();
 load();
+setInterval(()=>{ if(DATA) render(); },30000);
 </script>
 </body>
 </html>
