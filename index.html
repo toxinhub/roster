@@ -205,8 +205,10 @@ function render(){
       if(!range) return false;
       const [startMin,endMin]=range;
 
-      // Today's C starts at 22:00. Its 00:00–06:00 portion belongs
-      // to yesterday's C and is handled separately above.
+      // Each shift is exactly 8 hours:
+      // A = 06:00–13:59, B = 14:00–21:59,
+      // C = 22:00–05:59 (the next calendar day).
+      // The 00:00–05:59 part of C is handled by yesterday's C above.
       if(code==='C') return minutes>=startMin;
 
       return minutes>=startMin&&minutes<endMin;
