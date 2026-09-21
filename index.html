@@ -185,7 +185,8 @@ function render(){
       '</div>';
     }).join('');
 
-    // Live status: use Dhaka date/time and the roster's day-by-day shifts.
+    // Live status: handle overnight C (22:00–06:00), today's upcoming shift,
+    // and then the next rostered shift in chronological order.
     const dhakaNow=new Date();
     const dhakaParts=new Intl.DateTimeFormat('en-CA',{
       timeZone:'Asia/Dhaka',year:'numeric',month:'2-digit',day:'2-digit',
@@ -199,51 +200,58 @@ function render(){
     let status='OFF', statusText='OFF', displayCode=currentCode;
 
     const shiftTimes={A:[360,840],B:[840,1320],C:[1320,360]};
-    const range=shiftTimes[currentCode];
-
-    if(range){
+    const isShiftActive=(code,minutes)=>{
+      const range=shiftTimes[code];
+      if(!range) return false;
       const [startMin,endMin]=range;
-      const active=startMin<endMin
-        ? liveMinutes>=startMin&&liveMinutes<endMin
-        : liveMinutes>=startMin||liveMinutes<endMin;
+      return startMin<endMin
+        ? minutes>=startMin&&minutes<endMin
+        : minutes>=startMin||minutes<endMin;
+    };
 
-      if(active){
-        status='ON DUTY';
-        statusText='ON DUTY - '+currentCode;
-        displayCode=currentCode;
+    // A C shift from yesterday remains ON DUTY until 06:00 today.
+    if(todayIndex>0 && liveMinutes<360 && p.shifts?.[todayIndex-1]==='C'){
+      status='ON DUTY';
+      statusText='ON DUTY - C';
+      displayCode='C';
+    }else if(currentCode==='OFF'){
+      status='OFF';
+      statusText='OFF';
+      displayCode='OFF';
+    }else if(currentCode==='L'){
+      status='OFF';
+      statusText='LEAVE';
+      displayCode='L';
+    }else if(isShiftActive(currentCode,liveMinutes)){
+      status='ON DUTY';
+      statusText='ON DUTY - '+currentCode;
+      displayCode=currentCode;
+    }else{
+      const range=shiftTimes[currentCode];
+      let nextIndex=-1;
+
+      // If today's shift has not started yet, today's shift is UPCOMING.
+      if(range && liveMinutes<range[0]){
+        nextIndex=todayIndex;
       }else{
-        // Today's shift has ended. The next roster shift is UPCOMING.
-        // Example: Sep 21 B (14:00-22:00) -> Sep 22 A (06:00-14:00).
+        // Today's shift has ended; find the next A/B/C in the roster.
         for(let i=Math.max(todayIndex+1,0);i<days.length;i++){
-          const nextCode=p.shifts?.[i];
-          if(['A','B','C'].includes(nextCode)){
-            status='UPCOMING';
-            statusText='UPCOMING - '+nextCode;
-            displayCode=nextCode;
+          if(['A','B','C'].includes(p.shifts?.[i])){
+            nextIndex=i;
             break;
           }
         }
       }
-    }else{
-      // OFF/Leave today remains OFF/LEAVE for the entire calendar day.
-      if(currentCode==='OFF'){
+
+      if(nextIndex>=0){
+        const nextCode=p.shifts?.[nextIndex];
+        status='UPCOMING';
+        statusText='UPCOMING - '+nextCode;
+        displayCode=nextCode;
+      }else{
         status='OFF';
         statusText='OFF';
         displayCode='OFF';
-      }else if(currentCode==='L'){
-        status='OFF';
-        statusText='LEAVE';
-        displayCode='L';
-      }else{
-        for(let i=Math.max(todayIndex+1,0);i<days.length;i++){
-          const nextCode=p.shifts?.[i];
-          if(['A','B','C'].includes(nextCode)){
-            status='UPCOMING';
-            statusText='UPCOMING - '+nextCode;
-            displayCode=nextCode;
-            break;
-          }
-        }
       }
     }
 
