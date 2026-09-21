@@ -175,3 +175,45 @@
   body.dark .day-head em{color:#d9f1aa;background:#344a22}
   body.dark .person-head{color:#aeb9c5}
 }
+
+
+@media(min-width:901px){
+  /* Desktop: keep the name column visible while browsing the full month */
+  .roster-wrap{
+    -webkit-overflow-scrolling:touch;
+    overscroll-behavior-x:contain;
+    scroll-behavior:smooth;
+    scrollbar-width:thin;
+  }
+  .person-head,
+  .person{
+    position:sticky;
+    left:0;
+    z-index:4;
+  }
+  .person-head{
+    z-index:6;
+  }
+  .person{
+    box-shadow:8px 0 14px rgba(16,24,40,.055);
+  }
+  body.dark .person{
+    box-shadow:8px 0 16px rgba(0,0,0,.16);
+  }
+
+  /* Reduce scroll-time compositing work on the large desktop matrix */
+  .roster-wrap{
+    contain:layout style;
+    transform:translateZ(0);
+    -webkit-transform:translateZ(0);
+  }
+  .day-grid,
+  .person-row{
+    will-change:auto;
+  }
+  .shift-cell,
+  .day-head,
+  .person{
+    contain:layout paint;
+  }
+}
