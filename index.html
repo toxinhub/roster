@@ -25,7 +25,6 @@
   <main>
     <section class="intro">
       <div>
-        <span class="kicker">OPERATIONS / ROSTER</span>
         <h1 id="month">লোড হচ্ছে…</h1>
       </div>
       <div class="intro-meta">
@@ -37,12 +36,22 @@
     <section class="board">
       <div class="board-head">
         <div>
-          <span class="kicker">DUTY MATRIX</span>
+          
           <h2>ডিউটি রোস্টার</h2>
         </div>
         <div id="legend" class="legend"></div>
       </div>
       <div class="roster-wrap" id="roster"></div>
+    </section>
+
+    <section class="desktop-info-board" id="infoBoard" aria-label="পরবর্তী ডিউটি তথ্য">
+      <div class="info-board-head">
+        <div>
+          
+          <h2>পরবর্তী ডিউটি তথ্য</h2>
+        </div>
+      </div>
+      <div class="info-board-grid" id="infoBoardGrid"></div>
     </section>
   </main>
 
@@ -87,6 +96,50 @@ async function load(){
   }catch{
     toast('রোস্টার লোড করা যায়নি',true);
   }
+}
+
+function renderUpcomingInfo(){
+  const box=$('infoBoardGrid');
+  if(!box) return;
+  const days=DATA?.days||[];
+  const people=DATA?.employees||[];
+  const todayIso=today();
+  const todayIndex=days.findIndex(d=>d.isoDate===todayIso);
+
+  const formatDay=d=>{
+    if(!d) return '—';
+    const dt=new Date(d.isoDate+'T12:00:00');
+    return dt.toLocaleDateString('bn-BD',{day:'numeric',month:'short'});
+  };
+  const shiftLabel=code=>({A:'শিফট A',B:'শিফট B',C:'শিফট C',OFF:'অফ ডে',L:'Leave'}[code]||code||'—');
+
+  const cards=people.map(p=>{
+    const start=Math.max(todayIndex+1,0);
+    let nextChange=null,nextOff=null;
+    for(let i=start;i<days.length;i++){
+      const code=p.shifts?.[i]||'—';
+      if(!nextOff&&(code==='OFF'||code==='L')) nextOff={day:days[i],code};
+      if(!nextChange&&['A','B','C'].includes(code)){
+        let prevCode=null;
+        for(let j=i-1;j>=0;j--){
+          const prev=p.shifts?.[j];
+          if(['A','B','C'].includes(prev)){prevCode=prev;break;}
+        }
+        if(prevCode&&prevCode!==code) nextChange={day:days[i],from:prevCode,to:code};
+      }
+      if(nextChange&&nextOff) break;
+    }
+    return '<article class="info-card">'+
+      '<div class="info-person"><strong>'+esc(p.name)+'</strong><span>বর্তমান: '+esc(shiftLabel(p.shifts?.[todayIndex]))+'</span></div>'+
+      '<div class="info-item shift-change"><span class="info-label">পরবর্তী শিফট চেঞ্জ</span>'+
+        (nextChange?'<b>'+esc(formatDay(nextChange.day))+'</b><small>'+esc(shiftLabel(nextChange.from))+' → '+esc(shiftLabel(nextChange.to))+'</small>':'<b>—</b><small>আগাম তথ্য নেই</small>')+
+      '</div>'+
+      '<div class="info-item off-day"><span class="info-label">পরবর্তী অফ ডে</span>'+
+        (nextOff?'<b>'+esc(formatDay(nextOff.day))+'</b><small>'+esc(nextOff.code==='L'?'Leave':'নির্ধারিত ছুটি')+'</small>':'<b>—</b><small>আগাম তথ্য নেই</small>')+
+      '</div>'+
+    '</article>';
+  }).join('');
+  box.innerHTML=cards||'<div class="info-empty">আগাম ডিউটি তথ্য পাওয়া যাচ্ছে না।</div>';
 }
 
 function render(){
@@ -144,6 +197,7 @@ function render(){
       '<div class="person-head" aria-label="CCTV">📹</div>'+
       '<div class="days" style="'+gridStyle+'">'+head+'</div>'+
     '</div>'+rows;
+  renderUpcomingInfo();
 }
 
 $('theme').onclick=()=>{
@@ -153,6 +207,61 @@ $('theme').onclick=()=>{
 
 applyTheme();
 load();
+
+/* Buttery horizontal roster scrolling */
+(function(){
+  const wrap=$('roster');
+  if(!wrap) return;
+  let dragging=false,startX=0,startScroll=0,lastX=0,lastTime=0,velocity=0,raf=0;
+
+  const stopMomentum=()=>{
+    if(raf) cancelAnimationFrame(raf);
+    raf=0;
+  };
+
+  const momentum=()=>{
+    velocity*=0.94;
+    if(Math.abs(velocity)<0.15){raf=0;return;}
+    wrap.scrollLeft-=velocity;
+    raf=requestAnimationFrame(momentum);
+  };
+
+  wrap.addEventListener('pointerdown',e=>{
+    if(e.pointerType==='mouse' && e.button!==0) return;
+    dragging=true;
+    stopMomentum();
+    startX=lastX=e.clientX;
+    startScroll=wrap.scrollLeft;
+    lastTime=performance.now();
+    velocity=0;
+    wrap.classList.add('is-dragging');
+    try{wrap.setPointerCapture(e.pointerId)}catch{}
+  });
+
+  wrap.addEventListener('pointermove',e=>{
+    if(!dragging) return;
+    const now=performance.now();
+    const dx=e.clientX-startX;
+    const dt=Math.max(now-lastTime,1);
+    const step=e.clientX-lastX;
+    velocity=step/(dt/16.67);
+    wrap.scrollLeft=startScroll-dx;
+    lastX=e.clientX;
+    lastTime=now;
+    if(Math.abs(dx)>3) e.preventDefault();
+  },{passive:false});
+
+  const release=e=>{
+    if(!dragging) return;
+    dragging=false;
+    wrap.classList.remove('is-dragging');
+    try{wrap.releasePointerCapture(e.pointerId)}catch{}
+    raf=requestAnimationFrame(momentum);
+  };
+  wrap.addEventListener('pointerup',release);
+  wrap.addEventListener('pointercancel',release);
+  wrap.addEventListener('pointerleave',e=>{if(e.pointerType==='mouse'&&dragging) release(e)});
+})();
 </script>
 </body>
 </html>
