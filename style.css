@@ -659,3 +659,26 @@
 @media(max-width:900px){
   .upcoming-info{display:none !important;}
 }
+
+
+/* Current shift color indicator */
+@media(min-width:901px){
+  .current-shift{
+    display:inline-flex;
+    align-items:center;
+    gap:5px;
+  }
+  .current-shift::before{
+    content:"";
+    width:6px;
+    height:6px;
+    flex:0 0 6px;
+    border-radius:50%;
+    background:var(--current-color,#64748b);
+    box-shadow:0 0 7px color-mix(in srgb,var(--current-color,#64748b) 65%,transparent);
+  }
+  .current-shift b{
+    color:var(--current-color,#64748b);
+    font-weight:900;
+  }
+}
