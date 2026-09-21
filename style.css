@@ -651,7 +651,7 @@
 
 /* Smooth, touch-friendly roster scrolling */
 .roster-wrap{
-  scroll-behavior:auto;
+  scroll-behavior:smooth;
   -webkit-overflow-scrolling:touch;
   overscroll-behavior-x:contain;
   touch-action:pan-x;
@@ -661,11 +661,10 @@
 .roster-wrap.is-dragging{
   scroll-behavior:auto;
   cursor:grabbing;
+  user-select:none;
 }
 @media(max-width:900px){
   .roster-wrap{
-    scroll-behavior:smooth;
-    scroll-snap-type:none;
     scrollbar-width:none;
   }
   .roster-wrap::-webkit-scrollbar{
