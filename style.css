@@ -730,3 +730,22 @@ body.dark .day-grid .day-head{background:#182738;}
     font-size:7px;
   }
 }
+
+
+/* Active duty indicator */
+.person-status.on-duty::before{
+  content:"";
+  width:5px;
+  height:5px;
+  flex:0 0 5px;
+  border-radius:50%;
+  background:#22c55e;
+  box-shadow:0 0 0 2px rgba(34,197,94,.14),0 0 7px rgba(34,197,94,.32);
+}
+@media(max-width:520px){
+  .person-status.on-duty::before{
+    width:4px;
+    height:4px;
+    flex-basis:4px;
+  }
+}
