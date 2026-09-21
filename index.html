@@ -87,8 +87,8 @@ function getCurrentStatus(code){
   const active=end>=1440
     ? (current>=start || current<normalizedEnd)
     : (current>=start && current<end);
-  if(active) return {cls:'on-duty',icon:'●',label:'ON DUTY'};
-  if(current<start) return {cls:'upcoming',icon:'●',label:'UPCOMING'};
+  if(active) return {cls:'on-duty',icon:'',label:'- '+code};
+  if(current<start) return {cls:'upcoming',icon:'',label:'- '+code};
   return {cls:'done',icon:'●',label:'COMPLETED'};
 }
 
