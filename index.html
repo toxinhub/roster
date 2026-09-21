@@ -225,18 +225,29 @@ function render(){
         }
       }
     }else{
-      // Today is OFF/Leave: find the next scheduled A/B/C shift.
-      for(let i=Math.max(todayIndex+1,0);i<days.length;i++){
-        const nextCode=p.shifts?.[i];
-        if(['A','B','C'].includes(nextCode)){
-          status='UPCOMING';
-          statusText='UPCOMING - '+nextCode;
-          displayCode=nextCode;
-          break;
+      // OFF/Leave today remains OFF/LEAVE for the entire calendar day.
+      if(currentCode==='OFF'){
+        status='OFF';
+        statusText='OFF';
+        displayCode='OFF';
+      }else if(currentCode==='L'){
+        status='OFF';
+        statusText='LEAVE';
+        displayCode='L';
+      }else{
+        for(let i=Math.max(todayIndex+1,0);i<days.length;i++){
+          const nextCode=p.shifts?.[i];
+          if(['A','B','C'].includes(nextCode)){
+            status='UPCOMING';
+            statusText='UPCOMING - '+nextCode;
+            displayCode=nextCode;
+            break;
+          }
         }
       }
     }
 
+    const displayType=types[displayCode]||{};
     const statusColor=displayType.color||types.OFF?.color||'#64748b';
     const statusHtml='<span class="duty-status status-'+status.toLowerCase().replace(/\s+/g,'-')+(status==='ON DUTY'?' is-active':'')+'" style="--status-color:'+esc(statusColor)+'"><b>'+esc(statusText)+'</b></span>';
 
