@@ -729,26 +729,43 @@ body.dark .shift-cell{
   border-top-color:rgba(255,255,255,.045);
 }
 
-/* Smooth, touch-friendly roster scrolling */
+/* High-performance roster scrolling */
+html,body{
+  scroll-behavior:auto;
+  overscroll-behavior-x:none;
+}
 .roster-wrap{
-  scroll-behavior:smooth;
+  overflow-x:auto;
+  overflow-y:hidden;
+  scroll-behavior:auto;
   -webkit-overflow-scrolling:touch;
   overscroll-behavior-x:contain;
   touch-action:pan-x;
   scrollbar-width:thin;
-  cursor:grab;
-}
-.roster-wrap.is-dragging{
-  scroll-behavior:auto;
-  cursor:grabbing;
-  user-select:none;
 }
 @media(max-width:900px){
   .roster-wrap{
     scrollbar-width:none;
+    -ms-overflow-style:none;
   }
-  .roster-wrap::-webkit-scrollbar{
-    display:none;
+  .roster-wrap::-webkit-scrollbar{display:none}
+  /* Keep touch scrolling on the browser's native compositor path. */
+  .roster-wrap,
+  .roster-wrap *{
+    -webkit-tap-highlight-color:transparent;
+  }
+  .board,
+  .board-head,
+  .legend span{
+    backdrop-filter:none;
+    -webkit-backdrop-filter:none;
+  }
+}
+@media(min-width:901px) and (pointer:fine){
+  .roster-wrap{cursor:grab}
+  .roster-wrap.is-dragging{
+    cursor:grabbing;
+    user-select:none;
   }
 }
 
