@@ -3541,3 +3541,52 @@ body.dark .board-head h2{
     box-shadow:0 3px 7px rgba(0,0,0,.25),inset 0 1px 0 rgba(255,255,255,.06) !important;
   }
 }
+
+
+/* Final title redesign — editorial heading, not a button */
+.board-head > div:first-child{display:block !important}
+.board-head h2{
+  display:block !important;
+  min-height:0 !important;
+  width:max-content !important;
+  margin:0 !important;
+  padding:0 0 7px !important;
+  border:0 !important;
+  border-radius:0 !important;
+  background:none !important;
+  box-shadow:none !important;
+  color:#334155 !important;
+  font-size:19px !important;
+  font-weight:900 !important;
+  letter-spacing:-.035em !important;
+  line-height:1.15 !important;
+  text-shadow:0 1px 2px rgba(31,41,55,.10) !important;
+  filter:none !important;
+  position:relative !important;
+}
+.board-head h2::before{display:none !important}
+.board-head h2::after{
+  content:"" !important;
+  display:block !important;
+  width:100% !important;
+  height:3px !important;
+  margin-top:7px !important;
+  border-radius:999px !important;
+  background:linear-gradient(90deg,#ef4444 0 38%,#3b82f6 68%,rgba(59,130,246,0) 100%) !important;
+  opacity:.78 !important;
+}
+body.dark .board-head h2{
+  color:#e7edf3 !important;
+  text-shadow:0 2px 4px rgba(0,0,0,.35) !important;
+}
+body.dark .board-head h2::after{opacity:.62 !important}
+@media(max-width:900px){
+  .board-head h2{
+    font-size:17px !important;
+    padding-bottom:6px !important;
+  }
+  .board-head h2::after{
+    height:2px !important;
+    margin-top:6px !important;
+  }
+}
