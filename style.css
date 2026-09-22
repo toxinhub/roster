@@ -3722,3 +3722,62 @@ body.dark .day-head.is-today{
     background:linear-gradient(180deg,rgba(99,102,241,.14),rgba(99,102,241,.07)) !important;
   }
 }
+
+
+/* Today column — luminous soft lavender glass */
+.day-head.is-today,
+.shift-cell.is-today{
+  background:linear-gradient(180deg,rgba(237,233,254,.68),rgba(245,243,255,.46)) !important;
+  box-shadow:
+    inset 1px 0 0 rgba(139,92,246,.24),
+    inset -1px 0 0 rgba(139,92,246,.24),
+    inset 0 1px 0 rgba(255,255,255,.88),
+    inset 0 -1px 0 rgba(139,92,246,.08) !important;
+}
+.day-head.is-today{
+  border-top:2px solid rgba(139,92,246,.46) !important;
+  border-bottom:2px solid rgba(139,92,246,.38) !important;
+  box-shadow:
+    inset 1px 0 0 rgba(139,92,246,.28),
+    inset -1px 0 0 rgba(139,92,246,.28),
+    inset 0 1px 0 rgba(255,255,255,.92),
+    0 3px 12px rgba(139,92,246,.16) !important;
+}
+.shift-cell.is-today{
+  border-left-color:rgba(139,92,246,.23) !important;
+  border-right-color:rgba(139,92,246,.23) !important;
+}
+body.dark .day-head.is-today,
+body.dark .shift-cell.is-today{
+  background:linear-gradient(180deg,rgba(139,92,246,.23),rgba(124,58,237,.12)) !important;
+  box-shadow:
+    inset 1px 0 0 rgba(196,181,253,.25),
+    inset -1px 0 0 rgba(196,181,253,.25),
+    inset 0 1px 0 rgba(255,255,255,.07),
+    0 3px 12px rgba(109,40,217,.14) !important;
+}
+body.dark .day-head.is-today{
+  border-top-color:rgba(167,139,250,.48) !important;
+  border-bottom-color:rgba(167,139,250,.36) !important;
+}
+@media(max-width:900px){
+  .day-head.is-today,
+  .shift-cell.is-today{
+    background:linear-gradient(180deg,rgba(237,233,254,.60),rgba(245,243,255,.38)) !important;
+    box-shadow:
+      inset 1px 0 0 rgba(139,92,246,.20),
+      inset -1px 0 0 rgba(139,92,246,.20),
+      inset 0 1px 0 rgba(255,255,255,.78) !important;
+  }
+  .day-head.is-today{
+    box-shadow:
+      inset 1px 0 0 rgba(139,92,246,.23),
+      inset -1px 0 0 rgba(139,92,246,.23),
+      inset 0 1px 0 rgba(255,255,255,.84),
+      0 2px 9px rgba(139,92,246,.12) !important;
+  }
+  body.dark .day-head.is-today,
+  body.dark .shift-cell.is-today{
+    background:linear-gradient(180deg,rgba(139,92,246,.19),rgba(124,58,237,.09)) !important;
+  }
+}
