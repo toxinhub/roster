@@ -3908,3 +3908,56 @@ body.dark .day-head.is-today{
   .upcoming-info .info-item b{font-size:18px !important}
   .upcoming-info .info-item small{font-size:13px !important}
 }
+
+
+/* Desktop — contrast correction for text against current backgrounds */
+@media(min-width:901px){
+  .kicker{color:#64748b !important}
+  .intro h1{color:#1f2937 !important}
+  .intro p{color:#526171 !important}
+  .intro-meta span{color:#64748b !important}
+  .intro-meta b{color:#334155 !important}
+  .board-head{color:#263442 !important}
+  .board-head h2{color:#263442 !important}
+  .legend span{color:#526171 !important;background:rgba(255,255,255,.62) !important;border-color:rgba(148,163,184,.42) !important}
+  .legend b{color:#263442 !important}
+  .legend small{color:#64748b !important}
+  .day-head strong{color:#263b52 !important}
+  .day-head span{color:#526171 !important}
+  .day-head em{color:#365314 !important}
+  .person strong{color:#263238 !important}
+  .duty-status b{font-weight:950 !important}
+  .shift b{color:#25313c !important}
+  .shift small{color:#25313c !important;opacity:.9 !important}
+  .upcoming-info{color:#263442 !important}
+  .upcoming-info .upcoming-head h2{color:#263442 !important}
+  .info-person strong{color:#263442 !important}
+  .info-person span{color:#526171 !important}
+  .info-label{color:#64748b !important}
+  .info-item b{color:#263442 !important}
+  .info-item small{color:#526171 !important}
+}
+
+/* Desktop dark mode — preserve contrast on dark surfaces */
+@media(min-width:901px){
+  body.dark .kicker{color:#94a3b8 !important}
+  body.dark .intro h1{color:#edf2f7 !important}
+  body.dark .intro p{color:#aeb9c5 !important}
+  body.dark .intro-meta span{color:#94a3b8 !important}
+  body.dark .intro-meta b{color:#d5dde5 !important}
+  body.dark .board-head,
+  body.dark .board-head h2{color:#e7edf3 !important}
+  body.dark .legend span{color:#b8c3ce !important;background:rgba(22,31,42,.78) !important;border-color:#344250 !important}
+  body.dark .legend b{color:#e7edf3 !important}
+  body.dark .legend small{color:#94a3b8 !important}
+  body.dark .day-head strong{color:#e5ebf1 !important}
+  body.dark .day-head span{color:#aeb9c5 !important}
+  body.dark .day-head em{color:#d9cfff !important}
+  body.dark .person strong{color:#e7edf3 !important}
+  body.dark .upcoming-info .upcoming-head h2,
+  body.dark .info-person strong,
+  body.dark .info-item b{color:#e7edf3 !important}
+  body.dark .info-person span,
+  body.dark .info-label,
+  body.dark .info-item small{color:#aeb9c5 !important}
+}
