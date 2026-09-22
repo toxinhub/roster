@@ -2209,3 +2209,25 @@ body.dark .person{
     background:linear-gradient(180deg,#16231e,#13201b) !important;
   }
 }
+
+
+/* Neutral soft-dark name column */
+.person{
+  background:linear-gradient(180deg,#e0e3e5,#dce0e2) !important;
+  border-right-color:#c4c9cd !important;
+  border-bottom-color:#cdd2d5 !important;
+}
+.person strong{color:#28313a !important}
+body.dark .person{
+  background:linear-gradient(180deg,#151a1f,#12171c) !important;
+  border-right-color:#303840 !important;
+  border-bottom-color:#292f35 !important;
+}
+@media(max-width:900px){
+  .person{
+    background:linear-gradient(180deg,#e0e3e5,#dce0e2) !important;
+  }
+  body.dark .person{
+    background:linear-gradient(180deg,#151a1f,#12171c) !important;
+  }
+}
