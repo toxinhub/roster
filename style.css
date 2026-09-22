@@ -1188,3 +1188,37 @@ body.dark .info-item small{color:#aeb9c4 !important}
 @media(prefers-reduced-motion:reduce){
   .name-active-dot{animation:none !important}
 }
+
+/* Active duty dot — tiny core, larger visible glow */
+.name-active-dot{
+  width:5px !important;
+  height:5px !important;
+  border-radius:50% !important;
+  background:var(--status-color,#64748b) !important;
+  box-shadow:
+    0 0 0 2px color-mix(in srgb,var(--status-color,#64748b) 18%,transparent),
+    0 0 10px color-mix(in srgb,var(--status-color,#64748b) 92%,transparent),
+    0 0 20px color-mix(in srgb,var(--status-color,#64748b) 58%,transparent),
+    0 0 30px color-mix(in srgb,var(--status-color,#64748b) 30%,transparent) !important;
+  animation:activeDutyPulse 1.8s ease-in-out infinite !important;
+}
+@keyframes activeDutyPulse{
+  0%,100%{
+    opacity:.78;
+    transform:scale(.9);
+    box-shadow:
+      0 0 0 2px color-mix(in srgb,var(--status-color,#64748b) 15%,transparent),
+      0 0 8px color-mix(in srgb,var(--status-color,#64748b) 78%,transparent),
+      0 0 17px color-mix(in srgb,var(--status-color,#64748b) 48%,transparent),
+      0 0 26px color-mix(in srgb,var(--status-color,#64748b) 24%,transparent);
+  }
+  50%{
+    opacity:1;
+    transform:scale(1.05);
+    box-shadow:
+      0 0 0 2px color-mix(in srgb,var(--status-color,#64748b) 22%,transparent),
+      0 0 12px color-mix(in srgb,var(--status-color,#64748b) 100%,transparent),
+      0 0 24px color-mix(in srgb,var(--status-color,#64748b) 68%,transparent),
+      0 0 38px color-mix(in srgb,var(--status-color,#64748b) 34%,transparent);
+  }
+}
