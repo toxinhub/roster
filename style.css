@@ -1407,3 +1407,30 @@ body.dark .today-jump:focus-visible{
     line-height:1.3 !important;
   }
 }
+
+/* Mobile footer hierarchy and divider */
+@media(max-width:900px){
+  .site-footer{
+    text-align:center !important;
+  }
+  .footer-switch{
+    font-size:12px !important;
+    font-weight:700 !important;
+    line-height:1.35 !important;
+  }
+  .footer-divider{
+    display:block !important;
+    width:50% !important;
+    height:1px !important;
+    margin:8px auto !important;
+    background:currentColor !important;
+    opacity:.22 !important;
+    border:0 !important;
+  }
+  .footer-fun{
+    font-size:10px !important;
+    font-weight:500 !important;
+    line-height:1.35 !important;
+    opacity:.68 !important;
+  }
+}
