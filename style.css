@@ -4525,3 +4525,98 @@ body.dark .shift{
 body.dark .shift b,body.dark .shift small{color:#e7edf2 !important}
 body.dark .kicker,body.dark .intro p,body.dark .intro-meta span,body.dark .legend span,body.dark .day-head span,body.dark .info-person span,body.dark .info-label,body.dark .info-item small{color:#a5b0ba !important}
 body.dark .intro h1,body.dark .board-head,body.dark .board-head h2,body.dark .person strong,body.dark .day-head strong,body.dark .legend b,body.dark .intro-meta b,body.dark .info-person strong,body.dark .info-item b{color:#e7edf2 !important}
+
+
+/* Theme — Burgundy × Graphite */
+body:not(.dark){
+  background:
+    radial-gradient(circle at 8% 7%,rgba(127,29,29,.10),transparent 27%),
+    radial-gradient(circle at 92% 92%,rgba(88,28,35,.07),transparent 30%),
+    linear-gradient(135deg,#d8d5d6 0%,#cbc9cb 52%,#d3d0d2 100%) !important;
+}
+body.dark{
+  --bg:#121417;
+  --panel:#1c2025;
+  --panel-soft:#23282e;
+  --ink:#e7e9eb;
+  --muted:#a5a8ad;
+  --line:#34383e;
+  --line-strong:#484d54;
+  background:
+    radial-gradient(circle at 7% 6%,rgba(127,29,29,.20),transparent 29%),
+    radial-gradient(circle at 93% 90%,rgba(88,28,35,.12),transparent 32%),
+    linear-gradient(135deg,#121417 0%,#1c2025 52%,#15181c 100%) !important;
+}
+
+/* Burgundy graphite roster surfaces */
+.board{
+  background:linear-gradient(145deg,rgba(235,233,234,.94),rgba(220,218,220,.88)) !important;
+  border-color:rgba(151,145,148,.52) !important;
+  box-shadow:0 22px 52px rgba(31,24,27,.11),inset 0 1px 0 rgba(255,255,255,.82) !important;
+}
+.board-head{
+  background:linear-gradient(135deg,rgba(230,226,228,.97),rgba(213,210,213,.91)) !important;
+  border-bottom-color:rgba(151,145,148,.50) !important;
+}
+.day-head,.shift-cell{
+  background:rgba(224,222,224,.76) !important;
+  border-color:#c7c2c5 !important;
+}
+.person-head,.person{
+  background:linear-gradient(180deg,rgba(229,226,228,.98),rgba(216,213,216,.95)) !important;
+  border-right-color:#bcb6ba !important;
+  box-shadow:7px 0 18px rgba(48,28,34,.08),inset 0 1px 0 rgba(255,255,255,.74) !important;
+}
+.legend span{
+  background:rgba(230,226,228,.90) !important;
+  border-color:#c2bcc0 !important;
+}
+
+/* Duty palette */
+.shift[style*="#FCA5A5"]{--c:#b95b63 !important}
+.shift[style*="#FCD34D"]{--c:#b58c42 !important}
+.shift[style*="#93C5FD"]{--c:#6386a8 !important}
+.shift[style*="#CBD5E1"]{--c:#7c8288 !important}
+.shift[style*="#86EFAC"]{--c:#5f9270 !important}
+.shift{
+  box-shadow:0 5px 14px color-mix(in srgb,var(--c) 20%,transparent),inset 0 1px 0 rgba(255,255,255,.46) !important;
+}
+
+/* Typography */
+.kicker{color:#756d71 !important}
+.intro h1,.board-head,.board-head h2,.person strong,.day-head strong{color:#302b2e !important}
+.intro p,.intro-meta span,.legend span,.day-head span,.info-person span,.info-label,.info-item small{color:#716b6f !important}
+.legend b,.intro-meta b,.info-person strong,.info-item b{color:#3a3337 !important}
+.shift b,.shift small{color:#302b2e !important}
+
+/* Dark graphite */
+body.dark .board{
+  background:linear-gradient(145deg,rgba(30,34,40,.97),rgba(25,29,34,.93)) !important;
+  border-color:#34383e !important;
+  box-shadow:0 25px 60px rgba(0,0,0,.32),inset 0 1px 0 rgba(255,255,255,.055) !important;
+}
+body.dark .board-head{
+  background:linear-gradient(135deg,rgba(34,38,44,.98),rgba(28,32,37,.94)) !important;
+  border-bottom-color:#34383e !important;
+}
+body.dark .day-head,body.dark .shift-cell{
+  background:rgba(28,32,37,.92) !important;
+  border-color:#34383e !important;
+}
+body.dark .person-head,body.dark .person{
+  background:linear-gradient(180deg,rgba(34,38,44,.98),rgba(28,32,37,.96)) !important;
+  border-right-color:#484049 !important;
+  box-shadow:8px 0 21px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.045) !important;
+}
+body.dark .legend span{
+  background:rgba(34,38,44,.95) !important;
+  border-color:#484049 !important;
+}
+body.dark .shift{
+  background:color-mix(in srgb,var(--c) 30%,#1c2025) !important;
+  border-color:color-mix(in srgb,var(--c) 56%,#34383e) !important;
+  box-shadow:0 5px 14px color-mix(in srgb,var(--c) 16%,transparent),inset 0 1px 0 rgba(255,255,255,.045) !important;
+}
+body.dark .shift b,body.dark .shift small{color:#e7e9eb !important}
+body.dark .kicker,body.dark .intro p,body.dark .intro-meta span,body.dark .legend span,body.dark .day-head span,body.dark .info-person span,body.dark .info-label,body.dark .info-item small{color:#a5a8ad !important}
+body.dark .intro h1,body.dark .board-head,body.dark .board-head h2,body.dark .person strong,body.dark .day-head strong,body.dark .legend b,body.dark .intro-meta b,body.dark .info-person strong,body.dark .info-item b{color:#e7e9eb !important}
