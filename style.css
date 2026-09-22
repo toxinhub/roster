@@ -2138,3 +2138,35 @@ body.dark .person .duty-status b{color:#91a39a}
     border-right-color:#2f4038 !important;
   }
 }
+
+
+/* Name-column divider + restore live status shift colors */
+.person{
+  border-right:1px solid #c6d0cb !important;
+}
+.person + .day-grid{
+  border-left:0 !important;
+}
+.duty-status b{
+  color:var(--status-color,#64748b) !important;
+}
+.duty-status b[style*="#"]{
+  color:inherit !important;
+}
+body.dark .person{
+  border-right-color:#34453d !important;
+}
+
+/* Preserve shift-specific colors for ON DUTY / UPCOMING labels */
+.duty-status .status-a{color:#dc5f68 !important}
+.duty-status .status-b{color:#c28b13 !important}
+.duty-status .status-c{color:#4f82bd !important}
+.duty-status .status-l{color:#4f9a6a !important}
+@media(max-width:900px){
+  .person{
+    border-right:1px solid #c6d0cb !important;
+  }
+  body.dark .person{
+    border-right-color:#34453d !important;
+  }
+}
