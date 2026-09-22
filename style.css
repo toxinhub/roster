@@ -5144,3 +5144,87 @@ body.dark .intro h1,body.dark .board-head,body.dark .board-head h2,body.dark .pe
     -webkit-backdrop-filter:none !important;
   }
 }
+
+
+/* Calm Graphite theme — preserves all existing shift colors */
+body:not(.dark){
+  background:linear-gradient(135deg,#aeb7bf 0%,#b8c1c8 52%,#aeb7bf 100%) !important;
+}
+body.dark{
+  background:linear-gradient(135deg,#151b20 0%,#1c242a 52%,#151b20 100%) !important;
+}
+
+/* Main roster surfaces */
+.board{
+  background:#c4cbd1 !important;
+  border:1px solid #919ba4 !important;
+  box-shadow:0 16px 34px rgba(38,49,58,.13),inset 0 1px 0 rgba(255,255,255,.34) !important;
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+}
+.board-head{
+  background:#cbd1d6 !important;
+  border-bottom-color:#a2abb3 !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.38) !important;
+}
+.day-head,.shift-cell{
+  background:#b8c1c8 !important;
+  border-color:#919ba4 !important;
+}
+.person-head,.person{
+  background:#d0d5d9 !important;
+  border-right-color:#919ba4 !important;
+  box-shadow:7px 0 16px rgba(38,49,58,.075),inset 0 1px 0 rgba(255,255,255,.42) !important;
+}
+.legend span{
+  background:#cbd1d6 !important;
+  border-color:#9ba5ad !important;
+}
+
+/* Preserve shift colors; only soften their surrounding treatment */
+.shift{
+  border-radius:12px !important;
+  box-shadow:0 4px 10px rgba(38,49,58,.09),inset 0 1px 0 rgba(255,255,255,.42) !important;
+}
+.shift b,.shift small{color:#26313a !important}
+
+/* Calm, readable typography */
+.kicker{color:#53616c !important}
+.intro h1,.board-head,.board-head h2,.person strong,.day-head strong{color:#26313a !important}
+.intro p,.intro-meta span,.legend span,.day-head span,.info-person span,.info-label,.info-item small{color:#53616c !important}
+.legend b,.intro-meta b,.info-person strong,.info-item b{color:#34414d !important}
+
+body.dark .board{
+  background:#20282f !important;
+  border-color:#3b474f !important;
+  box-shadow:0 18px 40px rgba(0,0,0,.25),inset 0 1px 0 rgba(255,255,255,.045) !important;
+}
+body.dark .board-head{
+  background:#273139 !important;
+  border-bottom-color:#3b474f !important;
+}
+body.dark .day-head,body.dark .shift-cell{
+  background:#252f37 !important;
+  border-color:#3b474f !important;
+}
+body.dark .person-head,body.dark .person{
+  background:#2b363e !important;
+  border-right-color:#46525a !important;
+  box-shadow:8px 0 18px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.045) !important;
+}
+body.dark .legend span{
+  background:#273139 !important;
+  border-color:#46525a !important;
+}
+body.dark .shift{
+  box-shadow:0 4px 10px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.06) !important;
+}
+body.dark .shift b,body.dark .shift small{color:#e4e9ed !important}
+body.dark .kicker,body.dark .intro p,body.dark .intro-meta span,body.dark .legend span,body.dark .day-head span,body.dark .info-person span,body.dark .info-label,body.dark .info-item small{color:#aab5bd !important}
+body.dark .intro h1,body.dark .board-head,body.dark .board-head h2,body.dark .person strong,body.dark .day-head strong,body.dark .legend b,body.dark .intro-meta b,body.dark .info-person strong,body.dark .info-item b{color:#e4e9ed !important}
+
+/* Desktop-only finishing touches; mobile behavior remains untouched */
+@media(min-width:901px){
+  .board{border-radius:18px !important}
+  .board-head{border-radius:18px 18px 0 0 !important}
+}
