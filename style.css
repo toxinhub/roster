@@ -1442,3 +1442,52 @@ body.dark .picker .shift-option{
   .duty-status b{font-size:6.6px}
   .shift{max-width:62px;min-height:38px}
 }
+
+
+/* Final roster cell borders: keep every date clearly boxed across the full month */
+.day-head,
+.shift-cell{
+  border:1px solid var(--line) !important;
+}
+.day-head:last-child,
+.shift-cell:last-child{
+  border-right:1px solid var(--line) !important;
+}
+.day-head.week-start,
+.shift-cell.week-start{
+  border-left:3px solid rgba(16,24,40,.55) !important;
+}
+.day-head.week-end,
+.shift-cell.week-end{
+  border-right:3px solid rgba(16,24,40,.55) !important;
+}
+body.dark .day-head,
+body.dark .shift-cell{
+  border-color:rgba(148,163,184,.20) !important;
+}
+body.dark .day-head.week-start,
+body.dark .shift-cell.week-start{
+  border-left-color:rgba(255,255,255,.40) !important;
+}
+body.dark .day-head.week-end,
+body.dark .shift-cell.week-end{
+  border-right-color:rgba(255,255,255,.40) !important;
+}
+@media(max-width:900px){
+  .day-head.week-start,
+  .shift-cell.week-start{
+    border-left:2px solid #8a96a3 !important;
+  }
+  .day-head.week-end,
+  .shift-cell.week-end{
+    border-right:2px solid #8a96a3 !important;
+  }
+  body.dark .day-head.week-start,
+  body.dark .shift-cell.week-start{
+    border-left-color:#657384 !important;
+  }
+  body.dark .day-head.week-end,
+  body.dark .shift-cell.week-end{
+    border-right-color:#657384 !important;
+  }
+}
