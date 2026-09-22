@@ -4007,3 +4007,46 @@ body.dark .day-head.is-today{
   footer,
   .site-footer{max-width:1660px !important;}
 }
+
+
+/* Desktop — balance typography and spacing for wider 1660px layout */
+@media(min-width:901px){
+  main{padding-left:24px !important;padding-right:24px !important;padding-top:40px !important}
+  .intro{gap:40px;margin-bottom:22px !important}
+  .intro h1{font-size:32px !important;letter-spacing:-.04em !important}
+  .intro p{font-size:14px !important;margin-top:10px !important}
+  .intro-meta{padding-bottom:4px !important}
+  .intro-meta span{font-size:9px !important}
+  .intro-meta b{font-size:12px !important}
+  .board-head{min-height:78px !important;padding:15px 22px !important;gap:28px !important}
+  .board-head h2{font-size:23px !important}
+  .legend{gap:8px !important}
+  .legend span{padding:6px 10px !important;font-size:13px !important}
+  .legend b{font-size:10px !important}
+  .legend small{font-size:8.5px !important}
+  .day-grid,.person-row{grid-template-columns:150px minmax(900px,1fr) !important}
+  .day-head{min-height:76px !important;padding:11px 10px !important}
+  .day-head strong{font-size:17px !important}
+  .day-head span{font-size:14px !important}
+  .day-head em{font-size:11px !important;top:8px !important;right:8px !important;padding:3px 6px !important}
+  .person-row{min-height:80px !important}
+  .person{padding-left:20px !important;padding-right:16px !important}
+  .person strong{font-size:18px !important}
+  .duty-status b{font-size:9px !important}
+  .shift-cell{min-height:80px !important;padding:9px 8px !important}
+  .shift{max-width:116px !important;min-height:50px !important;padding:8px 12px !important;border-radius:10px !important}
+  .shift b{font-size:18px !important}
+  .shift small{font-size:9px !important}
+  .upcoming-info{margin-top:18px !important;padding:17px !important}
+  .upcoming-head{margin-bottom:13px !important}
+  .upcoming-info .upcoming-head h2{font-size:22px !important}
+  .info-board-grid{gap:11px !important}
+  .info-card{padding:12px !important;gap:9px !important;border-radius:14px !important}
+  .upcoming-info .info-person strong{font-size:18px !important}
+  .upcoming-info .info-person span{font-size:9px !important}
+  .upcoming-info .current-shift{font-size:14px !important}
+  .upcoming-info .info-label{font-size:12px !important}
+  .upcoming-info .info-item b{font-size:18px !important}
+  .upcoming-info .info-item small{font-size:12px !important}
+  footer,.site-footer{padding-left:24px !important;padding-right:24px !important}
+}
