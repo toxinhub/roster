@@ -2769,3 +2769,14 @@ background:#28233a !important;
     border-right-color:rgba(226,232,240,.46) !important;
   }
 }
+
+
+/* Desktop side width refinement */
+@media(min-width:901px){
+  main{
+    max-width:1360px;
+  }
+  footer{
+    max-width:1360px;
+  }
+}
