@@ -1572,3 +1572,38 @@ body.dark .roster-wrap{
     border-color:rgba(148,163,184,.18) !important;
   }
 }
+
+
+/* Roster grid — clean cell borders */
+.day-grid .person-head,
+.day-grid .day-head,
+.person-row .person,
+.person-row .shift-cell{
+  border:1px solid rgba(148,163,184,.26) !important;
+}
+.roster-wrap{
+  border:1px solid rgba(100,116,139,.28) !important;
+}
+body.dark .day-grid .person-head,
+body.dark .day-grid .day-head,
+body.dark .person-row .person,
+body.dark .person-row .shift-cell{
+  border-color:rgba(148,163,184,.20) !important;
+}
+body.dark .roster-wrap{border-color:rgba(148,163,184,.22) !important}
+
+@media(max-width:900px){
+  .day-grid .person-head,
+  .day-grid .day-head,
+  .person-row .person,
+  .person-row .shift-cell{
+    border-color:rgba(148,163,184,.22) !important;
+  }
+  .roster-wrap{border-color:rgba(100,116,139,.24) !important}
+  body.dark .day-grid .person-head,
+  body.dark .day-grid .day-head,
+  body.dark .person-row .person,
+  body.dark .person-row .shift-cell{
+    border-color:rgba(148,163,184,.18) !important;
+  }
+}
