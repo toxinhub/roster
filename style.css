@@ -1194,15 +1194,17 @@ body.dark .picker .shift-option{
   display:inline-block;
 }
 .today-jump::after{
-  content:"· · · ─ · · ─ · · ─ · · ·";
+  content:"· · · ─ · · · ─ · · · ─ · · · ─ · · · ─ · · · ─ · · · ─ · · · ─ · · ·";
   display:block;
   width:100%;
-  margin-top:0;
+  height:7px;
+  margin-top:-1px;
+  overflow:hidden;
   color:color-mix(in srgb,currentColor 48%,transparent);
-  font-size:7px;
-  font-weight:800;
-  letter-spacing:1px;
-  line-height:.65;
+  font-size:6px;
+  font-weight:900;
+  letter-spacing:.55px;
+  line-height:7px;
   white-space:nowrap;
   text-align:center;
   pointer-events:none;
