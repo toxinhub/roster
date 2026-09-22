@@ -3312,3 +3312,25 @@ body.dark .shift{
     scroll-behavior:smooth !important;
   }
 }
+
+/* Mobile scroll performance fix — remove forced compositing/containment and native-smooth scrolling */
+@media(max-width:900px){
+  html,body{
+    scroll-behavior:auto !important;
+    -webkit-overflow-scrolling:auto !important;
+  }
+  .roster-wrap{
+    scroll-behavior:auto !important;
+    -webkit-overflow-scrolling:touch !important;
+    overscroll-behavior-x:contain !important;
+    contain:none !important;
+    transform:none !important;
+    -webkit-transform:none !important;
+    will-change:auto !important;
+    touch-action:pan-x !important;
+  }
+  .roster-wrap *{
+    transform:none;
+    -webkit-transform:none;
+  }
+}
