@@ -332,7 +332,16 @@ $('todayJump').onclick=()=>{
 
 load();
 // Recalculate live duty status as shift boundaries are crossed.
-setInterval(()=>{ if(DATA) render(); },30000);
+let rosterScrolling=false,rosterScrollTimer=0;
+const rosterEl=$('roster');
+if(rosterEl){
+  rosterEl.addEventListener('scroll',()=>{
+    rosterScrolling=true;
+    clearTimeout(rosterScrollTimer);
+    rosterScrollTimer=setTimeout(()=>{rosterScrolling=false},200);
+  },{passive:true});
+}
+setInterval(()=>{ if(DATA&&!rosterScrolling) render(); },30000);
 
 (function(){
   const wrap=$('roster');
