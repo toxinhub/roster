@@ -2908,3 +2908,62 @@ background:#28233a !important;
       0 6px 20px rgba(0,0,0,.30);
   }
 }
+
+
+/* Desktop — final 24-hour date-pill progress ring fix */
+@media(min-width:901px){
+  .today-jump{
+    --day-remaining:100%;
+    border:3px solid transparent !important;
+    background:
+      linear-gradient(rgba(255,255,255,.72),rgba(255,255,255,.72)) padding-box,
+      conic-gradient(
+        from -90deg,
+        #ef4444 0 var(--day-remaining),
+        rgba(239,68,68,.12) var(--day-remaining) 100%
+      ) border-box !important;
+    background-clip:padding-box,border-box !important;
+    box-shadow:
+      0 6px 18px rgba(15,23,42,.08),
+      0 0 0 1px rgba(239,68,68,.035) !important;
+  }
+
+  .today-jump:hover,
+  .today-jump:focus-visible{
+    border-color:transparent !important;
+    background:
+      linear-gradient(rgba(255,255,255,.82),rgba(255,255,255,.82)) padding-box,
+      conic-gradient(
+        from -90deg,
+        #ef4444 0 var(--day-remaining),
+        rgba(239,68,68,.16) var(--day-remaining) 100%
+      ) border-box !important;
+    background-clip:padding-box,border-box !important;
+    box-shadow:
+      0 8px 22px rgba(15,23,42,.10),
+      0 0 14px rgba(239,68,68,.12) !important;
+  }
+
+  body.dark .today-jump{
+    background:
+      linear-gradient(rgba(17,24,39,.88),rgba(17,24,39,.88)) padding-box,
+      conic-gradient(
+        from -90deg,
+        #f87171 0 var(--day-remaining),
+        rgba(248,113,113,.13) var(--day-remaining) 100%
+      ) border-box !important;
+    background-clip:padding-box,border-box !important;
+  }
+
+  body.dark .today-jump:hover,
+  body.dark .today-jump:focus-visible{
+    background:
+      linear-gradient(rgba(20,29,42,.94),rgba(20,29,42,.94)) padding-box,
+      conic-gradient(
+        from -90deg,
+        #f87171 0 var(--day-remaining),
+        rgba(248,113,113,.18) var(--day-remaining) 100%
+      ) border-box !important;
+    background-clip:padding-box,border-box !important;
+  }
+}
