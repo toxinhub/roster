@@ -1214,3 +1214,22 @@ body.dark .picker .shift-option{
 .today-jump:hover::after{opacity:.38}
 .today-jump:focus-visible{outline:2px solid color-mix(in srgb,currentColor 35%,transparent);outline-offset:4px;border-radius:4px}
 .day-head.today-jump-focus{outline:2px solid color-mix(in srgb,var(--accent,#2563eb) 55%,transparent);outline-offset:-2px}
+
+
+/* Mobile dark-mode surface fix: prevent light glass layers from staying white */
+@media(max-width:900px){
+  body.dark .board{
+    background:var(--panel);
+    border-color:rgba(255,255,255,.10);
+    box-shadow:0 18px 45px rgba(0,0,0,.24);
+  }
+  body.dark .board-head{
+    background:var(--panel-soft);
+    border-bottom-color:rgba(148,163,184,.16);
+  }
+  body.dark .legend span{
+    background:#1a2530;
+    border-color:#334250;
+    box-shadow:none;
+  }
+}
