@@ -1422,7 +1422,7 @@ body.dark .today-jump:focus-visible{
     display:block !important;
     width:50% !important;
     height:1px !important;
-    margin:8px auto !important;
+    margin:4px auto !important;
     background:currentColor !important;
     opacity:.22 !important;
     border:0 !important;
