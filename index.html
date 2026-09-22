@@ -274,12 +274,19 @@ function render(){
         statusText='UPCOMING - '+todayOccurrence.code;
         displayCode=todayOccurrence.code;
       }else{
-        // The 4-hour rule applies ONLY while the current calendar day
-        // is explicitly marked OFF or LEAVE.
+        // If today's assigned shift has ended and the next assigned shift
+        // is tomorrow, show that next shift as UPCOMING immediately.
+        const isAssignedToday=['A','B','C'].includes(currentCode);
+        const tomorrowIso=addDays(liveDate,1);
+        const nextIsTomorrow=next&&next.date===tomorrowIso;
         const isNoShiftDay=currentCode==='OFF'||currentCode==='L';
         const hoursUntilNext=next?(next.startMs-nowMs)/(60*60000):Infinity;
 
-        if(isNoShiftDay&&next&&hoursUntilNext>0&&hoursUntilNext<=4){
+        if(isAssignedToday&&nextIsTomorrow){
+          status='UPCOMING';
+          statusText='UPCOMING - '+next.code;
+          displayCode=next.code;
+        }else if(isNoShiftDay&&next&&hoursUntilNext>0&&hoursUntilNext<=4){
           status='UPCOMING';
           statusText='UPCOMING - '+next.code;
           displayCode=next.code;
