@@ -485,3 +485,129 @@
   body.dark .roster-wrap::-webkit-scrollbar-thumb{background:#667586;border-color:#1a2530;}
   body.dark .roster-wrap::-webkit-scrollbar-thumb:hover{background:#8190a0;}
 }
+
+
+/* Upcoming Duty — three separate employee cards */
+.upcoming-info{
+  margin-top:18px;
+  padding:18px;
+  background:rgba(255,255,255,.56);
+  border:1px solid rgba(255,255,255,.72);
+  border-radius:18px;
+  box-shadow:0 14px 38px rgba(31,41,55,.09),inset 0 1px 0 rgba(255,255,255,.8);
+}
+.upcoming-head{margin-bottom:14px}
+.upcoming-head h2{margin:0;color:#263442;font-size:20px;font-weight:900}
+.info-board-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:12px;
+}
+.info-card{
+  min-width:0;
+  display:grid;
+  grid-template-columns:1.05fr .95fr .95fr;
+  align-items:stretch;
+  gap:0;
+  padding:0;
+  background:rgba(255,255,255,.48);
+  border:1px solid rgba(148,163,184,.32);
+  border-radius:14px;
+  overflow:hidden;
+  box-shadow:0 7px 18px rgba(31,41,55,.065),inset 0 1px 0 rgba(255,255,255,.75);
+}
+.info-person,.info-item{
+  padding:13px 12px;
+  min-width:0;
+}
+.info-person{
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  gap:5px;
+  background:rgba(255,255,255,.30);
+}
+.info-person strong{
+  color:#263442;
+  font-size:16px;
+  font-weight:900;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.info-person span.current-shift{
+  display:flex;
+  align-items:center;
+  gap:5px;
+  color:#64748b;
+  font-size:9px;
+  font-weight:700;
+}
+.current-shift i{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--current-color,#64748b);
+  box-shadow:0 0 0 3px color-mix(in srgb,var(--current-color,#64748b) 14%,transparent);
+  flex:0 0 auto;
+}
+.info-person span.current-shift b{color:#526171;font-size:10px}
+.info-item{
+  border-left:1px solid rgba(148,163,184,.25);
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  gap:3px;
+}
+.info-label{
+  color:#74808b;
+  font-size:9px;
+  font-weight:800;
+}
+.info-item b{
+  color:#263442;
+  font-size:16px;
+  font-weight:900;
+  line-height:1.15;
+}
+.info-item small{
+  color:#63717c;
+  font-size:9px;
+  font-weight:700;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.info-empty{
+  grid-column:1/-1;
+  padding:18px;
+  text-align:center;
+  color:#74808b;
+}
+body.dark .upcoming-info{
+  background:rgba(20,29,38,.72);
+  border-color:rgba(255,255,255,.10);
+  box-shadow:0 16px 42px rgba(0,0,0,.24),inset 0 1px 0 rgba(255,255,255,.05);
+}
+body.dark .upcoming-head h2,
+body.dark .info-person strong,
+body.dark .info-item b{color:#e7edf3}
+body.dark .info-card{
+  background:rgba(255,255,255,.035);
+  border-color:rgba(255,255,255,.09);
+  box-shadow:0 7px 18px rgba(0,0,0,.16),inset 0 1px 0 rgba(255,255,255,.04);
+}
+body.dark .info-person{background:rgba(255,255,255,.025)}
+body.dark .info-item{border-left-color:rgba(255,255,255,.08)}
+body.dark .info-person span.current-shift b,
+body.dark .info-label,
+body.dark .info-item small,
+body.dark .info-empty{color:#aeb9c4}
+
+@media(max-width:1100px){
+  .info-card{grid-template-columns:1fr}
+  .info-item{border-left:0;border-top:1px solid rgba(148,163,184,.25)}
+  body.dark .info-item{border-top-color:rgba(255,255,255,.08)}
+}
+@media(max-width:900px){
+  .upcoming-info{padding:14px;border-radius:15px}
+  .info-board-grid{grid-template-columns:1fr}
+}
