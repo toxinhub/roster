@@ -152,12 +152,39 @@ body.dark .picker{box-shadow:0 18px 50px rgba(0,0,0,.45)}
 
     function syncMonth() {
       const value = $('monthPicker').value;
-      if (!value) return;
+      if (!value || !S) return;
       const [year, month] = value.split('-').map(Number);
-      const monthName = new Intl.DateTimeFormat('bn-BD', { month: 'long', year: 'numeric' }).format(new Date(year, month - 1, 1));
-      $('month').value = monthName;
+      const monthName = new Intl.DateTimeFormat('bn-BD', { month: 'long', year: 'numeric' }).format(new Date(Date.UTC(year, month - 1, 1)));
+      const weekdays = ['রবিবার','সোমবার','মঙ্গলবার','বুধবার','বৃহস্পতিবার','শুক্রবার','শনিবার'];
+      const toBangla = n => String(n).replace(/0/g,'০').replace(/1/g,'১').replace(/2/g,'২').replace(/3/g,'৩').replace(/4/g,'৪').replace(/5/g,'৫').replace(/6/g,'৬').replace(/7/g,'৭').replace(/8/g,'৮').replace(/9/g,'৯');
+      const daysInMonth = new Date(Date.UTC(year, month, 0)).getUTCDate();
+      const oldDays = Array.isArray(S.days) ? S.days : [];
+      const oldEmployees = Array.isArray(S.employees) ? S.employees : [];
+
       S.month = monthName;
+      S.days = Array.from({length:daysInMonth}, (_,i) => {
+        const day = i + 1;
+        const isoDate = year + '-' + String(month).padStart(2,'0') + '-' + String(day).padStart(2,'0');
+        const date = new Date(Date.UTC(year, month - 1, day));
+        return {
+          date: toBangla(day),
+          weekday: weekdays[date.getUTCDay()],
+          isoDate
+        };
+      });
+
+      oldEmployees.forEach(emp => {
+        const oldShifts = Array.isArray(emp.shifts) ? emp.shifts : [];
+        emp.shifts = S.days.map((_,i) => oldShifts[i] || 'OFF');
+      });
+
+      $('month').value = monthName;
       $('monthHead').textContent = monthName;
+      render();
+      markDirty();
+      toast(oldDays.length === daysInMonth
+        ? 'মাস ও সাল অনুযায়ী তারিখ আপডেট হয়েছে'
+        : daysInMonth + ' দিনের রোস্টার তৈরি হয়েছে');
     }
 
     function setPicker() {
