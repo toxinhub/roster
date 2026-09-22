@@ -3383,3 +3383,33 @@ body.dark .shift{
   .roster-wrap .shift{box-shadow:none !important}
   body::before,body::after{display:none !important}
 }
+
+
+/* Final background theme — CCTV Blue × Red, static and performance-safe */
+body:not(.dark){
+  background:
+    radial-gradient(circle at 10% 5%,rgba(239,68,68,.075),transparent 25%),
+    radial-gradient(circle at 90% 7%,rgba(96,165,250,.10),transparent 27%),
+    radial-gradient(circle at 50% 100%,rgba(148,163,184,.055),transparent 34%),
+    #f3f5f7 !important;
+}
+body.dark{
+  background:
+    radial-gradient(circle at 10% 5%,rgba(239,68,68,.085),transparent 25%),
+    radial-gradient(circle at 90% 7%,rgba(59,130,246,.095),transparent 27%),
+    #0b1118 !important;
+}
+@media(max-width:900px){
+  body:not(.dark){
+    background:
+      radial-gradient(circle at 13% 4%,rgba(239,68,68,.065),transparent 24%),
+      radial-gradient(circle at 88% 7%,rgba(96,165,250,.075),transparent 25%),
+      #f3f5f7 !important;
+  }
+  body.dark{
+    background:
+      radial-gradient(circle at 13% 4%,rgba(239,68,68,.07),transparent 24%),
+      radial-gradient(circle at 88% 7%,rgba(59,130,246,.075),transparent 25%),
+      #0b1118 !important;
+  }
+}
