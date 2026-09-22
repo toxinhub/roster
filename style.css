@@ -2231,3 +2231,25 @@ body.dark .person{
     background:linear-gradient(180deg,#151a1f,#12171c) !important;
   }
 }
+
+
+/* Very light 10% soft-dark name column */
+.person{
+  background:linear-gradient(180deg,#f0f2f3,#edf0f1) !important;
+  border-right-color:#d9dde0 !important;
+  border-bottom-color:#dfe2e4 !important;
+}
+.person strong{color:#303840 !important}
+body.dark .person{
+  background:linear-gradient(180deg,#1c2228,#192026) !important;
+  border-right-color:#353c43 !important;
+  border-bottom-color:#30373d !important;
+}
+@media(max-width:900px){
+  .person{
+    background:linear-gradient(180deg,#f0f2f3,#edf0f1) !important;
+  }
+  body.dark .person{
+    background:linear-gradient(180deg,#1c2228,#192026) !important;
+  }
+}
