@@ -3590,3 +3590,45 @@ body.dark .board-head h2::after{opacity:.62 !important}
     margin-top:6px !important;
   }
 }
+
+
+/* Restore strong today-column highlight */
+.day-head.is-today{
+  position:relative !important;
+  background:linear-gradient(180deg,#e2ebe6,#e9f0ec) !important;
+  box-shadow:inset 0 -3px 0 rgba(59,130,246,.28),inset 0 1px 0 rgba(255,255,255,.9) !important;
+}
+.day-head.is-today::after{
+  content:"" !important;
+  position:absolute !important;
+  left:0 !important;
+  right:0 !important;
+  bottom:0 !important;
+  height:3px !important;
+  background:linear-gradient(90deg,#ef4444,#3b82f6) !important;
+  opacity:.75 !important;
+}
+.day-head.is-today em{
+  background:#dbeafe !important;
+  color:#1d4ed8 !important;
+  border-color:#bfdbfe !important;
+  box-shadow:0 2px 8px rgba(37,99,235,.18),inset 0 1px 0 rgba(255,255,255,.85) !important;
+  font-weight:900 !important;
+}
+@media(max-width:900px){
+  .day-head.is-today{
+    background:#f3efff !important;
+    box-shadow:inset 0 -3px 0 rgba(99,102,241,.24) !important;
+  }
+  .day-head.is-today::after{height:2px !important;opacity:.7 !important}
+}
+body.dark .day-head.is-today{
+  background:linear-gradient(180deg,#28233a,#211d2e) !important;
+  box-shadow:inset 0 -3px 0 rgba(129,140,248,.3),inset 0 1px 0 rgba(255,255,255,.06) !important;
+}
+body.dark .day-head.is-today::after{opacity:.6 !important}
+body.dark .day-head.is-today em{
+  background:#263b5a !important;
+  color:#9ec5ff !important;
+  border-color:#3d5d86 !important;
+}
