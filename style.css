@@ -1707,3 +1707,33 @@ body.dark .shift[style*="#CBD5E1"]{--c:#65727f !important}
     background:linear-gradient(180deg,#203346,#1b2a38) !important;
   }
 }
+
+
+/* Slightly deeper day/date header for clearer roster hierarchy */
+.day-head{
+  background:linear-gradient(180deg,#e4e9ee,#edf1f4) !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.72);
+}
+.day-head span{color:#687684}
+.day-head strong{color:#263747}
+.day-head em{
+  background:rgba(148,163,184,.18);
+  color:#526273;
+  border-color:rgba(100,116,139,.12);
+}
+.day-head.is-today{
+  background:linear-gradient(180deg,#dbe5ef,#e8eef3) !important;
+}
+body.dark .day-head{
+  background:linear-gradient(180deg,#1b2835,#17222e) !important;
+}
+body.dark .day-head span{color:#9aa9b8}
+body.dark .day-head strong{color:#e1e9f0}
+body.dark .day-head em{
+  background:rgba(96,165,250,.12);
+  color:#a9c5dc;
+  border-color:rgba(96,165,250,.13);
+}
+body.dark .day-head.is-today{
+  background:linear-gradient(180deg,#22364a,#1b2c3c) !important;
+}
