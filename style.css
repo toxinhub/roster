@@ -2418,3 +2418,53 @@ body.dark .duty-status b{
   text-shadow:none;
   filter:saturate(1.05);
 }
+
+
+/* Mobile theme refresh: 1) quiet neutral background, 2) premium glass sheet */
+@media(max-width:900px){
+  body{
+    background:
+      radial-gradient(720px 420px at 0% 0%,rgba(255,255,255,.72),transparent 62%),
+      linear-gradient(180deg,#edf0f2 0%,#e8ecef 100%) !important;
+  }
+  body::before{
+    opacity:.022 !important;
+    mix-blend-mode:soft-light;
+  }
+  .app{
+    filter:none !important;
+  }
+  .board{
+    background:rgba(255,255,255,.58) !important;
+    border:1px solid rgba(255,255,255,.78) !important;
+    border-radius:16px !important;
+    box-shadow:
+      0 10px 28px rgba(31,43,54,.07),
+      0 2px 8px rgba(31,43,54,.045),
+      inset 0 1px 0 rgba(255,255,255,.78) !important;
+    overflow:hidden;
+  }
+  .board-head{
+    background:rgba(255,255,255,.34) !important;
+    border-bottom:1px solid rgba(120,135,146,.16) !important;
+  }
+}
+@media(max-width:900px){
+  body.dark{
+    background:
+      radial-gradient(680px 380px at 0% 0%,rgba(71,101,128,.09),transparent 62%),
+      linear-gradient(180deg,#0b1118 0%,#0d141c 100%) !important;
+  }
+  body.dark .board{
+    background:rgba(17,25,34,.72) !important;
+    border-color:rgba(104,124,143,.18) !important;
+    box-shadow:
+      0 12px 30px rgba(0,0,0,.24),
+      0 2px 8px rgba(0,0,0,.18),
+      inset 0 1px 0 rgba(255,255,255,.035) !important;
+  }
+  body.dark .board-head{
+    background:rgba(22,31,41,.58) !important;
+    border-bottom-color:rgba(116,137,157,.16) !important;
+  }
+}
