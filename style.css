@@ -1023,3 +1023,31 @@ body.dark .info-item small{color:#aeb9c4 !important}
     max-width:1840px !important;
   }
 }
+
+/* Desktop — typography balance for readability */
+@media(min-width:901px){
+  .brand-copy strong{font-size:13px !important}
+  .intro h1{font-size:34px !important;line-height:1.12 !important}
+  .intro p{font-size:14px !important;line-height:1.55 !important}
+  .intro-meta span{font-size:10px !important}
+  .intro-meta b{font-size:13px !important}
+  .board-head h2{font-size:22px !important;line-height:1.2 !important}
+  .legend span{font-size:12px !important}
+  .legend b{font-size:10px !important}
+  .legend small{font-size:9px !important}
+  .day-head strong{font-size:17px !important;line-height:1.15 !important}
+  .day-head span{font-size:13px !important}
+  .day-head em{font-size:10px !important}
+  .person strong{font-size:17px !important;line-height:1.2 !important}
+  .duty-status b{font-size:9px !important}
+  .shift b{font-size:18px !important;line-height:1 !important}
+  .shift small{font-size:9px !important;line-height:1.2 !important}
+  .upcoming-head h2{font-size:17px !important}
+  .info-person strong{font-size:14px !important}
+  .info-person span.current-shift{font-size:8px !important}
+  .info-person span.current-shift b{font-size:9px !important}
+  .info-label{font-size:8px !important}
+  .info-item b{font-size:13px !important}
+  .info-item small{font-size:9px !important}
+  footer,.site-footer{font-size:10px !important}
+}
