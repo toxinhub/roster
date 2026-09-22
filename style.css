@@ -1291,3 +1291,35 @@ body.dark .info-item small{color:#aeb9c4 !important}
 @media(min-width:901px){
   .footer-switch{display:none !important;}
 }
+
+/* Clean date display */
+.today-jump{
+  border:0 !important;
+  outline:0 !important;
+  background:transparent !important;
+  box-shadow:none !important;
+  color:#475569 !important;
+  padding:0 !important;
+  margin:0 !important;
+  font-size:15px !important;
+  font-weight:700 !important;
+  letter-spacing:-.015em !important;
+  line-height:1.35 !important;
+  border-radius:0 !important;
+}
+.today-jump:hover,
+.today-jump:focus-visible{
+  background:transparent !important;
+  box-shadow:none !important;
+  color:#334155 !important;
+  outline:none !important;
+}
+body.dark .today-jump{color:#dbe3ea !important}
+body.dark .today-jump:hover,
+body.dark .today-jump:focus-visible{color:#f1f5f8 !important}
+@media(max-width:900px){
+  .today-jump{
+    font-size:14px !important;
+    font-weight:700 !important;
+  }
+}
