@@ -3413,3 +3413,31 @@ body.dark{
       #0b1118 !important;
   }
 }
+
+
+/* Today tag — distinct highlight inside the roster header */
+.day-head.is-today em{
+  background:#dbeafe !important;
+  color:#1d4ed8 !important;
+  border-color:#bfdbfe !important;
+  box-shadow:0 2px 7px rgba(37,99,235,.14),inset 0 1px 0 rgba(255,255,255,.8) !important;
+  font-weight:900 !important;
+}
+body.dark .day-head.is-today em{
+  background:#263b5a !important;
+  color:#9ec5ff !important;
+  border-color:#3d5d86 !important;
+  box-shadow:0 2px 7px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.06) !important;
+}
+@media(max-width:900px){
+  .day-head.is-today em{
+    background:#dbeafe !important;
+    color:#1d4ed8 !important;
+    border-color:#bfdbfe !important;
+  }
+  body.dark .day-head.is-today em{
+    background:#263b5a !important;
+    color:#9ec5ff !important;
+    border-color:#3d5d86 !important;
+  }
+}
