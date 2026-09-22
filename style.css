@@ -1182,7 +1182,7 @@ body.dark .picker .shift-option{
   appearance:none;
   border:0;
   background:none;
-  padding:0 0 5px;
+  padding:0;
   margin:0;
   color:inherit;
   font:inherit;
@@ -1191,21 +1191,22 @@ body.dark .picker .shift-option{
   cursor:pointer;
   position:relative;
   text-decoration:none;
+  display:inline-block;
 }
 .today-jump::after{
   content:"· · · ─ · · ─ · · ─ · · ·";
   display:block;
-  margin-top:6px;
+  width:100%;
+  margin-top:0;
   color:color-mix(in srgb,currentColor 48%,transparent);
   font-size:7px;
   font-weight:800;
   letter-spacing:1px;
-  line-height:1;
+  line-height:.65;
   white-space:nowrap;
   text-align:center;
   pointer-events:none;
 }
 .today-jump:hover::after{color:color-mix(in srgb,currentColor 76%,transparent)}
-.today-jump:focus-visible{outline:2px solid color-mix(in srgb,currentColor 35%,transparent);outline-offset:4px;border-radius:4px}
 .today-jump:focus-visible{outline:2px solid color-mix(in srgb,currentColor 35%,transparent);outline-offset:4px;border-radius:4px}
 .day-head.today-jump-focus{outline:2px solid color-mix(in srgb,var(--accent,#2563eb) 55%,transparent);outline-offset:-2px}
