@@ -2795,8 +2795,8 @@ background:#28233a !important;
       linear-gradient(var(--panel,#fff),var(--panel,#fff)) padding-box,
       conic-gradient(
         from -90deg,
-        #ef4444 var(--day-remaining),
-        rgba(239,68,68,.10) var(--day-remaining)
+        #ef4444 0 var(--day-remaining),
+        rgba(239,68,68,.10) var(--day-remaining) 100%
       ) border-box;
     box-shadow:
       0 6px 18px rgba(15,23,42,.08),
@@ -2825,8 +2825,8 @@ background:#28233a !important;
       linear-gradient(#111827,#111827) padding-box,
       conic-gradient(
         from -90deg,
-        #f87171 var(--day-remaining),
-        rgba(248,113,113,.10) var(--day-remaining)
+        #f87171 0 var(--day-remaining),
+        rgba(248,113,113,.10) var(--day-remaining) 100%
       ) border-box;
     box-shadow:
       0 7px 20px rgba(0,0,0,.20),
