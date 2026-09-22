@@ -3848,3 +3848,14 @@ body.dark .day-head.is-today{
     background:linear-gradient(180deg,rgba(139,92,246,.20),rgba(124,58,237,.10)) !important;
   }
 }
+
+
+/* Desktop — improve readability of upcoming duty information */
+@media(min-width:901px){
+  .upcoming-info .upcoming-head h2{font-size:18px !important}
+  .upcoming-info .info-person strong{font-size:15px !important}
+  .upcoming-info .current-shift{font-size:12px !important}
+  .upcoming-info .info-label{font-size:10px !important;letter-spacing:.055em !important}
+  .upcoming-info .info-item b{font-size:15px !important}
+  .upcoming-info .info-item small{font-size:11px !important}
+}
