@@ -2327,3 +2327,25 @@ body.dark .person{
     background:linear-gradient(180deg,#eaf0ed,#eef3f0) !important;
   }
 }
+
+
+/* Match name column to the ultra-light header tone */
+.person{
+  background:linear-gradient(180deg,#eef3f0,#f1f5f3) !important;
+  border-right-color:#dfe5e2 !important;
+  border-bottom-color:#e1e7e4 !important;
+}
+.person strong{color:#496458 !important}
+body.dark .person{
+  background:linear-gradient(180deg,#1c2a24,#1a2721) !important;
+  border-right-color:#34443c !important;
+  border-bottom-color:#303d36 !important;
+}
+@media(max-width:900px){
+  .person{
+    background:linear-gradient(180deg,#eef3f0,#f1f5f3) !important;
+  }
+  body.dark .person{
+    background:linear-gradient(180deg,#1c2a24,#1a2721) !important;
+  }
+}
