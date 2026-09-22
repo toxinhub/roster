@@ -5228,3 +5228,81 @@ body.dark .intro h1,body.dark .board-head,body.dark .board-head h2,body.dark .pe
   .board{border-radius:18px !important}
   .board-head{border-radius:18px 18px 0 0 !important}
 }
+
+
+/* Midnight Smoke — new neutral theme, existing shift colors untouched */
+body:not(.dark){
+  background:linear-gradient(135deg,#8f989d 0%,#a2aaae 48%,#929b9f 100%) !important;
+}
+body.dark{
+  background:linear-gradient(135deg,#101519 0%,#171e23 50%,#11171b 100%) !important;
+}
+
+/* Elevated neutral roster */
+.board{
+  background:#b9c0c4 !important;
+  border:1px solid #7f898f !important;
+  box-shadow:0 20px 42px rgba(17,24,28,.18),inset 0 1px 0 rgba(255,255,255,.30) !important;
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+}
+.board-head{
+  background:#c0c6c9 !important;
+  border-bottom-color:#929ba0 !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.34) !important;
+}
+.day-head,.shift-cell{
+  background:#adb5ba !important;
+  border-color:#899399 !important;
+}
+.person-head,.person{
+  background:#c7cccf !important;
+  border-right-color:#899399 !important;
+  box-shadow:8px 0 18px rgba(17,24,28,.08),inset 0 1px 0 rgba(255,255,255,.38) !important;
+}
+.legend span{
+  background:#bec4c7 !important;
+  border-color:#8d979c !important;
+}
+
+/* Shift cards: colors remain exactly as defined in the roster */
+.shift{
+  border-radius:11px !important;
+  box-shadow:0 5px 11px rgba(17,24,28,.11),inset 0 1px 0 rgba(255,255,255,.45) !important;
+}
+.shift b,.shift small{color:#202a30 !important}
+
+/* Neutral, slightly warm-readable typography */
+.kicker{color:#526067 !important}
+.intro h1,.board-head,.board-head h2,.person strong,.day-head strong{color:#202a30 !important}
+.intro p,.intro-meta span,.legend span,.day-head span,.info-person span,.info-label,.info-item small{color:#526067 !important}
+.legend b,.intro-meta b,.info-person strong,.info-item b{color:#303c43 !important}
+
+body.dark .board{
+  background:#1d252a !important;
+  border-color:#354047 !important;
+  box-shadow:0 22px 46px rgba(0,0,0,.30),inset 0 1px 0 rgba(255,255,255,.045) !important;
+}
+body.dark .board-head{
+  background:#232d33 !important;
+  border-bottom-color:#39454c !important;
+}
+body.dark .day-head,body.dark .shift-cell{
+  background:#202a30 !important;
+  border-color:#354148 !important;
+}
+body.dark .person-head,body.dark .person{
+  background:#283239 !important;
+  border-right-color:#414d54 !important;
+  box-shadow:8px 0 20px rgba(0,0,0,.20),inset 0 1px 0 rgba(255,255,255,.045) !important;
+}
+body.dark .legend span{
+  background:#232d33 !important;
+  border-color:#414d54 !important;
+}
+body.dark .shift{
+  box-shadow:0 5px 11px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.055) !important;
+}
+body.dark .shift b,body.dark .shift small{color:#e3e9ec !important}
+body.dark .kicker,body.dark .intro p,body.dark .intro-meta span,body.dark .legend span,body.dark .day-head span,body.dark .info-person span,body.dark .info-label,body.dark .info-item small{color:#a9b4ba !important}
+body.dark .intro h1,body.dark .board-head,body.dark .board-head h2,body.dark .person strong,body.dark .day-head strong,body.dark .legend b,body.dark .intro-meta b,body.dark .info-person strong,body.dark .info-item b{color:#e3e9ec !important}
