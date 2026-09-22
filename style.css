@@ -3859,3 +3859,14 @@ body.dark .day-head.is-today{
   .upcoming-info .info-item b{font-size:15px !important}
   .upcoming-info .info-item small{font-size:11px !important}
 }
+
+
+/* Desktop — second readability boost for upcoming duty information */
+@media(min-width:901px){
+  .upcoming-info .upcoming-head h2{font-size:20px !important}
+  .upcoming-info .info-person strong{font-size:17px !important}
+  .upcoming-info .current-shift{font-size:13px !important}
+  .upcoming-info .info-label{font-size:11px !important;letter-spacing:.06em !important}
+  .upcoming-info .info-item b{font-size:17px !important}
+  .upcoming-info .info-item small{font-size:12px !important}
+}
