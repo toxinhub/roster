@@ -2031,3 +2031,27 @@ body.dark .shift-cell.week-end{
     display:none !important;
   }
 }
+
+/* Mobile legend — keep shift times, stay compact */
+@media(max-width:900px){
+  .legend span{
+    padding:2px 2px !important;
+    gap:2px !important;
+    font-size:5.8px !important;
+  }
+  .legend i{
+    width:4px !important;
+    height:4px !important;
+    flex:0 0 4px !important;
+  }
+  .legend b{
+    font-size:6px !important;
+  }
+  .legend small{
+    display:inline !important;
+    font-size:5px !important;
+    line-height:1 !important;
+    white-space:nowrap !important;
+    overflow:visible !important;
+  }
+}
