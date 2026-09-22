@@ -1680,3 +1680,30 @@ body.dark .shift[style*="#CBD5E1"]{--c:#65727f !important}
       #eef1f4;
   }
 }
+
+
+/* Mobile day/date header — slightly deeper, still clean */
+@media(max-width:900px){
+  .day-head{
+    background:linear-gradient(180deg,#e4e9ee,#edf0f3) !important;
+    border-right-color:rgba(71,85,105,.16);
+  }
+  .day-head strong{color:#304255 !important}
+  .day-head span{color:#667687 !important}
+  .day-head em{
+    background:rgba(96,165,250,.12);
+    color:#46657f;
+    border-color:rgba(96,165,250,.14);
+  }
+  .day-head.is-today{
+    background:linear-gradient(180deg,#dce5ee,#e8edf2) !important;
+  }
+  body.dark .day-head{
+    background:linear-gradient(180deg,#1a2632,#17222d) !important;
+  }
+  body.dark .day-head strong{color:#d7e2ec !important}
+  body.dark .day-head span{color:#91a2b2 !important}
+  body.dark .day-head.is-today{
+    background:linear-gradient(180deg,#203346,#1b2a38) !important;
+  }
+}
