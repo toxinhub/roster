@@ -1491,3 +1491,49 @@ body.dark .shift-cell.week-end{
     border-right-color:#657384 !important;
   }
 }
+
+
+/* Continuous roster grid: shared dividers instead of separated boxes */
+.day-head,
+.shift-cell{
+  border-top:0 !important;
+  border-bottom:1px solid var(--line) !important;
+  border-left:0 !important;
+  border-right:1px solid var(--line) !important;
+  border-radius:0 !important;
+}
+.day-head:first-child,
+.shift-cell:first-child{
+  border-left:0 !important;
+}
+.day-head.week-start,
+.shift-cell.week-start{
+  border-left:2px solid #8a96a3 !important;
+}
+.day-head.week-end,
+.shift-cell.week-end{
+  border-right:2px solid #8a96a3 !important;
+}
+body.dark .day-head,
+body.dark .shift-cell{
+  border-right-color:rgba(148,163,184,.20) !important;
+  border-bottom-color:rgba(148,163,184,.20) !important;
+}
+body.dark .day-head.week-start,
+body.dark .shift-cell.week-start{
+  border-left-color:#657384 !important;
+}
+body.dark .day-head.week-end,
+body.dark .shift-cell.week-end{
+  border-right-color:#657384 !important;
+}
+@media(min-width:901px){
+  .day-head.week-start,
+  .shift-cell.week-start{border-left:3px solid rgba(16,24,40,.55) !important}
+  .day-head.week-end,
+  .shift-cell.week-end{border-right:3px solid rgba(16,24,40,.55) !important}
+  body.dark .day-head.week-start,
+  body.dark .shift-cell.week-start{border-left-color:rgba(255,255,255,.40) !important}
+  body.dark .day-head.week-end,
+  body.dark .shift-cell.week-end{border-right-color:rgba(255,255,255,.40) !important}
+}
