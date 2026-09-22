@@ -1556,3 +1556,51 @@ body.dark .shift-cell.week-end{
     background-attachment:scroll;
   }
 }
+
+
+/* Step 7: cinematic dark mode — deep charcoal/navy with muted shift tones */
+body.dark{
+  --bg:#0a1017;
+  --panel:#111923;
+  --panel-soft:#151f2a;
+  --ink:#e7edf3;
+  --muted:#8e9aa7;
+  --line:#273442;
+  --line-strong:#354453;
+  --navy:#070b11;
+}
+body.dark .shift{
+  background:color-mix(in srgb,var(--c) 48%,#111923) !important;
+  border-color:color-mix(in srgb,var(--c) 58%,#273442) !important;
+  color:#dbe3ea !important;
+  box-shadow:0 3px 10px rgba(0,0,0,.20),inset 0 1px 0 rgba(255,255,255,.045) !important;
+}
+body.dark .shift b,
+body.dark .shift small{
+  color:#dbe3ea !important;
+}
+body.dark .legend span{
+  background:rgba(21,31,42,.78);
+  border-color:rgba(148,163,184,.14);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.035);
+}
+body.dark .legend b{color:#dbe3ea}
+body.dark .person,
+body.dark .shift-cell{background:var(--panel)}
+body.dark .day-grid{background:var(--panel-soft)}
+@media(max-width:900px){
+  body.dark .shift{
+    background:color-mix(in srgb,var(--c) 34%,#111923) !important;
+    border-color:color-mix(in srgb,var(--c) 52%,#273442) !important;
+    box-shadow:0 3px 9px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.04) !important;
+  }
+  body.dark .shift b,
+  body.dark .shift small{color:#dbe3ea !important}
+}
+
+/* Keep dark-mode shift coding muted and readable */
+body.dark .shift[style*="#FCA5A5"]{--c:#b85c62 !important}
+body.dark .shift[style*="#FCD34D"]{--c:#b58a35 !important}
+body.dark .shift[style*="#93C5FD"]{--c:#557ea8 !important}
+body.dark .shift[style*="#86EFAC"]{--c:#57936b !important}
+body.dark .shift[style*="#CBD5E1"]{--c:#65727f !important}
