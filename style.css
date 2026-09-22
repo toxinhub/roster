@@ -1537,3 +1537,22 @@ body.dark .shift-cell.week-end{
   body.dark .day-head.week-end,
   body.dark .shift-cell.week-end{border-right-color:rgba(255,255,255,.40) !important}
 }
+
+
+/* Step 6: subtle red/yellow atmospheric background — clean first, tint second */
+@media(max-width:900px){
+  body:not(.dark){
+    background:
+      radial-gradient(circle at 16% 7%, rgba(248,113,113,.095), transparent 24%),
+      radial-gradient(circle at 86% 15%, rgba(250,204,21,.065), transparent 22%),
+      var(--bg);
+    background-attachment:scroll;
+  }
+  body.dark{
+    background:
+      radial-gradient(circle at 16% 7%, rgba(239,68,68,.075), transparent 24%),
+      radial-gradient(circle at 86% 15%, rgba(250,204,21,.045), transparent 22%),
+      #0b1118;
+    background-attachment:scroll;
+  }
+}
