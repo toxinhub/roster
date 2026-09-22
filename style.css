@@ -1088,3 +1088,61 @@ body.dark .info-item small{color:#aeb9c4 !important}
     font-weight:900 !important;
   }
 }
+
+/* Duty status — compact label under each person's name */
+.person{
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:flex-start !important;
+  justify-content:center !important;
+  gap:5px !important;
+}
+.person strong{
+  display:block !important;
+  line-height:1.15 !important;
+}
+.duty-status{
+  display:inline-flex !important;
+  align-items:center !important;
+  width:max-content !important;
+  max-width:100% !important;
+  margin:0 !important;
+  padding:3px 7px !important;
+  border-radius:999px !important;
+  font-size:8px !important;
+  font-weight:800 !important;
+  line-height:1 !important;
+  letter-spacing:.02em !important;
+  white-space:nowrap !important;
+}
+.duty-status b{
+  font-size:8px !important;
+  font-weight:850 !important;
+}
+@media(min-width:901px){
+  .person{
+    gap:6px !important;
+  }
+  .person strong{
+    font-size:17px !important;
+  }
+  .duty-status{
+    padding:4px 8px !important;
+    font-size:9px !important;
+  }
+  .duty-status b{
+    font-size:9px !important;
+  }
+}
+@media(max-width:900px){
+  .person{
+    gap:4px !important;
+  }
+  .duty-status{
+    padding:3px 6px !important;
+    font-size:7px !important;
+  }
+  .duty-status b{
+    font-size:7px !important;
+  }
+}
