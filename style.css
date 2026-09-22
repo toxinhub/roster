@@ -1946,3 +1946,46 @@ body.dark .shift-cell.week-end{
     line-height:1.35 !important;
   }
 }
+
+/* Minimal roster legend — compact footprint */
+.legend{
+  gap:6px !important;
+  margin-top:8px !important;
+}
+.legend span{
+  padding:3px 7px !important;
+  gap:4px !important;
+  min-height:0 !important;
+  line-height:1 !important;
+}
+.legend i{
+  width:6px !important;
+  height:6px !important;
+  flex:0 0 6px !important;
+}
+.legend b{
+  font-size:8px !important;
+  line-height:1 !important;
+}
+.legend small{
+  font-size:7px !important;
+  line-height:1 !important;
+}
+@media(max-width:900px){
+  .legend{
+    gap:3px !important;
+    margin-top:5px !important;
+  }
+  .legend span{
+    padding:2px 3px !important;
+    gap:2px !important;
+    border-radius:999px !important;
+  }
+  .legend i{
+    width:4px !important;
+    height:4px !important;
+    flex:0 0 4px !important;
+  }
+  .legend b{font-size:6px !important}
+  .legend small{font-size:5px !important}
+}
