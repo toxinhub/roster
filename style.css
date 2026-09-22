@@ -2384,3 +2384,37 @@ body.dark .duty-status.status-l b{color:#79b88e !important}
     font-weight:800 !important;
   }
 }
+
+
+/* Stronger live status visibility */
+.duty-status{
+  opacity:1 !important;
+}
+.duty-status b{
+  display:inline-block !important;
+  font-size:7.4px !important;
+  font-weight:900 !important;
+  letter-spacing:.045em !important;
+  line-height:1.1 !important;
+  -webkit-font-smoothing:antialiased;
+  text-shadow:0 1px 0 rgba(255,255,255,.55);
+}
+.duty-status.status-on-duty b{
+  filter:saturate(1.08);
+}
+@media(max-width:900px){
+  .duty-status b{
+    font-size:7.2px !important;
+    font-weight:900 !important;
+    letter-spacing:.04em !important;
+  }
+}
+@media(max-width:520px){
+  .duty-status b{
+    font-size:7px !important;
+  }
+}
+body.dark .duty-status b{
+  text-shadow:none;
+  filter:saturate(1.05);
+}
