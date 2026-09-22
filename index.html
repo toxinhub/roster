@@ -150,7 +150,7 @@ function render(){
   const gridStyle='grid-template-columns:repeat('+cols+',minmax(78px,1fr));';
 
   const todayDateObj=new Date(now+'T12:00:00');
-  const todayLabel=todayDateObj.toLocaleDateString('bn-BD',{day:'numeric',month:'long',year:'numeric'});
+  const todayLabel=todayDateObj.toLocaleDateString('bn-BD',{day:'numeric',month:'long',year:'numeric'}).replace(/\s*,\s*/g,' ');
   $('todayJump').textContent=todayLabel;
   $('todayJump').dataset.iso=now;
   $('updated').textContent=timeLabel(DATA.updatedAt);
