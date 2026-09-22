@@ -3961,3 +3961,41 @@ body.dark .day-head.is-today{
   body.dark .info-label,
   body.dark .info-item small{color:#aeb9c5 !important}
 }
+
+
+/* Desktop dark mode — final text contrast pass */
+@media(min-width:901px){
+  body.dark .brand small{color:#b7c2cd !important}
+  body.dark .status-live{color:#e0e7ee !important}
+  body.dark .icon-btn,
+  body.dark .admin-link{color:#f1f5f9 !important}
+  body.dark .kicker{color:#a7b3bf !important}
+  body.dark .intro h1{color:#f3f6f9 !important}
+  body.dark .intro p{color:#b9c4cf !important}
+  body.dark .intro-meta span{color:#a7b3bf !important}
+  body.dark .intro-meta b{color:#e0e6ec !important}
+  body.dark .board-head{color:#e7edf3 !important}
+  body.dark .board-head h2{color:#f0f4f8 !important}
+  body.dark .legend span{color:#c4ced8 !important;background:rgba(30,41,53,.88) !important;border-color:#3c4b59 !important}
+  body.dark .legend b{color:#f0f4f8 !important}
+  body.dark .legend small{color:#a9b5c0 !important}
+  body.dark .person-head{color:#aeb9c4 !important}
+  body.dark .person strong{color:#edf2f6 !important}
+  body.dark .duty-status{color:var(--status-color,#aeb9c4) !important}
+  body.dark .duty-status b{color:var(--status-color,#aeb9c4) !important}
+  body.dark .day-head strong{color:#edf2f6 !important}
+  body.dark .day-head span{color:#aeb9c4 !important}
+  body.dark .day-head em{color:#e1d9ff !important;background:#40385a !important;border-color:#5b4f78 !important}
+  body.dark .shift b,
+  body.dark .shift small{color:#e8edf2 !important}
+  body.dark .upcoming-info{color:#e7edf3 !important}
+  body.dark .upcoming-info .upcoming-head h2{color:#f0f4f8 !important}
+  body.dark .info-person strong{color:#edf2f6 !important}
+  body.dark .info-person span{color:#aeb9c4 !important}
+  body.dark .info-label{color:#aeb9c4 !important}
+  body.dark .info-item b{color:#edf2f6 !important}
+  body.dark .info-item small{color:#aeb9c4 !important}
+  body.dark .info-empty{color:#aeb9c4 !important}
+  body.dark .today-jump{color:#dce4eb !important}
+  body.dark footer{color:#9da9b5 !important}
+}
