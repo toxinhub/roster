@@ -1443,3 +1443,17 @@ body.dark .today-jump:focus-visible{
     line-height:1.35 !important;
   }
 }
+
+/* Compact roster legend + shift times */
+@media(min-width:901px){
+  .legend span{font-size:10px !important}
+  .legend b{font-size:8px !important}
+  .legend small{font-size:7px !important}
+  .shift small{font-size:8px !important}
+}
+@media(max-width:900px){
+  .legend span{font-size:6px !important}
+  .legend b{font-size:6px !important}
+  .legend small{font-size:5px !important}
+  .shift small{font-size:7px !important}
+}
