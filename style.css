@@ -1336,3 +1336,25 @@ body.dark .today-jump:focus-visible{
     font-weight:700 !important;
   }
 }
+
+/* Mobile typography — slightly larger */
+@media(max-width:900px){
+  .brand-copy strong{font-size:14px !important}
+  .intro h1{font-size:28px !important;line-height:1.15 !important}
+  .intro p{font-size:14px !important;line-height:1.55 !important}
+  .intro-meta span{font-size:10px !important}
+  .intro-meta b{font-size:13px !important}
+  .board-head h2{font-size:20px !important;line-height:1.2 !important}
+  .legend span{font-size:11px !important}
+  .legend b{font-size:10px !important}
+  .legend small{font-size:9px !important}
+  .day-head strong{font-size:16px !important;line-height:1.15 !important}
+  .day-head span{font-size:12px !important}
+  .day-head em{font-size:9px !important}
+  .person strong{font-size:16px !important;line-height:1.2 !important}
+  .duty-status{font-size:8px !important}
+  .duty-status b{font-size:8px !important}
+  .shift b{font-size:17px !important;line-height:1 !important}
+  .shift small{font-size:9px !important;line-height:1.2 !important}
+  .today-jump{font-size:15px !important}
+}
