@@ -4898,3 +4898,143 @@ body.dark .day-head strong{color:#e8edf2 !important}
     -webkit-backdrop-filter:none !important;
   }
 }
+
+
+/* Desktop refinement — iOS Control Room / Frosted Slate */
+@media(min-width:901px){
+  body:not(.dark){
+    background:
+      radial-gradient(circle at 8% 5%,rgba(96,165,250,.09),transparent 28%),
+      radial-gradient(circle at 92% 8%,rgba(167,139,250,.055),transparent 25%),
+      linear-gradient(135deg,#e7ebef 0%,#dfe5ea 52%,#e5eaee 100%) !important;
+  }
+
+  body.dark{
+    --bg:#0f151c !important;
+    --panel:#1b2631 !important;
+    --panel-soft:#202d39 !important;
+    --ink:#e8edf2 !important;
+    --muted:#a5b0ba !important;
+    --line:#303c47 !important;
+    --line-strong:#42505c !important;
+    background:
+      radial-gradient(circle at 8% 5%,rgba(96,165,250,.09),transparent 28%),
+      radial-gradient(circle at 92% 8%,rgba(167,139,250,.055),transparent 25%),
+      linear-gradient(135deg,#0f151c 0%,#18222c 52%,#121a21 100%) !important;
+  }
+
+  /* Data-dense roster: clearer elevated surface, less visual noise */
+  .board{
+    background:#f1f4f6 !important;
+    border:1px solid rgba(148,163,184,.30) !important;
+    border-radius:18px !important;
+    box-shadow:0 22px 55px rgba(15,23,42,.10),inset 0 1px 0 rgba(255,255,255,.92) !important;
+    backdrop-filter:none !important;
+    -webkit-backdrop-filter:none !important;
+  }
+  .board-head{
+    background:linear-gradient(135deg,#f7f9fa,#e9eef2) !important;
+    border-bottom:1px solid rgba(148,163,184,.24) !important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.95) !important;
+  }
+  .day-grid{
+    background:#e9eef2 !important;
+  }
+  .day-head,
+  .shift-cell{
+    background:#f3f6f8 !important;
+    border-color:#d7dee4 !important;
+  }
+  .day-head{
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.88) !important;
+  }
+  .person-head,
+  .person{
+    background:#e8edf1 !important;
+    border-right:1px solid #cbd4dc !important;
+    box-shadow:7px 0 18px rgba(15,23,42,.055),inset 0 1px 0 rgba(255,255,255,.82) !important;
+    backdrop-filter:none !important;
+    -webkit-backdrop-filter:none !important;
+  }
+  .legend span{
+    background:#f5f7f9 !important;
+    border-color:#d3dbe2 !important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.92),0 4px 12px rgba(15,23,42,.045) !important;
+  }
+
+  /* Semantic duty colors */
+  .shift[style*="#FCA5A5"]{--c:#ef777f !important}
+  .shift[style*="#FCD34D"]{--c:#e1b84e !important}
+  .shift[style*="#93C5FD"]{--c:#72a9dc !important}
+  .shift[style*="#CBD5E1"]{--c:#8b98a4 !important}
+  .shift[style*="#86EFAC"]{--c:#72b889 !important}
+  .shift{
+    min-height:46px !important;
+    border-radius:13px !important;
+    border:1px solid color-mix(in srgb,var(--c) 42%,#fff) !important;
+    box-shadow:0 5px 14px color-mix(in srgb,var(--c) 14%,transparent),inset 0 1px 0 rgba(255,255,255,.58) !important;
+  }
+
+  /* Today = quiet focus, not a competing status color */
+  .day-head.is-today,
+  .shift-cell.is-today{
+    background:#f0ecfb !important;
+    box-shadow:inset 1px 0 0 rgba(124,105,180,.20),inset -1px 0 0 rgba(124,105,180,.20) !important;
+  }
+  .day-head.is-today .day-head strong{color:#51456f !important}
+  .day-head em{color:#5c4e7c !important;background:#e8e1f8 !important}
+
+  /* Dark mode */
+  body.dark .board{
+    background:#1b2631 !important;
+    border-color:rgba(255,255,255,.10) !important;
+    box-shadow:0 24px 58px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.055) !important;
+    backdrop-filter:blur(8px) saturate(110%) !important;
+    -webkit-backdrop-filter:blur(8px) saturate(110%) !important;
+  }
+  body.dark .board-head{
+    background:#202d39 !important;
+    border-bottom-color:rgba(255,255,255,.08) !important;
+  }
+  body.dark .day-grid{background:#202a34 !important}
+  body.dark .day-head,
+  body.dark .shift-cell{
+    background:#1d2934 !important;
+    border-color:#303c47 !important;
+  }
+  body.dark .person-head,
+  body.dark .person{
+    background:#24313d !important;
+    border-right-color:#3b4854 !important;
+    box-shadow:8px 0 20px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.045) !important;
+  }
+  body.dark .legend span{
+    background:#222f3b !important;
+    border-color:rgba(255,255,255,.10) !important;
+  }
+  body.dark .shift{
+    background:color-mix(in srgb,var(--c) 30%,#1b2631) !important;
+    border-color:color-mix(in srgb,var(--c) 52%,#34414d) !important;
+    box-shadow:0 5px 14px color-mix(in srgb,var(--c) 12%,transparent),inset 0 1px 0 rgba(255,255,255,.045) !important;
+  }
+  body.dark .shift b,
+  body.dark .shift small{color:#e8edf2 !important}
+  body.dark .day-head.is-today,
+  body.dark .shift-cell.is-today{
+    background:#29253a !important;
+    box-shadow:inset 1px 0 0 rgba(167,139,250,.20),inset -1px 0 0 rgba(167,139,250,.20) !important;
+  }
+  body.dark .day-head.is-today .day-head strong{color:#d7ccef !important}
+  body.dark .day-head em{color:#d8cdf0 !important;background:#40375a !important}
+
+  /* Restrained accent hierarchy */
+  .topbar::after{
+    background:linear-gradient(90deg,transparent,rgba(96,165,250,.48),rgba(239,119,127,.34),transparent) !important;
+  }
+  .status-live i{
+    background:#72b889 !important;
+    box-shadow:0 0 0 4px rgba(114,184,137,.10) !important;
+  }
+}
+
+/* Keep the mobile implementation untouched by this refinement. */
