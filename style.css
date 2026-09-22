@@ -2518,3 +2518,31 @@ body.dark .duty-status b{
       linear-gradient(180deg,#0b1118 0%,#0d141c 100%) !important;
   }
 }
+
+
+/* Mobile: subtle liquid blood-red glossy atmosphere */
+@media(max-width:900px){
+  body{
+    background:
+      radial-gradient(620px 300px at 12% -8%,rgba(150,18,31,.20),transparent 70%),
+      radial-gradient(420px 250px at 42% 0%,rgba(235,58,70,.07),transparent 72%),
+      radial-gradient(500px 360px at 100% 0%,rgba(245,166,72,.10),transparent 70%),
+      linear-gradient(180deg,#edf0f2 0%,#e8ecef 100%) !important;
+  }
+  .board{
+    background:rgba(255,255,255,.50) !important;
+    box-shadow:
+      0 10px 28px rgba(31,43,54,.065),
+      0 2px 8px rgba(31,43,54,.04),
+      inset 0 1px 0 rgba(255,255,255,.82) !important;
+  }
+}
+@media(max-width:900px){
+  body.dark{
+    background:
+      radial-gradient(620px 300px at 12% -8%,rgba(120,15,28,.25),transparent 70%),
+      radial-gradient(420px 250px at 42% 0%,rgba(210,42,56,.09),transparent 72%),
+      radial-gradient(500px 360px at 100% 0%,rgba(191,116,48,.10),transparent 70%),
+      linear-gradient(180deg,#0b1118 0%,#0d141c 100%) !important;
+  }
+}
