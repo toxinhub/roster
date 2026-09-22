@@ -4715,3 +4715,116 @@ body.dark .shift{
 body.dark .shift b,body.dark .shift small{color:#e7edf2 !important}
 body.dark .kicker,body.dark .intro p,body.dark .intro-meta span,body.dark .legend span,body.dark .day-head span,body.dark .info-person span,body.dark .info-label,body.dark .info-item small{color:#a5b0ba !important}
 body.dark .intro h1,body.dark .board-head,body.dark .board-head h2,body.dark .person strong,body.dark .day-head strong,body.dark .legend b,body.dark .intro-meta b,body.dark .info-person strong,body.dark .info-item b{color:#e7edf2 !important}
+
+
+/* Modern iOS — Frosted Slate / Midnight theme */
+body:not(.dark){
+  background:
+    radial-gradient(circle at 8% 5%,rgba(96,165,250,.10),transparent 28%),
+    radial-gradient(circle at 92% 10%,rgba(167,139,250,.07),transparent 25%),
+    linear-gradient(135deg,#e9edf1 0%,#dfe5ea 52%,#e6ebef 100%) !important;
+}
+body.dark{
+  --bg:#0b1117 !important;
+  --panel:#18222c !important;
+  --panel-soft:#202c37 !important;
+  --ink:#e8edf2 !important;
+  --muted:#9faab4 !important;
+  --line:#303c47 !important;
+  --line-strong:#42505c !important;
+  background:
+    radial-gradient(circle at 8% 5%,rgba(96,165,250,.12),transparent 29%),
+    radial-gradient(circle at 92% 10%,rgba(167,139,250,.07),transparent 26%),
+    linear-gradient(135deg,#0b1117 0%,#151e27 52%,#0e151c 100%) !important;
+}
+
+/* Frosted main surfaces */
+.board{
+  background:linear-gradient(145deg,rgba(255,255,255,.58),rgba(255,255,255,.30)) !important;
+  border-color:rgba(255,255,255,.72) !important;
+  box-shadow:0 22px 55px rgba(15,23,42,.10),inset 0 1px 0 rgba(255,255,255,.90) !important;
+  backdrop-filter:blur(18px) saturate(135%) !important;
+  -webkit-backdrop-filter:blur(18px) saturate(135%) !important;
+}
+.board-head{
+  background:linear-gradient(135deg,rgba(255,255,255,.68),rgba(255,255,255,.34)) !important;
+  border-bottom-color:rgba(148,163,184,.22) !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.92) !important;
+}
+.day-head,.shift-cell{
+  background:rgba(255,255,255,.28) !important;
+  border-color:rgba(148,163,184,.22) !important;
+}
+.person-head,.person{
+  background:rgba(241,245,248,.68) !important;
+  border-right-color:rgba(148,163,184,.28) !important;
+  box-shadow:7px 0 18px rgba(15,23,42,.07),inset 0 1px 0 rgba(255,255,255,.78) !important;
+  backdrop-filter:blur(20px) saturate(135%) !important;
+  -webkit-backdrop-filter:blur(20px) saturate(135%) !important;
+}
+.legend span{
+  background:rgba(255,255,255,.46) !important;
+  border-color:rgba(148,163,184,.24) !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.85),0 4px 14px rgba(15,23,42,.045) !important;
+}
+
+/* iOS-style muted duty pills */
+.shift[style*="#FCA5A5"]{--c:#ef777f !important}
+.shift[style*="#FCD34D"]{--c:#e1b84e !important}
+.shift[style*="#93C5FD"]{--c:#72a9dc !important}
+.shift[style*="#CBD5E1"]{--c:#8b98a4 !important}
+.shift[style*="#86EFAC"]{--c:#72b889 !important}
+.shift{
+  border-color:color-mix(in srgb,var(--c) 38%,rgba(255,255,255,.55)) !important;
+  box-shadow:0 6px 16px color-mix(in srgb,var(--c) 15%,transparent),inset 0 1px 0 rgba(255,255,255,.55) !important;
+  border-radius:12px !important;
+}
+
+/* Light typography */
+.kicker{color:#71808c !important}
+.intro h1,.board-head,.board-head h2,.person strong,.day-head strong{color:#25313b !important}
+.intro p,.intro-meta span,.legend span,.day-head span,.info-person span,.info-label,.info-item small{color:#71808c !important}
+.legend b,.intro-meta b,.info-person strong,.info-item b{color:#34414c !important}
+.shift b,.shift small{color:#26323c !important}
+
+/* Dark frosted surfaces */
+body.dark .board{
+  background:linear-gradient(145deg,rgba(28,39,50,.76),rgba(17,27,36,.64)) !important;
+  border-color:rgba(255,255,255,.10) !important;
+  box-shadow:0 26px 62px rgba(0,0,0,.30),inset 0 1px 0 rgba(255,255,255,.065) !important;
+  backdrop-filter:blur(18px) saturate(125%) !important;
+  -webkit-backdrop-filter:blur(18px) saturate(125%) !important;
+}
+body.dark .board-head{
+  background:linear-gradient(135deg,rgba(31,44,56,.78),rgba(20,30,40,.66)) !important;
+  border-bottom-color:rgba(255,255,255,.09) !important;
+}
+body.dark .day-head,body.dark .shift-cell{
+  background:rgba(24,35,46,.62) !important;
+  border-color:rgba(148,163,184,.16) !important;
+}
+body.dark .person-head,body.dark .person{
+  background:rgba(29,42,54,.82) !important;
+  border-right-color:rgba(148,163,184,.22) !important;
+  box-shadow:8px 0 20px rgba(0,0,0,.20),inset 0 1px 0 rgba(255,255,255,.045) !important;
+}
+body.dark .legend span{
+  background:rgba(31,43,55,.68) !important;
+  border-color:rgba(255,255,255,.11) !important;
+}
+body.dark .shift{
+  background:color-mix(in srgb,var(--c) 32%,#18222c) !important;
+  border-color:color-mix(in srgb,var(--c) 52%,#303c47) !important;
+  box-shadow:0 6px 16px color-mix(in srgb,var(--c) 14%,transparent),inset 0 1px 0 rgba(255,255,255,.05) !important;
+}
+body.dark .shift b,body.dark .shift small{color:#e8edf2 !important}
+body.dark .kicker,body.dark .intro p,body.dark .intro-meta span,body.dark .legend span,body.dark .day-head span,body.dark .info-person span,body.dark .info-label,body.dark .info-item small{color:#9faab4 !important}
+body.dark .intro h1,body.dark .board-head,body.dark .board-head h2,body.dark .person strong,body.dark .day-head strong,body.dark .legend b,body.dark .intro-meta b,body.dark .info-person strong,body.dark .info-item b{color:#e8edf2 !important}
+
+/* Keep mobile rendering light and smooth */
+@media(max-width:900px){
+  .board,.board-head,.legend span,.person-head,.person{
+    backdrop-filter:none !important;
+    -webkit-backdrop-filter:none !important;
+  }
+}
