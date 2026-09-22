@@ -2297,3 +2297,33 @@ body.dark .person{
     background:linear-gradient(180deg,#191e23,#181c21) !important;
   }
 }
+
+
+/* Ultra-light green header */
+.day-head{
+  background:linear-gradient(180deg,#eef3f0,#f1f5f3) !important;
+  border-right-color:#dfe5e2 !important;
+  border-bottom-color:#d3dcd7 !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.88),0 2px 4px rgba(37,78,59,.025);
+}
+.day-head.is-today{
+  background:linear-gradient(180deg,#eaf0ed,#eef3f0) !important;
+  border-bottom-color:#cbd6d0 !important;
+}
+.day-head strong{color:#496458 !important}
+.day-head span{color:#84968d !important}
+.day-head em{
+  background:rgba(46,91,69,.035) !important;
+  color:#71857b !important;
+  border-color:rgba(46,91,69,.05) !important;
+}
+@media(max-width:900px){
+  .day-head{
+    background:linear-gradient(180deg,#eef3f0,#f1f5f3) !important;
+    border-right-color:#dfe5e2 !important;
+    border-bottom-color:#d3dcd7 !important;
+  }
+  .day-head.is-today{
+    background:linear-gradient(180deg,#eaf0ed,#eef3f0) !important;
+  }
+}
