@@ -1005,3 +1005,12 @@ body.dark .info-item small{color:#aeb9c4 !important}
   body.dark .info-item{border-top-color:rgba(255,255,255,.055) !important}
   body.dark .info-label,body.dark .info-item small{color:#94a3b8 !important}
 }
+
+/* Desktop — widen the main page body */
+@media(min-width:901px){
+  main,
+  footer,
+  .site-footer{
+    max-width:1800px !important;
+  }
+}
