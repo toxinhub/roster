@@ -1315,3 +1315,24 @@ body.dark .picker .shift-option{
       inset 0 1px 0 rgba(255,255,255,.06);
   }
 }
+
+
+/* Mobile visual step 2 tuning: slightly stronger shift colors */
+@media(max-width:900px){
+  .shift{
+    border-color:color-mix(in srgb,var(--c) 74%,#fff);
+    background:color-mix(in srgb,var(--c) 50%,#fff);
+    color:color-mix(in srgb,var(--c) 88%,#17202a);
+    box-shadow:
+      0 3px 9px color-mix(in srgb,var(--c) 16%,transparent),
+      inset 0 1px 0 rgba(255,255,255,.58);
+  }
+  body.dark .shift{
+    border-color:color-mix(in srgb,var(--c) 62%,#263341);
+    background:color-mix(in srgb,var(--c) 31%,#111a24);
+    color:color-mix(in srgb,var(--c) 84%,#eef3f7);
+    box-shadow:
+      0 3px 9px rgba(0,0,0,.18),
+      inset 0 1px 0 rgba(255,255,255,.055);
+  }
+}
