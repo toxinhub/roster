@@ -1146,3 +1146,45 @@ body.dark .info-item small{color:#aeb9c4 !important}
     font-size:7px !important;
   }
 }
+
+/* Active duty — glowing shift-color dot beside the name */
+.person-name{
+  display:inline-flex !important;
+  align-items:center !important;
+  gap:7px !important;
+  min-width:0 !important;
+}
+.name-active-dot{
+  flex:0 0 auto !important;
+  display:inline-block !important;
+  width:7px !important;
+  height:7px !important;
+  border-radius:50% !important;
+  background:var(--status-color,#64748b) !important;
+  box-shadow:
+    0 0 0 2px color-mix(in srgb,var(--status-color,#64748b) 16%,transparent),
+    0 0 7px color-mix(in srgb,var(--status-color,#64748b) 75%,transparent),
+    0 0 13px color-mix(in srgb,var(--status-color,#64748b) 42%,transparent) !important;
+  animation:activeDutyPulse 1.8s ease-in-out infinite !important;
+}
+@keyframes activeDutyPulse{
+  0%,100%{
+    opacity:.78;
+    transform:scale(.92);
+    box-shadow:
+      0 0 0 2px color-mix(in srgb,var(--status-color,#64748b) 13%,transparent),
+      0 0 6px color-mix(in srgb,var(--status-color,#64748b) 68%,transparent),
+      0 0 11px color-mix(in srgb,var(--status-color,#64748b) 34%,transparent);
+  }
+  50%{
+    opacity:1;
+    transform:scale(1.08);
+    box-shadow:
+      0 0 0 3px color-mix(in srgb,var(--status-color,#64748b) 18%,transparent),
+      0 0 9px color-mix(in srgb,var(--status-color,#64748b) 90%,transparent),
+      0 0 17px color-mix(in srgb,var(--status-color,#64748b) 48%,transparent);
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  .name-active-dot{animation:none !important}
+}
