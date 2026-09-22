@@ -879,3 +879,129 @@ body.dark .info-item small{color:#aeb9c4 !important}
   body.dark .info-item{border-top-color:rgba(255,255,255,.06) !important}
   body.dark .info-label,body.dark .info-item small{color:#94a3b8 !important}
 }
+
+/* Upcoming Duty — alternate desktop layout */
+@media(min-width:901px){
+  .upcoming-info{
+    margin-top:24px !important;
+    padding:0 !important;
+    background:transparent !important;
+    border:0 !important;
+    box-shadow:none !important;
+  }
+  .upcoming-head{
+    display:flex !important;
+    align-items:center !important;
+    gap:10px !important;
+    margin:0 0 12px !important;
+    padding:0 2px !important;
+  }
+  .upcoming-head h2{
+    margin:0 !important;
+    color:#334155 !important;
+    font-size:16px !important;
+    font-weight:800 !important;
+    letter-spacing:-.025em !important;
+  }
+  .upcoming-head::after{
+    content:"" !important;
+    height:1px !important;
+    flex:1 !important;
+    background:rgba(148,163,184,.18) !important;
+  }
+  .info-board-grid{
+    display:grid !important;
+    grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+    gap:0 !important;
+    border:1px solid rgba(148,163,184,.18) !important;
+    border-radius:12px !important;
+    overflow:hidden !important;
+    background:rgba(255,255,255,.38) !important;
+  }
+  .info-card{
+    min-width:0 !important;
+    display:block !important;
+    padding:0 !important;
+    background:transparent !important;
+    border:0 !important;
+    border-radius:0 !important;
+    box-shadow:none !important;
+    overflow:visible !important;
+  }
+  .info-card + .info-card{
+    border-left:1px solid rgba(148,163,184,.16) !important;
+  }
+  .info-card::before{display:none !important}
+  .info-card:hover{
+    transform:none !important;
+    box-shadow:none !important;
+  }
+  .info-person{
+    min-height:52px !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:space-between !important;
+    gap:10px !important;
+    padding:10px 14px !important;
+    background:rgba(248,250,252,.55) !important;
+    border-bottom:1px solid rgba(148,163,184,.14) !important;
+  }
+  .info-person strong{
+    color:#334155 !important;
+    font-size:14px !important;
+    font-weight:850 !important;
+  }
+  .info-person span.current-shift{
+    padding:3px 6px !important;
+    border:0 !important;
+    border-radius:5px !important;
+    background:rgba(226,232,240,.45) !important;
+    color:#94a3b8 !important;
+    font-size:8px !important;
+  }
+  .info-person span.current-shift b{font-size:9px !important;color:#475569 !important}
+  .current-shift i{width:5px !important;height:5px !important;box-shadow:none !important}
+  .info-item{
+    min-height:44px !important;
+    display:grid !important;
+    grid-template-columns:1fr auto !important;
+    grid-template-rows:auto auto !important;
+    padding:8px 14px !important;
+    column-gap:8px !important;
+    align-items:center !important;
+    border:0 !important;
+    border-top:1px solid rgba(148,163,184,.10) !important;
+  }
+  .info-label{
+    color:#94a3b8 !important;
+    font-size:8px !important;
+    font-weight:750 !important;
+    letter-spacing:.02em !important;
+  }
+  .info-item b{
+    color:#475569 !important;
+    font-size:13px !important;
+    font-weight:850 !important;
+  }
+  .info-item small{
+    color:#94a3b8 !important;
+    font-size:8px !important;
+    font-weight:650 !important;
+  }
+  body.dark .upcoming-head h2{color:#dbe3ea !important}
+  body.dark .upcoming-head::after{background:rgba(255,255,255,.10) !important}
+  body.dark .info-board-grid{
+    border-color:rgba(255,255,255,.08) !important;
+    background:rgba(27,36,46,.34) !important;
+  }
+  body.dark .info-card + .info-card{border-left-color:rgba(255,255,255,.07) !important}
+  body.dark .info-person{
+    background:rgba(255,255,255,.025) !important;
+    border-bottom-color:rgba(255,255,255,.06) !important;
+  }
+  body.dark .info-person strong,body.dark .info-item b{color:#dbe3ea !important}
+  body.dark .info-person span.current-shift{background:rgba(255,255,255,.05) !important;color:#94a3b8 !important}
+  body.dark .info-person span.current-shift b{color:#cbd5e1 !important}
+  body.dark .info-item{border-top-color:rgba(255,255,255,.055) !important}
+  body.dark .info-label,body.dark .info-item small{color:#94a3b8 !important}
+}
