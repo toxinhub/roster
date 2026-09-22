@@ -2910,65 +2910,79 @@ background:#28233a !important;
 }
 
 
-/* Desktop — date-pill outline-only progress effect */
+/* Desktop — 24-hour progress strictly on the outer outline */
 @media(min-width:901px){
   .today-jump{
     --day-remaining:100%;
-    border:3px solid transparent !important;
-    background:
-      linear-gradient(rgba(255,255,255,.72),rgba(255,255,255,.72)) padding-box,
-      conic-gradient(
-        from -90deg,
-        #ef4444 0 var(--day-remaining),
-        rgba(239,68,68,.12) var(--day-remaining) 100%
-      ) border-box !important;
-    background-clip:padding-box,border-box !important;
+    position:relative;
+    isolation:isolate;
+    border:1px solid rgba(239,68,68,.12) !important;
+    background:linear-gradient(rgba(255,255,255,.72),rgba(255,255,255,.72)) !important;
     box-shadow:
       0 6px 18px rgba(15,23,42,.08),
       0 0 0 1px rgba(239,68,68,.035) !important;
-    transition:box-shadow .18s ease,border-color .18s ease !important;
+    transition:box-shadow .18s ease !important;
+  }
+
+  .today-jump::after{
+    content:"";
+    position:absolute;
+    inset:-2px;
+    padding:2px;
+    border-radius:inherit;
+    pointer-events:none;
+    z-index:-1;
+    background:conic-gradient(
+      from -90deg,
+      #ef4444 0 var(--day-remaining),
+      rgba(239,68,68,.12) var(--day-remaining) 100%
+    );
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite:xor;
+    mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    mask-composite:exclude;
   }
 
   .today-jump:hover,
   .today-jump:focus-visible{
     transform:none !important;
-    border-color:transparent !important;
-    background:
-      linear-gradient(rgba(255,255,255,.72),rgba(255,255,255,.72)) padding-box,
-      conic-gradient(
-        from -90deg,
-        #ef4444 0 var(--day-remaining),
-        rgba(239,68,68,.18) var(--day-remaining) 100%
-      ) border-box !important;
-    background-clip:padding-box,border-box !important;
+    background:linear-gradient(rgba(255,255,255,.72),rgba(255,255,255,.72)) !important;
     box-shadow:
       0 6px 18px rgba(15,23,42,.08),
-      0 0 10px rgba(239,68,68,.10) !important;
+      0 0 8px rgba(239,68,68,.08) !important;
+  }
+
+  .today-jump:hover::after,
+  .today-jump:focus-visible::after{
+    background:conic-gradient(
+      from -90deg,
+      #ef4444 0 var(--day-remaining),
+      rgba(239,68,68,.18) var(--day-remaining) 100%
+    );
   }
 
   body.dark .today-jump{
-    background:
-      linear-gradient(rgba(17,24,39,.88),rgba(17,24,39,.88)) padding-box,
-      conic-gradient(
-        from -90deg,
-        #f87171 0 var(--day-remaining),
-        rgba(248,113,113,.13) var(--day-remaining) 100%
-      ) border-box !important;
-    background-clip:padding-box,border-box !important;
+    border-color:rgba(248,113,113,.12) !important;
+    background:linear-gradient(rgba(17,24,39,.88),rgba(17,24,39,.88)) !important;
+  }
+
+  body.dark .today-jump::after{
+    background:conic-gradient(
+      from -90deg,
+      #f87171 0 var(--day-remaining),
+      rgba(248,113,113,.13) var(--day-remaining) 100%
+    );
   }
 
   body.dark .today-jump:hover,
   body.dark .today-jump:focus-visible{
-    background:
-      linear-gradient(rgba(17,24,39,.88),rgba(17,24,39,.88)) padding-box,
-      conic-gradient(
-        from -90deg,
-        #f87171 0 var(--day-remaining),
-        rgba(248,113,113,.18) var(--day-remaining) 100%
-      ) border-box !important;
-    background-clip:padding-box,border-box !important;
+    background:linear-gradient(rgba(17,24,39,.88),rgba(17,24,39,.88)) !important;
     box-shadow:
       0 6px 18px rgba(0,0,0,.20),
-      0 0 10px rgba(248,113,113,.10) !important;
+      0 0 8px rgba(248,113,113,.08) !important;
   }
 }
