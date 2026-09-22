@@ -1780,3 +1780,45 @@ body.dark .day-head.is-today{
     background:linear-gradient(180deg,#23394d,#1c3041) !important;
   }
 }
+
+
+/* Unique roster header tone — clearly separated from OFF */
+.day-head{
+  background:linear-gradient(180deg,#d8c9b8,#e4d9cc) !important;
+  border-right:1px solid #c8b9a8 !important;
+  border-bottom:2px solid #ad9a86 !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.72),0 2px 6px rgba(92,74,55,.10);
+}
+.day-head.is-today{
+  background:linear-gradient(180deg,#cdb79f,#dfcdb8) !important;
+  border-bottom-color:#9d866e !important;
+}
+body.dark .day-head{
+  background:linear-gradient(180deg,#2b2520,#241f1b) !important;
+  border-right-color:#51463b !important;
+  border-bottom:2px solid #665748 !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.045),0 2px 7px rgba(0,0,0,.22);
+}
+body.dark .day-head.is-today{
+  background:linear-gradient(180deg,#3a3027,#2d251f) !important;
+  border-bottom-color:#796652 !important;
+}
+@media(max-width:900px){
+  .day-head{
+    background:linear-gradient(180deg,#d8c9b8,#e4d9cc) !important;
+    border-right-color:#c8b9a8 !important;
+    border-bottom:2px solid #ad9a86 !important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.72),0 2px 6px rgba(92,74,55,.10);
+  }
+  .day-head.is-today{
+    background:linear-gradient(180deg,#cdb79f,#dfcdb8) !important;
+  }
+  body.dark .day-head{
+    background:linear-gradient(180deg,#2b2520,#241f1b) !important;
+    border-right-color:#51463b !important;
+    border-bottom:2px solid #665748 !important;
+  }
+  body.dark .day-head.is-today{
+    background:linear-gradient(180deg,#3a3027,#2d251f) !important;
+  }
+}
