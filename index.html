@@ -283,8 +283,24 @@ function render(){
 }
 
 $('theme').onclick=()=>{
-  localStorage.setItem('roster-theme',document.body.classList.contains('dark')?'light':'dark');
+  const button=$('theme');
+  const rect=button.getBoundingClientRect();
+  const x=((rect.left+rect.width/2)/window.innerWidth)*100;
+  const y=((rect.top+rect.height/2)/window.innerHeight)*100;
+  const goingDark=!document.body.classList.contains('dark');
+
+  document.body.style.setProperty('--theme-x',x+'%');
+  document.body.style.setProperty('--theme-y',y+'%');
+  document.body.classList.remove('theme-to-dark','theme-to-light');
+  void document.body.offsetWidth;
+  document.body.classList.add(goingDark?'theme-to-dark':'theme-to-light');
+
+  localStorage.setItem('roster-theme',goingDark?'dark':'light');
   applyTheme();
+
+  setTimeout(()=>{
+    document.body.classList.remove('theme-to-dark','theme-to-light');
+  },760);
 };
 
 applyTheme();
