@@ -1937,3 +1937,12 @@ body.dark .shift-cell.week-end{
     padding:4px 6px !important;
   }
 }
+
+/* Desktop date — slightly larger */
+@media(min-width:901px){
+  .today-jump{
+    font-size:18px !important;
+    font-weight:700 !important;
+    line-height:1.35 !important;
+  }
+}
