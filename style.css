@@ -1365,7 +1365,7 @@ body.dark .today-jump:focus-visible{
   .update-meta,
   .last-updated,
   .updated-info{
-    font-size:9px !important;
+    font-size:6px !important;
     line-height:1.2 !important;
     font-weight:500 !important;
     letter-spacing:.01em !important;
