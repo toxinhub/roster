@@ -185,78 +185,99 @@ function render(){
       '</div>';
     }).join('');
 
-    // Live status: handle overnight C (22:00–06:00), today's upcoming shift,
-    // and then the next rostered shift in chronological order.
+    // Live status: date-aware 8-hour shift occurrences.
+    // A = 06:00–14:00, B = 14:00–22:00, C = 22:00–06:00 next day.
     const dhakaNow=new Date();
     const dhakaParts=new Intl.DateTimeFormat('en-CA',{
       timeZone:'Asia/Dhaka',year:'numeric',month:'2-digit',day:'2-digit',
-      hour:'2-digit',minute:'2-digit',hour12:false
+      hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false
     }).formatToParts(dhakaNow);
     const part=k=>dhakaParts.find(x=>x.type===k)?.value||'00';
     const liveDate=part('year')+'-'+part('month')+'-'+part('day');
     const liveMinutes=Number(part('hour'))*60+Number(part('minute'));
     const todayIndex=days.findIndex(d=>d.isoDate===liveDate);
-    const currentCode=todayIndex>=0 ? (p.shifts?.[todayIndex]||'—') : '—';
-    let status='OFF', statusText='OFF', displayCode=currentCode;
 
     const shiftTimes={A:[360,840],B:[840,1320],C:[1320,360]};
-    const isShiftActive=(code,minutes)=>{
-      const range=shiftTimes[code];
-      if(!range) return false;
-      const [startMin,endMin]=range;
-
-      // Each shift is exactly 8 hours:
-      // A = 06:00–13:59, B = 14:00–21:59,
-      // C = 22:00–05:59 (the next calendar day).
-      // The 00:00–05:59 part of C is handled by yesterday's C above.
-      if(code==='C') return minutes>=startMin;
-
-      return minutes>=startMin&&minutes<endMin;
+    const shiftStartMinutes={A:360,B:840,C:1320};
+    const toUtcMs=(isoDate,minutes)=>{
+      const [y,m,d]=isoDate.split('-').map(Number);
+      const base=Date.UTC(y,m-1,d,0,0,0);
+      return base+(minutes-360)*60000;
     };
+    const addDays=(isoDate,n)=>{
+      const [y,m,d]=isoDate.split('-').map(Number);
+      const dt=new Date(Date.UTC(y,m-1,d+n,12,0,0));
+      return dt.toISOString().slice(0,10);
+    };
+    const occurrence=(index,code)=>{
+      if(index<0||index>=days.length||!['A','B','C'].includes(code)) return null;
+      const date=days[index].isoDate;
+      const startMs=toUtcMs(date,shiftStartMinutes[code]);
+      const endMs=startMs+8*60*60000;
+      return {index,code,date,startMs,endMs,endDate:addDays(date,code==='C'?1:0)};
+    };
+    const nowMs=toUtcMs(liveDate,liveMinutes);
 
-    // A C shift from yesterday remains ON DUTY until 06:00 today.
-    if(todayIndex>0 && liveMinutes<360 && p.shifts?.[todayIndex-1]==='C'){
-      status='ON DUTY';
-      statusText='ON DUTY - C';
-      displayCode='C';
-    }else if(currentCode==='OFF'){
-      status='OFF';
-      statusText='OFF';
-      displayCode='OFF';
-    }else if(currentCode==='L'){
-      status='OFF';
-      statusText='LEAVE';
-      displayCode='L';
-    }else if(isShiftActive(currentCode,liveMinutes)){
-      status='ON DUTY';
-      statusText='ON DUTY - '+currentCode;
-      displayCode=currentCode;
-    }else{
-      const range=shiftTimes[currentCode];
-      let nextIndex=-1;
+    const assigned=[];
+    for(let i=0;i<days.length;i++){
+      const code=p.shifts?.[i];
+      if(['A','B','C'].includes(code)) assigned.push(occurrence(i,code));
+    }
 
-      // If today's shift has not started yet, today's shift is UPCOMING.
-      if(range && liveMinutes<range[0]){
-        nextIndex=todayIndex;
-      }else{
-        // Today's shift has ended; find the next A/B/C in the roster.
-        for(let i=Math.max(todayIndex+1,0);i<days.length;i++){
-          if(['A','B','C'].includes(p.shifts?.[i])){
-            nextIndex=i;
-            break;
-          }
-        }
+    let active=null;
+    for(const occ of assigned){
+      if(nowMs>=occ.startMs&&nowMs<occ.endMs){
+        active=occ;
+        break;
       }
+    }
 
-      if(nextIndex>=0){
-        const nextCode=p.shifts?.[nextIndex];
+    let previous=null,next=null;
+    if(active){
+      const pos=assigned.indexOf(active);
+      previous=pos>0?assigned[pos-1]:null;
+      next=pos>=0&&pos<assigned.length-1?assigned[pos+1]:null;
+    }else{
+      for(const occ of assigned){
+        if(occ.startMs>nowMs){next=occ;break;}
+      }
+      for(let i=assigned.length-1;i>=0;i--){
+        if(assigned[i].endMs<=nowMs){previous=assigned[i];break;}
+      }
+    }
+
+    let status='OFF', statusText='OFF', displayCode='OFF';
+
+    // Active shift always takes priority. If the previous assigned shift
+    // ends exactly when this one starts, this is a 16-hour double duty.
+    if(active){
+      const isDouble=previous&&previous.endMs===active.startMs;
+      status='ON DUTY';
+      statusText=isDouble
+        ? 'ON DUTY (DOUBLE DUTY) - '+previous.code+' → '+active.code
+        : 'ON DUTY - '+active.code;
+      displayCode=active.code;
+    }else{
+      // During any shift-free period, UPCOMING starts exactly 4 hours
+      // before the next assigned shift, regardless of the length of the gap.
+      const hoursUntilNext=next?(next.startMs-nowMs)/(60*60000):Infinity;
+      if(next&&hoursUntilNext>0&&hoursUntilNext<=4){
         status='UPCOMING';
-        statusText='UPCOMING - '+nextCode;
-        displayCode=nextCode;
+        statusText='UPCOMING - '+next.code;
+        displayCode=next.code;
       }else{
-        status='OFF';
-        statusText='OFF';
-        displayCode='OFF';
+        // No active shift and the next shift is more than 4 hours away:
+        // use the explicit no-shift flag for the current calendar date.
+        const currentCode=todayIndex>=0 ? (p.shifts?.[todayIndex]||'OFF') : 'OFF';
+        if(currentCode==='L'){
+          status='OFF';
+          statusText='LEAVE';
+          displayCode='L';
+        }else{
+          status='OFF';
+          statusText='OFF';
+          displayCode='OFF';
+        }
       }
     }
 
