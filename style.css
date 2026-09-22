@@ -4329,3 +4329,46 @@ body.dark{
       linear-gradient(135deg,#1b2229 0%,#26313b 52%,#1d252d 100%) !important;
   }
 }
+
+
+/* Both versions — Dim red cinematic background */
+body:not(.dark){
+  background:
+    radial-gradient(circle at 8% 8%,rgba(239,68,68,.09),transparent 27%),
+    radial-gradient(circle at 92% 88%,rgba(127,29,29,.07),transparent 30%),
+    linear-gradient(135deg,#d3d1d2 0%,#c9c8ca 52%,#d0cdcf 100%) !important;
+}
+body.dark{
+  background:
+    radial-gradient(circle at 8% 8%,rgba(185,28,28,.16),transparent 29%),
+    radial-gradient(circle at 92% 88%,rgba(127,29,29,.10),transparent 32%),
+    linear-gradient(135deg,#0d1115 0%,#17171a 52%,#121417 100%) !important;
+}
+@media(max-width:900px){
+  body:not(.dark){
+    background:
+      radial-gradient(circle at 18% 8%,rgba(239,68,68,.065),transparent 27%),
+      radial-gradient(circle at 88% 88%,rgba(127,29,29,.045),transparent 28%),
+      #cecdcf !important;
+  }
+  body.dark{
+    background:
+      radial-gradient(circle at 18% 8%,rgba(185,28,28,.12),transparent 28%),
+      radial-gradient(circle at 88% 88%,rgba(127,29,29,.075),transparent 30%),
+      #0d1115 !important;
+  }
+}
+@media(min-width:901px){
+  body:not(.dark){
+    background:
+      radial-gradient(circle at 8% 4%,rgba(239,68,68,.10),transparent 26%),
+      radial-gradient(circle at 92% 92%,rgba(127,29,29,.075),transparent 30%),
+      linear-gradient(135deg,#d3d1d2 0%,#c9c8ca 50%,#d0cdcf 100%) !important;
+  }
+  body.dark{
+    background:
+      radial-gradient(circle at 8% 4%,rgba(185,28,28,.17),transparent 29%),
+      radial-gradient(circle at 92% 92%,rgba(127,29,29,.11),transparent 32%),
+      linear-gradient(135deg,#0d1115 0%,#17171a 52%,#121417 100%) !important;
+  }
+}
