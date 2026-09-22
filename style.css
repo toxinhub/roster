@@ -2786,3 +2786,46 @@ body.dark .duty-status b{
     filter:blur(12px);
   }
 }
+
+
+/* Mobile: layered circular light falloff from the top-left C — background only */
+@media(max-width:900px){
+  body::after{
+    width:900px;
+    height:900px;
+    left:22px;
+    top:12px;
+    transform:translate(-50%,-50%);
+    background:
+      radial-gradient(circle,
+        rgba(211,53,63,.30) 0 7%,
+        rgba(211,53,63,.25) 7.5% 14%,
+        rgba(220,66,72,.19) 14.5% 23%,
+        rgba(230,86,76,.13) 23.5% 34%,
+        rgba(239,111,83,.085) 34.5% 47%,
+        rgba(239,111,83,.048) 47.5% 61%,
+        rgba(239,111,83,.018) 61.5% 76%,
+        rgba(239,111,83,0) 77%);
+    filter:blur(4px);
+  }
+}
+@media(max-width:900px){
+  body.dark::after{
+    width:900px;
+    height:900px;
+    left:22px;
+    top:12px;
+    transform:translate(-50%,-50%);
+    background:
+      radial-gradient(circle,
+        rgba(178,39,49,.34) 0 7%,
+        rgba(178,39,49,.28) 7.5% 14%,
+        rgba(194,51,57,.22) 14.5% 23%,
+        rgba(201,67,61,.14) 23.5% 34%,
+        rgba(211,83,66,.085) 34.5% 47%,
+        rgba(211,83,66,.045) 47.5% 61%,
+        rgba(211,83,66,.018) 61.5% 76%,
+        rgba(211,83,66,0) 77%);
+    filter:blur(4px);
+  }
+}
