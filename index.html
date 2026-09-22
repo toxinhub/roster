@@ -42,7 +42,8 @@
         <div id="legend" class="legend"></div>
       </div>
       <div class="roster-wrap" id="roster"></div>
-    </section>\n  </main>
+    </section>
+  </main>
 <footer class="site-footer" aria-label="Project note">
   <div class="footer-switch">Switch to desktop view for more information.</div>
   <div class="footer-divider" aria-hidden="true"></div>
@@ -86,7 +87,8 @@ async function load(){
     toast('রোস্টার লোড করা যায়নি',true);
   }
 }
-\nfunction render(){
+
+function render(){
   const days=DATA.days||[];
   const people=DATA.employees||[];
   const types=DATA.shiftTypes||{};
