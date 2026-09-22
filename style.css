@@ -3870,3 +3870,22 @@ body.dark .day-head.is-today{
   .upcoming-info .info-item b{font-size:17px !important}
   .upcoming-info .info-item small{font-size:12px !important}
 }
+
+
+/* Desktop typography — improve overall roster readability */
+@media(min-width:901px){
+  .board-head h2{font-size:21px !important}
+  .day-head strong{font-size:15px !important}
+  .day-head span{font-size:13px !important}
+  .day-head em{font-size:11px !important}
+  .person strong{font-size:16px !important}
+  .duty-status b{font-size:8.5px !important;letter-spacing:.045em !important}
+  .shift{font-size:16px !important;font-weight:900 !important}
+  .legend span{font-size:12px !important}
+  .upcoming-info .upcoming-head h2{font-size:20px !important}
+  .upcoming-info .info-person strong{font-size:17px !important}
+  .upcoming-info .current-shift{font-size:13px !important}
+  .upcoming-info .info-label{font-size:11px !important}
+  .upcoming-info .info-item b{font-size:17px !important}
+  .upcoming-info .info-item small{font-size:12px !important}
+}
