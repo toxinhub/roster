@@ -3450,3 +3450,13 @@ body.dark .day-head.is-today em{
 body.dark .board-head h2{
   text-shadow:0 2px 6px rgba(0,0,0,.42),0 1px 1px rgba(255,255,255,.06) !important;
 }
+
+
+/* Stronger drop shadow for the roster title */
+.board-head h2{
+  filter:drop-shadow(0 3px 4px rgba(31,41,55,.22)) !important;
+  text-shadow:none !important;
+}
+body.dark .board-head h2{
+  filter:drop-shadow(0 3px 5px rgba(0,0,0,.48)) !important;
+}
