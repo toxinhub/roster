@@ -2881,3 +2881,100 @@ background:#28233a !important;
     border-color:rgba(147,197,253,.20);
   }
 }
+
+
+/* Desktop — premium shift glass */
+@media(min-width:901px){
+  .shift-cell{
+    background:linear-gradient(145deg,rgba(255,255,255,.78),rgba(246,249,252,.48));
+    border-color:rgba(148,163,184,.18);
+  }
+
+  .shift{
+    position:relative;
+    min-width:48px;
+    min-height:38px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:2px;
+    overflow:hidden;
+    border:1px solid color-mix(in srgb,var(--c) 22%,white);
+    background:
+      linear-gradient(145deg,
+        color-mix(in srgb,var(--c) 13%,white),
+        color-mix(in srgb,var(--c) 5%,white));
+    color:color-mix(in srgb,var(--c) 82%,#17202a);
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.72),
+      inset 0 -1px 0 color-mix(in srgb,var(--c) 8%,transparent),
+      0 3px 9px color-mix(in srgb,var(--c) 10%,transparent);
+    backdrop-filter:blur(8px) saturate(125%);
+    -webkit-backdrop-filter:blur(8px) saturate(125%);
+    transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+  }
+
+  .shift::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:linear-gradient(135deg,rgba(255,255,255,.36),transparent 48%);
+    pointer-events:none;
+  }
+
+  .shift b{
+    position:relative;
+    z-index:1;
+    font-size:15px;
+    line-height:1;
+    font-weight:850;
+    letter-spacing:.02em;
+  }
+
+  .shift:hover{
+    transform:translateY(-1px) scale(1.025);
+    border-color:color-mix(in srgb,var(--c) 35%,white);
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.82),
+      0 6px 14px color-mix(in srgb,var(--c) 16%,transparent);
+  }
+
+  /* Distinct but deliberately soft shift identities */
+  .shift-cell:has(.shift[style*="#60a5fa"]) .shift,
+  .shift-cell:has(.shift[style*="#3b82f6"]) .shift{
+    color:#2563eb;
+  }
+
+  .shift-cell:has(.shift[style*="#f59e0b"]) .shift,
+  .shift-cell:has(.shift[style*="#fbbf24"]) .shift{
+    color:#b45309;
+  }
+
+  .shift-cell:has(.shift[style*="#ef4444"]) .shift,
+  .shift-cell:has(.shift[style*="#dc2626"]) .shift{
+    color:#dc2626;
+  }
+
+  .shift-cell:has(.shift[style*="#64748b"]) .shift{
+    color:#64748b;
+  }
+
+  .dark .shift-cell{
+    background:linear-gradient(145deg,rgba(30,41,59,.72),rgba(15,23,42,.46));
+    border-color:rgba(148,163,184,.15);
+  }
+
+  .dark .shift{
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.08),
+      inset 0 -1px 0 color-mix(in srgb,var(--c) 12%,transparent),
+      0 4px 12px rgba(0,0,0,.14);
+  }
+
+  .dark .shift:hover{
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.12),
+      0 7px 16px color-mix(in srgb,var(--c) 14%,transparent);
+  }
+}
