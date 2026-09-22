@@ -2349,3 +2349,38 @@ body.dark .person{
     background:linear-gradient(180deg,#1c2a24,#1a2721) !important;
   }
 }
+
+
+/* Improve name + live status text visibility */
+.person strong{
+  color:#263238 !important;
+  font-weight:800 !important;
+  text-shadow:0 1px 0 rgba(255,255,255,.35);
+}
+.duty-status b{
+  font-weight:800 !important;
+  text-shadow:0 1px 0 rgba(255,255,255,.28);
+}
+.duty-status.status-a b{color:#c84f59 !important}
+.duty-status.status-b b{color:#a9780d !important}
+.duty-status.status-c b{color:#4676ad !important}
+.duty-status.status-l b{color:#478c61 !important}
+body.dark .person strong{
+  color:#e0e6e9 !important;
+  text-shadow:none;
+}
+body.dark .duty-status b{
+  text-shadow:none;
+}
+body.dark .duty-status.status-a b{color:#d97880 !important}
+body.dark .duty-status.status-b b{color:#d3ad55 !important}
+body.dark .duty-status.status-c b{color:#82add8 !important}
+body.dark .duty-status.status-l b{color:#79b88e !important}
+@media(max-width:900px){
+  .person strong{
+    font-weight:800 !important;
+  }
+  .duty-status b{
+    font-weight:800 !important;
+  }
+}
