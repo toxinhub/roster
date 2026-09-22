@@ -776,3 +776,8 @@ body.dark .info-item small{color:#aeb9c4 !important}
   .info-card{min-width:0 !important}
   .info-card:hover{transform:none !important}
 }
+
+/* Upcoming Duty — desktop only */
+@media(max-width:900px){
+  .upcoming-info{display:none !important}
+}
