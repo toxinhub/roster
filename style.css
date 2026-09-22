@@ -1814,3 +1814,41 @@ body.dark .shift-cell.week-end{
     border-right-color:rgba(226,232,240,.38) !important;
   }
 }
+
+/* FINAL — mobile legend always stays on one row */
+@media(max-width:900px){
+  .legend{
+    display:flex !important;
+    flex-direction:row !important;
+    flex-wrap:nowrap !important;
+    width:100% !important;
+    min-width:0 !important;
+    gap:4px !important;
+    overflow:hidden !important;
+    align-items:center !important;
+  }
+  .legend span{
+    flex:1 1 0 !important;
+    min-width:0 !important;
+    width:auto !important;
+    max-width:none !important;
+    box-sizing:border-box !important;
+    justify-content:center !important;
+    overflow:hidden !important;
+    white-space:nowrap !important;
+    padding:3px 2px !important;
+    gap:2px !important;
+  }
+  .legend i{
+    flex:0 0 5px !important;
+    width:5px !important;
+    height:5px !important;
+  }
+  .legend b{flex:0 0 auto !important}
+  .legend small{
+    min-width:0 !important;
+    overflow:hidden !important;
+    text-overflow:clip !important;
+    white-space:nowrap !important;
+  }
+}
