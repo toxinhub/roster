@@ -1257,3 +1257,32 @@ body.dark .info-item small{color:#aeb9c4 !important}
       0 0 72px color-mix(in srgb,var(--status-color,#64748b) 24%,transparent);
   }
 }
+
+
+/* Duty status labels — lighter visual weight */
+.duty-status{
+  opacity:.72 !important;
+  font-weight:700 !important;
+}
+.duty-status b{
+  font-weight:700 !important;
+  opacity:.88 !important;
+}
+@media(min-width:901px){
+  .duty-status{
+    font-size:8px !important;
+    padding:3px 7px !important;
+  }
+  .duty-status b{
+    font-size:8px !important;
+  }
+}
+@media(max-width:900px){
+  .duty-status{
+    font-size:7px !important;
+    padding:3px 6px !important;
+  }
+  .duty-status b{
+    font-size:7px !important;
+  }
+}
