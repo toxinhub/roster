@@ -331,9 +331,22 @@ $('todayJump').onclick=()=>{
   const iso=$('todayJump')?.dataset.iso||today();
   const target=$('roster')?.querySelector('.day-head[data-iso="'+iso+'"]');
   if(target){
-    target.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});
+    const wrap=$('roster');
+    const targetCenter=target.offsetLeft+(target.offsetWidth/2);
+    const desired=Math.max(0,targetCenter-(wrap.clientWidth/2));
+    const start=wrap.scrollLeft;
+    const distance=desired-start;
+    const duration=Math.min(900,Math.max(500,Math.abs(distance)*0.75));
+    const startTime=performance.now();
+    const ease=t=>1-Math.pow(1-t,3);
+    const animate=now=>{
+      const p=Math.min(1,(now-startTime)/duration);
+      wrap.scrollLeft=start+(distance*ease(p));
+      if(p<1) requestAnimationFrame(animate);
+    };
+    requestAnimationFrame(animate);
     target.classList.add('today-jump-focus');
-    setTimeout(()=>target.classList.remove('today-jump-focus'),900);
+    setTimeout(()=>target.classList.remove('today-jump-focus'),1200);
   }
 };
 
