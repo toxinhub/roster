@@ -2187,3 +2187,25 @@ body.dark .person{
 body.dark .person:last-child{
   border-bottom:0 !important;
 }
+
+
+/* Slightly deeper muted name-column background */
+.person{
+  background:linear-gradient(180deg,#dfe5e2,#dbe2df) !important;
+  border-right-color:#c3cdc8 !important;
+  border-bottom-color:#cbd4d0 !important;
+}
+.person strong{color:#263c33 !important}
+body.dark .person{
+  background:linear-gradient(180deg,#16231e,#13201b) !important;
+  border-right-color:#304139 !important;
+  border-bottom-color:#293932 !important;
+}
+@media(max-width:900px){
+  .person{
+    background:linear-gradient(180deg,#dfe5e2,#dbe2df) !important;
+  }
+  body.dark .person{
+    background:linear-gradient(180deg,#16231e,#13201b) !important;
+  }
+}
