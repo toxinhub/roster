@@ -2872,3 +2872,48 @@ body.dark .duty-status b{
     filter:blur(3px);
   }
 }
+
+
+/* Mobile: soft breathing glow centered on the header C — background only */
+@media(max-width:900px){
+  body::after{
+    width:900px;
+    height:900px;
+    left:22px;
+    top:12px;
+    transform:translate(-50%,-50%);
+    border-radius:50%;
+    background:radial-gradient(circle,
+      rgba(211,53,63,.22) 0%,
+      rgba(220,66,72,.15) 15%,
+      rgba(230,86,76,.085) 30%,
+      rgba(239,111,83,.04) 48%,
+      rgba(239,145,102,0) 70%);
+    filter:blur(18px);
+    animation:brandCSoftBreath 7s ease-in-out infinite;
+    will-change:opacity,transform;
+  }
+}
+@keyframes brandCSoftBreath{
+  0%,100%{
+    opacity:.58;
+    transform:translate(-50%,-50%) scale(.92);
+  }
+  50%{
+    opacity:1;
+    transform:translate(-50%,-50%) scale(1.08);
+  }
+}
+@media(max-width:900px){
+  body.dark::after{
+    background:radial-gradient(circle,
+      rgba(178,39,49,.25) 0%,
+      rgba(194,51,57,.17) 15%,
+      rgba(201,67,61,.095) 30%,
+      rgba(211,83,66,.045) 48%,
+      rgba(211,110,80,0) 70%);
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  body::after{animation:none !important}
+}
