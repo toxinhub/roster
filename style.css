@@ -2083,3 +2083,33 @@ body.dark .day-head.is-today{
     box-shadow:0 8px 24px rgba(16,24,40,.045);
   }
 }
+
+
+/* Extra-light green header */
+.day-head{
+  background:linear-gradient(180deg,#e7eeea,#edf2ef) !important;
+  border-right-color:#d1dbd6 !important;
+  border-bottom-color:#c1cec7 !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.82),0 2px 5px rgba(37,78,59,.04);
+}
+.day-head.is-today{
+  background:linear-gradient(180deg,#e2ebe6,#e9f0ec) !important;
+  border-bottom-color:#b7c7be !important;
+}
+.day-head strong{color:#3b5e4d !important}
+.day-head span{color:#7a8e83 !important}
+.day-head em{
+  background:rgba(46,91,69,.055) !important;
+  color:#617a6d !important;
+  border-color:rgba(46,91,69,.075) !important;
+}
+@media(max-width:900px){
+  .day-head{
+    background:linear-gradient(180deg,#e7eeea,#edf2ef) !important;
+    border-right-color:#d1dbd6 !important;
+    border-bottom-color:#c1cec7 !important;
+  }
+  .day-head.is-today{
+    background:linear-gradient(180deg,#e2ebe6,#e9f0ec) !important;
+  }
+}
