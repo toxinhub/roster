@@ -2113,3 +2113,28 @@ body.dark .day-head.is-today{
     background:linear-gradient(180deg,#e2ebe6,#e9f0ec) !important;
   }
 }
+
+
+/* Soft muted tone for employee name cells */
+.person{
+  background:linear-gradient(180deg,#e8ecea,#e3e8e5) !important;
+  border-right-color:#d0d8d4 !important;
+}
+.person strong{color:#263b32 !important}
+.person .duty-status b{color:#687b72}
+body.dark .person{
+  background:linear-gradient(180deg,#17241f,#14201c) !important;
+  border-right-color:#2f4038 !important;
+}
+body.dark .person strong{color:#d7e2dc !important}
+body.dark .person .duty-status b{color:#91a39a}
+@media(max-width:900px){
+  .person{
+    background:linear-gradient(180deg,#e8ecea,#e3e8e5) !important;
+    border-right-color:#d0d8d4 !important;
+  }
+  body.dark .person{
+    background:linear-gradient(180deg,#17241f,#14201c) !important;
+    border-right-color:#2f4038 !important;
+  }
+}
