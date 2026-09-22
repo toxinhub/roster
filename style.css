@@ -2499,3 +2499,22 @@ body.dark .duty-status b{
     border-color:rgba(104,124,143,.18) !important;
   }
 }
+
+
+/* Mobile: subtle warm orange glass glow at top-right */
+@media(max-width:900px){
+  body{
+    background:
+      radial-gradient(520px 360px at 0% 0%,rgba(220,92,101,.13),transparent 68%),
+      radial-gradient(500px 360px at 100% 0%,rgba(245,166,72,.12),transparent 68%),
+      linear-gradient(180deg,#edf0f2 0%,#e8ecef 100%) !important;
+  }
+}
+@media(max-width:900px){
+  body.dark{
+    background:
+      radial-gradient(540px 380px at 0% 0%,rgba(177,69,79,.16),transparent 68%),
+      radial-gradient(500px 360px at 100% 0%,rgba(191,116,48,.12),transparent 68%),
+      linear-gradient(180deg,#0b1118 0%,#0d141c 100%) !important;
+  }
+}
