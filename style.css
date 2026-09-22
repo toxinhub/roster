@@ -1894,3 +1894,32 @@ body.dark .day-head + .day-head{
     border-left-color:rgba(148,163,184,.07) !important;
   }
 }
+
+
+/* Minimal dark-blue date separators */
+.day-head{
+  border-right-color:rgba(37,64,91,.30) !important;
+}
+.day-head + .day-head{
+  border-left-color:rgba(37,64,91,.10) !important;
+}
+body.dark .day-head{
+  border-right-color:rgba(96,135,174,.28) !important;
+}
+body.dark .day-head + .day-head{
+  border-left-color:rgba(96,135,174,.10) !important;
+}
+@media(max-width:900px){
+  .day-head{
+    border-right-color:rgba(37,64,91,.28) !important;
+  }
+  .day-head + .day-head{
+    border-left-color:rgba(37,64,91,.09) !important;
+  }
+  body.dark .day-head{
+    border-right-color:rgba(96,135,174,.25) !important;
+  }
+  body.dark .day-head + .day-head{
+    border-left-color:rgba(96,135,174,.08) !important;
+  }
+}
