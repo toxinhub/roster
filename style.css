@@ -34,7 +34,7 @@
  .intro h1{margin:5px 0 0;font-size:clamp(24px,2.4vw,30px);line-height:1.05;letter-spacing:-.035em;font-weight:900}
  .intro p{margin:9px 0 0;color:var(--muted);font-size:13px;font-weight:600}
  .intro-meta{text-align:right;padding-bottom:3px}.intro-meta span{display:block;color:#9aa5ae;font-size:8px;font-weight:900;letter-spacing:.15em}.intro-meta b{display:block;margin-top:3px;font-size:11px;color:var(--muted);font-weight:800}
- .board{background:rgba(255,255,255,.62);border:1px solid rgba(255,255,255,.78);border-radius:20px;box-shadow:0 20px 55px rgba(31,41,55,.12),inset 0 1px 0 rgba(255,255,255,.9);overflow:hidden;backdrop-filter:blur(24px) saturate(145%);-webkit-backdrop-filter:blur(24px) saturate(145%);position:relative}
+ @media(max-width:900px){.intro-meta b{font-size:9px}.intro-meta span{font-size:7px}} .board{background:rgba(255,255,255,.62);border:1px solid rgba(255,255,255,.78);border-radius:20px;box-shadow:0 20px 55px rgba(31,41,55,.12),inset 0 1px 0 rgba(255,255,255,.9);overflow:hidden;backdrop-filter:blur(24px) saturate(145%);-webkit-backdrop-filter:blur(24px) saturate(145%);position:relative}
  .board-head{min-height:72px;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;gap:20px;border-bottom:1px solid rgba(255,255,255,.65);background:rgba(255,255,255,.2);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
  .board-head h2{margin:3px 0 0;font-size:20px;font-weight:900;letter-spacing:-.03em}
  .legend{display:flex;align-items:center;justify-content:flex-end;gap:6px;flex-wrap:wrap}
