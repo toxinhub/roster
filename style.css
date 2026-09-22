@@ -3370,3 +3370,16 @@ body.dark .shift{
     overflow:visible !important;
   }
 }
+
+@media(max-width:900px){
+  .roster-wrap,.roster-wrap *{
+    contain:none !important;
+    transform:none !important;
+    -webkit-transform:none !important;
+    will-change:auto !important;
+    backface-visibility:visible !important;
+    -webkit-backface-visibility:visible !important;
+  }
+  .roster-wrap .shift{box-shadow:none !important}
+  body::before,body::after{display:none !important}
+}
