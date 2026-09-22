@@ -3480,3 +3480,64 @@ body.dark .board-head h2{
     0 2px 0 rgba(0,0,0,.40),
     0 4px 8px rgba(0,0,0,.46) !important;
 }
+
+
+/* Duty roster title card — clean elevated badge */
+.board-head > div:first-child{
+  display:flex !important;
+  align-items:center !important;
+}
+.board-head h2{
+  position:relative !important;
+  display:inline-flex !important;
+  align-items:center !important;
+  min-height:34px !important;
+  margin:0 !important;
+  padding:6px 13px 7px !important;
+  border:1px solid rgba(148,163,184,.32) !important;
+  border-radius:10px !important;
+  background:linear-gradient(180deg,rgba(255,255,255,.92),rgba(241,245,243,.78)) !important;
+  box-shadow:
+    0 2px 4px rgba(31,41,55,.08),
+    0 7px 16px rgba(31,41,55,.08),
+    inset 0 1px 0 rgba(255,255,255,.95) !important;
+  color:#334155 !important;
+  font-weight:850 !important;
+  letter-spacing:-.025em !important;
+  text-shadow:none !important;
+  filter:none !important;
+}
+.board-head h2::before{
+  content:"" !important;
+  width:4px !important;
+  height:17px !important;
+  margin-right:8px !important;
+  border-radius:999px !important;
+  background:linear-gradient(180deg,#ef4444,#3b82f6) !important;
+  box-shadow:0 2px 5px rgba(59,130,246,.18) !important;
+}
+body.dark .board-head h2{
+  border-color:rgba(148,163,184,.22) !important;
+  background:linear-gradient(180deg,rgba(30,41,52,.94),rgba(20,29,38,.92)) !important;
+  box-shadow:
+    0 3px 7px rgba(0,0,0,.28),
+    0 9px 18px rgba(0,0,0,.22),
+    inset 0 1px 0 rgba(255,255,255,.07) !important;
+  color:#e7edf3 !important;
+}
+@media(max-width:900px){
+  .board-head h2{
+    min-height:31px !important;
+    padding:5px 11px 6px !important;
+    border-radius:9px !important;
+    box-shadow:0 2px 5px rgba(31,41,55,.07),inset 0 1px 0 rgba(255,255,255,.92) !important;
+  }
+  .board-head h2::before{
+    width:3px !important;
+    height:15px !important;
+    margin-right:7px !important;
+  }
+  body.dark .board-head h2{
+    box-shadow:0 3px 7px rgba(0,0,0,.25),inset 0 1px 0 rgba(255,255,255,.06) !important;
+  }
+}
