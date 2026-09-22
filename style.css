@@ -1434,3 +1434,12 @@ body.dark .today-jump:focus-visible{
     opacity:.68 !important;
   }
 }
+
+/* Mobile date text — slightly larger */
+@media(max-width:900px){
+  .today-jump{
+    font-size:17px !important;
+    font-weight:700 !important;
+    line-height:1.35 !important;
+  }
+}
