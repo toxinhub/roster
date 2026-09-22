@@ -2468,3 +2468,34 @@ body.dark .duty-status b{
     border-bottom-color:rgba(116,137,157,.16) !important;
   }
 }
+
+
+/* Mobile: subtle red glass gradient atmosphere */
+@media(max-width:900px){
+  body{
+    background:
+      radial-gradient(520px 360px at 0% 0%,rgba(220,92,101,.13),transparent 68%),
+      radial-gradient(520px 420px at 100% 15%,rgba(255,255,255,.34),transparent 72%),
+      linear-gradient(180deg,#edf0f2 0%,#e8ecef 100%) !important;
+  }
+  .board{
+    background:rgba(255,255,255,.54) !important;
+    border-color:rgba(255,255,255,.76) !important;
+    box-shadow:
+      0 10px 28px rgba(31,43,54,.065),
+      0 2px 8px rgba(31,43,54,.04),
+      inset 0 1px 0 rgba(255,255,255,.78) !important;
+  }
+}
+@media(max-width:900px){
+  body.dark{
+    background:
+      radial-gradient(540px 380px at 0% 0%,rgba(177,69,79,.16),transparent 68%),
+      radial-gradient(520px 420px at 100% 15%,rgba(70,99,125,.08),transparent 72%),
+      linear-gradient(180deg,#0b1118 0%,#0d141c 100%) !important;
+  }
+  body.dark .board{
+    background:rgba(17,25,34,.70) !important;
+    border-color:rgba(104,124,143,.18) !important;
+  }
+}
