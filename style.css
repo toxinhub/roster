@@ -2839,60 +2839,72 @@ background:#28233a !important;
 }
 
 
-/* Desktop — smooth theme transition from the toggle button */
+
+
+/* Desktop — theme button-only micro interaction */
 @media(min-width:901px){
-  body{
-    --theme-x:50%;
-    --theme-y:50%;
+  .icon-btn#theme{
+    position:relative;
+    isolation:isolate;
+    overflow:visible;
+    transition:transform .22s cubic-bezier(.2,.8,.2,1),box-shadow .22s ease,background .22s ease;
   }
 
-  body::after{
+  .icon-btn#theme::before,
+  .icon-btn#theme::after{
     content:"";
-    position:fixed;
-    inset:-1px;
-    z-index:9998;
-    pointer-events:none;
+    position:absolute;
+    inset:-5px;
+    border:1px solid currentColor;
+    border-radius:inherit;
     opacity:0;
-    clip-path:circle(150% at var(--theme-x) var(--theme-y));
-    will-change:clip-path,opacity;
+    pointer-events:none;
   }
 
-  /* Switching to dark: the remaining light retreats toward the button. */
-  body.theme-to-dark::after{
-    opacity:1;
-    background:
-      radial-gradient(circle at var(--theme-x) var(--theme-y),
-        rgba(255,255,255,.98) 0%,
-        rgba(255,255,255,.96) 18%,
-        rgba(255,255,255,.92) 55%,
-        rgba(255,255,255,.88) 100%);
-    animation:themeRetreat .88s cubic-bezier(.22,.72,.22,1) forwards;
+  .icon-btn#theme::before{
+    transform:scale(.72);
   }
 
-  /* Switching to light: light spreads outward from the button. */
-  body.theme-to-light::after{
-    opacity:1;
-    background:
-      radial-gradient(circle at var(--theme-x) var(--theme-y),
-        rgba(15,23,42,.98) 0%,
-        rgba(15,23,42,.96) 18%,
-        rgba(15,23,42,.92) 55%,
-        rgba(15,23,42,.88) 100%);
-    animation:themeRetreat .88s cubic-bezier(.22,.72,.22,1) forwards;
+  .icon-btn#theme::after{
+    transform:scale(1);
   }
 
-  @keyframes themeRetreat{
-    0%{
-      clip-path:circle(150% at var(--theme-x) var(--theme-y));
-      opacity:1;
-    }
-    72%{
-      clip-path:circle(18% at var(--theme-x) var(--theme-y));
-      opacity:1;
-    }
-    100%{
-      clip-path:circle(0% at var(--theme-x) var(--theme-y));
-      opacity:0;
-    }
+  .icon-btn#theme.theme-clicked{
+    transform:rotate(-8deg) scale(1.08);
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,.10),
+      0 0 18px rgba(96,165,250,.30),
+      0 6px 18px rgba(15,23,42,.18);
+  }
+
+  .icon-btn#theme.theme-clicked::before{
+    animation:themeButtonRipple .58s cubic-bezier(.18,.8,.25,1);
+  }
+
+  .icon-btn#theme.theme-clicked::after{
+    animation:themeButtonRipple .58s .08s cubic-bezier(.18,.8,.25,1);
+  }
+
+  .icon-btn#theme.theme-clicked{
+    animation:themeButtonIcon .58s cubic-bezier(.18,.8,.25,1);
+  }
+
+  @keyframes themeButtonRipple{
+    0%{opacity:.55;transform:scale(.72);}
+    100%{opacity:0;transform:scale(1.72);}
+  }
+
+  @keyframes themeButtonIcon{
+    0%{transform:rotate(0) scale(1);}
+    28%{transform:rotate(-16deg) scale(1.12);}
+    58%{transform:rotate(10deg) scale(1.04);}
+    100%{transform:rotate(0) scale(1);}
+  }
+
+  .dark .icon-btn#theme.theme-clicked{
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,.08),
+      0 0 20px rgba(147,197,253,.28),
+      0 6px 20px rgba(0,0,0,.30);
   }
 }
