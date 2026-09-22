@@ -88,7 +88,22 @@ async function load(){
   }
 }
 
+function updateDateProgress(){
+  const btn=$('todayJump');
+  if(!btn) return;
+
+  const now=new Date();
+  const parts=new Intl.DateTimeFormat('en-GB',{
+    timeZone:'Asia/Dhaka',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false
+  }).formatToParts(now);
+  const part=k=>parts.find(x=>x.type===k)?.value||'00';
+  const elapsed=Number(part('hour'))*3600+Number(part('minute'))*60+Number(part('second'));
+  const remaining=Math.max(0,86400-elapsed);
+  btn.style.setProperty('--day-remaining',((remaining/86400)*100).toFixed(3)+'%');
+}
+
 function render(){
+
   const days=DATA.days||[];
   const people=DATA.employees||[];
   const types=DATA.shiftTypes||{};
@@ -100,6 +115,7 @@ function render(){
   const todayLabel=todayDateObj.toLocaleDateString('bn-BD',{day:'numeric',month:'long',year:'numeric'}).replace(/\s*,\s*/g,' ');
   $('todayJump').textContent=todayLabel;
   $('todayJump').dataset.iso=now;
+  updateDateProgress();
   $('updated').textContent=timeLabel(DATA.updatedAt);
 
   $('legend').innerHTML=Object.entries(types).map(([k,v])=>
@@ -307,6 +323,7 @@ if(rosterEl){
     rosterScrollTimer=setTimeout(()=>{rosterScrolling=false},200);
   },{passive:true});
 }
+setInterval(()=>{ updateDateProgress(); },1000);
 setInterval(()=>{ if(DATA&&!rosterScrolling) render(); },30000);
 
 (function(){
