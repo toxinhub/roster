@@ -2751,3 +2751,38 @@ body.dark .duty-status b{
       transparent 73%);
   }
 }
+
+
+/* Mobile: broader, stronger background-only sunset red diffusion */
+@media(max-width:900px){
+  body::after{
+    width:760px;
+    height:760px;
+    left:22px;
+    top:12px;
+    background:radial-gradient(circle,
+      rgba(211,53,63,.25) 0%,
+      rgba(220,66,72,.18) 12%,
+      rgba(230,86,76,.12) 26%,
+      rgba(239,111,83,.075) 42%,
+      rgba(239,111,83,.035) 58%,
+      rgba(239,111,83,0) 78%);
+    filter:blur(12px);
+  }
+}
+@media(max-width:900px){
+  body.dark::after{
+    width:760px;
+    height:760px;
+    left:22px;
+    top:12px;
+    background:radial-gradient(circle,
+      rgba(178,39,49,.30) 0%,
+      rgba(194,51,57,.22) 13%,
+      rgba(201,67,61,.14) 27%,
+      rgba(211,83,66,.075) 43%,
+      rgba(211,83,66,.035) 59%,
+      transparent 79%);
+    filter:blur(12px);
+  }
+}
