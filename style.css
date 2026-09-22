@@ -1075,3 +1075,16 @@ body.dark .info-item small{color:#aeb9c4 !important}
     line-height:1.35 !important;
   }
 }
+
+/* Upcoming Duty — enlarge current shift text */
+@media(min-width:901px){
+  .info-person span.current-shift{
+    font-size:12px !important;
+    font-weight:800 !important;
+    padding:5px 9px !important;
+  }
+  .info-person span.current-shift b{
+    font-size:14px !important;
+    font-weight:900 !important;
+  }
+}
