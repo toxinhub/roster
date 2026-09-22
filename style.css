@@ -3293,3 +3293,22 @@ body.dark .shift{
     background:transparent !important;
   }
 }
+
+
+/* Smooth roster scrolling — keep mobile native and lightweight */
+.roster-wrap{
+  scroll-behavior:smooth !important;
+  -webkit-overflow-scrolling:touch;
+  overscroll-behavior-x:contain;
+}
+@media(max-width:900px){
+  .roster-wrap{
+    scroll-behavior:smooth !important;
+    scroll-snap-type:none !important;
+  }
+}
+@media(min-width:901px){
+  .roster-wrap{
+    scroll-behavior:smooth !important;
+  }
+}
