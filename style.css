@@ -1457,3 +1457,24 @@ body.dark .today-jump:focus-visible{
   .legend small{font-size:5px !important}
   .shift small{font-size:7px !important}
 }
+
+/* Mobile legend — single compact row */
+@media(max-width:900px){
+  .legend{
+    width:100% !important;
+    display:flex !important;
+    flex-wrap:nowrap !important;
+    align-items:center !important;
+    justify-content:flex-start !important;
+    gap:4px !important;
+    overflow:hidden !important;
+    white-space:nowrap !important;
+  }
+  .legend span{
+    flex:0 0 auto !important;
+    padding:3px 5px !important;
+    gap:3px !important;
+    white-space:nowrap !important;
+  }
+  .legend i{width:5px !important;height:5px !important;flex:0 0 5px !important}
+}
