@@ -1852,3 +1852,16 @@ body.dark .shift-cell.week-end{
     white-space:nowrap !important;
   }
 }
+
+/* Mobile legend — slightly wider cards */
+@media(max-width:900px){
+  .legend{
+    gap:5px !important;
+    overflow:visible !important;
+  }
+  .legend span{
+    flex:1 1 0 !important;
+    padding:4px 5px !important;
+    min-width:0 !important;
+  }
+}
