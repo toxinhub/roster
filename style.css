@@ -2839,7 +2839,7 @@ background:#28233a !important;
 }
 
 
-/* Desktop — theme light-flow transition from the toggle button */
+/* Desktop — smooth theme transition from the toggle button */
 @media(min-width:901px){
   body{
     --theme-x:50%;
@@ -2849,68 +2849,50 @@ background:#28233a !important;
   body::after{
     content:"";
     position:fixed;
-    inset:0;
+    inset:-1px;
     z-index:9998;
     pointer-events:none;
     opacity:0;
-    transform:scale(1);
-    transform-origin:var(--theme-x) var(--theme-y);
+    clip-path:circle(150% at var(--theme-x) var(--theme-y));
+    will-change:clip-path,opacity;
   }
 
-  body.theme-to-light::after{
-    opacity:1;
-    background:radial-gradient(
-      circle at var(--theme-x) var(--theme-y),
-      rgba(255,255,255,.92) 0%,
-      rgba(255,255,255,.82) 8%,
-      rgba(255,255,255,.42) 22%,
-      rgba(255,255,255,.12) 42%,
-      transparent 66%
-    );
-    animation:themeLightSpread .72s cubic-bezier(.22,.8,.25,1) forwards;
-  }
-
+  /* Switching to dark: the remaining light retreats toward the button. */
   body.theme-to-dark::after{
     opacity:1;
-    background:radial-gradient(
-      circle at var(--theme-x) var(--theme-y),
-      transparent 0%,
-      transparent 8%,
-      rgba(15,23,42,.08) 18%,
-      rgba(15,23,42,.40) 38%,
-      rgba(15,23,42,.78) 60%,
-      rgba(15,23,42,.96) 78%
-    );
-    animation:themeDarkPull .72s cubic-bezier(.22,.8,.25,1) forwards;
+    background:
+      radial-gradient(circle at var(--theme-x) var(--theme-y),
+        rgba(255,255,255,.98) 0%,
+        rgba(255,255,255,.96) 18%,
+        rgba(255,255,255,.92) 55%,
+        rgba(255,255,255,.88) 100%);
+    animation:themeRetreat .88s cubic-bezier(.22,.72,.22,1) forwards;
   }
 
-  @keyframes themeLightSpread{
+  /* Switching to light: light spreads outward from the button. */
+  body.theme-to-light::after{
+    opacity:1;
+    background:
+      radial-gradient(circle at var(--theme-x) var(--theme-y),
+        rgba(15,23,42,.98) 0%,
+        rgba(15,23,42,.96) 18%,
+        rgba(15,23,42,.92) 55%,
+        rgba(15,23,42,.88) 100%);
+    animation:themeRetreat .88s cubic-bezier(.22,.72,.22,1) forwards;
+  }
+
+  @keyframes themeRetreat{
     0%{
+      clip-path:circle(150% at var(--theme-x) var(--theme-y));
+      opacity:1;
+    }
+    72%{
+      clip-path:circle(18% at var(--theme-x) var(--theme-y));
+      opacity:1;
+    }
+    100%{
       clip-path:circle(0% at var(--theme-x) var(--theme-y));
-      opacity:.95;
-    }
-    55%{
-      clip-path:circle(48% at var(--theme-x) var(--theme-y));
-      opacity:.72;
-    }
-    100%{
-      clip-path:circle(150% at var(--theme-x) var(--theme-y));
       opacity:0;
-    }
-  }
-
-  @keyframes themeDarkPull{
-    0%{
-      clip-path:circle(150% at var(--theme-x) var(--theme-y));
-      opacity:0;
-    }
-    45%{
-      clip-path:circle(70% at var(--theme-x) var(--theme-y));
-      opacity:.92;
-    }
-    100%{
-      clip-path:circle(10% at var(--theme-x) var(--theme-y));
-      opacity:.72;
     }
   }
 }
