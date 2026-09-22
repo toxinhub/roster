@@ -4181,3 +4181,24 @@ body.dark .day-head.is-today{
     box-shadow:8px 0 20px rgba(0,0,0,.22),inset 1px 0 0 rgba(255,255,255,.045),inset 0 1px 0 rgba(255,255,255,.055) !important;
   }
 }
+
+
+/* Desktop — stronger frosted blur for the sticky name column */
+@media(min-width:901px){
+  .person-head,
+  .person{
+    background:linear-gradient(180deg,rgba(241,246,250,.90),rgba(232,239,245,.84)) !important;
+    backdrop-filter:blur(30px) saturate(160%) !important;
+    -webkit-backdrop-filter:blur(30px) saturate(160%) !important;
+    border-right-color:rgba(148,163,184,.38) !important;
+    box-shadow:8px 0 22px rgba(31,41,55,.09),inset 1px 0 0 rgba(255,255,255,.78),inset 0 1px 0 rgba(255,255,255,.82) !important;
+  }
+  body.dark .person-head,
+  body.dark .person{
+    background:linear-gradient(180deg,rgba(29,42,55,.94),rgba(20,31,42,.89)) !important;
+    backdrop-filter:blur(30px) saturate(155%) !important;
+    -webkit-backdrop-filter:blur(30px) saturate(155%) !important;
+    border-right-color:rgba(148,163,184,.28) !important;
+    box-shadow:8px 0 24px rgba(0,0,0,.28),inset 1px 0 0 rgba(255,255,255,.06),inset 0 1px 0 rgba(255,255,255,.07) !important;
+  }
+}
