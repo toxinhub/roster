@@ -1264,3 +1264,54 @@ body.dark .picker .shift-option{
     border-bottom-color:rgba(148,163,184,.14);
   }
 }
+
+
+/* Mobile visual step 2: soft shift cards */
+@media(max-width:900px){
+  .shift-cell{
+    background:var(--panel);
+    padding:7px 5px;
+  }
+  .shift-cell.is-today{
+    background:#f3efff !important;
+  }
+  .shift{
+    max-width:64px;
+    min-height:39px;
+    padding:6px 8px;
+    border-radius:10px;
+    border:1px solid color-mix(in srgb,var(--c) 58%,#fff);
+    background:color-mix(in srgb,var(--c) 34%,#fff);
+    color:color-mix(in srgb,var(--c) 78%,#17202a);
+    box-shadow:
+      0 3px 8px color-mix(in srgb,var(--c) 12%,transparent),
+      inset 0 1px 0 rgba(255,255,255,.72);
+    transition:transform .12s ease,filter .12s ease;
+  }
+  .shift b{
+    font-size:13px;
+    font-weight:950;
+    color:inherit;
+  }
+
+  /* Keep each shift visually distinct without making the table too colorful. */
+  .shift-cell:active .shift{
+    transform:scale(.97);
+    filter:brightness(.98);
+  }
+
+  body.dark .shift-cell{
+    background:var(--panel);
+  }
+  body.dark .shift-cell.is-today{
+    background:#28233a !important;
+  }
+  body.dark .shift{
+    border-color:color-mix(in srgb,var(--c) 48%,#263341);
+    background:color-mix(in srgb,var(--c) 22%,#111a24);
+    color:color-mix(in srgb,var(--c) 76%,#eef3f7);
+    box-shadow:
+      0 3px 9px rgba(0,0,0,.16),
+      inset 0 1px 0 rgba(255,255,255,.06);
+  }
+}
