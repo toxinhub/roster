@@ -2627,3 +2627,73 @@ body.dark .duty-status b{
       transparent 75%);
   }
 }
+
+
+/* Reworked mobile light-source effect: the red C legend marker itself radiates the glow */
+@media(max-width:900px){
+  .board-head{
+    position:relative;
+    overflow:visible !important;
+  }
+  .legend{
+    position:relative;
+    z-index:2;
+    overflow:visible !important;
+  }
+  .legend span:has(i[style*="#FCA5A5"]){
+    position:relative;
+    z-index:3;
+    overflow:visible !important;
+  }
+  .legend span:has(i[style*="#FCA5A5"])::before{
+    content:"";
+    position:absolute;
+    width:150px;
+    height:150px;
+    left:50%;
+    top:50%;
+    transform:translate(-50%,-50%);
+    border-radius:50%;
+    pointer-events:none;
+    z-index:-2;
+    background:radial-gradient(circle,
+      rgba(225,67,76,.16) 0%,
+      rgba(225,67,76,.09) 22%,
+      rgba(225,67,76,.045) 44%,
+      rgba(225,67,76,.018) 61%,
+      transparent 76%);
+    filter:blur(7px);
+  }
+  .legend span:has(i[style*="#FCA5A5"])::after{
+    content:"";
+    position:absolute;
+    width:52px;
+    height:52px;
+    left:50%;
+    top:50%;
+    transform:translate(-50%,-50%);
+    border-radius:50%;
+    pointer-events:none;
+    z-index:-1;
+    background:radial-gradient(circle,
+      rgba(240,78,85,.20) 0%,
+      rgba(240,78,85,.08) 42%,
+      transparent 74%);
+    filter:blur(3px);
+  }
+}
+@media(max-width:900px){
+  body.dark .legend span:has(i[style*="#FCA5A5"])::before{
+    background:radial-gradient(circle,
+      rgba(215,61,70,.22) 0%,
+      rgba(215,61,70,.12) 24%,
+      rgba(215,61,70,.05) 48%,
+      transparent 78%);
+  }
+  body.dark .legend span:has(i[style*="#FCA5A5"])::after{
+    background:radial-gradient(circle,
+      rgba(232,70,78,.24) 0%,
+      rgba(232,70,78,.08) 46%,
+      transparent 75%);
+  }
+}
