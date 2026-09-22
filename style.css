@@ -1062,3 +1062,16 @@ body.dark .info-item small{color:#aeb9c4 !important}
   .info-item b{font-size:16px !important}
   .info-item small{font-size:10px !important}
 }
+
+/* Upcoming Duty — enlarge secondary detail text */
+@media(min-width:901px){
+  .info-label{
+    font-size:12px !important;
+    font-weight:800 !important;
+  }
+  .info-item small{
+    font-size:13px !important;
+    font-weight:700 !important;
+    line-height:1.35 !important;
+  }
+}
