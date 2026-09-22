@@ -4286,3 +4286,46 @@ body.dark{
       linear-gradient(135deg,#0d1824 0%,#162638 52%,#0f1d2b 100%) !important;
   }
 }
+
+
+/* Both versions — Charcoal Blue background */
+body:not(.dark){
+  background:
+    radial-gradient(circle at 8% 6%,rgba(96,165,250,.09),transparent 26%),
+    radial-gradient(circle at 92% 10%,rgba(239,68,68,.055),transparent 24%),
+    linear-gradient(135deg,#d7dde2 0%,#cbd2d8 52%,#d1d8de 100%) !important;
+}
+body.dark{
+  background:
+    radial-gradient(circle at 8% 6%,rgba(96,165,250,.10),transparent 27%),
+    radial-gradient(circle at 92% 10%,rgba(239,68,68,.06),transparent 25%),
+    linear-gradient(135deg,#1b2229 0%,#26313b 52%,#1d252d 100%) !important;
+}
+@media(max-width:900px){
+  body:not(.dark){
+    background:
+      radial-gradient(circle at 18% 8%,rgba(96,165,250,.07),transparent 26%),
+      radial-gradient(circle at 88% 16%,rgba(239,68,68,.04),transparent 23%),
+      #d0d6dc !important;
+  }
+  body.dark{
+    background:
+      radial-gradient(circle at 18% 8%,rgba(96,165,250,.075),transparent 26%),
+      radial-gradient(circle at 88% 16%,rgba(239,68,68,.045),transparent 23%),
+      #1b2229 !important;
+  }
+}
+@media(min-width:901px){
+  body:not(.dark){
+    background:
+      radial-gradient(circle at 8% 4%,rgba(96,165,250,.10),transparent 25%),
+      radial-gradient(circle at 92% 8%,rgba(239,68,68,.06),transparent 24%),
+      linear-gradient(135deg,#d7dde2 0%,#cbd2d8 50%,#d1d8de 100%) !important;
+  }
+  body.dark{
+    background:
+      radial-gradient(circle at 8% 4%,rgba(96,165,250,.10),transparent 27%),
+      radial-gradient(circle at 92% 8%,rgba(239,68,68,.06),transparent 25%),
+      linear-gradient(135deg,#1b2229 0%,#26313b 52%,#1d252d 100%) !important;
+  }
+}
