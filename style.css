@@ -1014,3 +1014,12 @@ body.dark .info-item small{color:#aeb9c4 !important}
     max-width:1800px !important;
   }
 }
+
+/* Desktop — wider page body */
+@media(min-width:901px){
+  main,
+  footer,
+  .site-footer{
+    max-width:1840px !important;
+  }
+}
