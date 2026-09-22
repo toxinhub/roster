@@ -258,26 +258,28 @@ function render(){
         : 'ON DUTY - '+active.code;
       displayCode=active.code;
     }else{
-      // During any shift-free period, UPCOMING starts exactly 4 hours
-      // before the next assigned shift, regardless of the length of the gap.
+      // The 4-hour UPCOMING window applies ONLY when the employee is
+      // currently on an explicit OFF/LEAVE day and is approaching the
+      // next assigned shift after that OFF/LEAVE period.
+      const currentCode=todayIndex>=0 ? (p.shifts?.[todayIndex]||'OFF') : 'OFF';
+      const isNoShiftDay=currentCode==='OFF'||currentCode==='L';
       const hoursUntilNext=next?(next.startMs-nowMs)/(60*60000):Infinity;
-      if(next&&hoursUntilNext>0&&hoursUntilNext<=4){
+
+      if(isNoShiftDay&&next&&hoursUntilNext>0&&hoursUntilNext<=4){
         status='UPCOMING';
         statusText='UPCOMING - '+next.code;
         displayCode=next.code;
+      }else if(currentCode==='L'){
+        status='OFF';
+        statusText='LEAVE';
+        displayCode='L';
       }else{
-        // No active shift and the next shift is more than 4 hours away:
-        // use the explicit no-shift flag for the current calendar date.
-        const currentCode=todayIndex>=0 ? (p.shifts?.[todayIndex]||'OFF') : 'OFF';
-        if(currentCode==='L'){
-          status='OFF';
-          statusText='LEAVE';
-          displayCode='L';
-        }else{
-          status='OFF';
-          statusText='OFF';
-          displayCode='OFF';
-        }
+        // Normal gap between assigned shifts has no 4-hour rule.
+        // It remains OFF by default unless the current day is explicitly
+        // marked LEAVE.
+        status='OFF';
+        statusText='OFF';
+        displayCode='OFF';
       }
     }
 
