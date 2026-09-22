@@ -42,17 +42,7 @@
         <div id="legend" class="legend"></div>
       </div>
       <div class="roster-wrap" id="roster"></div>
-    </section>
-
-    <section class="upcoming-info" aria-labelledby="upcomingTitle">
-      <div class="upcoming-head">
-        <div>
-          <h2 id="upcomingTitle">পরবর্তী ডিউটি তথ্য</h2>
-        </div>
-      </div>
-      <div class="info-board-grid" id="infoBoardGrid"></div>
-    </section>
-  </main>
+    </section>\n  </main>
 <footer class="site-footer" aria-label="Project note">
   <div class="footer-switch">Switch to desktop view for more information.</div>
   <div class="footer-divider" aria-hidden="true"></div>
@@ -96,52 +86,7 @@ async function load(){
     toast('রোস্টার লোড করা যায়নি',true);
   }
 }
-
-function renderUpcomingInfo(){
-  const box=$('infoBoardGrid');
-  if(!box) return;
-  const days=DATA?.days||[];
-  const people=DATA?.employees||[];
-  const todayIso=today();
-  const todayIndex=days.findIndex(d=>d.isoDate===todayIso);
-
-  const formatDay=d=>{
-    if(!d) return '—';
-    const dt=new Date(d.isoDate+'T12:00:00');
-    return dt.toLocaleDateString('bn-BD',{day:'numeric',month:'short'});
-  };
-  const shiftLabel=code=>({A:'শিফট A',B:'শিফট B',C:'শিফট C',OFF:'অফ ডে',L:'Leave'}[code]||code||'—');
-
-  const cards=people.map(p=>{
-    const start=Math.max(todayIndex+1,0);
-    let nextChange=null,nextOff=null;
-    for(let i=start;i<days.length;i++){
-      const code=p.shifts?.[i]||'—';
-      if(!nextOff&&(code==='OFF'||code==='L')) nextOff={day:days[i],code};
-      if(!nextChange&&['A','B','C'].includes(code)){
-        let prevCode=null;
-        for(let j=i-1;j>=0;j--){
-          const prev=p.shifts?.[j];
-          if(['A','B','C'].includes(prev)){prevCode=prev;break;}
-        }
-        if(prevCode&&prevCode!==code) nextChange={day:days[i],from:prevCode,to:code};
-      }
-      if(nextChange&&nextOff) break;
-    }
-    return '<article class="info-card">'+
-      '<div class="info-person"><strong>'+esc(p.name)+'</strong><span class="current-shift" style="--current-color:'+esc(((DATA.shiftTypes||{})[p.shifts?.[todayIndex]]||{}).color||"#64748b")+'">বর্তমান: <i aria-hidden="true"></i><b>'+esc(shiftLabel(p.shifts?.[todayIndex]))+'</b></span></div>'+
-      '<div class="info-item shift-change"><span class="info-label">পরবর্তী শিফট চেঞ্জ</span>'+
-        (nextChange?'<b>'+esc(formatDay(nextChange.day))+'</b><small>'+esc(shiftLabel(nextChange.from))+' → '+esc(shiftLabel(nextChange.to))+'</small>':'<b>—</b><small>আগাম তথ্য নেই</small>')+
-      '</div>'+
-      '<div class="info-item off-day"><span class="info-label">পরবর্তী অফ ডে</span>'+
-        (nextOff?'<b>'+esc(formatDay(nextOff.day))+'</b><small>'+esc(nextOff.code==='L'?'Leave':'নির্ধারিত ছুটি')+'</small>':'<b>—</b><small>আগাম তথ্য নেই</small>')+
-      '</div>'+
-    '</article>';
-  }).join('');
-  box.innerHTML=cards||'<div class="info-empty">আগাম ডিউটি তথ্য পাওয়া যাচ্ছে না।</div>';
-}
-
-function render(){
+\nfunction render(){
   const days=DATA.days||[];
   const people=DATA.employees||[];
   const types=DATA.shiftTypes||{};
@@ -317,7 +262,6 @@ function render(){
       '<div class="person-head" aria-label="CCTV">📹</div>'+
       '<div class="days" style="'+gridStyle+'">'+head+'</div>'+
     '</div>'+rows;
-  renderUpcomingInfo();
 }
 
 $('theme').onclick=()=>{
