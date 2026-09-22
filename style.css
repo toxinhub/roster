@@ -529,6 +529,30 @@ min-width:0
 }
 
 @media(min-width:901px){
+  .legend{
+    gap:8px !important;
+    margin-top:10px !important;
+  }
+  .legend span{
+    gap:5px !important;
+    padding:5px 9px !important;
+    font-size:10px;
+    min-height:22px !important;
+  }
+  .legend i{
+    width:7px !important;
+    height:7px !important;
+    flex-basis:7px !important;
+  }
+  .legend b{
+    font-size:9px !important;
+  }
+  .legend small{
+    font-size:8px !important;
+  }
+}
+
+@media(min-width:901px){
 
   body::before{
 content:"";
