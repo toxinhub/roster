@@ -1286,3 +1286,8 @@ body.dark .info-item small{color:#aeb9c4 !important}
     font-size:7px !important;
   }
 }
+
+/* Desktop-only footer switch message */
+@media(min-width:901px){
+  .footer-switch{display:none !important;}
+}
