@@ -2829,3 +2829,46 @@ body.dark .duty-status b{
     filter:blur(4px);
   }
 }
+
+
+/* Mobile: wide-spaced layered sunset atmosphere, inspired by serene adventure-game sunsets */
+@media(max-width:900px){
+  body::after{
+    width:1100px;
+    height:1100px;
+    left:22px;
+    top:12px;
+    transform:translate(-50%,-50%);
+    background:
+      radial-gradient(circle,
+        rgba(211,53,63,.30) 0 5%,
+        rgba(211,53,63,.30) 5.5% 9%,
+        rgba(220,66,72,.21) 12% 18%,
+        rgba(230,86,76,.145) 21% 28%,
+        rgba(239,111,83,.085) 32% 41%,
+        rgba(239,130,91,.048) 45% 56%,
+        rgba(239,145,102,.022) 60% 72%,
+        rgba(239,145,102,0) 80%);
+    filter:blur(3px);
+  }
+}
+@media(max-width:900px){
+  body.dark::after{
+    width:1100px;
+    height:1100px;
+    left:22px;
+    top:12px;
+    transform:translate(-50%,-50%);
+    background:
+      radial-gradient(circle,
+        rgba(178,39,49,.34) 0 5%,
+        rgba(178,39,49,.34) 5.5% 9%,
+        rgba(194,51,57,.24) 12% 18%,
+        rgba(201,67,61,.155) 21% 28%,
+        rgba(211,83,66,.09) 32% 41%,
+        rgba(211,96,72,.05) 45% 56%,
+        rgba(211,110,80,.024) 60% 72%,
+        rgba(211,110,80,0) 80%);
+    filter:blur(3px);
+  }
+}
