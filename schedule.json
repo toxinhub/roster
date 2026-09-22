@@ -10,12 +10,12 @@
     "B": {
       "label": "শিফট B",
       "note": "14:00–22:00",
-      "color": "#93C5FD"
+      "color": "#FCD34D"
     },
     "C": {
       "label": "শিফট C",
       "note": "22:00–06:00",
-      "color": "#86EFAC"
+      "color": "#93C5FD"
     },
     "OFF": {
       "label": "ছুটি",
@@ -25,7 +25,7 @@
     "L": {
       "label": "ছুটি (Leave)",
       "note": "অনুমোদিত ছুটি",
-      "color": "#FCD34D"
+      "color": "#86EFAC"
     }
   },
   "days": [
