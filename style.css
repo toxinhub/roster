@@ -1478,3 +1478,30 @@ body.dark .today-jump:focus-visible{
   }
   .legend i{width:5px !important;height:5px !important;flex:0 0 5px !important}
 }
+
+/* Mobile legend — readable single row */
+@media(max-width:900px){
+  .legend{
+    display:grid !important;
+    grid-template-columns:repeat(4,minmax(0,1fr)) !important;
+    width:100% !important;
+    gap:4px !important;
+    align-items:center !important;
+    overflow:visible !important;
+  }
+  .legend span{
+    min-width:0 !important;
+    width:100% !important;
+    box-sizing:border-box !important;
+    justify-content:center !important;
+    padding:3px 3px !important;
+    gap:3px !important;
+    overflow:hidden !important;
+    white-space:nowrap !important;
+    font-size:6.5px !important;
+    line-height:1.15 !important;
+  }
+  .legend i{width:5px !important;height:5px !important;flex:0 0 5px !important}
+  .legend b{font-size:6.5px !important;flex:0 0 auto !important}
+  .legend small{font-size:5.5px !important;overflow:hidden !important;text-overflow:clip !important}
+}
