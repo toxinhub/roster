@@ -1233,3 +1233,34 @@ body.dark .picker .shift-option{
     box-shadow:none;
   }
 }
+
+
+/* Mobile visual step 1: lightweight premium glass surfaces */
+@media(max-width:900px){
+  body:not(.dark) .board{
+    background:linear-gradient(145deg,rgba(255,255,255,.88),rgba(248,250,252,.78));
+    border-color:rgba(255,255,255,.96);
+    box-shadow:
+      0 14px 34px rgba(31,41,55,.08),
+      inset 0 1px 0 rgba(255,255,255,.96);
+  }
+  body:not(.dark) .board-head{
+    background:linear-gradient(90deg,rgba(255,255,255,.78),rgba(255,245,245,.52),rgba(255,251,235,.46));
+    border-bottom-color:rgba(100,116,139,.12);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.92);
+  }
+  body:not(.dark) .legend span{
+    background:rgba(255,255,255,.72);
+    border-color:rgba(255,255,255,.92);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.96),0 3px 9px rgba(31,41,55,.035);
+  }
+  body.dark .board{
+    background:linear-gradient(145deg,rgba(17,26,36,.96),rgba(21,31,42,.90));
+    border-color:rgba(255,255,255,.11);
+    box-shadow:0 16px 40px rgba(0,0,0,.24),inset 0 1px 0 rgba(255,255,255,.055);
+  }
+  body.dark .board-head{
+    background:linear-gradient(90deg,rgba(255,255,255,.035),rgba(127,29,29,.045),rgba(120,53,15,.035));
+    border-bottom-color:rgba(148,163,184,.14);
+  }
+}
