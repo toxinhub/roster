@@ -1632,3 +1632,26 @@ body.dark .person-row{
     border-bottom-color:rgba(148,163,184,.16) !important;
   }
 }
+
+/* Mobile roster — divider box */
+@media(max-width:900px){
+  .roster-wrap{
+    border:1px solid rgba(148,163,184,.24) !important;
+    border-radius:0 !important;
+  }
+  .day-grid .person-head,
+  .day-grid .day-head,
+  .person-row .person,
+  .person-row .shift-cell{
+    border:1px solid rgba(148,163,184,.22) !important;
+  }
+  body.dark .roster-wrap{
+    border-color:rgba(148,163,184,.18) !important;
+  }
+  body.dark .day-grid .person-head,
+  body.dark .day-grid .day-head,
+  body.dark .person-row .person,
+  body.dark .person-row .shift-cell{
+    border-color:rgba(148,163,184,.16) !important;
+  }
+}
