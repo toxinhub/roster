@@ -2275,3 +2275,25 @@ body.dark .person{
     background:linear-gradient(180deg,#1b2025,#191e23) !important;
   }
 }
+
+
+/* Ultra-subtle 2% soft-dark name column */
+.person{
+  background:linear-gradient(180deg,#fafbfb,#f8f9fa) !important;
+  border-right-color:#e5e7e9 !important;
+  border-bottom-color:#eaeced !important;
+}
+.person strong{color:#3a4148 !important}
+body.dark .person{
+  background:linear-gradient(180deg,#191e23,#181c21) !important;
+  border-right-color:#2d3339 !important;
+  border-bottom-color:#292f35 !important;
+}
+@media(max-width:900px){
+  .person{
+    background:linear-gradient(180deg,#fafbfb,#f8f9fa) !important;
+  }
+  body.dark .person{
+    background:linear-gradient(180deg,#191e23,#181c21) !important;
+  }
+}
