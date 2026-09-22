@@ -1777,3 +1777,40 @@ body.dark .person-row .shift-cell{
     border-bottom-color:rgba(148,163,184,.11) !important;
   }
 }
+
+/* Weekly dividers — week runs Friday through Thursday */
+.day-head.week-start,
+.shift-cell.week-start{
+  border-left:3px solid rgba(71,85,105,.55) !important;
+}
+.day-head.week-end,
+.shift-cell.week-end{
+  border-right:3px solid rgba(71,85,105,.55) !important;
+}
+body.dark .day-head.week-start,
+body.dark .shift-cell.week-start{
+  border-left-color:rgba(226,232,240,.42) !important;
+}
+body.dark .day-head.week-end,
+body.dark .shift-cell.week-end{
+  border-right-color:rgba(226,232,240,.42) !important;
+}
+
+@media(max-width:900px){
+  .day-head.week-start,
+  .shift-cell.week-start{
+    border-left:2px solid rgba(71,85,105,.50) !important;
+  }
+  .day-head.week-end,
+  .shift-cell.week-end{
+    border-right:2px solid rgba(71,85,105,.50) !important;
+  }
+  body.dark .day-head.week-start,
+  body.dark .shift-cell.week-start{
+    border-left-color:rgba(226,232,240,.38) !important;
+  }
+  body.dark .day-head.week-end,
+  body.dark .shift-cell.week-end{
+    border-right-color:rgba(226,232,240,.38) !important;
+  }
+}
