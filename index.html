@@ -391,5 +391,20 @@ setInterval(()=>{ if(DATA&&!rosterScrolling) render(); },30000);
   wrap.addEventListener('lostpointercapture',stop);
 })();
 </script>
+
+
+<script>
+/* Desktop — mouse wheel scrolls the roster horizontally */
+(function(){
+  const wrap=document.getElementById('roster');
+  if(!wrap || !window.matchMedia('(min-width:901px) and (pointer:fine)').matches) return;
+  wrap.addEventListener('wheel',e=>{
+    if(Math.abs(e.deltaY)<=Math.abs(e.deltaX)) return;
+    if(wrap.scrollWidth<=wrap.clientWidth) return;
+    wrap.scrollLeft += e.deltaY;
+    e.preventDefault();
+  },{passive:false});
+})();
+</script>
 </body>
 </html>
