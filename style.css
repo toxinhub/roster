@@ -2917,3 +2917,44 @@ body.dark .duty-status b{
 @media(prefers-reduced-motion:reduce){
   body::after{animation:none !important}
 }
+
+
+/* Mobile: extend the C's breathing glow toward the top-right — background only */
+@media(max-width:900px){
+  body::after{
+    width:1050px;
+    height:820px;
+    left:34%;
+    top:2px;
+    transform:translate(-50%,-50%);
+    background:radial-gradient(ellipse at 25% 18%,
+      rgba(211,53,63,.23) 0%,
+      rgba(220,66,72,.15) 17%,
+      rgba(230,86,76,.085) 34%,
+      rgba(239,111,83,.04) 53%,
+      rgba(239,145,102,0) 76%);
+    filter:blur(20px);
+    animation:brandCSoftBreathWide 7s ease-in-out infinite;
+    will-change:opacity,transform;
+  }
+}
+@keyframes brandCSoftBreathWide{
+  0%,100%{
+    opacity:.58;
+    transform:translate(-50%,-50%) scale(.94);
+  }
+  50%{
+    opacity:1;
+    transform:translate(-50%,-50%) scale(1.07);
+  }
+}
+@media(max-width:900px){
+  body.dark::after{
+    background:radial-gradient(ellipse at 25% 18%,
+      rgba(178,39,49,.26) 0%,
+      rgba(194,51,57,.17) 17%,
+      rgba(201,67,61,.095) 34%,
+      rgba(211,83,66,.045) 53%,
+      rgba(211,110,80,0) 76%);
+  }
+}
