@@ -5038,3 +5038,109 @@ body.dark .day-head strong{color:#e8edf2 !important}
 }
 
 /* Keep the mobile implementation untouched by this refinement. */
+
+
+/* Soft Slate + Elevated Frost — refined two-sector theme */
+body:not(.dark){
+  background:
+    linear-gradient(135deg,#d9dee3 0%,#cbd2d8 52%,#d6dce1 100%) !important;
+}
+body.dark{
+  --bg:#111820 !important;
+  --panel:#1d2832 !important;
+  --panel-soft:#202d38 !important;
+  --ink:#e7edf2 !important;
+  --muted:#a6b1bb !important;
+  --line:#303c47 !important;
+  --line-strong:#414f5b !important;
+  background:
+    linear-gradient(135deg,#111820 0%,#1b252f 52%,#141d25 100%) !important;
+}
+
+/* Sector 1 — elevated roster surface */
+.board{
+  background:#e4e8ec !important;
+  border:1px solid rgba(151,163,173,.48) !important;
+  border-radius:18px !important;
+  box-shadow:0 18px 42px rgba(31,41,55,.11),inset 0 1px 0 rgba(255,255,255,.78) !important;
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+}
+.board-head{
+  background:#e8ecef !important;
+  border-bottom-color:rgba(151,163,173,.38) !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.82) !important;
+}
+.day-head,.shift-cell{
+  background:#d9dee3 !important;
+  border-color:#c1c9d0 !important;
+}
+.person-head,.person{
+  background:#e8ecef !important;
+  border-right-color:#b8c1c9 !important;
+  box-shadow:7px 0 16px rgba(31,41,55,.065),inset 0 1px 0 rgba(255,255,255,.72) !important;
+}
+.legend span{
+  background:#e5e9ec !important;
+  border-color:#c0c8cf !important;
+}
+
+/* Sector 2 — semantic duty pills */
+.shift[style*="#FCA5A5"]{--c:#d96870 !important}
+.shift[style*="#FCD34D"]{--c:#d3aa4a !important}
+.shift[style*="#93C5FD"]{--c:#6798c5 !important}
+.shift[style*="#CBD5E1"]{--c:#87929c !important}
+.shift[style*="#86EFAC"]{--c:#65a57a !important}
+.shift{
+  border-radius:12px !important;
+  border-color:color-mix(in srgb,var(--c) 48%,#ffffff) !important;
+  background:color-mix(in srgb,var(--c) 17%,#e4e8ec) !important;
+  box-shadow:0 5px 12px color-mix(in srgb,var(--c) 13%,transparent),inset 0 1px 0 rgba(255,255,255,.60) !important;
+}
+.shift b,.shift small{color:#27323b !important}
+
+/* Readable typography */
+.kicker{color:#6c7882 !important}
+.intro h1,.board-head,.board-head h2,.person strong,.day-head strong{color:#27323b !important}
+.intro p,.intro-meta span,.legend span,.day-head span,.info-person span,.info-label,.info-item small{color:#63717c !important}
+.legend b,.intro-meta b,.info-person strong,.info-item b{color:#34414b !important}
+
+/* Dark sector separation */
+body.dark .board{
+  background:#1d2832 !important;
+  border-color:rgba(255,255,255,.095) !important;
+  box-shadow:0 20px 48px rgba(0,0,0,.27),inset 0 1px 0 rgba(255,255,255,.055) !important;
+}
+body.dark .board-head{
+  background:#222e38 !important;
+  border-bottom-color:rgba(255,255,255,.075) !important;
+}
+body.dark .day-head,body.dark .shift-cell{
+  background:#202d38 !important;
+  border-color:#303c47 !important;
+}
+body.dark .person-head,body.dark .person{
+  background:#26333e !important;
+  border-right-color:#3b4854 !important;
+  box-shadow:8px 0 18px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.045) !important;
+}
+body.dark .legend span{
+  background:#222e38 !important;
+  border-color:#3b4854 !important;
+}
+body.dark .shift{
+  background:color-mix(in srgb,var(--c) 25%,#1d2832) !important;
+  border-color:color-mix(in srgb,var(--c) 50%,#303c47) !important;
+  box-shadow:0 5px 12px color-mix(in srgb,var(--c) 13%,transparent),inset 0 1px 0 rgba(255,255,255,.045) !important;
+}
+body.dark .shift b,body.dark .shift small{color:#e7edf2 !important}
+body.dark .kicker,body.dark .intro p,body.dark .intro-meta span,body.dark .legend span,body.dark .day-head span,body.dark .info-person span,body.dark .info-label,body.dark .info-item small{color:#a6b1bb !important}
+body.dark .intro h1,body.dark .board-head,body.dark .board-head h2,body.dark .person strong,body.dark .day-head strong,body.dark .legend b,body.dark .intro-meta b,body.dark .info-person strong,body.dark .info-item b{color:#e7edf2 !important}
+
+/* Keep mobile lightweight */
+@media(max-width:900px){
+  .board,.board-head,.legend span,.person-head,.person{
+    backdrop-filter:none !important;
+    -webkit-backdrop-filter:none !important;
+  }
+}
