@@ -3999,3 +3999,11 @@ body.dark .day-head.is-today{
   body.dark .today-jump{color:#dce4eb !important}
   body.dark footer{color:#9da9b5 !important}
 }
+
+
+/* Desktop — wider page body */
+@media(min-width:901px){
+  main,
+  footer,
+  .site-footer{max-width:1660px !important;}
+}
