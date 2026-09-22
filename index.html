@@ -26,7 +26,7 @@
   <main>
     <section class="intro">
       <div>
-        <h1 id="month">লোড হচ্ছে…</h1>
+        <button class="today-jump" id="todayJump" type="button" aria-label="আজকের রোস্টারে যান">লোড হচ্ছে…</button>
       </div>
       <div class="intro-meta">
         <span>UPDATED</span>
@@ -149,7 +149,10 @@ function render(){
   const cols=Math.max(days.length,1);
   const gridStyle='grid-template-columns:repeat('+cols+',minmax(78px,1fr));';
 
-  $('month').textContent=DATA.month||'Duty Roster';
+  const todayDateObj=new Date(now+'T12:00:00');
+  const todayLabel=todayDateObj.toLocaleDateString('bn-BD',{day:'numeric',month:'long',year:'numeric'});
+  $('todayJump').textContent=todayLabel;
+  $('todayJump').dataset.iso=now;
   $('updated').textContent=timeLabel(DATA.updatedAt);
 
   $('legend').innerHTML=Object.entries(types).map(([k,v])=>
@@ -162,7 +165,7 @@ function render(){
     const dayNo=dateObj.getDay();
     const weekStart=dayNo===5;
     const weekEnd=dayNo===4;
-    return '<div class="day-head '+(isToday?'is-today ':'')+(weekStart?'week-start ':'')+(weekEnd?'week-end':'')+'">'+
+    return '<div class="day-head '+(isToday?'is-today ':'')+(weekStart?'week-start ':'')+(weekEnd?'week-end':'')+'" data-iso="'+esc(d.isoDate)+'">'+
       '<span>'+esc(d.weekday||'')+'</span>'+
       '<strong>'+esc(d.date||'')+'</strong>'+
       (isToday?'<em>আজ</em>':'')+
@@ -316,6 +319,17 @@ $('theme').onclick=()=>{
 };
 
 applyTheme();
+
+$('todayJump').onclick=()=>{
+  const iso=$('todayJump')?.dataset.iso||today();
+  const target=$('roster')?.querySelector('.day-head[data-iso="'+iso+'"]');
+  if(target){
+    target.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});
+    target.classList.add('today-jump-focus');
+    setTimeout(()=>target.classList.remove('today-jump-focus'),900);
+  }
+};
+
 load();
 // Recalculate live duty status as shift boundaries are crossed.
 setInterval(()=>{ if(DATA) render(); },30000);
