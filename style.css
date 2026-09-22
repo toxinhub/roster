@@ -1862,3 +1862,35 @@ body.dark .day-head.is-today{
     background:linear-gradient(180deg,#322a23,#29221d) !important;
   }
 }
+
+
+/* Minimal date separators */
+.day-head{
+  border-right:1px solid rgba(100,116,139,.22) !important;
+}
+.day-head:last-child{
+  border-right:0 !important;
+}
+.day-head + .day-head{
+  border-left:1px solid rgba(100,116,139,.10) !important;
+}
+body.dark .day-head{
+  border-right-color:rgba(148,163,184,.20) !important;
+}
+body.dark .day-head + .day-head{
+  border-left-color:rgba(148,163,184,.08) !important;
+}
+@media(max-width:900px){
+  .day-head{
+    border-right:1px solid rgba(100,116,139,.20) !important;
+  }
+  .day-head + .day-head{
+    border-left:1px solid rgba(100,116,139,.08) !important;
+  }
+  body.dark .day-head{
+    border-right-color:rgba(148,163,184,.18) !important;
+  }
+  body.dark .day-head + .day-head{
+    border-left-color:rgba(148,163,184,.07) !important;
+  }
+}
