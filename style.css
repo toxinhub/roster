@@ -1394,3 +1394,51 @@ body.dark .picker .shift-option{
       inset -2px 0 0 rgba(167,139,250,.15);
   }
 }
+
+/* Mobile visual step 4: cleaner row hierarchy and spacing */
+@media(max-width:900px){
+  .person{
+    padding-left:12px;
+    padding-right:9px;
+    gap:3px;
+  }
+  .person-name{
+    gap:5px;
+    line-height:1.05;
+  }
+  .person strong{
+    font-size:13.5px;
+    line-height:1.1;
+    letter-spacing:-.025em;
+  }
+  .duty-status{
+    gap:3px;
+    min-height:9px;
+  }
+  .duty-status b{
+    font-size:6.8px;
+    letter-spacing:.035em;
+  }
+  .name-active-dot{
+    width:6px;
+    height:6px;
+    flex-basis:6px;
+  }
+  .shift-cell{
+    padding:7px 5px;
+  }
+  .shift{
+    min-height:39px;
+    max-width:64px;
+    border-radius:9px;
+  }
+}
+@media(max-width:520px){
+  .person{
+    padding-left:9px;
+    padding-right:7px;
+  }
+  .person strong{font-size:13px}
+  .duty-status b{font-size:6.6px}
+  .shift{max-width:62px;min-height:38px}
+}
