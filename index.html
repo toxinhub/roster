@@ -258,31 +258,40 @@ function render(){
         : 'ON DUTY - '+active.code;
       displayCode=active.code;
     }else{
-      // The 4-hour UPCOMING window applies ONLY when the employee is
-      // currently on an explicit OFF/LEAVE day and is approaching the
-      // next assigned shift after that OFF/LEAVE period.
       const currentCode=todayIndex>=0 ? (p.shifts?.[todayIndex]||'OFF') : 'OFF';
-      const isNoShiftDay=currentCode==='OFF'||currentCode==='L';
-      const hoursUntilNext=next?(next.startMs-nowMs)/(60*60000):Infinity;
+      const todayOccurrence=
+        todayIndex>=0&&['A','B','C'].includes(currentCode)
+          ? occurrence(todayIndex,currentCode)
+          : null;
 
-      if(isNoShiftDay&&next&&hoursUntilNext>0&&hoursUntilNext<=4){
+      // A future shift assigned for TODAY is UPCOMING until it starts.
+      // The 4-hour rule is not used for this case.
+      if(todayOccurrence&&nowMs<todayOccurrence.startMs){
         status='UPCOMING';
-        statusText='UPCOMING - '+next.code;
-        displayCode=next.code;
-      }else if(currentCode==='L'){
-        status='OFF';
-        statusText='LEAVE';
-        displayCode='L';
+        statusText='UPCOMING - '+todayOccurrence.code;
+        displayCode=todayOccurrence.code;
       }else{
-        // Normal gap between assigned shifts has no 4-hour rule.
-        // It remains OFF by default unless the current day is explicitly
-        // marked LEAVE.
-        status='OFF';
-        statusText='OFF';
-        displayCode='OFF';
+        // The 4-hour rule applies ONLY while the current calendar day
+        // is explicitly marked OFF or LEAVE.
+        const isNoShiftDay=currentCode==='OFF'||currentCode==='L';
+        const hoursUntilNext=next?(next.startMs-nowMs)/(60*60000):Infinity;
+
+        if(isNoShiftDay&&next&&hoursUntilNext>0&&hoursUntilNext<=4){
+          status='UPCOMING';
+          statusText='UPCOMING - '+next.code;
+          displayCode=next.code;
+        }else if(currentCode==='L'){
+          status='OFF';
+          statusText='LEAVE';
+          displayCode='L';
+        }else{
+          // A normal gap between assigned shifts remains OFF by default.
+          status='OFF';
+          statusText='OFF';
+          displayCode='OFF';
+        }
       }
     }
-
     const displayType=types[displayCode]||{};
     const statusColor=displayType.color||types.OFF?.color||'#64748b';
     const statusHtml='<span class="duty-status status-'+status.toLowerCase().replace(/\s+/g,'-')+(status==='ON DUTY'?' is-active':'')+'" style="--status-color:'+esc(statusColor)+'"><b>'+esc(statusText)+'</b></span>';
