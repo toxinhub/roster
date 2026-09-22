@@ -1713,3 +1713,67 @@ body.dark .person-row{
     outline:0 !important;
   }
 }
+
+/* Full roster — ultra-fine clean dividers */
+.day-grid .person-head,
+.day-grid .day-head,
+.person-row .person,
+.person-row .shift-cell{
+  border:0 !important;
+  border-right:1px solid rgba(148,163,184,.14) !important;
+  border-bottom:1px solid rgba(148,163,184,.14) !important;
+}
+.day-grid .person-head,
+.person-row .person{
+  border-left:0 !important;
+}
+.day-grid .day-head:last-child,
+.person-row .shift-cell:last-child{
+  border-right:0 !important;
+}
+.day-grid,
+.person-row{
+  border:0 !important;
+}
+.roster-wrap{
+  border:0 !important;
+}
+body.dark .day-grid .person-head,
+body.dark .day-grid .day-head,
+body.dark .person-row .person,
+body.dark .person-row .shift-cell{
+  border-right-color:rgba(148,163,184,.11) !important;
+  border-bottom-color:rgba(148,163,184,.11) !important;
+}
+
+/* Keep the same fine divider treatment on mobile */
+@media(max-width:900px){
+  .roster-wrap,
+  .day-grid,
+  .person-row{
+    border:0 !important;
+  }
+  .day-grid .person-head,
+  .day-grid .day-head,
+  .person-row .person,
+  .person-row .shift-cell{
+    border:0 !important;
+    border-right:1px solid rgba(148,163,184,.14) !important;
+    border-bottom:1px solid rgba(148,163,184,.14) !important;
+  }
+  .day-grid .person-head,
+  .person-row .person{
+    border-left:0 !important;
+  }
+  .day-grid .day-head:last-child,
+  .person-row .shift-cell:last-child{
+    border-right:0 !important;
+  }
+  body.dark .day-grid .person-head,
+  body.dark .day-grid .day-head,
+  body.dark .person-row .person,
+  body.dark .person-row .shift-cell{
+    border-right-color:rgba(148,163,184,.11) !important;
+    border-bottom-color:rgba(148,163,184,.11) !important;
+  }
+}
