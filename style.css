@@ -1176,3 +1176,24 @@ body.dark .picker .shift-option{
     min-height:50px;
   }
 }
+
+/* Today date shortcut */
+.today-jump{
+  appearance:none;
+  border:0;
+  background:none;
+  padding:0 0 3px;
+  margin:0;
+  color:inherit;
+  font:inherit;
+  font-weight:inherit;
+  line-height:1.1;
+  cursor:pointer;
+  text-decoration-line:underline;
+  text-decoration-thickness:1px;
+  text-underline-offset:5px;
+  text-decoration-color:color-mix(in srgb,currentColor 48%,transparent);
+}
+.today-jump:hover{text-decoration-color:currentColor}
+.today-jump:focus-visible{outline:2px solid color-mix(in srgb,currentColor 35%,transparent);outline-offset:4px;border-radius:4px}
+.day-head.today-jump-focus{outline:2px solid color-mix(in srgb,var(--accent,#2563eb) 55%,transparent);outline-offset:-2px}
