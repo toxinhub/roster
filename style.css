@@ -2546,3 +2546,24 @@ body.dark .duty-status b{
       linear-gradient(180deg,#0b1118 0%,#0d141c 100%) !important;
   }
 }
+
+
+/* Mobile: soft sunset-red glossy glow */
+@media(max-width:900px){
+  body{
+    background:
+      radial-gradient(260px 190px at 18% -2%,rgba(218,72,74,.18),transparent 72%),
+      radial-gradient(520px 260px at 18% 0%,rgba(239,111,83,.10),transparent 78%),
+      radial-gradient(460px 300px at 100% 0%,rgba(245,166,72,.08),transparent 72%),
+      linear-gradient(180deg,#edf0f2 0%,#e8ecef 100%) !important;
+  }
+}
+@media(max-width:900px){
+  body.dark{
+    background:
+      radial-gradient(260px 190px at 18% -2%,rgba(191,54,60,.22),transparent 72%),
+      radial-gradient(520px 260px at 18% 0%,rgba(194,76,62,.11),transparent 78%),
+      radial-gradient(460px 300px at 100% 0%,rgba(191,116,48,.08),transparent 72%),
+      linear-gradient(180deg,#0b1118 0%,#0d141c 100%) !important;
+  }
+}
