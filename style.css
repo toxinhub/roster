@@ -1737,3 +1737,46 @@ body.dark .day-head em{
 body.dark .day-head.is-today{
   background:linear-gradient(180deg,#22364a,#1b2c3c) !important;
 }
+
+
+/* Header row separation — distinct from OFF cells */
+.day-head{
+  background:linear-gradient(180deg,#dfe6ed,#e9eef3) !important;
+  border-right:1px solid #c7d1da !important;
+  border-bottom:2px solid #aebbc7 !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.78),0 2px 5px rgba(51,65,85,.08);
+}
+.day-head:last-child{border-right:0 !important}
+.day-head.is-today{
+  background:linear-gradient(180deg,#d5e1ec,#e2ebf2) !important;
+  border-bottom-color:#91a7ba !important;
+}
+body.dark .day-head{
+  background:linear-gradient(180deg,#1c2a38,#172431) !important;
+  border-right-color:#354656 !important;
+  border-bottom:2px solid #46596a !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.045),0 2px 7px rgba(0,0,0,.20);
+}
+body.dark .day-head.is-today{
+  background:linear-gradient(180deg,#23394d,#1c3041) !important;
+  border-bottom-color:#5b748b !important;
+}
+@media(max-width:900px){
+  .day-head{
+    background:linear-gradient(180deg,#e2e8ee,#ebeff3) !important;
+    border-right-color:#c9d2da !important;
+    border-bottom:2px solid #b2bec8 !important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.72),0 2px 5px rgba(51,65,85,.07);
+  }
+  .day-head.is-today{
+    background:linear-gradient(180deg,#d9e4ed,#e5edf3) !important;
+  }
+  body.dark .day-head{
+    background:linear-gradient(180deg,#1c2a38,#172431) !important;
+    border-right-color:#354656 !important;
+    border-bottom:2px solid #46596a !important;
+  }
+  body.dark .day-head.is-today{
+    background:linear-gradient(180deg,#23394d,#1c3041) !important;
+  }
+}
