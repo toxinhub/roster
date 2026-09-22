@@ -3460,3 +3460,23 @@ body.dark .board-head h2{
 body.dark .board-head h2{
   filter:drop-shadow(0 3px 5px rgba(0,0,0,.48)) !important;
 }
+
+
+/* Final roster title treatment — bold outlined drop shadow */
+.board-head h2{
+  font-weight:900 !important;
+  text-shadow:
+    0 1px 0 rgba(255,255,255,.9),
+    1px 0 0 rgba(31,41,55,.16),
+    -1px 0 0 rgba(31,41,55,.10),
+    0 2px 0 rgba(31,41,55,.16),
+    0 4px 7px rgba(31,41,55,.18) !important;
+  filter:none !important;
+}
+body.dark .board-head h2{
+  text-shadow:
+    1px 0 0 rgba(0,0,0,.42),
+    -1px 0 0 rgba(0,0,0,.28),
+    0 2px 0 rgba(0,0,0,.40),
+    0 4px 8px rgba(0,0,0,.46) !important;
+}
