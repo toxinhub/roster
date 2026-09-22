@@ -1865,3 +1865,31 @@ body.dark .shift-cell.week-end{
     min-width:0 !important;
   }
 }
+
+/* Mobile legend — wider and readable */
+@media(max-width:900px){
+  .legend{
+    gap:5px !important;
+  }
+  .legend span{
+    padding:4px 5px !important;
+    gap:3px !important;
+    font-size:8px !important;
+    line-height:1.2 !important;
+  }
+  .legend i{
+    width:6px !important;
+    height:6px !important;
+    flex:0 0 6px !important;
+  }
+  .legend b{
+    font-size:8px !important;
+    font-weight:800 !important;
+  }
+  .legend small{
+    font-size:7px !important;
+    line-height:1.2 !important;
+    overflow:visible !important;
+    text-overflow:clip !important;
+  }
+}
