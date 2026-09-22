@@ -1668,3 +1668,15 @@ body.dark .shift[style*="#CBD5E1"]{--c:#65727f !important}
       #0c1219;
   }
 }
+
+
+/* Light mode refinement — softer editorial background */
+@media(max-width:900px){
+  body:not(.dark){
+    background:
+      radial-gradient(circle at 14% 7%,rgba(239,68,68,.028),transparent 24%),
+      radial-gradient(circle at 88% 12%,rgba(245,158,11,.020),transparent 22%),
+      radial-gradient(circle at 50% 100%,rgba(59,130,246,.014),transparent 32%),
+      #eef1f4;
+  }
+}
