@@ -1362,3 +1362,35 @@ body.dark .picker .shift-option{
     color:#111827 !important;
   }
 }
+
+/* Mobile visual step 3: clear Today column focus — static and lightweight */
+@media(max-width:900px){
+  .day-head.is-today{
+    position:relative;
+    z-index:2;
+    box-shadow:
+      inset 2px 0 0 rgba(139,92,246,.22),
+      inset -2px 0 0 rgba(139,92,246,.22),
+      inset 0 2px 0 rgba(139,92,246,.38),
+      inset 0 -1px 0 rgba(139,92,246,.12);
+  }
+  .shift-cell.is-today{
+    position:relative;
+    z-index:1;
+    box-shadow:
+      inset 2px 0 0 rgba(139,92,246,.12),
+      inset -2px 0 0 rgba(139,92,246,.12);
+  }
+  body.dark .day-head.is-today{
+    box-shadow:
+      inset 2px 0 0 rgba(167,139,250,.26),
+      inset -2px 0 0 rgba(167,139,250,.26),
+      inset 0 2px 0 rgba(167,139,250,.42),
+      inset 0 -1px 0 rgba(167,139,250,.14);
+  }
+  body.dark .shift-cell.is-today{
+    box-shadow:
+      inset 2px 0 0 rgba(167,139,250,.15),
+      inset -2px 0 0 rgba(167,139,250,.15);
+  }
+}
