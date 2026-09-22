@@ -1630,3 +1630,22 @@ body.dark .shift[style*="#CBD5E1"]{--c:#65727f !important}
     z-index:1;
   }
 }
+
+
+/* Mobile background palette — Light/Dark atmospheric version */
+@media(max-width:900px){
+  body:not(.dark){
+    background:
+      radial-gradient(circle at 14% 7%,rgba(248,113,113,.075),transparent 25%),
+      radial-gradient(circle at 88% 12%,rgba(245,158,11,.052),transparent 23%),
+      radial-gradient(circle at 50% 100%,rgba(96,165,250,.035),transparent 34%),
+      #f4f6f8;
+  }
+  body.dark{
+    background:
+      radial-gradient(circle at 14% 7%,rgba(185,92,98,.075),transparent 25%),
+      radial-gradient(circle at 88% 12%,rgba(181,138,53,.045),transparent 23%),
+      radial-gradient(circle at 50% 100%,rgba(59,91,128,.035),transparent 36%),
+      #0b1118;
+  }
+}
