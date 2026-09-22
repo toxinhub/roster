@@ -1222,3 +1222,38 @@ body.dark .info-item small{color:#aeb9c4 !important}
       0 0 38px color-mix(in srgb,var(--status-color,#64748b) 34%,transparent);
   }
 }
+
+
+/* Active duty dot — wider, softer glow spread */
+.name-active-dot{
+  width:5px !important;
+  height:5px !important;
+  box-shadow:
+    0 0 0 2px color-mix(in srgb,var(--status-color,#64748b) 18%,transparent),
+    0 0 12px color-mix(in srgb,var(--status-color,#64748b) 92%,transparent),
+    0 0 26px color-mix(in srgb,var(--status-color,#64748b) 64%,transparent),
+    0 0 44px color-mix(in srgb,var(--status-color,#64748b) 42%,transparent),
+    0 0 64px color-mix(in srgb,var(--status-color,#64748b) 22%,transparent) !important;
+}
+@keyframes activeDutyPulse{
+  0%,100%{
+    opacity:.76;
+    transform:scale(.9);
+    box-shadow:
+      0 0 0 2px color-mix(in srgb,var(--status-color,#64748b) 15%,transparent),
+      0 0 10px color-mix(in srgb,var(--status-color,#64748b) 78%,transparent),
+      0 0 22px color-mix(in srgb,var(--status-color,#64748b) 50%,transparent),
+      0 0 40px color-mix(in srgb,var(--status-color,#64748b) 32%,transparent),
+      0 0 58px color-mix(in srgb,var(--status-color,#64748b) 18%,transparent);
+  }
+  50%{
+    opacity:1;
+    transform:scale(1.06);
+    box-shadow:
+      0 0 0 2px color-mix(in srgb,var(--status-color,#64748b) 22%,transparent),
+      0 0 14px color-mix(in srgb,var(--status-color,#64748b) 100%,transparent),
+      0 0 30px color-mix(in srgb,var(--status-color,#64748b) 70%,transparent),
+      0 0 50px color-mix(in srgb,var(--status-color,#64748b) 44%,transparent),
+      0 0 72px color-mix(in srgb,var(--status-color,#64748b) 24%,transparent);
+  }
+}
