@@ -1051,3 +1051,14 @@ body.dark .info-item small{color:#aeb9c4 !important}
   .info-item small{font-size:9px !important}
   footer,.site-footer{font-size:10px !important}
 }
+
+/* Upcoming Duty — larger desktop text */
+@media(min-width:901px){
+  .upcoming-head h2{font-size:20px !important}
+  .info-person strong{font-size:17px !important}
+  .info-person span.current-shift{font-size:10px !important}
+  .info-person span.current-shift b{font-size:11px !important}
+  .info-label{font-size:10px !important}
+  .info-item b{font-size:16px !important}
+  .info-item small{font-size:10px !important}
+}
