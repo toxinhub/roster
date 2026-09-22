@@ -1200,9 +1200,9 @@ body.dark .picker .shift-option{
   height:1px;
   margin-top:0;
   background:currentColor;
-  opacity:.5;
+  opacity:.22;
   pointer-events:none;
 }
-.today-jump:hover::after{opacity:.76}
+.today-jump:hover::after{opacity:.38}
 .today-jump:focus-visible{outline:2px solid color-mix(in srgb,currentColor 35%,transparent);outline-offset:4px;border-radius:4px}
 .day-head.today-jump-focus{outline:2px solid color-mix(in srgb,var(--accent,#2563eb) 55%,transparent);outline-offset:-2px}
