@@ -3889,3 +3889,22 @@ body.dark .day-head.is-today{
   .upcoming-info .info-item b{font-size:17px !important}
   .upcoming-info .info-item small{font-size:12px !important}
 }
+
+
+/* Desktop typography — final readability increase */
+@media(min-width:901px){
+  .board-head h2{font-size:23px !important}
+  .day-head strong{font-size:16px !important}
+  .day-head span{font-size:14px !important}
+  .day-head em{font-size:12px !important}
+  .person strong{font-size:17px !important}
+  .duty-status b{font-size:9px !important;letter-spacing:.045em !important}
+  .shift{font-size:17px !important;font-weight:900 !important}
+  .legend span{font-size:13px !important}
+  .upcoming-info .upcoming-head h2{font-size:21px !important}
+  .upcoming-info .info-person strong{font-size:18px !important}
+  .upcoming-info .current-shift{font-size:14px !important}
+  .upcoming-info .info-label{font-size:12px !important}
+  .upcoming-info .info-item b{font-size:18px !important}
+  .upcoming-info .info-item small{font-size:13px !important}
+}
