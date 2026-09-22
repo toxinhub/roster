@@ -1336,3 +1336,29 @@ body.dark .picker .shift-option{
       inset 0 1px 0 rgba(255,255,255,.055);
   }
 }
+
+
+/* Mobile shift cards: stronger colors + black labels */
+@media(max-width:900px){
+  .shift{
+    border-color:color-mix(in srgb,var(--c) 82%,#fff);
+    background:color-mix(in srgb,var(--c) 62%,#fff);
+    color:#111827;
+    box-shadow:
+      0 3px 10px color-mix(in srgb,var(--c) 18%,transparent),
+      inset 0 1px 0 rgba(255,255,255,.52);
+  }
+  .shift b,
+  .shift small{
+    color:#111827 !important;
+  }
+  body.dark .shift{
+    border-color:color-mix(in srgb,var(--c) 70%,#263341);
+    background:color-mix(in srgb,var(--c) 40%,#111a24);
+    color:#111827;
+  }
+  body.dark .shift b,
+  body.dark .shift small{
+    color:#111827 !important;
+  }
+}
