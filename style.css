@@ -2017,3 +2017,50 @@ body.dark .day-head.is-today{
     background:linear-gradient(180deg,#254438,#1e362c) !important;
   }
 }
+
+
+/* Softer dark-green roster header */
+.day-head{
+  background:linear-gradient(180deg,#e0e9e4,#e8efeb) !important;
+  border-right-color:#c9d5cf !important;
+  border-bottom-color:#b6c6be !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.78),0 2px 5px rgba(37,78,59,.055);
+}
+.day-head.is-today{
+  background:linear-gradient(180deg,#d9e5df,#e3ece7) !important;
+  border-bottom-color:#a9bdb2 !important;
+}
+.day-head strong{color:#315544 !important}
+.day-head span{color:#71877b !important}
+.day-head em{
+  background:rgba(46,91,69,.075) !important;
+  color:#587366 !important;
+  border-color:rgba(46,91,69,.10) !important;
+}
+body.dark .day-head{
+  background:linear-gradient(180deg,#21382e,#1c2f27) !important;
+  border-right-color:#3a5146 !important;
+  border-bottom-color:#50685b !important;
+}
+body.dark .day-head.is-today{
+  background:linear-gradient(180deg,#29473a,#22392f) !important;
+  border-bottom-color:#617b6d !important;
+}
+@media(max-width:900px){
+  .day-head{
+    background:linear-gradient(180deg,#e0e9e4,#e8efeb) !important;
+    border-right-color:#c9d5cf !important;
+    border-bottom-color:#b6c6be !important;
+  }
+  .day-head.is-today{
+    background:linear-gradient(180deg,#d9e5df,#e3ece7) !important;
+  }
+  body.dark .day-head{
+    background:linear-gradient(180deg,#21382e,#1c2f27) !important;
+    border-right-color:#3a5146 !important;
+    border-bottom-color:#50685b !important;
+  }
+  body.dark .day-head.is-today{
+    background:linear-gradient(180deg,#29473a,#22392f) !important;
+  }
+}
