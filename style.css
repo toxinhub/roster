@@ -2170,3 +2170,20 @@ body.dark .person{
     border-right-color:#34453d !important;
   }
 }
+
+
+/* Minimal horizontal dividers between name cells */
+.person{
+  border-right:1px solid #c6d0cb !important;
+  border-bottom:1px solid #d3dbd7 !important;
+}
+.person:last-child{
+  border-bottom:0 !important;
+}
+body.dark .person{
+  border-right-color:#34453d !important;
+  border-bottom-color:#2c3b34 !important;
+}
+body.dark .person:last-child{
+  border-bottom:0 !important;
+}
