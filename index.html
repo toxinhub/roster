@@ -88,6 +88,34 @@ async function load(){
   }
 }
 
+function updateTodayRemaining(){
+  const btn=$('todayJump');
+  if(!btn) return;
+
+  const now=new Date();
+  const parts=new Intl.DateTimeFormat('en-GB',{
+    timeZone:'Asia/Dhaka',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false
+  }).formatToParts(now);
+  const part=k=>parts.find(x=>x.type===k)?.value||'00';
+  const h=Number(part('hour')),m=Number(part('minute')),s=Number(part('second'));
+  const elapsed=(h*3600)+(m*60)+s;
+  const total=24*3600;
+  const remaining=Math.max(0,total-elapsed);
+  const rh=Math.floor(remaining/3600);
+  const rm=Math.floor((remaining%3600)/60);
+  const rs=remaining%60;
+
+  const label=rh+' ঘণ্টা '+rm+' মিনিট';
+  const exact=rh+' ঘণ্টা '+rm+' মিনিট '+rs+' সেকেন্ড';
+  const remainingEl=$('todayRemaining');
+  const progressEl=$('todayProgress');
+  if(remainingEl) remainingEl.textContent=label;
+  if(progressEl) progressEl.style.width=((remaining/total)*100).toFixed(3)+'%';
+
+  btn.title='আজকের দিন শেষ হতে বাকি '+exact;
+  btn.setAttribute('aria-label','আজকের দিন শেষ হতে বাকি '+exact);
+}
+
 function render(){
   const days=DATA.days||[];
   const people=DATA.employees||[];
@@ -98,8 +126,9 @@ function render(){
 
   const todayDateObj=new Date(now+'T12:00:00');
   const todayLabel=todayDateObj.toLocaleDateString('bn-BD',{day:'numeric',month:'long',year:'numeric'}).replace(/\s*,\s*/g,' ');
-  $('todayJump').textContent=todayLabel;
+  $('todayJump').innerHTML='<span class="today-jump-date">'+esc(todayLabel)+'</span><span class="today-jump-info" aria-hidden="true"><b id="todayRemaining">—</b><small>দিন শেষ হতে বাকি</small><i class="today-progress"><em id="todayProgress"></em></i></span>';
   $('todayJump').dataset.iso=now;
+  updateTodayRemaining();
   $('updated').textContent=timeLabel(DATA.updatedAt);
 
   $('legend').innerHTML=Object.entries(types).map(([k,v])=>
@@ -307,6 +336,7 @@ if(rosterEl){
     rosterScrollTimer=setTimeout(()=>{rosterScrolling=false},200);
   },{passive:true});
 }
+setInterval(()=>{ updateTodayRemaining(); },1000);
 setInterval(()=>{ if(DATA&&!rosterScrolling) render(); },30000);
 
 (function(){
