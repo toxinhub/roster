@@ -3334,3 +3334,39 @@ body.dark .shift{
     -webkit-transform:none;
   }
 }
+
+
+/* Mobile roster stability pass — keep horizontal scrolling native and avoid costly repaints */
+@media(max-width:900px){
+  html,body{
+    overflow-x:hidden !important;
+  }
+  .roster-wrap{
+    overflow-x:auto !important;
+    overflow-y:hidden !important;
+    scroll-behavior:auto !important;
+    -webkit-overflow-scrolling:touch !important;
+    touch-action:pan-x !important;
+    overscroll-behavior-x:contain !important;
+    contain:none !important;
+    transform:none !important;
+    -webkit-transform:none !important;
+    will-change:scroll-position !important;
+  }
+
+  /* Do not repaint the large page-wide effects while the roster is being dragged */
+  body::before,
+  body::after{
+    animation-play-state:paused !important;
+  }
+  .roster-wrap,
+  .roster-wrap .board{
+    backdrop-filter:none !important;
+    -webkit-backdrop-filter:none !important;
+  }
+
+  /* Prevent accidental nested horizontal scrolling */
+  .roster-wrap .board{
+    overflow:visible !important;
+  }
+}
