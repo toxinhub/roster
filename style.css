@@ -1893,3 +1893,47 @@ body.dark .shift-cell.week-end{
     text-overflow:clip !important;
   }
 }
+
+/* Header — extra minimal mobile treatment */
+@media(max-width:900px){
+  .topbar{
+    min-height:44px !important;
+    height:44px !important;
+    padding:0 12px !important;
+    box-shadow:0 3px 10px rgba(16,24,40,.06) !important;
+  }
+  .brand{
+    gap:6px !important;
+  }
+  .brand-mark{
+    width:22px !important;
+    height:22px !important;
+    font-size:11px !important;
+  }
+  .brand-copy strong{
+    font-size:12px !important;
+    font-weight:800 !important;
+    letter-spacing:-.02em !important;
+  }
+  .top-actions{
+    gap:5px !important;
+  }
+  .status-live{
+    font-size:7px !important;
+    padding:3px 6px !important;
+    gap:3px !important;
+  }
+  .status-live i{
+    width:4px !important;
+    height:4px !important;
+  }
+  .icon-btn{
+    width:27px !important;
+    height:27px !important;
+    font-size:13px !important;
+  }
+  .admin-link{
+    font-size:8px !important;
+    padding:4px 6px !important;
+  }
+}
