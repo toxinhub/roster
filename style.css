@@ -3694,3 +3694,14 @@ background:#28233a !important;
     font-size:10px !important;
   }
 }
+/* Mobile — exact updated timestamp sizing */
+@media(max-width:900px){
+  #updated{
+    font-size:6px !important;
+  }
+
+  .updated-badge,
+  .updated-label{
+    font-size:8px !important;
+  }
+}
