@@ -3972,3 +3972,15 @@ background:#28233a !important;
     color:#cbd5e1 !important;
   }
 }
+/* Mobile — make active legend text visibly bold on phone rendering */
+@media(max-width:900px){
+  .legend span.active-shift b{
+    font-weight:900 !important;
+    -webkit-text-stroke:.18px currentColor;
+    text-shadow:none !important;
+  }
+  .legend span.active-shift small{
+    font-weight:800 !important;
+    -webkit-text-stroke:.08px currentColor;
+  }
+}
