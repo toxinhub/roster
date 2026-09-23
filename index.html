@@ -159,7 +159,7 @@ function render(){
       const weekStart=dayNo===5;
       const weekEnd=dayNo===4;
       return '<div class="shift-cell '+(isToday?'is-today ':'')+(weekStart?'week-start ':'')+(weekEnd?'week-end':'')+'">'+
-        '<span class="shift '+(code==='B'?'shift-b':'')+'" style="--c:'+esc(type.color||'#64748b')+'">'+
+        '<span class="shift shift-'+String(code).toLowerCase()+'" style="--c:'+esc(type.color||'#64748b')+'">'+
           '<b>'+esc(code)+'</b>'+
         '</span>'+
       '</div>';
