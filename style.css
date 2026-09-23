@@ -3040,16 +3040,14 @@ background:#28233a !important;
   }
 
   /* Mobile C indicator: dim red → vivid red → dim red. The C text stays visible. */
-  @supports (animation-name:cctvMarkPulse){
-    .brand-mark{
-      background-color:#7f1d1d !important;
-      animation:cctvMarkPulse 3.2s ease-in-out infinite;
-    }
+  .brand-mark{
+    background:#7f1d1d !important;
+    animation:cctvMarkPulse 3.2s ease-in-out infinite !important;
+  }
 
-    @keyframes cctvMarkPulse{
-      0%,100%{background-color:#7f1d1d;}
-      50%{background-color:#ef4444;}
-    }
+  @keyframes cctvMarkPulse{
+    0%,100%{background:#7f1d1d;}
+    50%{background:#ef4444;}
   }
 
   .brand-copy{
