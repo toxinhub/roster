@@ -3485,3 +3485,36 @@ background:#28233a !important;
   0%,100%{background-color:#7f1d1d;}
   50%{background-color:#dc2626;}
 }
+
+
+/* Desktop — balanced Today date pill */
+@media(min-width:901px){
+  .today-jump{
+    --day-remaining:100%;
+    min-height:32px;
+    height:32px;
+    padding:6px 13px !important;
+    border-radius:999px !important;
+    font-size:13px !important;
+    font-weight:850 !important;
+    letter-spacing:.025em !important;
+    line-height:1 !important;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    white-space:nowrap;
+    -webkit-tap-highlight-color:transparent;
+    touch-action:manipulation;
+    box-shadow:0 5px 16px rgba(15,23,42,.07) !important;
+  }
+
+  .today-jump::after{
+    inset:-1.5px;
+    padding:1.5px;
+    border-radius:inherit;
+  }
+
+  .today-jump:active{
+    transform:scale(.985) !important;
+  }
+}
