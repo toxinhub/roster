@@ -3295,10 +3295,10 @@ background:#28233a !important;
 }
 
 @media(min-width:901px){
-  /* Desktop — balanced 1.5-inch side spacing */
+  /* Desktop — responsive side spacing, matched to header */
   main,
   footer{
-    width:calc(100% - 3in);
+    width:calc(100% - clamp(48px, 14vw, 288px));
     max-width:none;
     margin-left:auto;
     margin-right:auto;
