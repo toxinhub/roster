@@ -3161,7 +3161,7 @@ background:#28233a !important;
   }
   /* Mobile C switch: dim red → vivid red → dim red */
   .brand-mark{
-    animation:cctvRedSwitch 3s ease-in-out infinite;
+    animation:cctvRedSwitch 5s ease-in-out infinite;
   }
 
   @keyframes cctvRedSwitch{
