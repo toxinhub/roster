@@ -3138,11 +3138,6 @@ background:#28233a !important;
     outline-offset:2px;
   }
 
-  body.dark .brand-mark{
-    background:
-      linear-gradient(135deg,rgba(255,255,255,.065),rgba(255,255,255,.025) 48%,rgba(59,130,246,.045)) !important;
-  }
-
   body.dark .topbar{
     background:
       linear-gradient(135deg,rgba(255,255,255,.065),rgba(255,255,255,.025) 48%,rgba(59,130,246,.045));
