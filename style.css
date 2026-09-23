@@ -4229,3 +4229,9 @@ body.dark .picker .shift-l{background:linear-gradient(145deg,rgba(164,36,59,.30)
     padding-right:10px !important;
   }
 }
+
+
+/* Mobile — legend item gap 5px */
+@media(max-width:900px){
+  .legend{column-gap:5px !important;}
+}
