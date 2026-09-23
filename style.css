@@ -84,7 +84,7 @@ font-weight:800
 }
 
  main{
-max-width:1440px;margin:0 auto;padding:42px 18px 18px
+max-width:1280px;margin:0 auto;padding:20px 24px 28px
 }
 
  .intro{
@@ -265,7 +265,7 @@ font-size:8px;font-weight:850;opacity:.82;white-space:nowrap
 }
 
  footer{
-max-width:1440px;margin:0 auto;padding:11px 18px 18px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:2px;color:#aeb6be;font-size:6px;font-weight:400;line-height:1.25;letter-spacing:.01em
+max-width:1280px;margin:0 auto;padding:11px 24px 18px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:2px;color:#aeb6be;font-size:6px;font-weight:400;line-height:1.25;letter-spacing:.01em
 }
 footer .fun-footer{
 opacity:.72
@@ -3295,10 +3295,10 @@ background:#28233a !important;
 }
 
 @media(min-width:901px){
-  /* Desktop — slightly narrower main roster body */
+  /* Desktop — balanced content width */
   main,
   footer{
-    max-width:1360px;
+    max-width:1280px;
   }
 }
 
@@ -3310,8 +3310,8 @@ background:#28233a !important;
 /* Desktop — canonical header (single source of truth) */
 @media(min-width:901px){
   .topbar{
-    height:70px !important;
-    padding:0 max(24px,calc((100vw - 1360px)/2)) !important;
+    height:64px !important;
+    padding:0 max(24px,calc((100vw - 1280px)/2)) !important;
     position:relative;
     z-index:5;
     overflow:hidden;
@@ -3360,9 +3360,9 @@ background:#28233a !important;
 
   .brand-mark{
     position:relative;
-    width:36px !important;
-    height:36px !important;
-    flex:0 0 36px;
+    width:34px !important;
+    height:34px !important;
+    flex:0 0 34px;
     border-radius:9px !important;
     color:#fff;
     font-size:16px !important;
@@ -3430,7 +3430,7 @@ background:#28233a !important;
 
   .icon-btn,
   .admin-link{
-    min-height:36px !important;
+    min-height:34px !important;
     border-radius:10px !important;
     border:1px solid rgba(255,255,255,.15) !important;
     background:rgba(25,35,52,.72) !important;
@@ -3442,13 +3442,13 @@ background:#28233a !important;
   }
 
   .icon-btn{
-    width:36px !important;
+    width:34px !important;
     padding:0 !important;
     font-size:16px !important;
   }
 
   .admin-link{
-    padding:8px 12px !important;
+    padding:7px 11px !important;
     font-size:11px !important;
     font-weight:850 !important;
   }
