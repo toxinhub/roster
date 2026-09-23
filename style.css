@@ -4241,3 +4241,10 @@ body.dark .picker .shift-l{background:linear-gradient(145deg,rgba(164,36,59,.30)
 @media(max-width:900px){
   .board{margin-left:5px !important;margin-right:5px !important;}
 }
+
+
+/* Mobile — narrow roster frame to screen edges */
+@media(max-width:900px){
+  main{padding-left:5px !important;padding-right:5px !important;}
+  .board{margin-left:0 !important;margin-right:0 !important;}
+}
