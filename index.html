@@ -119,7 +119,7 @@ function render(){
   $('updated').textContent=timeLabel(DATA.updatedAt);
 
   $('legend').innerHTML=Object.entries(types).map(([k,v])=>
-    '<span><i style="--c:'+esc(v.color||'#64748b')+'"></i><b>'+esc(k)+'</b><small><span class="legend-sep" aria-hidden="true"></span>'+esc(v.note||'')+'</small></span>'
+    '<span><i style="--c:'+esc(v.color||'#64748b')+'"></i><b>'+esc(k)+'</b><small> · '+esc(v.note||'')+'</small></span>'
   ).join('');
 
   const head=days.map(d=>{
