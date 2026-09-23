@@ -4021,3 +4021,77 @@ background:#28233a !important;
     max-width:1360px;
   }
 }
+
+
+/* Desktop — balanced header using the mobile header's core features */
+@media(min-width:901px){
+  .topbar{
+    height:70px;
+    padding:0 max(24px,calc((100vw - 1360px)/2));
+    background:#141f31;
+    border-bottom:1px solid rgba(255,255,255,.12);
+    box-shadow:0 10px 28px rgba(16,24,40,.16);
+    backdrop-filter:none;
+    -webkit-backdrop-filter:none;
+  }
+
+  .brand{
+    gap:12px;
+  }
+
+  .brand-mark{
+    width:36px;
+    height:36px;
+    border-radius:9px;
+    font-size:16px;
+    font-weight:950;
+    animation:cctvRedSwitchDesktop 5s ease-in-out infinite;
+  }
+
+  .brand-copy strong{
+    font-size:14px;
+    line-height:1.1;
+    letter-spacing:.02em;
+  }
+
+  .top-actions{
+    gap:9px;
+  }
+
+  .status-live{
+    font-size:9px;
+    gap:6px;
+    margin-right:2px;
+  }
+
+  .icon-btn,
+  .admin-link{
+    min-height:36px;
+    border-radius:9px;
+    background:#192334;
+    border-color:#344052;
+  }
+
+  .icon-btn{
+    width:36px;
+    padding:0;
+    font-size:16px;
+  }
+
+  .admin-link{
+    padding:8px 12px;
+    font-size:11px;
+    font-weight:850;
+  }
+
+  body.dark .topbar{
+    background:#111827;
+    border-bottom-color:rgba(255,255,255,.10);
+    box-shadow:0 10px 28px rgba(0,0,0,.24);
+  }
+}
+
+@keyframes cctvRedSwitchDesktop{
+  0%,100%{background-color:#7f1d1d;}
+  50%{background-color:#dc2626;}
+}
