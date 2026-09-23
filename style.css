@@ -4243,8 +4243,8 @@ body.dark .picker .shift-l{background:linear-gradient(145deg,rgba(164,36,59,.30)
 }
 
 
-/* Mobile — narrow roster frame to screen edges */
+/* Mobile — 2px roster frame side gap */
 @media(max-width:900px){
-  main{padding-left:5px !important;padding-right:5px !important;}
+  main{padding-left:2px !important;padding-right:2px !important;}
   .board{margin-left:0 !important;margin-right:0 !important;}
 }
