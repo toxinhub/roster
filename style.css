@@ -3266,3 +3266,17 @@ background:#28233a !important;
     clip-path:inset(0 round 11px);
   }
 }
+
+
+/* Mobile — restore the Today pill's 24-hour progress ring */
+@media(max-width:900px){
+  .today-jump{
+    overflow:visible !important;
+    clip-path:none !important;
+    -webkit-clip-path:none !important;
+  }
+
+  .today-jump::after{
+    z-index:2 !important;
+  }
+}
