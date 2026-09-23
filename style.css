@@ -3036,10 +3036,8 @@ background:#28233a !important;
     flex:0 0 31px;
     border-radius:10px;
     background:linear-gradient(145deg,#ff5b5b,#dc2626);
-    border:1px solid rgba(255,255,255,.20);
-    box-shadow:
-      0 5px 15px rgba(239,68,68,.22),
-      inset 0 1px 0 rgba(255,255,255,.35);
+    border:1px solid rgba(255,255,255,.16);
+    box-shadow:0 5px 15px rgba(239,68,68,.20);
     font-size:13px;
     letter-spacing:-.04em;
   }
@@ -3071,24 +3069,29 @@ background:#28233a !important;
   }
 
   .admin-link{
-    min-height:32px;
-    padding:6px 11px !important;
-    border-radius:10px;
-    border:1px solid rgba(255,255,255,.13);
-    background:linear-gradient(135deg,rgba(96,165,250,.13),rgba(255,255,255,.055));
-    color:#dbeafe;
-    font-size:10px !important;
-    font-weight:800;
-    letter-spacing:.01em;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-height:30px;
+    padding:0 10px !important;
+    border-radius:9px;
+    border:1px solid rgba(147,197,253,.18);
+    background:linear-gradient(135deg,rgba(96,165,250,.14),rgba(255,255,255,.045));
+    color:#e2ecf8;
+    font-size:9px !important;
+    font-weight:850;
+    letter-spacing:.025em;
     line-height:1;
+    white-space:nowrap;
     box-shadow:
-      inset 0 1px 0 rgba(255,255,255,.10),
-      0 3px 10px rgba(0,0,0,.08);
-    transition:transform .2s ease,background .2s ease,box-shadow .2s ease;
+      inset 0 1px 0 rgba(255,255,255,.07),
+      0 2px 8px rgba(0,0,0,.08);
+    transition:transform .18s ease,background .18s ease,box-shadow .18s ease;
   }
 
   .admin-link:active{
-    transform:scale(.96);
+    transform:scale(.97);
+    background:linear-gradient(135deg,rgba(96,165,250,.18),rgba(255,255,255,.06));
   }
 
   .icon-btn#theme{
