@@ -3241,3 +3241,28 @@ background:#28233a !important;
     touch-action:manipulation;
   }
 }
+
+
+/* Mobile — keep button visuals and touch feedback aligned */
+@media(max-width:900px){
+  .icon-btn,
+  .admin-link,
+  button,
+  [role="button"]{
+    -webkit-tap-highlight-color:transparent;
+    touch-action:manipulation;
+  }
+
+  .icon-btn,
+  .admin-link,
+  button{
+    overflow:hidden;
+    -webkit-clip-path:inset(0 round 10px);
+    clip-path:inset(0 round 10px);
+  }
+
+  .today-jump{
+    -webkit-clip-path:inset(0 round 11px);
+    clip-path:inset(0 round 11px);
+  }
+}
