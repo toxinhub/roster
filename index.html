@@ -132,7 +132,8 @@ function render(){
   $('legend').innerHTML=Object.entries(types).map(([k,v])=>{
     const note=(v.note||'').replace(/–/g,' - ');
     const active=k===activeShift?' active-shift':'';
-    return '<span class="'+active.trim()+'"><i style="--c:'+esc(v.color||'#64748b')+'"></i><b>'+esc(k)+'</b><small><strong class="legend-dash">·</strong>'+esc(note)+'</small></span>';
+    const tone=k==='B'?' shift-b':'';
+    return '<span class="'+(active+tone).trim()+'"><i style="--c:'+esc(v.color||'#64748b')+'"></i><b>'+esc(k)+'</b><small><strong class="legend-dash">·</strong>'+esc(note)+'</small></span>';
   }).join('');
 
   const head=days.map(d=>{
@@ -158,7 +159,7 @@ function render(){
       const weekStart=dayNo===5;
       const weekEnd=dayNo===4;
       return '<div class="shift-cell '+(isToday?'is-today ':'')+(weekStart?'week-start ':'')+(weekEnd?'week-end':'')+'">'+
-        '<span class="shift" style="--c:'+esc(type.color||'#64748b')+'">'+
+        '<span class="shift '+(code==='B'?'shift-b':'')+'" style="--c:'+esc(type.color||'#64748b')+'">'+
           '<b>'+esc(code)+'</b>'+
         '</span>'+
       '</div>';
