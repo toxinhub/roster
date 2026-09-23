@@ -3029,7 +3029,7 @@ background:#28233a !important;
     height:28px;
     flex:0 0 28px;
     border-radius:2px;
-    background:#dc2626 !important;
+    background:linear-gradient(135deg,rgba(16,24,40,.96),rgba(20,31,49,.92) 58%,rgba(31,24,40,.94)) !important;
     border:1px solid rgba(0,0,0,.18);
     box-shadow:none;
     font-size:13px;
@@ -3038,15 +3038,19 @@ background:#28233a !important;
     text-shadow:0 1px 1px rgba(0,0,0,.12);
   }
 
-  /* Native fallback: static header-red when animation is unsupported */
+  /* Smooth pulse: header color → deep red → header color */
   @supports (animation-name:cctvMarkPulse){
     .brand-mark{
       animation:cctvMarkPulse 3.6s ease-in-out infinite;
     }
 
     @keyframes cctvMarkPulse{
-      0%,100%{background:#dc2626 !important;}
-      50%{background:#7f1d1d !important;}
+      0%,100%{
+        background:linear-gradient(135deg,rgba(16,24,40,.96),rgba(20,31,49,.92) 58%,rgba(31,24,40,.94)) !important;
+      }
+      50%{
+        background:#7f1d1d !important;
+      }
     }
   }
 
