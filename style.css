@@ -3777,3 +3777,19 @@ background:#28233a !important;
     flex-basis:10px !important;
   }
 }
+/* Mobile — lift the currently active shift in the legend */
+@media(max-width:900px){
+  .legend span.active-shift{
+    transform:translateY(-3px);
+    filter:drop-shadow(0 3px 4px rgba(15,23,42,.18));
+    transition:transform .25s ease,filter .25s ease;
+  }
+
+  .legend span.active-shift i{
+    box-shadow:0 0 0 2px rgba(255,255,255,.9),0 0 8px var(--c);
+  }
+
+  .legend span.active-shift b{
+    font-weight:1000 !important;
+  }
+}
