@@ -207,10 +207,10 @@ min-height:68px;padding:10px 8px;display:flex;align-items:center;justify-content
 border-right:0
 }
 .day-head span{
-font-size:11px;color:#8a959f;font-weight:800
+font-size:11px;color:#8a959f;font-weight:400
 }
 .day-head strong{
-font-size:22px;line-height:1.1;letter-spacing:-.03em;font-weight:900
+font-size:22px;line-height:1.1;letter-spacing:-.03em;font-weight:400
 }
 .day-head em{
 position:absolute;top:7px;right:7px;font-style:normal;font-size:7px;font-weight:950;color:#4c7119;background:#e7f7c9;border-radius:99px;padding:2px 5px
@@ -238,7 +238,7 @@ gap:5px !important;
 .person strong{
 font-size:18px;
 letter-spacing:-.02em;
-font-weight:900;
+font-weight:400;
 display:block !important;
 line-height:1.15 !important;
 }
@@ -258,10 +258,10 @@ width:100%;max-width:104px;min-height:46px;padding:7px 10px;display:flex;align-i
 }
 
  .shift b{
-font-size:16px;font-weight:950;line-height:1;letter-spacing:.02em
+font-size:16px;font-weight:400;line-height:1;letter-spacing:.02em
 }
 .shift small{
-font-size:8px;font-weight:850;opacity:.82;white-space:nowrap
+font-size:8px;font-weight:400;opacity:.82;white-space:nowrap
 }
 
  footer{
