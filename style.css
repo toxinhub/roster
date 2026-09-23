@@ -3684,3 +3684,13 @@ background:#28233a !important;
     font-weight:900 !important;
   }
 }
+/* Mobile — slightly larger updated timestamp */
+@media(max-width:900px){
+  .updated,
+  .update-time,
+  #updated,
+  #updatedAt,
+  .last-updated{
+    font-size:10px !important;
+  }
+}
