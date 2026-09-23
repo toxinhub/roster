@@ -3477,3 +3477,13 @@ background:#28233a !important;
     align-self:center !important;
   }
 }
+
+
+/* Mobile — slightly larger legend color dots */
+@media(max-width:900px){
+  .legend i{
+    width:7px !important;
+    height:7px !important;
+    flex:0 0 7px !important;
+  }
+}
