@@ -3949,3 +3949,26 @@ background:#28233a !important;
     transform:none !important;
   }
 }
+/* Mobile — make the active shift visibly clearer, still subtle */
+@media(max-width:900px){
+  .legend span.active-shift b{
+    font-size:9.5px !important;
+    font-weight:1000 !important;
+    color:#0f172a !important;
+  }
+
+  .legend span.active-shift small{
+    font-size:7px !important;
+    font-weight:900 !important;
+    color:#475569 !important;
+    opacity:1 !important;
+  }
+
+  body.dark .legend span.active-shift b{
+    color:#f8fafc !important;
+  }
+
+  body.dark .legend span.active-shift small{
+    color:#cbd5e1 !important;
+  }
+}
