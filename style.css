@@ -3281,3 +3281,50 @@ background:#28233a !important;
     z-index:2 !important;
   }
 }
+
+
+/* Mobile — larger, readable legend letters while keeping all 5 items on one line */
+@media(max-width:900px){
+  .legend{
+    display:grid !important;
+    grid-template-columns:repeat(5,minmax(0,1fr)) !important;
+    width:100% !important;
+    gap:3px !important;
+    align-items:center !important;
+    overflow:visible !important;
+    white-space:nowrap !important;
+  }
+
+  .legend span{
+    min-width:0 !important;
+    width:100% !important;
+    box-sizing:border-box !important;
+    justify-content:center !important;
+    padding:3px 2px !important;
+    gap:3px !important;
+    overflow:hidden !important;
+    white-space:nowrap !important;
+    font-size:8px !important;
+    line-height:1.1 !important;
+  }
+
+  .legend i{
+    width:6px !important;
+    height:6px !important;
+    flex:0 0 6px !important;
+  }
+
+  .legend b{
+    font-size:9px !important;
+    font-weight:900 !important;
+    flex:0 0 auto !important;
+    line-height:1 !important;
+  }
+
+  .legend small{
+    font-size:6.5px !important;
+    line-height:1 !important;
+    overflow:hidden !important;
+    text-overflow:clip !important;
+  }
+}
