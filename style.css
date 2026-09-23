@@ -3354,3 +3354,62 @@ background:#28233a !important;
     line-height:1.15 !important;
   }
 }
+
+
+/* Mobile — two-row shift legend for clear, unclipped information */
+@media(max-width:900px){
+  .legend{
+    display:grid !important;
+    grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+    grid-template-rows:repeat(2,auto) !important;
+    width:100% !important;
+    gap:5px !important;
+    align-items:stretch !important;
+    overflow:visible !important;
+  }
+
+  .legend span{
+    width:100% !important;
+    min-width:0 !important;
+    min-height:38px !important;
+    height:auto !important;
+    box-sizing:border-box !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    padding:5px 4px !important;
+    gap:4px !important;
+    overflow:visible !important;
+    white-space:nowrap !important;
+    line-height:1.1 !important;
+  }
+
+  .legend i{
+    width:7px !important;
+    height:7px !important;
+    flex:0 0 7px !important;
+  }
+
+  .legend b{
+    font-size:10px !important;
+    font-weight:900 !important;
+    line-height:1.1 !important;
+    flex:0 0 auto !important;
+  }
+
+  .legend small{
+    font-size:7px !important;
+    line-height:1.15 !important;
+    overflow:visible !important;
+    text-overflow:clip !important;
+    white-space:nowrap !important;
+  }
+
+  .legend span:nth-child(4){
+    grid-column:1;
+  }
+
+  .legend span:nth-child(5){
+    grid-column:2;
+  }
+}
