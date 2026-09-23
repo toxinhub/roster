@@ -3168,3 +3168,63 @@ background:#28233a !important;
   }
 
 }
+
+
+/* Mobile — compact Today pill with 24-hour progress outline */
+@media(max-width:900px){
+  .today-jump{
+    position:relative;
+    isolation:isolate;
+    min-height:30px;
+    padding:5px 12px !important;
+    border:1px solid rgba(239,68,68,.22) !important;
+    border-radius:11px !important;
+    background:rgba(255,255,255,.72) !important;
+    color:#334155 !important;
+    font-size:10px !important;
+    font-weight:800 !important;
+    letter-spacing:.025em !important;
+    line-height:1 !important;
+    box-shadow:0 4px 12px rgba(15,23,42,.07) !important;
+    backdrop-filter:none;
+    -webkit-backdrop-filter:none;
+  }
+
+  .today-jump::after{
+    content:"";
+    position:absolute;
+    inset:-2px;
+    padding:1px;
+    border-radius:inherit;
+    pointer-events:none;
+    z-index:-1;
+    background:conic-gradient(
+      from -90deg,
+      #ef4444 0 var(--day-remaining),
+      rgba(239,68,68,.13) var(--day-remaining) 100%
+    );
+    -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+    -webkit-mask-composite:xor;
+    mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+    mask-composite:exclude;
+  }
+
+  .today-jump:active{
+    transform:scale(.97) !important;
+  }
+
+  body.dark .today-jump{
+    background:#182235 !important;
+    border-color:rgba(248,113,113,.20) !important;
+    color:#e2e8f0 !important;
+    box-shadow:0 4px 12px rgba(0,0,0,.16) !important;
+  }
+
+  body.dark .today-jump::after{
+    background:conic-gradient(
+      from -90deg,
+      #f87171 0 var(--day-remaining),
+      rgba(248,113,113,.14) var(--day-remaining) 100%
+    );
+  }
+}
