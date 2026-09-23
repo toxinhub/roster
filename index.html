@@ -118,9 +118,12 @@ function render(){
   updateDateProgress();
   $('updated').textContent=timeLabel(DATA.updatedAt);
 
+  const dhakaHour=Number(new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Dhaka',hour:'2-digit',hour12:false}).format(new Date()));
+  const activeShift=dhakaHour>=6&&dhakaHour<14?'A':dhakaHour>=14&&dhakaHour<22?'B':'C';
   $('legend').innerHTML=Object.entries(types).map(([k,v])=>{
     const note=(v.note||'').replace(/–/g,' - ');
-    return '<span><i style="--c:'+esc(v.color||'#64748b')+'"></i><b>'+esc(k)+'</b><small><strong class="legend-dash">·</strong>'+esc(note)+'</small></span>';
+    const active=k===activeShift?' active-shift':'';
+    return '<span class="'+active.trim()+'"><i style="--c:'+esc(v.color||'#64748b')+'"></i><b>'+esc(k)+'</b><small><strong class="legend-dash">·</strong>'+esc(note)+'</small></span>';
   }).join('');
 
   const head=days.map(d=>{
