@@ -3035,8 +3035,8 @@ background:#28233a !important;
     height:31px;
     flex:0 0 31px;
     border-radius:7px;
-    background:#dc2626;
-    border:1px solid rgba(255,255,255,.10);
+    background:#7f1d1d !important;
+    border:1px solid rgba(0,0,0,.18);
     box-shadow:none;
     font-size:13px;
     letter-spacing:-.04em;
@@ -3044,8 +3044,8 @@ background:#28233a !important;
   }
 
   @keyframes cctvMarkPulse{
-    0%,100%{background:#d92121;}
-    50%{background:#ff4a4a;}
+    0%,100%{background:#7f1d1d !important;}
+    50%{background:#ef4444 !important;}
   }
 
   .brand-mark::after{
@@ -3163,9 +3163,7 @@ background:#28233a !important;
   }
 
   body.dark .topbar::before{
-    background:
-      radial-gradient(circle at 8% 0%,rgba(255,255,255,.09),transparent 30%),
-      radial-gradient(circle at 92% 100%,rgba(59,130,246,.07),transparent 34%);
+    background:none !important;
   }
 
   body.dark .admin-link{
