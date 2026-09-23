@@ -3487,3 +3487,17 @@ background:#28233a !important;
     flex:0 0 7px !important;
   }
 }
+
+
+/* Mobile — make legend color dots visibly larger and balanced */
+@media(max-width:900px){
+  .legend i{
+    width:8px !important;
+    height:8px !important;
+    min-width:8px !important;
+    min-height:8px !important;
+    flex:0 0 8px !important;
+    display:inline-block !important;
+    border-radius:50% !important;
+  }
+}
