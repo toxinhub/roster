@@ -3814,3 +3814,18 @@ background:#28233a !important;
     font-weight:900 !important;
   }
 }
+/* Mobile — active legend: clean lift only */
+@media(max-width:900px){
+  .legend span.active-shift{
+    transform:translateY(-3px);
+    filter:none !important;
+    padding:0 2px !important;
+    border:0 !important;
+    border-radius:0 !important;
+    background:transparent !important;
+    box-shadow:none !important;
+  }
+  .legend span.active-shift i{
+    box-shadow:none !important;
+  }
+}
