@@ -3006,13 +3006,7 @@ background:#28233a !important;
   }
 
   .topbar::before{
-    content:"";
-    position:absolute;
-    inset:0;
-    background:
-      radial-gradient(circle at 8% 0%,rgba(255,255,255,.14),transparent 30%),
-      radial-gradient(circle at 92% 100%,rgba(96,165,250,.07),transparent 34%);
-    pointer-events:none;
+    display:none;
   }
 
   .topbar::after{
@@ -3031,21 +3025,21 @@ background:#28233a !important;
 
   .brand-mark{
     position:relative;
-    width:31px;
-    height:31px;
-    flex:0 0 31px;
-    border-radius:7px;
-    background:#7f1d1d !important;
+    width:28px;
+    height:28px;
+    flex:0 0 28px;
+    border-radius:6px;
+    background:#dc2626 !important;
     border:1px solid rgba(0,0,0,.18);
     box-shadow:none;
-    font-size:13px;
+    font-size:12px;
     letter-spacing:-.04em;
     animation:cctvMarkPulse 3.8s ease-in-out infinite;
   }
 
   @keyframes cctvMarkPulse{
-    0%,100%{background:#7f1d1d !important;}
-    50%{background:#ef4444 !important;}
+    0%,100%{background:#dc2626 !important;}
+    50%{background:#7f1d1d !important;}
   }
 
   .brand-mark::after{
