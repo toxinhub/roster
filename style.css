@@ -3025,6 +3025,7 @@ background:#28233a !important;
 
   .brand-mark{
     position:relative;
+    isolation:isolate;
     width:28px;
     height:28px;
     flex:0 0 28px;
@@ -3038,19 +3039,37 @@ background:#28233a !important;
     text-shadow:0 1px 1px rgba(0,0,0,.12);
   }
 
-  /* Smooth pulse: header color → deep red → header color */
+  /* Supported browsers: smooth header-color → deep-red → header-color pulse. */
   @supports (animation-name:cctvMarkPulse){
     .brand-mark{
+      background:transparent !important;
+    }
+
+    .brand-mark::before,
+    .brand-mark::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      border-radius:inherit;
+      pointer-events:none;
+    }
+
+    .brand-mark::before{
+      z-index:-2;
+      background:linear-gradient(135deg,rgba(16,24,40,.96),rgba(20,31,49,.92) 58%,rgba(31,24,40,.94));
+    }
+
+    .brand-mark::after{
+      z-index:-1;
+      display:block;
+      background:#7f1d1d;
+      opacity:0;
       animation:cctvMarkPulse 3.6s ease-in-out infinite;
     }
 
     @keyframes cctvMarkPulse{
-      0%,100%{
-        background:linear-gradient(135deg,rgba(16,24,40,.96),rgba(20,31,49,.92) 58%,rgba(31,24,40,.94)) !important;
-      }
-      50%{
-        background:#7f1d1d !important;
-      }
+      0%,100%{opacity:0;}
+      50%{opacity:1;}
     }
   }
 
