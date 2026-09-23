@@ -92,14 +92,23 @@ function updateDateProgress(){
   const btn=$('todayJump');
   if(!btn) return;
 
-  const now=new Date();
   const parts=new Intl.DateTimeFormat('en-GB',{
-    timeZone:'Asia/Dhaka',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false
-  }).formatToParts(now);
-  const part=k=>parts.find(x=>x.type===k)?.value||'00';
-  const elapsed=Number(part('hour'))*3600+Number(part('minute'))*60+Number(part('second'));
-  const remaining=Math.max(0,86400-elapsed);
-  btn.style.setProperty('--day-remaining',((remaining/86400)*100).toFixed(3)+'%');
+    timeZone:'Asia/Dhaka',
+    hour:'2-digit',
+    minute:'2-digit',
+    second:'2-digit',
+    hour12:false
+  }).formatToParts(new Date());
+
+  const get=k=>Number(parts.find(x=>x.type===k)?.value||0);
+  let hour=get('hour');
+  if(hour===24) hour=0;
+
+  const elapsed=(hour*3600)+(get('minute')*60)+get('second');
+  const remaining=86400-elapsed;
+  const percent=Math.max(0,Math.min(100,(remaining/86400)*100));
+
+  btn.style.setProperty('--day-remaining',percent.toFixed(4)+'%');
 }
 
 function render(){
