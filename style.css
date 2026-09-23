@@ -3298,7 +3298,7 @@ background:#28233a !important;
   /* Desktop — responsive side spacing, matched to header */
   main,
   footer{
-    width:calc(100% - clamp(48px, 14vw, 288px));
+    width:calc(100% - clamp(40px, 10vw, 220px));
     max-width:none;
     margin-left:auto;
     margin-right:auto;
