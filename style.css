@@ -3031,7 +3031,7 @@ background:#28233a !important;
     flex:0 0 28px;
     border-radius:2px;
     font-size:13px;
-    font-weight:1000;
+    font-weight:1100;
     letter-spacing:-.05em;
     text-shadow:0 1px 1px rgba(0,0,0,.12);\n    background:#dc2626;\n    border:1px solid rgba(0,0,0,.18);\n    box-shadow:none;
   }
@@ -3161,7 +3161,7 @@ background:#28233a !important;
   }
   /* Mobile C switch: dim red → vivid red → dim red */
   .brand-mark{
-    animation:cctvRedSwitch 2.8s ease-in-out infinite;
+    animation:cctvRedSwitch 3s ease-in-out infinite;
   }
 
   @keyframes cctvRedSwitch{
