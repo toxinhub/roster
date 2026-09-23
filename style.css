@@ -3898,3 +3898,18 @@ background:#28233a !important;
     border-bottom:1px solid rgba(100,116,139,.32) !important;
   }
 }
+/* Mobile — remove active legend underline */
+@media(max-width:900px){
+  .legend span.active-shift{
+    transform:none !important;
+    border:0 !important;
+    padding:0 2px !important;
+    background:transparent !important;
+    box-shadow:none !important;
+    filter:none !important;
+  }
+  .legend span.active-shift::after{
+    display:none !important;
+    content:none !important;
+  }
+}
