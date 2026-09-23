@@ -3883,3 +3883,10 @@ background:#28233a !important;
     display:none !important;
   }
 }
+/* Mobile — place active legend underline directly against the legend */
+@media(max-width:900px){
+  .legend span.active-shift{
+    padding-bottom:0 !important;
+    border-bottom:1px solid rgba(100,116,139,.32) !important;
+  }
+}
