@@ -3295,7 +3295,7 @@ background:#28233a !important;
 }
 
 @media(min-width:901px){
-  /* Desktop — balanced 2-inch side spacing */
+  /* Desktop — balanced 1.5-inch side spacing */
   main,
   footer{
     width:calc(100% - 3in);
@@ -3303,11 +3303,6 @@ background:#28233a !important;
     margin-left:auto;
     margin-right:auto;
   }
-}
-
-
-
-  50%{background-color:#dc2626;}
 }
 
 /* Desktop — canonical header (single source of truth) */
