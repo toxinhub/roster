@@ -3711,3 +3711,12 @@ background:#28233a !important;
     font-size:8px !important;
   }
 }
+/* Mobile — enlarge Today time button */
+@media(max-width:900px){
+  .today-jump{
+    min-height:36px !important;
+    padding:7px 15px !important;
+    font-size:12px !important;
+    border-radius:12px !important;
+  }
+}
