@@ -3913,3 +3913,33 @@ background:#28233a !important;
     content:none !important;
   }
 }
+/* Mobile — refined active shift details */
+@media(max-width:900px){
+  .legend span.active-shift{
+    transform:none !important;
+    border:0 !important;
+    padding:0 2px !important;
+    background:transparent !important;
+    box-shadow:none !important;
+    filter:none !important;
+  }
+
+  .legend span.active-shift b{
+    font-weight:1000 !important;
+    transform:translateY(-1px);
+  }
+
+  .legend span.active-shift small{
+    opacity:1 !important;
+    color:#334155 !important;
+    font-weight:800 !important;
+  }
+
+  body.dark .legend span.active-shift small{
+    color:#e2e8f0 !important;
+  }
+
+  .legend span.active-shift i{
+    box-shadow:none !important;
+  }
+}
