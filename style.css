@@ -3228,3 +3228,16 @@ background:#28233a !important;
     );
   }
 }
+
+
+/* Mobile Today pill — keep visual and touch geometry identical */
+@media(max-width:900px){
+  .today-jump{
+    -webkit-appearance:none;
+    appearance:none;
+    overflow:hidden;
+    clip-path:inset(0 round 11px);
+    -webkit-tap-highlight-color:transparent;
+    touch-action:manipulation;
+  }
+}
