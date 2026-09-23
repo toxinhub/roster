@@ -3039,26 +3039,16 @@ background:#28233a !important;
     text-shadow:0 1px 1px rgba(0,0,0,.12);
   }
 
-  /* Supported browsers: header-color → deep-red → header-color, like a switch indicator. */
+  /* Mobile C indicator: dim red → vivid red → dim red. The C text stays visible. */
   @supports (animation-name:cctvMarkPulse){
     .brand-mark{
-      background:linear-gradient(135deg,rgba(16,24,40,.96),rgba(20,31,49,.92) 58%,rgba(31,24,40,.94)) !important;
-    }
-
-    .brand-mark::before{
-      content:"";
-      position:absolute;
-      inset:0;
-      border-radius:inherit;
-      pointer-events:none;
-      background:#7f1d1d;
-      opacity:0;
-      animation:cctvMarkPulse 3.6s ease-in-out infinite;
+      background-color:#7f1d1d !important;
+      animation:cctvMarkPulse 3.2s ease-in-out infinite;
     }
 
     @keyframes cctvMarkPulse{
-      0%,100%{opacity:0;}
-      50%{opacity:1;}
+      0%,100%{background-color:#7f1d1d;}
+      50%{background-color:#ef4444;}
     }
   }
 
