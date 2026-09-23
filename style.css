@@ -3935,3 +3935,11 @@ background:#28233a !important;
     background:#777;
   }
 }
+
+
+/* Desktop — B shift soft sage tone */
+@media (min-width:901px){
+  .shift-b{
+    --c:#8FAF9A !important;
+  }
+}
