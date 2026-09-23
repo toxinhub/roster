@@ -3102,7 +3102,55 @@ background:#28233a !important;
 }
 
 @media(min-width:901px){
-  /* Desktop — responsive side spacing, matched to header */
+  /* Desktop — balanced active-shift typography and updated metadata */
+@media(min-width:901px){
+  .legend span.active-shift{
+    position:relative;
+    transform:translateY(-1px);
+    transition:transform .22s ease,filter .22s ease;
+  }
+
+  .legend span.active-shift b{
+    font-size:9.5px !important;
+    font-weight:1000 !important;
+    -webkit-text-stroke:.18px currentColor;
+  }
+
+  .legend span.active-shift small{
+    font-size:8px !important;
+    font-weight:1000 !important;
+    -webkit-text-stroke:.08px currentColor;
+    opacity:1;
+  }
+
+  .legend span.active-shift i{
+    box-shadow:0 0 0 1.5px rgba(255,255,255,.72),0 0 7px color-mix(in srgb,var(--c) 35%,transparent);
+  }
+
+  body.dark .legend span.active-shift i{
+    box-shadow:0 0 0 1.5px rgba(255,255,255,.14),0 0 7px color-mix(in srgb,var(--c) 32%,transparent);
+  }
+
+  .intro-meta{
+    padding-bottom:3px;
+  }
+
+  .intro-meta > span{
+    font-size:9px !important;
+    font-weight:950 !important;
+    letter-spacing:.16em;
+  }
+
+  .intro-meta > b,
+  #updated{
+    margin-top:3px !important;
+    font-size:11px !important;
+    font-weight:850 !important;
+    line-height:1.1 !important;
+  }
+}
+
+/* Desktop — responsive side spacing, matched to header */
   main,
   footer{
     width:calc(100% - clamp(40px, 10vw, 220px));
