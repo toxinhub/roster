@@ -3030,24 +3030,10 @@ background:#28233a !important;
     height:28px;
     flex:0 0 28px;
     border-radius:2px;
-    background:#dc2626 !important;
-    border:1px solid rgba(0,0,0,.18);
-    box-shadow:none;
     font-size:13px;
     font-weight:1000;
     letter-spacing:-.05em;
     text-shadow:0 1px 1px rgba(0,0,0,.12);
-  }
-
-  /* Mobile C indicator: dim red → vivid red → dim red. The C text stays visible. */
-  .brand-mark{
-    background:#7f1d1d !important;
-    animation:cctvMarkPulse 3.2s ease-in-out infinite !important;
-  }
-
-  @keyframes cctvMarkPulse{
-    0%,100%{background:#7f1d1d;}
-    50%{background:#ef4444;}
   }
 
   .brand-copy{
