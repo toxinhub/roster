@@ -3501,3 +3501,61 @@ background:#28233a !important;
     border-radius:50% !important;
   }
 }
+
+
+/* Mobile — final compact two-row legend layout */
+@media(max-width:900px){
+  .legend{
+    grid-template-columns:repeat(6,minmax(0,1fr)) !important;
+    grid-template-rows:24px 24px !important;
+    column-gap:2px !important;
+    row-gap:0 !important;
+    width:100% !important;
+    align-items:center !important;
+  }
+
+  .legend span{
+    min-width:0 !important;
+    width:100% !important;
+    height:24px !important;
+    min-height:24px !important;
+    padding:1px 2px !important;
+    gap:2px !important;
+    overflow:visible !important;
+    justify-content:center !important;
+  }
+
+  .legend span:nth-child(1),
+  .legend span:nth-child(2),
+  .legend span:nth-child(3){
+    grid-column:auto / span 2 !important;
+  }
+
+  .legend span:nth-child(4){
+    grid-column:2 / span 2 !important;
+  }
+
+  .legend span:nth-child(5){
+    grid-column:4 / span 2 !important;
+  }
+
+  .legend i{
+    width:8px !important;
+    height:8px !important;
+    min-width:8px !important;
+    min-height:8px !important;
+    flex:0 0 8px !important;
+  }
+
+  .legend b{
+    font-size:8.5px !important;
+    font-weight:900 !important;
+  }
+
+  .legend small{
+    font-size:6.5px !important;
+    white-space:nowrap !important;
+    overflow:visible !important;
+    line-height:1 !important;
+  }
+}
