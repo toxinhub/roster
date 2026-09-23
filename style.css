@@ -3793,3 +3793,24 @@ background:#28233a !important;
     font-weight:1000 !important;
   }
 }
+/* Mobile — active legend item: no glow, lift the whole item */
+@media(max-width:900px){
+  .legend span.active-shift{
+    transform:translateY(-3px);
+    filter:none !important;
+    padding:2px 4px !important;
+    border-radius:7px;
+    background:color-mix(in srgb,var(--c) 18%,transparent) !important;
+    box-shadow:0 2px 7px rgba(15,23,42,.10) !important;
+    border:1px solid color-mix(in srgb,var(--c) 38%,transparent) !important;
+  }
+
+  .legend span.active-shift i{
+    box-shadow:none !important;
+  }
+
+  .legend span.active-shift b,
+  .legend span.active-shift small{
+    font-weight:900 !important;
+  }
+}
