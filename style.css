@@ -3829,3 +3829,9 @@ background:#28233a !important;
     box-shadow:none !important;
   }
 }
+/* Mobile — active legend lift: 4px */
+@media(max-width:900px){
+  .legend span.active-shift{
+    transform:translateY(-4px);
+  }
+}
