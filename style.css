@@ -3295,10 +3295,13 @@ background:#28233a !important;
 }
 
 @media(min-width:901px){
-  /* Desktop — balanced content width */
+  /* Desktop — balanced 2-inch side spacing */
   main,
   footer{
-    max-width:1280px;
+    width:calc(100% - 4in);
+    max-width:none;
+    margin-left:auto;
+    margin-right:auto;
   }
 }
 
@@ -3311,7 +3314,7 @@ background:#28233a !important;
 @media(min-width:901px){
   .topbar{
     height:64px !important;
-    padding:0 max(24px,calc((100vw - 1280px)/2)) !important;
+    padding:0 max(24px,2in) !important;
     position:relative;
     z-index:5;
     overflow:hidden;
