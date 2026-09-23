@@ -3559,3 +3559,25 @@ background:#28233a !important;
     line-height:1 !important;
   }
 }
+
+
+/* Mobile — reliable CSS chevron separator for shift legend */
+@media(max-width:900px){
+  .legend .legend-sep{
+    display:inline-block !important;
+    width:5px !important;
+    height:5px !important;
+    margin:0 1px !important;
+    border-top:1.5px solid currentColor !important;
+    border-right:1.5px solid currentColor !important;
+    transform:rotate(45deg) !important;
+    flex:0 0 5px !important;
+    vertical-align:middle !important;
+  }
+
+  .legend small{
+    display:inline-flex !important;
+    align-items:center !important;
+    gap:1px !important;
+  }
+}
