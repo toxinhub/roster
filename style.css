@@ -3370,7 +3370,8 @@ background:#28233a !important;
     background:#dc2626;
     border:1px solid rgba(255,255,255,.16) !important;
     box-shadow:0 4px 14px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.18) !important;
-    animation:cctvRedPulsePC 5s ease-in-out infinite !important;\n    will-change:background-color,box-shadow;
+    animation:cctvRedPulsePC 5s ease-in-out infinite !important;
+    will-change:background-color,box-shadow;
   }
 
   .brand-mark::after{
@@ -3485,7 +3486,7 @@ background:#28233a !important;
   }
 }
 
-@keyframes cctvRedSwitchDesktop{
+@keyframes cctvRedPulsePC{
   0%,100%{background-color:#7f1d1d;}
   50%{background-color:#dc2626;}
 }
