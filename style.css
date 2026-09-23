@@ -3890,3 +3890,48 @@ background:#28233a !important;
     ) !important;
   }
 }
+
+
+/* Desktop — slightly thicker scrollbar for easier PC scrolling */
+@media (min-width:901px){
+  .roster-wrap{
+    scrollbar-width:auto;
+    scrollbar-color:#b8b8b8 #ededed;
+  }
+
+  .roster-wrap::-webkit-scrollbar{
+    height:12px;
+  }
+
+  .roster-wrap::-webkit-scrollbar-track{
+    background:#ededed;
+    border-radius:999px;
+  }
+
+  .roster-wrap::-webkit-scrollbar-thumb{
+    background:#b8b8b8;
+    border:3px solid #ededed;
+    border-radius:999px;
+  }
+
+  .roster-wrap::-webkit-scrollbar-thumb:hover{
+    background:#999;
+  }
+
+  body.dark .roster-wrap{
+    scrollbar-color:#666 #2a2a2a;
+  }
+
+  body.dark .roster-wrap::-webkit-scrollbar-track{
+    background:#2a2a2a;
+  }
+
+  body.dark .roster-wrap::-webkit-scrollbar-thumb{
+    background:#666;
+    border-color:#2a2a2a;
+  }
+
+  body.dark .roster-wrap::-webkit-scrollbar-thumb:hover{
+    background:#777;
+  }
+}
