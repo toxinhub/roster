@@ -3835,3 +3835,32 @@ background:#28233a !important;
     transform:translateY(-4px);
   }
 }
+/* Mobile — active legend: subtle time-based underline */
+@media(max-width:900px){
+  .legend span.active-shift{
+    transform:none !important;
+    filter:none !important;
+    padding:0 2px !important;
+    border:0 !important;
+    border-radius:0 !important;
+    background:transparent !important;
+    box-shadow:none !important;
+    position:relative;
+  }
+
+  .legend span.active-shift::after{
+    content:"";
+    position:absolute;
+    left:12%;
+    right:12%;
+    bottom:-2px;
+    height:1px;
+    border-radius:999px;
+    background:color-mix(in srgb,var(--c) 45%,transparent);
+    opacity:.55;
+  }
+
+  .legend span.active-shift i{
+    box-shadow:none !important;
+  }
+}
