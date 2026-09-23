@@ -3864,3 +3864,10 @@ background:#28233a !important;
     box-shadow:none !important;
   }
 }
+/* Mobile — neutral active legend underline */
+@media(max-width:900px){
+  .legend span.active-shift::after{
+    background:rgba(100,116,139,.32) !important;
+    opacity:.55 !important;
+  }
+}
