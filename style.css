@@ -3599,3 +3599,294 @@ background:#28233a !important;
   0%,100%{transform:scale(1);opacity:.82;}
   50%{transform:scale(1.22);opacity:1;}
 }
+
+
+/* Desktop — ChatGPT-inspired neutral workspace theme */
+@media (min-width:901px){
+  :root{
+    --bg:#f7f7f8;
+    --panel:#ffffff;
+    --panel-soft:#f9f9f9;
+    --ink:#2f2f2f;
+    --muted:#6b6b6b;
+    --line:#e5e5e5;
+    --line-strong:#d9d9d9;
+    --navy:#202123;
+    --accent:#10a37f;
+    --accent-ink:#ffffff;
+  }
+
+  body:not(.dark){
+    background:
+      radial-gradient(circle at 14% 12%,rgba(0,0,0,.028),transparent 28%),
+      radial-gradient(circle at 84% 76%,rgba(0,0,0,.018),transparent 30%),
+      #f7f7f8;
+    color:#2f2f2f;
+  }
+
+  /* Fine paper-like grain, kept subtle so text stays crisp */
+  body::before{
+    opacity:.055;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.72' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
+    background-size:180px 180px;
+    mix-blend-mode:multiply;
+  }
+
+  .topbar{
+    background:#202123 !important;
+    border-bottom:1px solid rgba(255,255,255,.08) !important;
+    box-shadow:0 4px 18px rgba(0,0,0,.10) !important;
+    backdrop-filter:blur(14px) !important;
+    -webkit-backdrop-filter:blur(14px) !important;
+  }
+
+  .topbar::before,
+  .topbar::after{
+    opacity:.25;
+  }
+
+  .board{
+    background:rgba(255,255,255,.94) !important;
+    border:1px solid #e5e5e5 !important;
+    border-radius:14px !important;
+    box-shadow:0 8px 28px rgba(0,0,0,.055),0 1px 2px rgba(0,0,0,.035) !important;
+    backdrop-filter:none !important;
+    -webkit-backdrop-filter:none !important;
+  }
+
+  .board-head{
+    min-height:68px;
+    background:#ffffff !important;
+    border-bottom:1px solid #e5e5e5 !important;
+    backdrop-filter:none !important;
+    -webkit-backdrop-filter:none !important;
+  }
+
+  .board-head h2{
+    color:#2f2f2f !important;
+    font-weight:800 !important;
+  }
+
+  .legend{
+    gap:7px !important;
+  }
+
+  .legend span{
+    background:#f7f7f8 !important;
+    border:1px solid #e5e5e5 !important;
+    color:#6b6b6b !important;
+    box-shadow:none !important;
+    backdrop-filter:none !important;
+    -webkit-backdrop-filter:none !important;
+  }
+
+  .legend span:hover{
+    background:#eeeeee !important;
+    box-shadow:none !important;
+    transform:translateY(-1px);
+  }
+
+  .legend b{
+    color:#2f2f2f !important;
+  }
+
+  .legend small{
+    color:#7a7a7a !important;
+  }
+
+  .legend span.active-shift{
+    background:#ececec !important;
+    border-color:#d8d8d8 !important;
+    box-shadow:inset 0 0 0 1px rgba(0,0,0,.025) !important;
+  }
+
+  .legend span.active-shift i{
+    box-shadow:0 0 0 2px rgba(16,163,127,.12) !important;
+  }
+
+  .person-head{
+    background:#f7f7f8 !important;
+    border-right:1px solid #e5e5e5 !important;
+    color:#6b6b6b !important;
+    text-shadow:none !important;
+  }
+
+  .day-grid{
+    background:#f7f7f8 !important;
+    border-bottom:1px solid #e5e5e5 !important;
+  }
+
+  .day-head{
+    background:#f7f7f8 !important;
+    border-right:1px solid #e5e5e5 !important;
+  }
+
+  .day-head span{
+    color:#777 !important;
+  }
+
+  .day-head strong{
+    color:#2f2f2f !important;
+  }
+
+  .day-head:hover{
+    background:#eeeeee !important;
+  }
+
+  .day-head.is-today,
+  .shift-cell.is-today{
+    background:#f1f1f1 !important;
+  }
+
+  .day-head.is-today .day-head strong{
+    color:#2f2f2f !important;
+  }
+
+  .day-head em{
+    color:#4f4f4f !important;
+    background:#e9e9e9 !important;
+  }
+
+  .person,
+  .shift-cell{
+    background:#ffffff !important;
+    border-color:#e5e5e5 !important;
+  }
+
+  .person-row:hover .person,
+  .person-row:hover .shift-cell{
+    background:#f7f7f7 !important;
+  }
+
+  .person-row:hover .person{
+    box-shadow:inset 3px 0 0 rgba(16,163,127,.55) !important;
+  }
+
+  .person strong{
+    color:#2f2f2f !important;
+  }
+
+  .shift{
+    border:1px solid color-mix(in srgb,var(--c) 62%,#fff) !important;
+    box-shadow:0 3px 8px color-mix(in srgb,var(--c) 12%,transparent) !important;
+  }
+
+  .shift:hover{
+    filter:brightness(.985);
+  }
+
+  .intro p,
+  .intro-meta b{
+    color:#6b6b6b !important;
+  }
+
+  .kicker,
+  .intro-meta > span{
+    color:#8a8a8a !important;
+  }
+
+  .today-jump{
+    background:#ffffff !important;
+    color:#2f2f2f !important;
+    border-color:#e5e5e5 !important;
+    box-shadow:0 3px 10px rgba(0,0,0,.045) !important;
+  }
+
+  .today-jump::before{
+    background:conic-gradient(
+      from -90deg,
+      #10a37f 0 var(--day-remaining),
+      #e8e8e8 var(--day-remaining) 100%
+    ) !important;
+  }
+
+  .today-jump:hover,
+  .today-jump:focus-visible{
+    background:#f7f7f7 !important;
+    box-shadow:0 5px 14px rgba(0,0,0,.07) !important;
+  }
+
+  footer{
+    color:#8a8a8a !important;
+  }
+
+  /* Keep the dark theme structurally similar, but use the same restrained UI language */
+  body.dark{
+    background:#171717 !important;
+  }
+
+  body.dark::before{
+    opacity:.075;
+    mix-blend-mode:screen;
+  }
+
+  body.dark .board{
+    background:#212121 !important;
+    border-color:#343434 !important;
+    box-shadow:0 10px 30px rgba(0,0,0,.25) !important;
+  }
+
+  body.dark .board-head,
+  body.dark .person,
+  body.dark .shift-cell{
+    background:#212121 !important;
+  }
+
+  body.dark .day-grid,
+  body.dark .person-head,
+  body.dark .day-head{
+    background:#1b1b1b !important;
+    border-color:#343434 !important;
+  }
+
+  body.dark .day-head span,
+  body.dark .kicker,
+  body.dark .intro-meta > span{
+    color:#9b9b9b !important;
+  }
+
+  body.dark .board-head h2,
+  body.dark .day-head strong,
+  body.dark .person strong{
+    color:#ececec !important;
+  }
+
+  body.dark .day-head.is-today,
+  body.dark .shift-cell.is-today{
+    background:#292929 !important;
+  }
+
+  body.dark .legend span{
+    background:#2a2a2a !important;
+    border-color:#3a3a3a !important;
+  }
+
+  body.dark .legend b{
+    color:#ececec !important;
+  }
+
+  body.dark .legend small,
+  body.dark .intro p,
+  body.dark .intro-meta b{
+    color:#a0a0a0 !important;
+  }
+
+  body.dark .legend span.active-shift{
+    background:#333333 !important;
+    border-color:#444 !important;
+  }
+
+  body.dark .today-jump{
+    background:#2a2a2a !important;
+    color:#ececec !important;
+    border-color:#3a3a3a !important;
+  }
+
+  body.dark .today-jump::before{
+    background:conic-gradient(
+      from -90deg,
+      #19c37d 0 var(--day-remaining),
+      #414141 var(--day-remaining) 100%
+    ) !important;
+  }
+}
