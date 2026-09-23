@@ -4012,3 +4012,12 @@ background:#28233a !important;
     text-shadow:none;
   }
 }
+
+
+@media(min-width:901px){
+  /* Desktop — slightly narrower main roster body */
+  main,
+  footer{
+    max-width:1360px;
+  }
+}
