@@ -3367,7 +3367,7 @@ background:#28233a !important;
     font-size:16px !important;
     font-weight:950 !important;
     letter-spacing:-.04em;
-    background:#dc2626 !important;
+    background:#dc2626;
     border:1px solid rgba(255,255,255,.16) !important;
     box-shadow:0 4px 14px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.18) !important;
     animation:cctvRedSwitchDesktop 5s ease-in-out infinite;
