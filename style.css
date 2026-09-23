@@ -3034,12 +3034,18 @@ background:#28233a !important;
     width:31px;
     height:31px;
     flex:0 0 31px;
-    border-radius:10px;
-    background:linear-gradient(145deg,#ff5b5b,#dc2626);
-    border:1px solid rgba(255,255,255,.16);
-    box-shadow:0 5px 15px rgba(239,68,68,.20);
+    border-radius:7px;
+    background:#dc2626;
+    border:1px solid rgba(255,255,255,.10);
+    box-shadow:none;
     font-size:13px;
     letter-spacing:-.04em;
+    animation:cctvMarkPulse 3.8s ease-in-out infinite;
+  }
+
+  @keyframes cctvMarkPulse{
+    0%,100%{background:#d92121;}
+    50%{background:#ff4a4a;}
   }
 
   .brand-mark::after{
