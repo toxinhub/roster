@@ -3720,3 +3720,19 @@ background:#28233a !important;
     border-radius:12px !important;
   }
 }
+/* Mobile — keep legend indicators close together */
+@media(max-width:900px){
+  .legend{
+    grid-template-columns:repeat(6,minmax(0,auto)) !important;
+    justify-content:center !important;
+    column-gap:0 !important;
+  }
+  .legend span{
+    width:auto !important;
+    padding:0 !important;
+    margin:0 !important;
+    gap:1px !important;
+  }
+  .legend span:nth-child(4){grid-column:2 / span 2 !important;}
+  .legend span:nth-child(5){grid-column:4 / span 2 !important;}
+}
