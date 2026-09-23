@@ -3298,7 +3298,7 @@ background:#28233a !important;
   /* Desktop — balanced 2-inch side spacing */
   main,
   footer{
-    width:calc(100% - 4in);
+    width:calc(100% - 3in);
     max-width:none;
     margin-left:auto;
     margin-right:auto;
@@ -3314,7 +3314,7 @@ background:#28233a !important;
 @media(min-width:901px){
   .topbar{
     height:64px !important;
-    padding:0 max(24px,2in) !important;
+    padding:0 max(24px,1.5in) !important;
     position:relative;
     z-index:5;
     overflow:hidden;
