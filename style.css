@@ -3274,6 +3274,7 @@ background:#28233a !important;
     overflow:visible !important;
     clip-path:none !important;
     -webkit-clip-path:none !important;
+    font-size:11px !important;
   }
 
   .today-jump::after{
