@@ -3159,4 +3159,14 @@ background:#28233a !important;
     background:linear-gradient(145deg,rgba(255,255,255,.075),rgba(255,255,255,.025));
     border-color:rgba(255,255,255,.10);
   }
+  /* Mobile C switch: dim red → vivid red → dim red */
+  .brand-mark{
+    animation:cctvRedSwitch 2.8s ease-in-out infinite;
+  }
+
+  @keyframes cctvRedSwitch{
+    0%,100%{background-color:#7f1d1d;}
+    50%{background-color:#ef4444;}
+  }
+
 }
