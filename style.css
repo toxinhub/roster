@@ -3109,15 +3109,32 @@ background:#28233a !important;
     transform:translateY(-1px);
   }
 
+  #legend span{
+    font-size:13px !important;
+    gap:6px !important;
+    padding:6px 10px !important;
+    min-height:28px !important;
+  }
+
+  #legend span b{
+    font-size:11px !important;
+    font-weight:850 !important;
+  }
+
+  #legend span small{
+    font-size:9px !important;
+    font-weight:700 !important;
+  }
+
   #legend span.active-shift b{
-    font-size:9.5px !important;
-    font-weight:900 !important;
+    font-size:11px !important;
+    font-weight:950 !important;
     line-height:1 !important;
     -webkit-text-stroke:.2px currentColor;
   }
 
   #legend span.active-shift small{
-    font-size:8px !important;
+    font-size:9px !important;
     font-weight:900 !important;
     line-height:1 !important;
     opacity:1 !important;
