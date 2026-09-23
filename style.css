@@ -3314,7 +3314,7 @@ background:#28233a !important;
 @media(min-width:901px){
   .topbar{
     height:64px !important;
-    padding:0 max(24px,1.5in) !important;
+    padding:0 max(24px,1in) !important;
     position:relative;
     z-index:5;
     overflow:hidden;
