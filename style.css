@@ -4220,3 +4220,12 @@ body.dark .picker .shift-b{background:linear-gradient(145deg,rgba(189,99,47,.30)
 body.dark .picker .shift-c{background:linear-gradient(145deg,rgba(39,62,71,.62),rgba(64,86,96,.48));color:#d7e3e8;}
 body.dark .picker .shift-off{background:linear-gradient(145deg,rgba(216,201,155,.28),rgba(88,80,51,.42));color:#eee2b9;}
 body.dark .picker .shift-l{background:linear-gradient(145deg,rgba(164,36,59,.30),rgba(91,31,45,.48));color:#f2a9b9;}
+
+
+/* Mobile — slightly wider main content */
+@media(max-width:900px){
+  main{
+    padding-left:10px !important;
+    padding-right:10px !important;
+  }
+}
