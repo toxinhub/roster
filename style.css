@@ -3943,3 +3943,9 @@ background:#28233a !important;
     box-shadow:none !important;
   }
 }
+/* Mobile — remove active shift micro position adjustment */
+@media(max-width:900px){
+  .legend span.active-shift b{
+    transform:none !important;
+  }
+}
