@@ -3984,3 +3984,14 @@ background:#28233a !important;
     -webkit-text-stroke:.08px currentColor;
   }
 }
+/* Mobile — exact active legend typography */
+@media(max-width:900px){
+  .legend span.active-shift b{
+    font-size:9.5px !important;
+    font-weight:1000 !important;
+  }
+  .legend span.active-shift small{
+    font-size:8px !important;
+    font-weight:1000 !important;
+  }
+}
