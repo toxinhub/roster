@@ -118,9 +118,10 @@ function render(){
   updateDateProgress();
   $('updated').textContent=timeLabel(DATA.updatedAt);
 
-  $('legend').innerHTML=Object.entries(types).map(([k,v])=>
-    '<span><i style="--c:'+esc(v.color||'#64748b')+'"></i><b>'+esc(k)+'</b><small><strong class="legend-dash">—</strong>'+esc(v.note||'')+'</small></span>'
-  ).join('');
+  $('legend').innerHTML=Object.entries(types).map(([k,v])=>{
+    const note=(v.note||'').replace(/–/g,' - ');
+    return '<span><i style="--c:'+esc(v.color||'#64748b')+'"></i><b>'+esc(k)+'</b><small><strong class="legend-dash">·</strong>'+esc(note)+'</small></span>';
+  }).join('');
 
   const head=days.map(d=>{
     const isToday=d.isoDate===now;
