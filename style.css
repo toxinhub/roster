@@ -3705,3 +3705,9 @@ background:#28233a !important;
     font-size:8px !important;
   }
 }
+/* Mobile — exact UPDATED label size */
+@media(max-width:900px){
+  .intro-meta > span{
+    font-size:8px !important;
+  }
+}
