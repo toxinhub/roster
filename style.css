@@ -3767,3 +3767,13 @@ background:#28233a !important;
     flex-basis:8px !important;
   }
 }
+/* Mobile — 10px legend color dots */
+@media(max-width:900px){
+  .legend i{
+    width:10px !important;
+    height:10px !important;
+    min-width:10px !important;
+    min-height:10px !important;
+    flex-basis:10px !important;
+  }
+}
