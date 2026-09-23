@@ -3358,11 +3358,10 @@ background:#28233a !important;
   }
 
   .brand-mark{
-    position:relative;
     width:34px !important;
     height:34px !important;
     flex:0 0 34px;
-    border-radius:9px !important;
+    border-radius:6px !important;
     color:#fff;
     font-size:16px !important;
     font-weight:950 !important;
@@ -3370,16 +3369,6 @@ background:#28233a !important;
     background:#dc2626;
     border:1px solid rgba(255,255,255,.16) !important;
     box-shadow:0 4px 14px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.18) !important;
-
-  }
-
-  .brand-mark::after{
-    content:"";
-    position:absolute;
-    inset:4px;
-    border:1px solid rgba(255,255,255,.18);
-    border-radius:7px;
-    pointer-events:none;
   }
 
   .brand-copy{
