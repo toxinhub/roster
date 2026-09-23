@@ -3660,3 +3660,27 @@ background:#28233a !important;
     line-height:1 !important;
   }
 }
+
+/* Mobile — tighten legend item spacing */
+@media(max-width:900px){
+  .legend{
+    column-gap:0 !important;
+    row-gap:0 !important;
+  }
+
+  .legend span{
+    gap:1px !important;
+    padding-left:0 !important;
+    padding-right:0 !important;
+  }
+
+  .legend i{
+    margin-right:1px !important;
+  }
+
+  .legend .legend-dash{
+    margin:0 1px !important;
+    font-size:8px !important;
+    font-weight:900 !important;
+  }
+}
