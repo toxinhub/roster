@@ -3996,9 +3996,19 @@ background:#28233a !important;
   }
 }
 
-/* Desktop — match heading style to mobile */
+/* Desktop — copy the mobile roster heading features */
 @media(min-width:901px){
   .board-head h2{
-    font-size:15px !important;
+    font-size:20px !important;
+    line-height:1.2 !important;
+    font-weight:900 !important;
+    letter-spacing:-.03em !important;
+    color:#1e293b !important;
+    text-shadow:0 1px 0 rgba(255,255,255,.65);
+  }
+
+  body.dark .board-head h2{
+    color:#eef3f7 !important;
+    text-shadow:none;
   }
 }
