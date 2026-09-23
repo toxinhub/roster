@@ -5,27 +5,27 @@
     "A": {
       "label": "শিফট A",
       "note": "06:00–14:00",
-      "color": "#FCA5A5"
+      "color": "#D8973C"
     },
     "B": {
       "label": "শিফট B",
       "note": "14:00–22:00",
-      "color": "#FCD34D"
+      "color": "#BD632F"
     },
     "C": {
       "label": "শিফট C",
       "note": "22:00–06:00",
-      "color": "#93C5FD"
+      "color": "#273E47"
     },
     "OFF": {
       "label": "ছুটি",
       "note": "নির্ধারিত ছুটি",
-      "color": "#CBD5E1"
+      "color": "#D8C99B"
     },
     "L": {
       "label": "ছুটি (Leave)",
       "note": "অনুমোদিত ছুটি",
-      "color": "#86EFAC"
+      "color": "#A4243B"
     }
   },
   "days": [
