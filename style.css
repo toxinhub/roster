@@ -4266,3 +4266,10 @@ body.dark .picker .shift-l{background:linear-gradient(145deg,rgba(164,36,59,.30)
     border-radius:0 !important;
   }
 }
+
+
+/* Mobile — roster frame edge spacing: 1px */
+@media (max-width:900px){
+  main{padding-left:1px !important;padding-right:1px !important;}
+  .board{margin-left:0 !important;margin-right:0 !important;width:100% !important;}
+}
