@@ -3871,3 +3871,15 @@ background:#28233a !important;
     opacity:.55 !important;
   }
 }
+/* Mobile — ensure active legend underline is visible */
+@media(max-width:900px){
+  .legend span.active-shift{
+    transform:none !important;
+    position:relative;
+    border-bottom:1px solid rgba(100,116,139,.32) !important;
+    padding-bottom:1px !important;
+  }
+  .legend span.active-shift::after{
+    display:none !important;
+  }
+}
