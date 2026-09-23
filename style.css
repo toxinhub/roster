@@ -3028,18 +3028,18 @@ background:#28233a !important;
     width:28px;
     height:28px;
     flex:0 0 28px;
-    border-radius:6px;
-    background:#dc2626 !important;
+    border-radius:4px;
+    background:#ff4a4a !important;
     border:1px solid rgba(0,0,0,.18);
     box-shadow:none;
     font-size:12px;
     letter-spacing:-.04em;
-    animation:cctvMarkPulse 3.8s ease-in-out infinite;
+    animation:cctvMarkPulse 3.2s ease-in-out infinite;
   }
 
   @keyframes cctvMarkPulse{
-    0%,100%{background:#dc2626 !important;}
-    50%{background:#7f1d1d !important;}
+    0%,100%{background:#ff4a4a !important;}
+    50%{background:#6b1111 !important;}
   }
 
   .brand-mark::after{
