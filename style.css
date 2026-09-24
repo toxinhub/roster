@@ -4716,3 +4716,10 @@ body:not(.dark)::before{
 .board{
   border-color:#D6D6D6 !important;
 }
+
+
+/* Live Duty dot — follows the active shift color */
+.name-active-dot{
+  background:var(--status-color) !important;
+  box-shadow:0 0 0 2px rgba(255,255,255,.9),0 0 7px color-mix(in srgb,var(--status-color) 55%, transparent) !important;
+}
