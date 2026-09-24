@@ -4707,7 +4707,12 @@ body:not(.dark)::before{
 }
 
 
-/* Roster board — subtle 1px corner rounding */
+/* Roster board — subtle 2px corner rounding */
 .board{
-  border-radius:1px !important;
+  border-radius:2px !important;
+}
+
+/* Roster board border — neutral gray, no blue tint */
+.board{
+  border-color:#D6D6D6 !important;
 }
