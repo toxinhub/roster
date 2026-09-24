@@ -4893,3 +4893,103 @@ html body.dark .shift-cell.is-today{
     transform:scale(1) !important;
   }
 }
+
+
+/* Roster board — liquid glass preview */
+html body:not(.dark) .board{
+  background:rgba(255,255,255,.48) !important;
+  border:1px solid rgba(255,255,255,.82) !important;
+  box-shadow:
+    0 18px 48px rgba(96,70,56,.10),
+    inset 0 1px 0 rgba(255,255,255,.88),
+    inset 0 -1px 0 rgba(180,135,116,.10) !important;
+  -webkit-backdrop-filter:blur(22px) saturate(135%);
+  backdrop-filter:blur(22px) saturate(135%);
+}
+
+html body:not(.dark) .board .board-head{
+  background:rgba(255,255,255,.30) !important;
+  border-bottom:1px solid rgba(255,255,255,.68) !important;
+  -webkit-backdrop-filter:blur(16px) saturate(125%);
+  backdrop-filter:blur(16px) saturate(125%);
+}
+
+html body:not(.dark) .board .day-grid{
+  background:rgba(255,255,255,.18) !important;
+}
+
+html body:not(.dark) .board .person-head,
+html body:not(.dark) .board .day-head,
+html body:not(.dark) .board .person,
+html body:not(.dark) .board .shift-cell:not(.is-today){
+  background:rgba(255,255,255,.24) !important;
+  -webkit-backdrop-filter:blur(10px) saturate(118%);
+  backdrop-filter:blur(10px) saturate(118%);
+}
+
+html body:not(.dark) .board .shift-cell:not(.is-today){
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.28) !important;
+}
+
+html body:not(.dark) .board .person-head,
+html body:not(.dark) .board .day-head,
+html body:not(.dark) .board .person{
+  border-color:rgba(191,171,161,.38) !important;
+}
+
+html body:not(.dark) .board .shift-cell:not(.is-today){
+  border-color:rgba(191,171,161,.34) !important;
+}
+
+html body.dark .board{
+  background:rgba(24,20,17,.62) !important;
+  border:1px solid rgba(255,255,255,.10) !important;
+  box-shadow:
+    0 20px 55px rgba(0,0,0,.28),
+    inset 0 1px 0 rgba(255,255,255,.08),
+    inset 0 -1px 0 rgba(0,0,0,.18) !important;
+  -webkit-backdrop-filter:blur(22px) saturate(125%);
+  backdrop-filter:blur(22px) saturate(125%);
+}
+
+html body.dark .board .board-head{
+  background:rgba(35,29,25,.46) !important;
+  border-bottom-color:rgba(255,255,255,.08) !important;
+}
+
+html body.dark .board .day-grid,
+html body.dark .board .person-head,
+html body.dark .board .day-head,
+html body.dark .board .person,
+html body.dark .board .shift-cell:not(.is-today){
+  background:rgba(26,23,20,.52) !important;
+}
+
+html body.dark .board .person-head,
+html body.dark .board .day-head,
+html body.dark .board .person,
+html body.dark .board .shift-cell:not(.is-today){
+  border-color:rgba(255,255,255,.07) !important;
+}
+
+@media(max-width:900px){
+  html body:not(.dark) .board{
+    -webkit-backdrop-filter:blur(16px) saturate(125%);
+    backdrop-filter:blur(16px) saturate(125%);
+  }
+  html body:not(.dark) .board .person-head,
+  html body:not(.dark) .board .day-head,
+  html body:not(.dark) .board .person,
+  html body:not(.dark) .board .shift-cell:not(.is-today){
+    -webkit-backdrop-filter:none;
+    backdrop-filter:none;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  html body:not(.dark) .board,
+  html body.dark .board{
+    -webkit-backdrop-filter:none;
+    backdrop-filter:none;
+  }
+}
