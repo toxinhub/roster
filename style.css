@@ -4638,3 +4638,21 @@ body.dark .legend span.shift-off,
 body.dark .legend span.shift-l{
   color:#17202A !important;
 }
+
+/* Active legend shift — subtle time-aware emphasis */
+.legend span.active-shift b{
+  font-size:10px !important;
+  font-weight:950 !important;
+  color:#17202A !important;
+}
+
+@media(max-width:520px){
+  .legend span.active-shift b{
+    font-size:8px !important;
+    font-weight:950 !important;
+  }
+}
+
+body.dark .legend span.active-shift b{
+  color:#17202A !important;
+}
