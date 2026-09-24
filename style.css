@@ -4656,3 +4656,15 @@ body.dark .legend span.shift-l{
 body.dark .legend span.active-shift b{
   color:#17202A !important;
 }
+
+
+/* Theme background — F9F9F9 */
+body:not(.dark){
+  background:#F9F9F9 !important;
+}
+
+@media(min-width:901px){
+  body:not(.dark){
+    background:#F9F9F9 !important;
+  }
+}
