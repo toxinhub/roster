@@ -4732,3 +4732,8 @@ html body.dark .board,
 html body.dark .board-head{
   border-radius:2px !important;
 }
+
+/* Match shift-cell white with the roster board tone */
+html body:not(.dark) .shift-cell{
+  background:#FFF8F4 !important;
+}
