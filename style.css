@@ -4668,3 +4668,52 @@ body.dark .today-jump::before{
   body:not(.dark) .shift-cell.is-today{background:#F8F0EA !important;}
   body:not(.dark) .legend span{background:#F7F2EF !important;border-color:#DED8D3 !important;}
 }
+
+
+/* Final light polish — lighter board + clean legend squares */
+html body:not(.dark) .board,
+html body:not(.dark) .board-head{
+  background:#FCF6F2 !important;
+}
+
+html body:not(.dark) .legend span.shift-a,
+html body:not(.dark) .legend span.shift-b,
+html body:not(.dark) .legend span.shift-c,
+html body:not(.dark) .legend span.shift-off,
+html body:not(.dark) .legend span.shift-l,
+html body.dark .legend span.shift-a,
+html body.dark .legend span.shift-b,
+html body.dark .legend span.shift-c,
+html body.dark .legend span.shift-off,
+html body.dark .legend span.shift-l{
+  background:transparent !important;
+  border:0 !important;
+  box-shadow:none !important;
+  outline:0 !important;
+}
+
+html body:not(.dark) .legend span.shift-a i,
+html body:not(.dark) .legend span.shift-b i,
+html body:not(.dark) .legend span.shift-c i,
+html body:not(.dark) .legend span.shift-off i,
+html body:not(.dark) .legend span.shift-l i,
+html body.dark .legend span.shift-a i,
+html body.dark .legend span.shift-b i,
+html body.dark .legend span.shift-c i,
+html body.dark .legend span.shift-off i,
+html body.dark .legend span.shift-l i{
+  border:0 !important;
+  outline:0 !important;
+  box-shadow:none !important;
+}
+
+@media(max-width:900px){
+  html body:not(.dark) .legend span.shift-a,
+  html body:not(.dark) .legend span.shift-b,
+  html body:not(.dark) .legend span.shift-c,
+  html body:not(.dark) .legend span.shift-off,
+  html body:not(.dark) .legend span.shift-l{
+    background:transparent !important;
+    border:0 !important;
+  }
+}
