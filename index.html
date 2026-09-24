@@ -132,7 +132,7 @@ function render(){
   $('legend').innerHTML=Object.entries(types).map(([k,v])=>{
     const note=(v.note||'').replace(/–/g,' - ');
     const active=k===activeShift?' active-shift':'';
-    const tone=k==='B'?' shift-b':'';
+    const tone=' shift-'+String(k).toLowerCase();
     return '<span class="'+(active+tone).trim()+'"><i style="--c:'+esc(v.color||'#64748b')+'"></i><b>'+esc(k)+'</b><small><strong class="legend-dash">·</strong>'+esc(note)+'</small></span>';
   }).join('');
 
