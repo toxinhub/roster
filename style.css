@@ -4306,3 +4306,16 @@ body.dark .picker .shift-l{background:linear-gradient(145deg,rgba(164,36,59,.30)
     box-sizing:border-box !important;
   }
 }
+
+
+/* Mobile — roster frame 5px physical edge gap (final) */
+@media (max-width:900px){
+  main{padding-left:0 !important;padding-right:0 !important;}
+  .board{
+    width:calc(100% - 10px) !important;
+    max-width:none !important;
+    margin-left:5px !important;
+    margin-right:5px !important;
+    box-sizing:border-box !important;
+  }
+}
