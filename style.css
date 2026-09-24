@@ -4717,3 +4717,10 @@ html body.dark .legend span.shift-l i{
     border:0 !important;
   }
 }
+
+
+/* Final board background color */
+html body:not(.dark) .board,
+html body:not(.dark) .board-head{
+  background:#FDEEE4 !important;
+}
