@@ -4332,3 +4332,13 @@ body.dark .picker .shift-l{background:linear-gradient(145deg,rgba(164,36,59,.30)
     width:100% !important;
   }
 }
+
+
+/* Mobile — today/updated edge balance: 8px */
+@media (max-width:900px){
+  .intro{
+    width:calc(100% - 16px) !important;
+    margin-left:8px !important;
+    margin-right:8px !important;
+  }
+}
