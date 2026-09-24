@@ -4319,3 +4319,16 @@ body.dark .picker .shift-l{background:linear-gradient(145deg,rgba(164,36,59,.30)
     box-sizing:border-box !important;
   }
 }
+
+
+/* Mobile — today/updated edge balance */
+@media (max-width:900px){
+  .intro{
+    width:calc(100% - 10px) !important;
+    margin-left:5px !important;
+    margin-right:5px !important;
+  }
+  .intro-meta{
+    width:100% !important;
+  }
+}
