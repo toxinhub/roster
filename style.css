@@ -4501,16 +4501,16 @@ body:not(.dark) .topbar::after{
 }
 
 html body:not(.dark) .board{
-  background:#F5E2D9 !important;
-  border-color:#DCD5D0 !important;
+  background:#F9EEE8 !important;
+  border-color:#E2D7D1 !important;
   box-shadow:
     0 10px 28px rgba(70,48,40,.07),
     inset 0 1px 0 rgba(255,255,255,.82) !important;
 }
 
 body:not(.dark) .board-head{
-  background:#F5E2D9 !important;
-  border-bottom-color:#DCD5D0 !important;
+  background:#F9EEE8 !important;
+  border-bottom-color:#E2D7D1 !important;
 }
 
 body:not(.dark) .day-grid,
@@ -4628,8 +4628,8 @@ body.dark .day-head em{
 }
 
 body.dark .legend span{
-  background:#25201C !important;
-  border-color:#403730 !important;
+  background:transparent !important;
+  border:0 !important;
 }
 
 body.dark .legend b,
