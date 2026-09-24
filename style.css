@@ -4894,7 +4894,7 @@ body.dark .today-jump::before{
     background:#F4F1EE !important;
     border-color:#DCD5D0 !important;
   }
-  body:not(.dark) .board-head{background:#F7F3F0 !important;}
+  body:not(.dark) .board-head{background:#F4F1EE !important;}
   body:not(.dark) .day-grid,
   body:not(.dark) .person-head,
   body:not(.dark) .day-head{background:#F2EFEC !important;}
