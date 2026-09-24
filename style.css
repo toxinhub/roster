@@ -4694,3 +4694,14 @@ body:not(.dark)::before{
     opacity:.028;
   }
 }
+
+
+/* Board corners — subtle 1px rounding */
+.board{
+  border-radius:1px !important;
+}
+@media(max-width:900px){
+  .board{
+    border-radius:1px !important;
+  }
+}
