@@ -4696,67 +4696,20 @@ body:not(.dark)::before{
 }
 
 
-/* Board corners — subtle 1px rounding */
-.board{
-  border-radius:1px !important;
-}
-@media(max-width:900px){
-  .board{
-    border-radius:1px !important;
-  }
-}
-
-
-/* Roster board — subtle 2px corner rounding */
-.board{
+/* Roster board — final surface */
+html body:not(.dark) .board{
+  background:#F4F4F5 !important;
+  background-color:#F4F4F5 !important;
+  background-image:none !important;
   border-radius:2px !important;
-}
-
-/* Roster board border — neutral gray, no blue tint */
-.board{
   border-color:#D6D6D6 !important;
+  box-shadow:
+    0 10px 28px rgba(31,41,55,.07),
+    inset 0 1px 0 rgba(255,255,255,.78) !important;
 }
-
 
 /* Live Duty dot — follows the active shift color */
 .name-active-dot{
   background:var(--status-color) !important;
   box-shadow:0 0 0 2px rgba(255,255,255,.9),0 0 7px color-mix(in srgb,var(--status-color) 55%, transparent) !important;
-}
-
-
-/* Board-only iOS glass — visible but restrained */
-body:not(.dark) .board{
-  background-color:#F4F4F5 !important;
-  background-image:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140' viewBox='0 0 140 140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.78' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.055'/%3E%3C/svg%3E") !important;
-  background-size:100% 100%,140px 140px !important;
-  -webkit-backdrop-filter:blur(18px) saturate(118%) !important;
-  backdrop-filter:blur(18px) saturate(118%) !important;
-  border-color:rgba(180,190,198,.72) !important;
-  box-shadow:
-    0 14px 34px rgba(31,41,55,.08),
-    inset 0 1px 0 rgba(255,255,255,.92),
-    inset 0 0 0 1px rgba(255,255,255,.34) !important;
-}
-
-@media(max-width:900px){
-  body:not(.dark) .board{
-    background-color:#F4F4F5 !important;
-    background-size:100% 100%,120px 120px !important;
-    -webkit-backdrop-filter:blur(13px) saturate(112%) !important;
-    backdrop-filter:blur(13px) saturate(112%) !important;
-    box-shadow:
-      0 9px 24px rgba(31,41,55,.065),
-      inset 0 1px 0 rgba(255,255,255,.9),
-      inset 0 0 0 1px rgba(255,255,255,.3) !important;
-  }
-}
-
-
-/* FINAL board surface — exact requested background */
-html body:not(.dark) .board{
-  background:#F4F4F5 !important;
-  background-color:#F4F4F5 !important;
-  background-image:none !important;
 }
