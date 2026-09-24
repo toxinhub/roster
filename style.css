@@ -4875,12 +4875,12 @@ html body.dark .shift-cell.is-today{
   box-shadow:none !important;
   filter:none !important;
   transform-origin:center !important;
-  animation:liveDutyDot 3.2s ease-in-out infinite !important;
+  animation:liveDutyDot 4s ease-in-out infinite !important;
 }
 
 @keyframes liveDutyDot{
   0%,100%{
-    transform:scale(.67);
+    transform:scale(.8333);
   }
   50%{
     transform:scale(1.33);
