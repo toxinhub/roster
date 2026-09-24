@@ -4752,3 +4752,11 @@ body:not(.dark) .board{
       inset 0 0 0 1px rgba(255,255,255,.3) !important;
   }
 }
+
+
+/* FINAL board surface — exact requested background */
+html body:not(.dark) .board{
+  background:#F4F4F5 !important;
+  background-color:#F4F4F5 !important;
+  background-image:none !important;
+}
