@@ -5131,3 +5131,151 @@ html body.dark .board .shift-cell:not(.is-today){
     backdrop-filter:none;
   }
 }
+
+
+/* FINAL FIX — make the board-only Liquid Glass visibly distinct */
+html body:not(.dark) .board{
+  background:rgba(255,255,255,.30) !important;
+  border:1px solid rgba(255,255,255,.96) !important;
+  box-shadow:
+    0 26px 70px rgba(70,48,40,.13),
+    0 2px 10px rgba(70,48,40,.06),
+    inset 0 1px 0 rgba(255,255,255,.98),
+    inset 1px 0 0 rgba(255,255,255,.55),
+    inset -1px 0 0 rgba(188,145,126,.16),
+    inset 0 -1px 0 rgba(188,145,126,.12) !important;
+  -webkit-backdrop-filter:blur(30px) saturate(155%) contrast(102%);
+  backdrop-filter:blur(30px) saturate(155%) contrast(102%);
+}
+
+html body:not(.dark) .board::before{
+  content:"" !important;
+  position:absolute;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+  border-radius:inherit;
+  background:
+    radial-gradient(ellipse 85% 45% at 50% -8%,rgba(255,255,255,.88),transparent 58%),
+    linear-gradient(110deg,rgba(255,255,255,.34) 0%,rgba(255,255,255,.10) 34%,rgba(255,218,204,.16) 68%,rgba(255,255,255,.28) 100%) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.90),
+    inset 0 0 28px rgba(255,255,255,.16) !important;
+}
+
+html body:not(.dark) .board::after{
+  content:"" !important;
+  position:absolute;
+  inset:1px;
+  z-index:0;
+  pointer-events:none;
+  border-radius:inherit;
+  background:
+    linear-gradient(105deg,transparent 0 27%,rgba(255,255,255,.18) 42%,transparent 58%),
+    radial-gradient(circle at 92% 8%,rgba(255,230,220,.24),transparent 28%);
+  mix-blend-mode:screen;
+}
+
+html body:not(.dark) .board > *{
+  position:relative !important;
+  z-index:1 !important;
+}
+
+/* Keep the glass surface visible without turning every cell into another glass layer */
+html body:not(.dark) .board .board-head{
+  background:rgba(255,255,255,.18) !important;
+  border-bottom:1px solid rgba(255,255,255,.70) !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.58) !important;
+  -webkit-backdrop-filter:none !important;
+  backdrop-filter:none !important;
+}
+
+html body:not(.dark) .board .day-grid{
+  background:rgba(255,255,255,.08) !important;
+}
+
+html body:not(.dark) .board .person-head,
+html body:not(.dark) .board .day-head,
+html body:not(.dark) .board .person,
+html body:not(.dark) .board .shift-cell:not(.is-today){
+  background:rgba(255,255,255,.12) !important;
+  border-color:rgba(177,151,138,.22) !important;
+  -webkit-backdrop-filter:none !important;
+  backdrop-filter:none !important;
+}
+
+html body:not(.dark) .board .shift-cell:not(.is-today){
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.30) !important;
+}
+
+html body:not(.dark) .board .day-head:hover,
+html body:not(.dark) .board .shift-cell:hover{
+  background:rgba(255,255,255,.22) !important;
+}
+
+html body.dark .board{
+  background:rgba(24,20,17,.48) !important;
+  border-color:rgba(255,255,255,.16) !important;
+  box-shadow:
+    0 28px 75px rgba(0,0,0,.38),
+    inset 0 1px 0 rgba(255,255,255,.13),
+    inset 1px 0 0 rgba(255,255,255,.07),
+    inset -1px 0 0 rgba(201,123,112,.10) !important;
+  -webkit-backdrop-filter:blur(30px) saturate(145%);
+  backdrop-filter:blur(30px) saturate(145%);
+}
+
+html body.dark .board::before{
+  background:
+    radial-gradient(ellipse 85% 45% at 50% -8%,rgba(255,255,255,.13),transparent 58%),
+    linear-gradient(110deg,rgba(255,255,255,.07),rgba(201,123,112,.06) 68%,rgba(255,255,255,.08)) !important;
+}
+
+html body.dark .board::after{
+  background:linear-gradient(105deg,transparent 0 27%,rgba(255,255,255,.06) 42%,transparent 58%) !important;
+}
+
+html body.dark .board .board-head{
+  background:rgba(255,255,255,.045) !important;
+  border-bottom-color:rgba(255,255,255,.10) !important;
+  -webkit-backdrop-filter:none !important;
+  backdrop-filter:none !important;
+}
+
+html body.dark .board .day-grid,
+html body.dark .board .person-head,
+html body.dark .board .day-head,
+html body.dark .board .person,
+html body.dark .board .shift-cell:not(.is-today){
+  background:rgba(255,255,255,.025) !important;
+  border-color:rgba(255,255,255,.065) !important;
+  -webkit-backdrop-filter:none !important;
+  backdrop-filter:none !important;
+}
+
+@media(max-width:900px){
+  html body:not(.dark) .board{
+    background:rgba(255,255,255,.28) !important;
+    -webkit-backdrop-filter:blur(18px) saturate(145%);
+    backdrop-filter:blur(18px) saturate(145%);
+    box-shadow:
+      0 16px 38px rgba(70,48,40,.10),
+      inset 0 1px 0 rgba(255,255,255,.96),
+      inset 0 -1px 0 rgba(188,145,126,.10) !important;
+  }
+  html body:not(.dark) .board::before{
+    background:
+      radial-gradient(ellipse 90% 42% at 50% -5%,rgba(255,255,255,.82),transparent 62%),
+      linear-gradient(110deg,rgba(255,255,255,.28),rgba(255,218,204,.12),rgba(255,255,255,.22)) !important;
+  }
+}
+
+@media(prefers-reduced-transparency:reduce){
+  html body:not(.dark) .board,
+  html body.dark .board{
+    -webkit-backdrop-filter:none !important;
+    backdrop-filter:none !important;
+    background:rgba(255,255,255,.88) !important;
+  }
+}
+
