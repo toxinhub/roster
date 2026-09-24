@@ -4732,7 +4732,7 @@ body:not(.dark) .topbar::after{
 }
 
 html body:not(.dark) .board{
-  background:#F4F1EE !important;
+  background:#F5E2D9 !important;
   border-color:#DCD5D0 !important;
   box-shadow:
     0 10px 28px rgba(70,48,40,.07),
@@ -4891,7 +4891,7 @@ body.dark .today-jump::before{
 @media(max-width:900px){
   body:not(.dark){background:#F8F2E7 !important;}
   html body:not(.dark) .board{
-    background:#F4F1EE !important;
+    background:#F5E2D9 !important;
     border-color:#DCD5D0 !important;
   }
   body:not(.dark) .board-head{background:#F4F1EE !important;}
