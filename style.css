@@ -4723,3 +4723,23 @@ body:not(.dark)::before{
   background:var(--status-color) !important;
   box-shadow:0 0 0 2px rgba(255,255,255,.9),0 0 7px color-mix(in srgb,var(--status-color) 55%, transparent) !important;
 }
+
+
+/* Board-only iOS glass + fine grain */
+body:not(.dark) .board{
+  background-color:rgba(255,255,255,.68) !important;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.028'/%3E%3C/svg%3E") !important;
+  background-size:180px 180px !important;
+  -webkit-backdrop-filter:blur(14px) saturate(110%) !important;
+  backdrop-filter:blur(14px) saturate(110%) !important;
+  border-color:#D6D6D6 !important;
+}
+
+@media(max-width:900px){
+  body:not(.dark) .board{
+    background-color:rgba(255,255,255,.74) !important;
+    background-size:150px 150px !important;
+    -webkit-backdrop-filter:blur(10px) saturate(106%) !important;
+    backdrop-filter:blur(10px) saturate(106%) !important;
+  }
+}
