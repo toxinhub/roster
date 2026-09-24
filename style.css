@@ -4889,7 +4889,7 @@ body.dark .today-jump::before{
 }
 
 @media(max-width:900px){
-  body:not(.dark){background:#FAF7F4 !important;}
+  body:not(.dark){background:#F8F2E7 !important;}
   html body:not(.dark) .board{
     background:#F4F1EE !important;
     border-color:#DCD5D0 !important;
