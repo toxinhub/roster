@@ -4705,3 +4705,9 @@ body:not(.dark)::before{
     border-radius:1px !important;
   }
 }
+
+
+/* Roster board — subtle 1px corner rounding */
+.board{
+  border-radius:1px !important;
+}
