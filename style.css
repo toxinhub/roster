@@ -4722,5 +4722,13 @@ html body.dark .legend span.shift-l i{
 /* Final board background color */
 html body:not(.dark) .board,
 html body:not(.dark) .board-head{
-  background:#FFF4EE !important;
+  background:#FFF8F4 !important;
+}
+
+/* Final roster board corner radius */
+html body:not(.dark) .board,
+html body:not(.dark) .board-head,
+html body.dark .board,
+html body.dark .board-head{
+  border-radius:2px !important;
 }
