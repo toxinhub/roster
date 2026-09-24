@@ -4743,7 +4743,7 @@ body:not(.dark) .board{
 
 @media(max-width:900px){
   body:not(.dark) .board{
-    background-color:rgba(255,255,255,.62) !important;
+    background-color:rgba(241,244,246,.66) !important;
     background-size:100% 100%,120px 120px !important;
     -webkit-backdrop-filter:blur(13px) saturate(112%) !important;
     backdrop-filter:blur(13px) saturate(112%) !important;
