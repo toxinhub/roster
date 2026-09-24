@@ -4893,3 +4893,36 @@ html body.dark .shift-cell.is-today{
     transform:scale(1) !important;
   }
 }
+
+/* Touch devices — cell-only feedback; never highlight the whole roster row */
+@media (hover:none), (pointer:coarse){
+  .person-row:hover .person,
+  .person-row:hover .shift-cell{
+    background:#FFF8F4 !important;
+    box-shadow:none !important;
+  }
+
+  body.dark .person-row:hover .person,
+  body.dark .person-row:hover .shift-cell{
+    background:#211D19 !important;
+    box-shadow:none !important;
+  }
+
+  /* Preserve the existing Today-column highlight on touch */
+  html body:not(.dark) .person-row:hover .shift-cell.is-today{
+    background:rgba(255,225,214,.62) !important;
+    box-shadow:
+      inset 2px 0 0 rgba(201,123,112,.72),
+      inset -2px 0 0 rgba(201,123,112,.72),
+      inset 0 1px 0 rgba(255,255,255,.38),
+      inset 0 -1px 0 rgba(201,123,112,.08) !important;
+  }
+
+  html body.dark .person-row:hover .shift-cell.is-today{
+    background:rgba(111,69,58,.30) !important;
+    box-shadow:
+      inset 2px 0 0 rgba(201,123,112,.78),
+      inset -2px 0 0 rgba(201,123,112,.78),
+      inset 0 1px 0 rgba(255,255,255,.06) !important;
+  }
+}
