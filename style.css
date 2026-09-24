@@ -4606,3 +4606,17 @@ body.dark .picker .shift-l{background:#D8C8EA !important;color:#17202A !importan
 .legend span[data-shift="C"] i,.legend span[data-shift="c"] i{background:#A9D8EA !important;}
 .legend span[data-shift="OFF"] i,.legend span[data-shift="off"] i{background:#B7E4C7 !important;}
 .legend span[data-shift="L"] i,.legend span[data-shift="l"] i{background:#D8C8EA !important;}
+
+
+/* Legend — exact shift color match */
+.legend span.shift-a{background:#F6B6AD !important;border-color:#E39B91 !important;color:#17202A !important;}
+.legend span.shift-b{background:#F6E58D !important;border-color:#D9C96A !important;color:#17202A !important;}
+.legend span.shift-c{background:#A9D8EA !important;border-color:#7EBFD6 !important;color:#17202A !important;}
+.legend span.shift-off{background:#B7E4C7 !important;border-color:#8FD0A4 !important;color:#17202A !important;}
+.legend span.shift-l{background:#D8C8EA !important;border-color:#B9A8D2 !important;color:#17202A !important;}
+.legend span.shift-a i{background:#F6B6AD !important;}
+.legend span.shift-b i{background:#F6E58D !important;}
+.legend span.shift-c i{background:#A9D8EA !important;}
+.legend span.shift-off i{background:#B7E4C7 !important;}
+.legend span.shift-l i{background:#D8C8EA !important;}
+body.dark .legend span.shift-a,body.dark .legend span.shift-b,body.dark .legend span.shift-c,body.dark .legend span.shift-off,body.dark .legend span.shift-l{color:#17202A !important;}
