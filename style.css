@@ -4993,3 +4993,141 @@ html body.dark .board .shift-cell:not(.is-today){
     backdrop-filter:none;
   }
 }
+
+
+/* Apple-inspired Liquid Glass — board-only refinement */
+html body:not(.dark) .board{
+  background:rgba(255,255,255,.38) !important;
+  border:1px solid rgba(255,255,255,.88) !important;
+  box-shadow:
+    0 24px 60px rgba(91,67,54,.12),
+    0 3px 12px rgba(91,67,54,.06),
+    inset 0 1px 0 rgba(255,255,255,.96),
+    inset 0 -1px 0 rgba(170,125,105,.10) !important;
+  -webkit-backdrop-filter:blur(28px) saturate(145%);
+  backdrop-filter:blur(28px) saturate(145%);
+}
+
+html body:not(.dark) .board::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  z-index:0;
+  border-radius:inherit;
+  background:
+    radial-gradient(circle at 18% 0%,rgba(255,255,255,.72),transparent 32%),
+    linear-gradient(120deg,rgba(255,255,255,.30),transparent 38%,rgba(255,228,217,.12));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.72);
+}
+
+html body:not(.dark) .board > *{
+  position:relative;
+  z-index:1;
+}
+
+html body:not(.dark) .board .board-head{
+  background:rgba(255,255,255,.25) !important;
+  border-bottom:1px solid rgba(255,255,255,.62) !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.55) !important;
+  -webkit-backdrop-filter:blur(18px) saturate(135%);
+  backdrop-filter:blur(18px) saturate(135%);
+}
+
+html body:not(.dark) .board .roster-wrap{
+  background:rgba(255,255,255,.10) !important;
+}
+
+html body:not(.dark) .board .day-grid{
+  background:rgba(255,255,255,.16) !important;
+}
+
+html body:not(.dark) .board .person-head,
+html body:not(.dark) .board .day-head,
+html body:not(.dark) .board .person,
+html body:not(.dark) .board .shift-cell:not(.is-today){
+  background:rgba(255,255,255,.20) !important;
+}
+
+html body:not(.dark) .board .person-head,
+html body:not(.dark) .board .day-head,
+html body:not(.dark) .board .person,
+html body:not(.dark) .board .shift-cell:not(.is-today){
+  border-color:rgba(177,151,138,.26) !important;
+}
+
+html body:not(.dark) .board .shift-cell:not(.is-today){
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.34) !important;
+}
+
+html body:not(.dark) .board .day-head:hover,
+html body:not(.dark) .board .shift-cell:hover{
+  background:rgba(255,255,255,.30) !important;
+}
+
+html body.dark .board{
+  background:rgba(24,20,17,.56) !important;
+  border-color:rgba(255,255,255,.13) !important;
+  box-shadow:
+    0 24px 60px rgba(0,0,0,.34),
+    inset 0 1px 0 rgba(255,255,255,.10),
+    inset 0 -1px 0 rgba(0,0,0,.22) !important;
+  -webkit-backdrop-filter:blur(28px) saturate(135%);
+  backdrop-filter:blur(28px) saturate(135%);
+}
+
+html body.dark .board::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  z-index:0;
+  border-radius:inherit;
+  background:radial-gradient(circle at 18% 0%,rgba(255,255,255,.09),transparent 34%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.06);
+}
+
+html body.dark .board > *{position:relative;z-index:1;}
+
+html body.dark .board .board-head{
+  background:rgba(40,34,29,.40) !important;
+  border-bottom-color:rgba(255,255,255,.08) !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.05) !important;
+}
+
+html body.dark .board .day-grid,
+html body.dark .board .person-head,
+html body.dark .board .day-head,
+html body.dark .board .person,
+html body.dark .board .shift-cell:not(.is-today){
+  background:rgba(25,22,19,.46) !important;
+}
+
+html body.dark .board .person-head,
+html body.dark .board .day-head,
+html body.dark .board .person,
+html body.dark .board .shift-cell:not(.is-today){
+  border-color:rgba(255,255,255,.055) !important;
+}
+
+@media(max-width:900px){
+  html body:not(.dark) .board{
+    -webkit-backdrop-filter:blur(20px) saturate(138%);
+    backdrop-filter:blur(20px) saturate(138%);
+  }
+  html body:not(.dark) .board .day-head,
+  html body:not(.dark) .board .person-head,
+  html body:not(.dark) .board .person,
+  html body:not(.dark) .board .shift-cell:not(.is-today){
+    -webkit-backdrop-filter:none;
+    backdrop-filter:none;
+  }
+}
+
+@media(prefers-reduced-transparency:reduce), (prefers-reduced-motion:reduce){
+  html body:not(.dark) .board,
+  html body.dark .board{
+    -webkit-backdrop-filter:none;
+    backdrop-filter:none;
+  }
+}
