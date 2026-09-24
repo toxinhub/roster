@@ -4737,3 +4737,43 @@ html body.dark .board-head{
 html body:not(.dark) .shift-cell{
   background:#FFF8F4 !important;
 }
+
+
+/* Today column — clear highlight + protected header space for “আজ” */
+.day-head.is-today{
+  padding-top:22px !important;
+  padding-bottom:8px !important;
+  box-shadow:inset 1.5px 0 0 #C97B70, inset -1.5px 0 0 #C97B70 !important;
+  z-index:1;
+}
+
+.day-head.is-today em{
+  top:5px !important;
+  right:6px !important;
+  z-index:3 !important;
+  line-height:1 !important;
+  white-space:nowrap !important;
+}
+
+.shift-cell.is-today{
+  box-shadow:inset 1.5px 0 0 rgba(201,123,112,.72), inset -1.5px 0 0 rgba(201,123,112,.72) !important;
+}
+
+body.dark .day-head.is-today{
+  box-shadow:inset 1.5px 0 0 #C97B70, inset -1.5px 0 0 #C97B70 !important;
+}
+
+body.dark .shift-cell.is-today{
+  box-shadow:inset 1.5px 0 0 rgba(201,123,112,.78), inset -1.5px 0 0 rgba(201,123,112,.78) !important;
+}
+
+@media(max-width:520px){
+  .day-head.is-today{
+    padding-top:18px !important;
+    padding-bottom:7px !important;
+  }
+  .day-head.is-today em{
+    top:4px !important;
+    right:4px !important;
+  }
+}
