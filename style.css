@@ -4789,3 +4789,52 @@ img,svg{
   .board,.topbar,.today-jump,.icon-btn,.admin-link,.status-live{background:rgba(255,255,255,.92)}
   body.dark .board,body.dark .topbar,body.dark .today-jump,body.dark .icon-btn,body.dark .admin-link,body.dark .status-live{background:rgba(17,26,36,.96)}
 }
+
+
+/* Mobile shift cells — balanced PC visual language */
+@media(max-width:900px){
+  .shift-cell{
+    padding:7px 7px !important;
+    background:#FCF8F4 !important;
+    border-right:1px solid #D8D0C9 !important;
+    border-bottom:1px solid #E1DAD4 !important;
+  }
+  .shift{
+    max-width:90px !important;
+    min-height:42px !important;
+    padding:7px 9px !important;
+    border-radius:9px !important;
+    border:1px solid color-mix(in srgb,var(--c) 82%,#fff) !important;
+    box-shadow:
+      0 4px 10px color-mix(in srgb,var(--c) 20%,transparent),
+      inset 0 1px 0 rgba(255,255,255,.48) !important;
+  }
+  .shift b{
+    font-size:14px !important;
+    font-weight:700 !important;
+  }
+}
+@media(max-width:520px){
+  .shift-cell{
+    padding:6px 6px !important;
+    border-right:1px solid #D8D0C9 !important;
+  }
+  .shift{
+    max-width:70px !important;
+    min-height:40px !important;
+    padding:6px 8px !important;
+    border-radius:9px !important;
+    box-shadow:
+      0 4px 10px color-mix(in srgb,var(--c) 20%,transparent),
+      inset 0 1px 0 rgba(255,255,255,.48) !important;
+  }
+  .shift b{
+    font-size:13px !important;
+    font-weight:700 !important;
+  }
+  body.dark .shift-cell{
+    background:#25211E !important;
+    border-right-color:#403831 !important;
+    border-bottom-color:#403831 !important;
+  }
+}
