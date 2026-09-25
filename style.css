@@ -5,6 +5,8 @@
   font-weight:400;
   font-display:swap;
   src:url("./fonts/Mina-Regular.woff2") format("woff2");
+  /* Keep a system fallback ready if the webfont is unavailable. */
+  unicode-range:U+0000-00FF,U+0980-09FF;
 }
 :root{
 --bg:#F3F6F8;
