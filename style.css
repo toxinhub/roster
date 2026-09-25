@@ -6342,3 +6342,17 @@ html body.ink-mode .footer-fun{
     opacity:.27 !important;
   }
 }
+
+
+/* HEADER → TODAY — compact, balanced spacing */
+main{
+  padding-top:0 !important;
+}
+.intro{
+  margin-top:4px !important;
+}
+@media(max-width:900px){
+  .intro{
+    margin-top:2px !important;
+  }
+}
