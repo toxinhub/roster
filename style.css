@@ -4839,3 +4839,219 @@ img,svg{
     border-bottom-color:#766E66 !important;
   }
 }
+
+
+/* Final balanced "dim-light" theme
+   Purpose: reduce the light-mode brightness without turning the UI into a
+   conventional dark/negative theme. Shift colors and header C animation stay untouched. */
+html body.dark{
+  --bg:#D7D1CB !important;
+  --panel:#E6E0DA !important;
+  --panel-soft:#DDD7D1 !important;
+  --ink:#403B37 !important;
+  --muted:#706862 !important;
+  --line:#B8B0A9 !important;
+  --line-strong:#A9A19A !important;
+  --navy:#403B37 !important;
+  background:
+    radial-gradient(circle at 12% 8%,rgba(255,244,232,.30),transparent 30%),
+    radial-gradient(circle at 88% 16%,rgba(201,123,112,.08),transparent 28%),
+    linear-gradient(180deg,#DDD7D1 0%,#D7D1CB 100%) !important;
+  color:var(--ink) !important;
+}
+
+html body.dark .board{
+  background:rgba(230,224,218,.88) !important;
+  border-color:rgba(255,255,255,.70) !important;
+  box-shadow:0 18px 45px rgba(70,60,52,.12),inset 0 1px 0 rgba(255,255,255,.72) !important;
+}
+
+html body.dark .board-head{
+  background:rgba(239,234,229,.64) !important;
+  border-bottom-color:rgba(184,176,169,.72) !important;
+}
+
+html body.dark .day-grid,
+html body.dark .person-head,
+html body.dark .day-head{
+  background:#DDD7D1 !important;
+  border-color:#B8B0A9 !important;
+}
+
+html body.dark .person,
+html body.dark .shift-cell{
+  background:#E6E0DA !important;
+  border-color:#C0B8B1 !important;
+}
+
+html body.dark .day-head span,
+html body.dark .legend small,
+html body.dark .intro p,
+html body.dark .intro-meta b,
+html body.dark .kicker,
+html body.dark .intro-meta span{
+  color:#706862 !important;
+}
+
+html body.dark .legend b,
+html body.dark .day-head strong,
+html body.dark .person strong,
+html body.dark .shift b{
+  color:#403B37 !important;
+}
+
+html body.dark .legend span{
+  color:#5F5852 !important;
+  background:rgba(247,243,239,.62) !important;
+  border-color:#C6BEB7 !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.65),0 3px 8px rgba(70,60,52,.035) !important;
+}
+
+html body.dark .day-head.is-today,
+html body.dark .shift-cell.is-today{
+  background:rgba(201,164,143,.16) !important;
+}
+
+html body.dark .day-head em{
+  color:#735A4D !important;
+  background:#E8D9D0 !important;
+}
+
+html body.dark .person-head{
+  color:#746B64 !important;
+  text-shadow:none !important;
+}
+
+html body.dark .today-jump{
+  background:#E1DBD5 !important;
+  border-color:#BDB5AE !important;
+  color:#4A433E !important;
+  box-shadow:0 3px 10px rgba(70,60,52,.06) !important;
+}
+
+html body.dark .topbar{
+  background:#D2CCC6 !important;
+  color:#403B37 !important;
+  border-bottom-color:#B5ADA6 !important;
+  box-shadow:0 5px 16px rgba(70,60,52,.08) !important;
+}
+
+html body.dark .brand-copy strong,
+html body.dark .topbar .brand > div strong{
+  color:#403B37 !important;
+}
+
+html body.dark .admin-link,
+html body.dark .icon-btn#theme,
+html body.dark .back,
+html body.dark .topbar .icon-btn{
+  background:#E9E3DE !important;
+  color:#4B443F !important;
+  border-color:#C5BDB6 !important;
+}
+
+html body.dark .status-live{
+  color:#706862 !important;
+}
+
+html body.dark .admin-note,
+html body.dark .panel{
+  background:#E6E0DA !important;
+  border-color:#C2BAB3 !important;
+  box-shadow:0 10px 26px rgba(70,60,52,.08),inset 0 1px 0 rgba(255,255,255,.72) !important;
+}
+
+html body.dark .admin-note{
+  background:#E9E1DB !important;
+}
+
+html body.dark input{
+  background:#F0EBE6 !important;
+  color:#403B37 !important;
+  border-color:#C2BAB3 !important;
+}
+
+html body.dark .primary{
+  background:#B96F66 !important;
+  border-color:#B96F66 !important;
+  color:#FFF9F6 !important;
+}
+
+html body.dark .actions button,
+html body.dark .form-row button,
+html body.dark .edit{
+  background:#E9E3DE !important;
+  color:#4B443F !important;
+  border-color:#C5BDB6 !important;
+}
+
+html body.dark .status{
+  background:#E4DED8 !important;
+  border-color:#C2BAB3 !important;
+  color:#706862 !important;
+}
+
+html body.dark .grid-scroll th{
+  background:#DDD7D1 !important;
+  color:#4B443F !important;
+}
+
+html body.dark .grid-scroll th,
+html body.dark .grid-scroll td{
+  border-color:#C2BAB3 !important;
+}
+
+html body.dark .grid-scroll input{
+  background:#F0EBE6 !important;
+}
+
+html body.dark .picker{
+  background:#E6E0DA !important;
+  border-color:#BDB5AE !important;
+  box-shadow:0 16px 36px rgba(70,60,52,.14) !important;
+}
+
+html body.dark .picker button{
+  color:#403B37 !important;
+}
+
+html body.dark .picker button:hover{
+  background:#DDD7D1 !important;
+}
+
+@media(max-width:900px){
+  html body.dark .topbar{
+    background:#D2CCC6 !important;
+    border-bottom-color:#B5ADA6 !important;
+    box-shadow:0 4px 14px rgba(70,60,52,.08) !important;
+  }
+  html body.dark .board{
+    background:#E6E0DA !important;
+    box-shadow:0 8px 22px rgba(70,60,52,.08) !important;
+  }
+  html body.dark .board-head{
+    background:#E6E0DA !important;
+  }
+  html body.dark .legend span{
+    background:#EDE8E3 !important;
+    box-shadow:none !important;
+  }
+  html body.dark .day-grid,
+  html body.dark .person-head,
+  html body.dark .day-head{
+    background:#DDD7D1 !important;
+  }
+  html body.dark .person,
+  html body.dark .shift-cell{
+    background:#E6E0DA !important;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  html body.dark .board,
+  html body.dark .topbar{
+    transition:none !important;
+  }
+}
+
+/* Preserve the existing header C animation exactly. */
