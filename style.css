@@ -4419,7 +4419,7 @@ html body.dark .shift-cell.is-today{
 /* Mobile header */
 @media(max-width:900px){
   .topbar{
-    height:56px;
+    height:44px;
     padding:0 12px;
     background:#D4D4D4;
     border:0;
