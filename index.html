@@ -324,7 +324,7 @@ $('theme').onclick=()=>{
 
   document.body.style.setProperty('--theme-x',x+'%');
   document.body.style.setProperty('--theme-y',y+'%');
-  document.body.classList.remove('theme-to-ink'),'theme-to-light');
+  document.body.classList.remove('theme-to-ink','theme-to-light');
   void document.body.offsetWidth;
   document.body.classList.add(goingInk?'theme-to-ink':'theme-to-light');
 
