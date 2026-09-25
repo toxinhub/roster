@@ -5918,3 +5918,56 @@ html body.ink-mode .today-jump{
     transform:scale(.97) !important;
   }
 }
+
+/* Compact next-duty summary below the roster board. */
+.next-duty{
+  width:min(100%,980px);
+  margin:10px auto 0;
+  padding:8px 10px;
+  border:1px solid rgba(100,116,139,.20);
+  border-radius:10px;
+  background:rgba(255,255,255,.56);
+  box-shadow:0 3px 12px rgba(31,41,55,.045);
+}
+.next-duty-head{display:flex;align-items:center;margin-bottom:5px}
+.next-duty-head span{font-size:10px;font-weight:900;letter-spacing:.03em;color:#475569}
+.next-duty-list{display:grid;gap:3px}
+.next-duty-row{
+  display:grid;
+  grid-template-columns:minmax(64px,.65fr) minmax(130px,1fr) minmax(120px,.9fr);
+  align-items:center;
+  min-height:25px;
+  padding:3px 5px;
+  border:1px solid rgba(100,116,139,.12);
+  border-radius:6px;
+  background:rgba(255,255,255,.48);
+}
+.next-duty-name{font-size:11px;font-weight:900;color:#334155}
+.next-duty-item{display:flex;align-items:baseline;gap:5px;min-width:0}
+.next-duty-item small{font-size:9px;font-weight:700;color:#64748b;white-space:nowrap}
+.next-duty-item b{font-size:10px;font-weight:900;color:#334155;white-space:nowrap}
+@media(max-width:900px){
+  .next-duty{width:calc(100% - 16px);margin:8px auto 0;padding:7px 8px;border-radius:8px}
+  .next-duty-head{margin-bottom:4px}
+  .next-duty-head span{font-size:9px}
+  .next-duty-row{grid-template-columns:50px 1fr 1fr;min-height:23px;padding:2px 4px;border-radius:5px}
+  .next-duty-name{font-size:10px}
+  .next-duty-item{gap:3px}
+  .next-duty-item small{font-size:8px}
+  .next-duty-item b{font-size:9px}
+}
+html body.ink-mode .next-duty{
+  background:#F5F2E8 !important;
+  border:1px solid #AAA79E !important;
+  border-radius:3px !important;
+  box-shadow:none !important;
+}
+html body.ink-mode .next-duty-head span,
+html body.ink-mode .next-duty-name,
+html body.ink-mode .next-duty-item small,
+html body.ink-mode .next-duty-item b{color:#252420 !important;text-shadow:none !important}
+html body.ink-mode .next-duty-row{
+  background:#ECE9DE !important;
+  border:1px solid #C1BEB5 !important;
+  border-radius:2px !important;
+}
