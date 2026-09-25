@@ -6522,7 +6522,7 @@ html body.ink-mode::after{
   content:"";
   position:fixed;
   inset:0;
-  z-index:2;
+  z-index:9999;
   pointer-events:none;
   opacity:.72;
   background-image:
