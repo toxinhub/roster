@@ -6524,12 +6524,12 @@ html body.ink-mode::after{
   inset:0;
   z-index:9999;
   pointer-events:none;
-  opacity:.30;
+  opacity:.14;
   background-image:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Cfilter id='paperFine' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.88' numOctaves='3' seed='29' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='.28 0 0 0 0 .28 0 0 0 0 .28 0 0 0 0 .72 0 0 0 .62 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23paperFine)'/%3E%3C/svg%3E"),
-    repeating-linear-gradient(92deg,rgba(92,82,68,.018) 0,rgba(92,82,68,.018) 1px,transparent 1px,transparent 7px),
-    repeating-linear-gradient(3deg,rgba(255,255,255,.035) 0,rgba(255,255,255,.035) 1px,transparent 1px,transparent 11px);
-  background-size:180px 180px,7px 7px,11px 11px;
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Cfilter id='paperFine' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.68' numOctaves='2' seed='29' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='.28 0 0 0 0 .28 0 0 0 0 .28 0 0 0 0 .72 0 0 0 .62 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23paperFine)'/%3E%3C/svg%3E"),
+    repeating-linear-gradient(92deg,rgba(92,82,68,.010) 0,rgba(92,82,68,.010) 1px,transparent 1px,transparent 7px),
+    repeating-linear-gradient(3deg,rgba(255,255,255,.020) 0,rgba(255,255,255,.020) 1px,transparent 1px,transparent 11px);
+  background-size:210px 210px,9px 9px,13px 13px;
   background-repeat:repeat;
   mix-blend-mode:multiply;
 }
@@ -6539,11 +6539,11 @@ html body.ink-mode::before{
   inset:0;
   z-index:9998;
   pointer-events:none;
-  opacity:.10;
+  opacity:.06;
   background:
-    radial-gradient(ellipse at 18% 22%,rgba(92,82,68,.055),transparent 34%),
-    radial-gradient(ellipse at 78% 68%,rgba(92,82,68,.045),transparent 38%),
-    repeating-linear-gradient(0deg,rgba(92,82,68,.018) 0 1px,transparent 1px 4px);
+    radial-gradient(ellipse at 18% 22%,rgba(92,82,68,.035),transparent 34%),
+    radial-gradient(ellipse at 78% 68%,rgba(92,82,68,.030),transparent 38%),
+    repeating-linear-gradient(0deg,rgba(92,82,68,.010) 0 1px,transparent 1px 4px);
   mix-blend-mode:multiply;
 }
 html body.ink-mode .app{
@@ -6552,19 +6552,19 @@ html body.ink-mode .app{
 }
 @media(max-width:900px){
   html body.ink-mode::after{
-    opacity:.36;
-    background-size:165px 165px,7px 7px,10px 10px;
+    opacity:.18;
+    background-size:190px 190px,9px 9px,13px 13px;
   }
   html body.ink-mode::before{
-    opacity:.12;
+    opacity:.07;
   }
 }
 @media(max-width:520px){
   html body.ink-mode::after{
-    opacity:.40;
-    background-size:155px 155px,7px 7px,10px 10px;
+    opacity:.21;
+    background-size:180px 180px,9px 9px,13px 13px;
   }
   html body.ink-mode::before{
-    opacity:.14;
+    opacity:.08;
   }
 }
