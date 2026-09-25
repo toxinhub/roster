@@ -343,7 +343,7 @@ function render(){
 
     return '<div class="next-duty-row">'+
       '<strong class="next-duty-name">'+esc(p.name)+'</strong>'+
-      '<span class="next-duty-item"><small>শিফট</small><b class="'+(nextShift?shiftClass(nextShift.code):'')+'">'+(nextShift?esc(dateLabel(nextShift))+' · '+esc(nextShift.code):'—')+'</b></span>'+
+      '<span class="next-duty-item"><small>শিফট পরিবর্তন</small><b class="next-duty-change">'+(nextShift?esc(current)+' → '+esc(nextShift.code):'—')+'</b><em class="next-duty-date">'+(nextShift?esc(dateLabel(nextShift)):'')+'</em></span>'+
       '<span class="next-duty-item"><small>OFF</small><b class="next-duty-off">'+(nextOff?esc(dateLabel(nextOff)):'—')+'</b></span>'+
     '</div>';
   }).join('');
