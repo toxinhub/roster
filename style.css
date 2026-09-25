@@ -4411,8 +4411,9 @@ html body.dark .shift-cell.is-today{
 
 /* Header C color is independent from dark mode and shift colors */
 @keyframes cctvRedSwitch{
-  0%,100%{background-color:#A9433D}
-  50%{background-color:#D85A52}
+  0%,100%{background-color:#E58B85}
+  50%{background-color:#C9433B}
+  75%{background-color:#FF2B1A}
 }
 
 /* Mobile header */
