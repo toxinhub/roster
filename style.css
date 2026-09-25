@@ -6523,15 +6523,21 @@ html body.ink-mode::after{
   inset:0;
   z-index:2;
   pointer-events:none;
-  opacity:.042;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Cfilter id='paperNoise' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.62' numOctaves='2' seed='17' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23paperNoise)' opacity='.72'/%3E%3C/svg%3E");
-  background-size:180px 180px;
+  opacity:.052;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220' viewBox='0 0 220 220'%3E%3Cfilter id='paperNoise' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.72' numOctaves='2' seed='17' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23paperNoise)' opacity='.82'/%3E%3C/svg%3E");
+  background-size:220px 220px;
   background-repeat:repeat;
   mix-blend-mode:multiply;
 }
 @media(max-width:900px){
   html body.ink-mode::after{
-    opacity:.032;
-    background-size:160px 160px;
+    opacity:.062;
+    background-size:190px 190px;
+  }
+}
+@media(max-width:520px){
+  html body.ink-mode::after{
+    opacity:.068;
+    background-size:180px 180px;
   }
 }
