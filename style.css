@@ -6244,3 +6244,18 @@ html body.ink-mode .next-duty-change-item .next-duty-date,
 html body.ink-mode .next-duty-off-item .next-duty-off{
   opacity:.78;
 }
+
+
+/* NEXT DUTY — match actual date text weight across Shift Change and OFF */
+.next-duty-change-item .next-duty-date,
+.next-duty-off-item .next-duty-off{
+  color:#667085 !important;
+  opacity:1 !important;
+  font-weight:700 !important;
+}
+html body.ink-mode .next-duty-change-item .next-duty-date,
+html body.ink-mode .next-duty-off-item .next-duty-off{
+  color:#77746C !important;
+  opacity:1 !important;
+  font-weight:700 !important;
+}
