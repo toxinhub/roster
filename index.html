@@ -63,7 +63,17 @@ const dhakaClockFormatter=new Intl.DateTimeFormat('en-GB',{
   second:'2-digit',
   hour12:false
 });
-const today=()=>new Date().toLocaleDateString('en-CA',{timeZone:'Asia/Dhaka'});
+const dhakaDateTimeFormatter=new Intl.DateTimeFormat('en-CA',{
+  timeZone:'Asia/Dhaka',
+  year:'numeric',
+  month:'2-digit',
+  day:'2-digit',
+  hour:'2-digit',
+  minute:'2-digit',
+  second:'2-digit',
+  hour12:false
+});
+const today=()=>new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Dhaka'}).format(new Date());
 const timeLabel=d=>{
   if(!d) return '—';
   const date=new Date(d);
@@ -128,7 +138,7 @@ function render(){
   updateDateProgress();
   $('updated').textContent=timeLabel(DATA.updatedAt);
 
-  const dhakaHour=Number(new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Dhaka',hour:'2-digit',hour12:false}).format(new Date()));
+  const dhakaHour=Number(dhakaClockFormatter.formatToParts(new Date()).find(p=>p.type==='hour')?.value||0);
   const activeShift=dhakaHour>=6&&dhakaHour<14?'A':dhakaHour>=14&&dhakaHour<22?'B':'C';
   $('legend').innerHTML=Object.entries(types).map(([k,v])=>{
     const note=(v.note||'').replace(/–/g,' - ');
@@ -153,10 +163,7 @@ function render(){
   // Cache the live-clock calculation once per render instead of once per employee.
   // This keeps the roster output identical while reducing repeated Intl/date work.
   const dhakaNow=new Date();
-  const dhakaParts=new Intl.DateTimeFormat('en-CA',{
-    timeZone:'Asia/Dhaka',year:'numeric',month:'2-digit',day:'2-digit',
-    hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false
-  }).formatToParts(dhakaNow);
+  const dhakaParts=dhakaDateTimeFormatter.formatToParts(dhakaNow);
   const part=k=>dhakaParts.find(x=>x.type===k)?.value||'00';
   const liveDate=part('year')+'-'+part('month')+'-'+part('day');
   const liveMinutes=Number(part('hour'))*60+Number(part('minute'));
