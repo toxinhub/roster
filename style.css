@@ -4624,3 +4624,42 @@ html body.dark .today-jump{
 }
 
 /* Keep shift colors and header CCTV red independent from the warm theme. */
+
+
+/* Admin live-roster navigation */
+.back{
+  position:relative;
+  isolation:isolate;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:30px;
+  padding:6px 10px;
+  border:1px solid #D5CAC3;
+  border-radius:4px;
+  background:#FBF6F2;
+  color:#403A36;
+  font-size:11px;
+  font-weight:800;
+  line-height:1;
+  text-decoration:none;
+  white-space:nowrap;
+  box-shadow:0 2px 7px rgba(70,48,40,.05);
+  transition:transform .12s ease,box-shadow .12s ease,background .12s ease;
+}
+.back::after{
+  content:"";
+  position:absolute;
+  inset:-2px;
+  border:1px solid rgba(94,82,74,.20);
+  border-radius:6px;
+  pointer-events:none;
+}
+.back:hover{transform:translateY(-1px);box-shadow:0 3px 9px rgba(70,48,40,.09)}
+.back:active{transform:scale(.97)}
+.back:focus-visible{outline:2px solid rgba(201,123,112,.42);outline-offset:2px}
+body.dark .back{background:#2A2521;color:#E8DFD9;border-color:#493F38}
+body.dark .back::after{border-color:rgba(232,223,217,.16)}
+@media(max-width:900px){
+  .back{min-height:28px;padding:0 8px;border-radius:4px;font-size:9px;letter-spacing:.025em}
+}
