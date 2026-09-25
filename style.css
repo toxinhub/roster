@@ -6524,7 +6524,7 @@ html body.ink-mode::after{
   inset:0;
   z-index:9999;
   pointer-events:none;
-  opacity:.72;
+  opacity:.30;
   background-image:
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Cfilter id='paperFine' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.88' numOctaves='3' seed='29' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='.28 0 0 0 0 .28 0 0 0 0 .28 0 0 0 0 .72 0 0 0 .62 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23paperFine)'/%3E%3C/svg%3E"),
     repeating-linear-gradient(92deg,rgba(92,82,68,.018) 0,rgba(92,82,68,.018) 1px,transparent 1px,transparent 7px),
@@ -6539,7 +6539,7 @@ html body.ink-mode::before{
   inset:0;
   z-index:9998;
   pointer-events:none;
-  opacity:.20;
+  opacity:.10;
   background:
     radial-gradient(ellipse at 18% 22%,rgba(92,82,68,.055),transparent 34%),
     radial-gradient(ellipse at 78% 68%,rgba(92,82,68,.045),transparent 38%),
@@ -6552,19 +6552,19 @@ html body.ink-mode .app{
 }
 @media(max-width:900px){
   html body.ink-mode::after{
-    opacity:.82;
-    background-size:150px 150px,6px 6px,10px 10px;
+    opacity:.36;
+    background-size:165px 165px,7px 7px,10px 10px;
   }
   html body.ink-mode::before{
-    opacity:.24;
+    opacity:.12;
   }
 }
 @media(max-width:520px){
   html body.ink-mode::after{
-    opacity:.88;
-    background-size:135px 135px,5px 5px,9px 9px;
+    opacity:.40;
+    background-size:155px 155px,7px 7px,10px 10px;
   }
   html body.ink-mode::before{
-    opacity:.28;
+    opacity:.14;
   }
 }
