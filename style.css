@@ -1027,8 +1027,6 @@ box-shadow:0 0 0 3px color-mix(in srgb,var(--current-color,#64748b) 13%,transpar
 flex:0 0 auto;
 }
 
-}
-
 @media(min-width:901px){
 
   .intro h1{
