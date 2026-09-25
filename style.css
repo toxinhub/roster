@@ -3896,52 +3896,52 @@ body:not(.dark) .today-jump::before{
 }
 
 body.dark{
-  --bg:#151311 !important;
-  --panel:#211D19 !important;
-  --panel-soft:#1A1714 !important;
-  --ink:#F3EEEA !important;
-  --muted:#B9AEA4 !important;
-  --line:#3A332D !important;
-  --line-strong:#4B413A !important;
+  --bg:#1C1917 !important;
+  --panel:#282421 !important;
+  --panel-soft:#24201D !important;
+  --ink:#F0EAE5 !important;
+  --muted:#B9ADA5 !important;
+  --line:#433B35 !important;
+  --line-strong:#554A42 !important;
   background:
     radial-gradient(circle at 12% 8%,rgba(201,123,112,.10),transparent 28%),
     radial-gradient(circle at 88% 14%,rgba(217,151,60,.06),transparent 25%),
-    #151311 !important;
+    #1C1917 !important;
 }
 
 body.dark .board{
-  background:#211D19 !important;
-  border-color:#3B332E !important;
+  background:#282421 !important;
+  border-color:#474039 !important;
   box-shadow:
-    0 18px 50px rgba(0,0,0,.28),
+    0 18px 50px rgba(0,0,0,.20),
     inset 0 1px 0 rgba(255,244,238,.06) !important;
 }
 
 body.dark .board-head,
 body.dark .person,
 body.dark .shift-cell{
-  background:#211D19 !important;
+  background:#282421 !important;
 }
 
 body.dark .day-grid,
 body.dark .person-head,
 body.dark .day-head{
-  background:#1A1714 !important;
-  border-color:#3A332D !important;
+  background:#24201D !important;
+  border-color:#433B35 !important;
 }
 
 body.dark .day-head.is-today,
 body.dark .shift-cell.is-today{
-  background:#302521 !important;
+  background:#2F2925 !important;
 }
 
 body.dark .day-head.is-today .day-head strong{
-  color:#F0CFC8 !important;
+  color:#F0EAE5 !important;
 }
 
 body.dark .day-head em{
-  color:#F0D0C9 !important;
-  background:#4A302B !important;
+  color:#E6D2CC !important;
+  background:#46352F !important;
 }
 
 body.dark .legend span{
@@ -3964,9 +3964,9 @@ body.dark .intro-meta span{
 }
 
 body.dark .today-jump{
-  background:#25201C !important;
+  background:#2D2824 !important;
   color:#F3EEEA !important;
-  border-color:#403730 !important;
+  border-color:#50443C !important;
 }
 
 body.dark .today-jump::before{
@@ -4214,7 +4214,7 @@ html body.dark .shift-cell.is-today{
 
   body.dark .person-row:hover .person,
   body.dark .person-row:hover .shift-cell{
-    background:#211D19 !important;
+    background:#282421 !important;
     box-shadow:none !important;
   }
 
