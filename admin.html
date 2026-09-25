@@ -233,6 +233,17 @@ html body.ink-mode #status.status.not-connected{
       const oldDays = Array.isArray(S.days) ? S.days : [];
       const oldEmployees = Array.isArray(S.employees) ? S.employees : [];
 
+      // Preserve shifts by actual ISO date, never by array index.
+      const oldShiftByDate = new Map();
+      oldEmployees.forEach(emp => {
+        const map = new Map();
+        oldDays.forEach((d, i) => {
+          const code = Array.isArray(emp.shifts) ? emp.shifts[i] : null;
+          if (d?.isoDate && code) map.set(d.isoDate, code);
+        });
+        oldShiftByDate.set(emp.name, map);
+      });
+
       S.month = monthName;
       S.days = Array.from({length:daysInMonth}, (_,i) => {
         const day = i + 1;
@@ -246,8 +257,8 @@ html body.ink-mode #status.status.not-connected{
       });
 
       oldEmployees.forEach(emp => {
-        const oldShifts = Array.isArray(emp.shifts) ? emp.shifts : [];
-        emp.shifts = S.days.map((_,i) => oldShifts[i] || 'OFF');
+        const byDate = oldShiftByDate.get(emp.name) || new Map();
+        emp.shifts = S.days.map(d => byDate.get(d.isoDate) || 'OFF');
       });
 
       $('month').value = monthName;
@@ -285,7 +296,48 @@ html body.ink-mode #status.status.not-connected{
     }
 
     function snapshot(){return JSON.stringify(S);}
-    function diffChanges(){if(!cleanSnapshot)return [];let before;try{before=JSON.parse(cleanSnapshot)}catch{return []}const out=[];(S.employees||[]).forEach((e,ei)=>{const old=before.employees?.[ei];if(old&&e.name!==old.name)out.push(`${old.name||'কর্মী'} → ${e.name||'নামহীন'}`);e.shifts.forEach((code,di)=>{const oldCode=old?.shifts?.[di];if(oldCode!==code)out.push(`${e.name||'কর্মী'} • ${S.days?.[di]?.date||di+1} তারিখ: ${oldCode||'—'} → ${code}`)})});if(before.month!==S.month)out.push(`রোস্টার: ${before.month||'—'} → ${S.month||'—'}`);return out}
+    function diffChanges(){
+      if(!cleanSnapshot)return [];
+      let before;
+      try{before=JSON.parse(cleanSnapshot)}catch{return []}
+      const out=[];
+      if(before.month!==S.month) out.push('রোস্টার: '+(before.month||'—')+' → '+(S.month||'—'));
+      const beforeDays=Array.isArray(before.days)?before.days:[], currentDays=Array.isArray(S.days)?S.days:[];
+      const maxDays=Math.max(beforeDays.length,currentDays.length);
+      for(let i=0;i<maxDays;i++){
+        const a=beforeDays[i], b=currentDays[i];
+        if(!a&&b) out.push('নতুন তারিখ: '+(b.date||i+1));
+        else if(a&&!b) out.push('তারিখ বাদ: '+(a.date||i+1));
+        else if(a&&b){
+          if(a.date!==b.date) out.push('তারিখ '+(b.date||i+1)+': '+(a.date||'—')+' → '+(b.date||'—'));
+          if(a.weekday!==b.weekday) out.push('দিন '+(b.date||i+1)+': '+(a.weekday||'—')+' → '+(b.weekday||'—'));
+          if(a.isoDate!==b.isoDate) out.push('ISO তারিখ '+(b.date||i+1)+': '+(a.isoDate||'—')+' → '+(b.isoDate||'—'));
+        }
+      }
+      const beforeEmployees=Array.isArray(before.employees)?before.employees:[], currentEmployees=Array.isArray(S.employees)?S.employees:[];
+      const maxEmp=Math.max(beforeEmployees.length,currentEmployees.length);
+      for(let ei=0;ei<maxEmp;ei++){
+        const e=currentEmployees[ei], old=beforeEmployees[ei];
+        if(!old&&e){out.push('নতুন কর্মী: '+(e.name||'নামহীন'));continue}
+        if(old&&!e){out.push('কর্মী বাদ: '+(old.name||'নামহীন'));continue}
+        if(!e||!old) continue;
+        if(e.name!==old.name) out.push('কর্মী: '+(old.name||'নামহীন')+' → '+(e.name||'নামহীন'));
+        const shifts=Array.isArray(e.shifts)?e.shifts:[], oldShifts=Array.isArray(old.shifts)?old.shifts:[];
+        const maxShift=Math.max(shifts.length,oldShifts.length,currentDays.length);
+        for(let di=0;di<maxShift;di++){
+          const code=shifts[di], oldCode=oldShifts[di];
+          if(code!==oldCode) out.push((e.name||'কর্মী')+' • '+(currentDays[di]?.date||beforeDays[di]?.date||di+1)+' তারিখ: '+(oldCode||'—')+' → '+(code||'—'));
+        }
+      }
+      const beforeTypes=before.shiftTypes||{}, currentTypes=S.shiftTypes||{};
+      [...new Set([...Object.keys(beforeTypes),...Object.keys(currentTypes)])].forEach(code=>{
+        const a=beforeTypes[code], b=currentTypes[code];
+        if(!a&&b) out.push('শিফট ধরন যোগ: '+code);
+        else if(a&&!b) out.push('শিফট ধরন বাদ: '+code);
+        else if(JSON.stringify(a)!==JSON.stringify(b)) out.push('শিফট ধরন পরিবর্তন: '+code);
+      });
+      return out;
+    }
     function markDirty(){dirty=snapshot()!==cleanSnapshot;updateChangeUI()}
     function updateChangeUI(){const el=$('changeStatus'),summary=$('changeSummary');if(!el||!summary)return;const changes=diffChanges();el.textContent=dirty?`● ${changes.length||1}টি পরিবর্তন করা হয়েছে`:'● কোনো পরিবর্তন নেই';el.className='change-status '+(dirty?'dirty':'clean');$('clearChanges').disabled=!dirty;if(!dirty){summary.hidden=true;summary.innerHTML='';return}summary.hidden=false;summary.innerHTML='<strong>Save করার আগে পরিবর্তনগুলো:</strong><ul>'+changes.slice(0,12).map(x=>'<li>'+esc(x)+'</li>').join('')+(changes.length>12?'<li>আরও '+(changes.length-12)+'টি পরিবর্তন…</li>':'')+'</ul>'}
 
@@ -363,21 +415,33 @@ html body.ink-mode #status.status.not-connected{
       a.click();
     };
 
-    $('connect').onclick = async () => {
+    async function verifySavedConnection(showToast = false) {
       const s = settings();
-      if (!s.token) return toast('Token দিন', true);
+      if (!s.token) {
+        $('status').textContent = 'সংযুক্ত নয়';
+        $('status').className = 'status not-connected';
+        return false;
+      }
       try {
         const r = await api('https://api.github.com/repos/' + s.owner + '/' + s.repo);
         if (!r.ok) throw new Error('api check failed');
-        sessionStorage.setItem(key, JSON.stringify(s));
         $('status').textContent = 'সংযুক্ত';
         $('status').className = 'status connected';
-        toast('GitHub সংযোগ সফল');
+        if(showToast) toast('GitHub সংযোগ সফল');
+        return true;
       } catch {
         $('status').textContent = 'সংযুক্ত নয়';
         $('status').className = 'status not-connected';
-        toast('সংযোগ যাচাই করা যায়নি', true);
+        if(showToast) toast('সংযোগ যাচাই করা যায়নি', true);
+        return false;
       }
+    }
+
+    $('connect').onclick = async () => {
+      const s = settings();
+      if (!s.token) return toast('Token দিন', true);
+      const ok = await verifySavedConnection(true);
+      if (ok) sessionStorage.setItem(key, JSON.stringify(s));
     };
 
     $('save').onclick = async () => {
@@ -422,6 +486,7 @@ html body.ink-mode #status.status.not-connected{
 
     loadSaved();
     applyTheme();
+    if ($('token').value.trim()) verifySavedConnection(false);
     load();
   </script>
 </body>
