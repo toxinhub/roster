@@ -5972,24 +5972,15 @@ html body.ink-mode .next-duty-row{
   border-radius:2px !important;
 }
 
-/* Next duty info — open surface, three horizontal columns with simple dividers. */
+/* Next duty — minimal strip directly under the roster board. */
 .next-duty{
-  width:min(100%,980px);
-  margin:10px auto 0;
-  padding:7px 4px;
+  width:100%;
+  margin:0;
+  padding:3px 0 0;
   border:0 !important;
   border-radius:0 !important;
   background:transparent !important;
   box-shadow:none !important;
-}
-.next-duty-head{
-  margin:0 0 4px;
-  padding:0 4px;
-}
-.next-duty-head span{
-  font-size:9px;
-  font-weight:900;
-  letter-spacing:.04em;
 }
 .next-duty-list{
   display:grid;
@@ -5998,19 +5989,20 @@ html body.ink-mode .next-duty-row{
 }
 .next-duty-row{
   display:grid;
-  grid-template-columns:minmax(42px,.72fr) minmax(0,1.35fr) minmax(0,1fr);
+  grid-template-columns:minmax(36px,.62fr) minmax(0,1.45fr) minmax(0,1fr);
   align-items:center;
-  min-height:27px;
-  padding:2px 9px;
+  min-height:25px;
+  padding:2px 8px;
   border:0 !important;
-  border-left:1px solid rgba(100,116,139,.28) !important;
+  border-left:1px solid rgba(100,116,139,.25) !important;
   border-radius:0 !important;
   background:transparent !important;
 }
 .next-duty-row:first-child{border-left:0 !important}
 .next-duty-name{
-  font-size:11px;
+  font-size:10px;
   font-weight:900;
+  color:#334155;
 }
 .next-duty-item{
   display:flex;
@@ -6019,38 +6011,58 @@ html body.ink-mode .next-duty-row{
   gap:0;
   min-width:0;
 }
-.next-duty-item small{font-size:8px;font-weight:700;line-height:1.15}
-.next-duty-item b{font-size:9px;font-weight:900;line-height:1.2;white-space:nowrap}
-html body.ink-mode .next-duty-row{
-  background:transparent !important;
-  border-left:1px solid #AAA79E !important;
+.next-duty-item small{
+  font-size:7px;
+  font-weight:700;
+  line-height:1.1;
+  color:#7A8792;
 }
-html body.ink-mode .next-duty-row:first-child{border-left:0 !important}
+.next-duty-item b{
+  font-size:8px;
+  font-weight:900;
+  line-height:1.15;
+  white-space:nowrap;
+  color:#334155;
+}
+.next-duty-shift-a{color:#C85A4E !important}
+.next-duty-shift-b{color:#A57A00 !important}
+.next-duty-shift-c{color:#3D86A5 !important}
+.next-duty-off{color:#3D7F58 !important}
+
 html body.ink-mode .next-duty{
   background:transparent !important;
   border:0 !important;
   box-shadow:none !important;
 }
+html body.ink-mode .next-duty-row{
+  background:transparent !important;
+  border-left:1px solid #AAA79E !important;
+}
+html body.ink-mode .next-duty-row:first-child{border-left:0 !important}
+html body.ink-mode .next-duty-name,
+html body.ink-mode .next-duty-item small,
+html body.ink-mode .next-duty-item b{
+  color:#252420 !important;
+}
+html body.ink-mode .next-duty-shift-a{color:#252420 !important}
+html body.ink-mode .next-duty-shift-b{color:#252420 !important}
+html body.ink-mode .next-duty-shift-c{color:#252420 !important}
+html body.ink-mode .next-duty-off{color:#252420 !important}
+
 @media(max-width:900px){
   .next-duty{
-    width:100%;
-    margin:8px 0 0;
-    padding:6px 0;
+    padding:2px 0 0;
   }
-  .next-duty-head{padding:0 4px;margin-bottom:3px}
-  .next-duty-list{grid-template-columns:repeat(3,minmax(0,1fr))}
   .next-duty-row{
     grid-template-columns:1fr;
     justify-items:center;
     text-align:center;
-    gap:1px;
-    min-height:56px;
-    padding:3px 5px;
+    gap:0;
+    min-height:48px;
+    padding:2px 4px;
   }
-  .next-duty-item{
-    align-items:center;
-  }
-  .next-duty-name{font-size:10px}
-  .next-duty-item small{font-size:7px}
-  .next-duty-item b{font-size:8px}
+  .next-duty-name{font-size:9px}
+  .next-duty-item{align-items:center}
+  .next-duty-item small{font-size:6px}
+  .next-duty-item b{font-size:7px}
 }
