@@ -12,10 +12,10 @@ const SCHEDULE_DATA = {
   updatedAt: "১৯ সেপ্টেম্বর, ২০২৬",
 
   shiftTypes: {
-    A: { label: "শিফট A", note: "", color: "#2F6F5E" },
-    B: { label: "শিফট B", note: "", color: "#C97A2B" },
-    C: { label: "শিফট C", note: "", color: "#51607A" },
-    OFF: { label: "ছুটি", note: "সাপ্তাহিক / নির্ধারিত ছুটি", color: "#B3462C" },
+    A: { label: "শিফট A", note: "", color: "#F6B6AD" },
+    B: { label: "শিফট B", note: "", color: "#F8DE7E" },
+    C: { label: "শিফট C", note: "", color: "#A9D8E9" },
+    OFF: { label: "ছুটি", note: "সাপ্তাহিক / নির্ধারিত ছুটি", color: "#B7E4C7" },
   },
 
   days: [
