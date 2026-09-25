@@ -751,8 +751,7 @@ color:#aeb9c5
   body.dark .intro-meta b,
   body.dark .legend b,
   body.dark .day-head strong,
-  body.dark .person strong,
-  body.dark .board-head h2{
+  body.dark .person strong{
 color:#eef3f7
 }
 
@@ -1080,9 +1079,6 @@ font-size:10px !important
 font-size:13px !important
 }
 
-  .board-head h2{
-font-size:22px !important;line-height:1.2 !important
-}
 
   .legend span{
 font-size:12px !important
@@ -1298,9 +1294,6 @@ font-size:10px !important
 font-size:13px !important
 }
 
-  .board-head h2{
-font-size:20px !important;line-height:1.2 !important
-}
 
   .legend span{
 font-size:11px !important
@@ -3142,10 +3135,6 @@ background:#28233a !important;
     -webkit-backdrop-filter:none !important;
   }
 
-  .board-head h2{
-    color:#2f2f2f !important;
-    font-weight:800 !important;
-  }
 
   .legend{
     gap:7px !important;
@@ -3325,7 +3314,6 @@ background:#28233a !important;
     color:#9b9b9b !important;
   }
 
-  body.dark .board-head h2,
   body.dark .day-head strong,
   body.dark .person strong{
     color:#ececec !important;
@@ -3474,9 +3462,6 @@ background:#28233a !important;
     border-bottom:1px solid #e5e5e5 !important;
   }
 
-  .board-head h2{
-    color:#2f2f2f !important;
-  }
 
   .legend{
     gap:6px !important;
@@ -3998,8 +3983,7 @@ body:not(.dark) .intro-meta span{
 
 body:not(.dark) .legend b,
 body:not(.dark) .day-head strong,
-body:not(.dark) .person strong,
-body:not(.dark) .board-head h2{
+body:not(.dark) .person strong{
   color:#2B2927 !important;
 }
 
@@ -4068,7 +4052,6 @@ body.dark .legend span{
 }
 
 body.dark .legend b,
-body.dark .board-head h2,
 body.dark .day-head strong,
 body.dark .person strong{
   color:#F3EEEA !important;
@@ -4583,8 +4566,7 @@ html body:not(.dark) .shift-cell.is-today{
 
 html body:not(.dark) .legend b,
 html body:not(.dark) .day-head strong,
-html body:not(.dark) .person strong,
-html body:not(.dark) .board-head h2{
+html body:not(.dark) .person strong{
   color:#332F2C !important;
 }
 
@@ -4638,7 +4620,6 @@ html body.dark .shift-cell.is-today{
 }
 
 html body.dark .legend b,
-html body.dark .board-head h2,
 html body.dark .day-head strong,
 html body.dark .person strong{
   color:#F1EBE6 !important;
@@ -4824,4 +4805,47 @@ body.dark footer{color:#8F837B}
   .topbar .brand-icon{width:28px;height:28px;flex-basis:28px;border-radius:5px;font-size:14px}
   .topbar .brand > div strong{font-size:11px}
   .topbar .brand > div small{font-size:7px}
+}
+
+
+/* Roster title — consolidated visual treatment */
+.board-head h2{
+  position:relative;
+  display:inline-block;
+  margin:3px 0 0;
+  padding:0 0 6px;
+  color:#332F2C !important;
+  font-size:21px !important;
+  font-weight:900 !important;
+  letter-spacing:-.035em;
+  line-height:1.05 !important;
+  text-rendering:optimizeLegibility;
+}
+.board-head h2::after{
+  content:"";
+  position:absolute;
+  left:0;
+  bottom:0;
+  width:30px;
+  height:2px;
+  border-radius:99px;
+  background:linear-gradient(90deg,#C9433B,#E7A08F);
+  box-shadow:0 1px 4px rgba(201,67,59,.14);
+}
+body.dark .board-head h2{
+  color:#F1EBE6 !important;
+}
+body.dark .board-head h2::after{
+  background:linear-gradient(90deg,#C96A61,#A9655D);
+  box-shadow:0 1px 5px rgba(201,106,97,.16);
+}
+@media(max-width:520px){
+  .board-head h2{
+    font-size:16px !important;
+    padding-bottom:5px;
+  }
+  .board-head h2::after{
+    width:24px;
+    height:1.5px;
+  }
 }
