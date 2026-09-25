@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Mina:wght@400&display=swap");
+
 :root{
 --bg:#F3F6F8;
    --panel:#ffffff;
@@ -17,7 +19,7 @@ box-sizing:border-box
 }
 
  html{
-font-family:Inter,"Segoe UI","Noto Sans Bengali","Noto Sans",Arial,sans-serif
+font-family:"Mina",sans-serif
 }
 
  body{
@@ -4773,7 +4775,7 @@ body.dark footer{color:#8F837B}
   margin:3px 0 0;
   padding:0;
   color:#332F2C !important;
-  font-family:"Noto Serif Bengali","Noto Sans Bengali","SolaimanLipi","Vrinda",serif !important;
+  font-family:"Mina",sans-serif !important;
   font-size:21px !important;
   font-weight:700 !important;
   letter-spacing:-.015em;
