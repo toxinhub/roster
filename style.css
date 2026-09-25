@@ -6372,3 +6372,68 @@ main{
     margin-top:10px !important;
   }
 }
+
+/* =========================================================
+   FINAL INK BALANCE — roster day / weekday / date header
+   Keep the header on the same warm paper family as the grid,
+   with a slightly deeper tone for clear hierarchy.
+   ========================================================= */
+html body.ink-mode .day-grid,
+html body.ink-mode .person-head,
+html body.ink-mode .day-head{
+  background:#EEECE4 !important;
+  background-image:none !important;
+  border-color:#B7B4AA !important;
+  box-shadow:none !important;
+  color:#252420 !important;
+}
+html body.ink-mode .day-head{
+  border-bottom:1px solid #8F8C84 !important;
+}
+html body.ink-mode .day-head span{
+  color:#66635B !important;
+  text-shadow:none !important;
+  font-weight:500 !important;
+}
+html body.ink-mode .day-head strong{
+  color:#252420 !important;
+  text-shadow:none !important;
+  font-weight:700 !important;
+}
+html body.ink-mode .day-head em{
+  background:#E2DFD5 !important;
+  color:#252420 !important;
+  border:1px solid #AAA79E !important;
+  border-radius:2px !important;
+  box-shadow:none !important;
+}
+html body.ink-mode .day-head.is-today{
+  background:#EAE7DD !important;
+}
+html body.ink-mode .day-head.is-today span,
+html body.ink-mode .day-head.is-today strong{
+  color:#171717 !important;
+}
+html body.ink-mode .day-head.is-today em{
+  background:#171717 !important;
+  color:#F5F2E8 !important;
+  border-color:#171717 !important;
+}
+html body.ink-mode .day-head.week-start,
+html body.ink-mode .shift-cell.week-start{
+  border-left-color:#85827A !important;
+}
+html body.ink-mode .day-head.week-end,
+html body.ink-mode .shift-cell.week-end{
+  border-right-color:#85827A !important;
+}
+@media(max-width:900px){
+  html body.ink-mode .day-grid,
+  html body.ink-mode .person-head,
+  html body.ink-mode .day-head{
+    background:#EEECE4 !important;
+  }
+  html body.ink-mode .day-head.is-today{
+    background:#EAE7DD !important;
+  }
+}
