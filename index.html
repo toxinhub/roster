@@ -56,6 +56,13 @@
 let DATA=null;
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+const dhakaClockFormatter=new Intl.DateTimeFormat('en-GB',{
+  timeZone:'Asia/Dhaka',
+  hour:'2-digit',
+  minute:'2-digit',
+  second:'2-digit',
+  hour12:false
+});
 const today=()=>new Date().toLocaleDateString('en-CA',{timeZone:'Asia/Dhaka'});
 const timeLabel=d=>{
   if(!d) return '—';
@@ -92,13 +99,7 @@ function updateDateProgress(){
   const btn=$('todayJump');
   if(!btn) return;
 
-  const parts=new Intl.DateTimeFormat('en-GB',{
-    timeZone:'Asia/Dhaka',
-    hour:'2-digit',
-    minute:'2-digit',
-    second:'2-digit',
-    hour12:false
-  }).formatToParts(new Date());
+  const parts=dhakaClockFormatter.formatToParts(new Date());
 
   const get=k=>Number(parts.find(x=>x.type===k)?.value||0);
   let hour=get('hour');
