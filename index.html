@@ -18,7 +18,7 @@
     </a>
     <div class="top-actions">
       <span class="status-live"><i></i> LIVE BOARD</span>
-      <button class="icon-btn" id="theme" aria-label="থিম পরিবর্তন">☾</button>
+      <button class="icon-btn" id="theme" aria-label="ইঙ্ক মোডে পরিবর্তন" title="Ink Mode">☀</button>
       <a class="admin-link" href="admin.html">Admin ↗</a>
     </div>
   </header>
@@ -90,7 +90,9 @@ const timeLabel=d=>{
 function applyTheme(){
   const dark=localStorage.getItem('roster-theme')==='dark';
   document.body.classList.toggle('dark',dark);
-  $('theme').textContent=dark?'☀':'☾';
+  $('theme').textContent=dark?'☀':'☀';
+  $('theme').setAttribute('aria-label',dark?'লাইট মোডে পরিবর্তন':'ইঙ্ক মোডে পরিবর্তন');
+  $('theme').setAttribute('title',dark?'Light Mode':'Ink Mode');
 }
 
 function toast(m,e=false){
