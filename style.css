@@ -4483,20 +4483,20 @@ html body:not(.dark) .today-jump{
 }
 
 html body.dark{
-  --bg:#1A1715 !important;
-  --panel:#25211E !important;
-  --panel-soft:#211D1A !important;
-  --ink:#F1EBE6 !important;
-  --muted:#B7AAA1 !important;
-  --line:#403831 !important;
-  --line-strong:#51463E !important;
-  background:#1A1715 !important;
+  --bg:#1C1917 !important;
+  --panel:#282421 !important;
+  --panel-soft:#24201D !important;
+  --ink:#F0EAE5 !important;
+  --muted:#B9ADA5 !important;
+  --line:#433B35 !important;
+  --line-strong:#554A42 !important;
+  background:#1C1917 !important;
 }
 
 html body.dark .board{
-  background:#25211E !important;
-  border-color:#443A34 !important;
-  box-shadow:0 18px 50px rgba(0,0,0,.24),inset 0 1px 0 rgba(255,244,238,.055) !important;
+  background:#282421 !important;
+  border-color:#474039 !important;
+  box-shadow:0 18px 50px rgba(0,0,0,.20),inset 0 1px 0 rgba(255,244,238,.055) !important;
 }
 
 html body.dark .board-head,
@@ -4508,19 +4508,19 @@ html body.dark .shift-cell{
 html body.dark .day-grid,
 html body.dark .person-head,
 html body.dark .day-head{
-  background:#211D1A !important;
-  border-color:#403831 !important;
+  background:#24201D !important;
+  border-color:#433B35 !important;
 }
 
 html body.dark .day-head.is-today,
 html body.dark .shift-cell.is-today{
-  background:rgba(112,77,65,.28) !important;
+  background:rgba(118,82,68,.24) !important;
 }
 
 html body.dark .legend b,
 html body.dark .day-head strong,
 html body.dark .person strong{
-  color:#F1EBE6 !important;
+  color:#F0EAE5 !important;
 }
 
 html body.dark .legend small,
@@ -4528,13 +4528,13 @@ html body.dark .intro p,
 html body.dark .intro-meta b,
 html body.dark .kicker,
 html body.dark .intro-meta span{
-  color:#B7AAA1 !important;
+  color:#B9ADA5 !important;
 }
 
 html body.dark .today-jump{
-  background:#2A2521 !important;
+  background:#2D2824 !important;
   color:#F1EBE6 !important;
-  border-color:#4A3F38 !important;
+  border-color:#50443C !important;
 }
 
 /* Keep shift colors and header CCTV red independent from the warm theme. */
