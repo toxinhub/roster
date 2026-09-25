@@ -6514,9 +6514,8 @@ html body.ink-mode .day-grid .days .day-head.is-today em{
 
 
 /* =========================================================
-   INK MODE — WARM PAPER SURFACE
-   Layered static texture: fine grain + subtle paper fibers.
-   Keeps the e-paper character visible without looking dirty.
+   INK MODE — SUBTLE WARM PAPER GRAIN
+   Very light paper texture: just enough to suggest natural stock.
    ========================================================= */
 html body.ink-mode::after{
   content:"";
@@ -6524,12 +6523,9 @@ html body.ink-mode::after{
   inset:0;
   z-index:9999;
   pointer-events:none;
-  opacity:.14;
-  background-image:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Cfilter id='paperFine' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.68' numOctaves='2' seed='29' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='.28 0 0 0 0 .28 0 0 0 0 .28 0 0 0 0 .72 0 0 0 .62 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23paperFine)'/%3E%3C/svg%3E"),
-    repeating-linear-gradient(92deg,rgba(92,82,68,.010) 0,rgba(92,82,68,.010) 1px,transparent 1px,transparent 7px),
-    repeating-linear-gradient(3deg,rgba(255,255,255,.020) 0,rgba(255,255,255,.020) 1px,transparent 1px,transparent 11px);
-  background-size:210px 210px,9px 9px,13px 13px;
+  opacity:.11;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Cfilter id='paperNoise' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.62' numOctaves='2' seed='17' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23paperNoise)' opacity='.55'/%3E%3C/svg%3E");
+  background-size:180px 180px;
   background-repeat:repeat;
   mix-blend-mode:multiply;
 }
@@ -6539,16 +6535,31 @@ html body.ink-mode::before{
   inset:0;
   z-index:9998;
   pointer-events:none;
-  opacity:.06;
-  background:
-    radial-gradient(ellipse at 18% 22%,rgba(92,82,68,.035),transparent 34%),
-    radial-gradient(ellipse at 78% 68%,rgba(92,82,68,.030),transparent 38%),
-    repeating-linear-gradient(0deg,rgba(92,82,68,.010) 0 1px,transparent 1px 4px);
+  opacity:.035;
+  background:repeating-linear-gradient(0deg,rgba(92,82,68,.010) 0 1px,transparent 1px 5px);
   mix-blend-mode:multiply;
 }
 html body.ink-mode .app{
   position:relative;
   z-index:1;
+}
+@media(max-width:900px){
+  html body.ink-mode::after{
+    opacity:.13;
+    background-size:180px 180px;
+  }
+  html body.ink-mode::before{
+    opacity:.04;
+  }
+}
+@media(max-width:520px){
+  html body.ink-mode::after{
+    opacity:.14;
+    background-size:175px 175px;
+  }
+  html body.ink-mode::before{
+    opacity:.045;
+  }
 }
 @media(max-width:900px){
   html body.ink-mode::after{
