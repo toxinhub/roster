@@ -88,11 +88,11 @@ const timeLabel=d=>{
 };
 
 function applyTheme(){
-  const ink-mode=localStorage.getItem('roster-display-mode')==='ink';
-  document.body.classList.toggle('ink-mode',ink-mode);
-  $('theme').textContent=ink-mode?'☀':'☀';
-  $('theme').setAttribute('aria-label',ink-mode?'লাইট মোডে পরিবর্তন':'ইঙ্ক মোডে পরিবর্তন');
-  $('theme').setAttribute('title',ink-mode?'Light Mode':'Ink Mode');
+  const inkMode=localStorage.getItem('roster-display-mode')==='ink';
+  document.body.classList.toggle('ink-mode',inkMode);
+  $('theme').textContent=inkMode?'☀':'☀';
+  $('theme').setAttribute('aria-label',inkMode?'লাইট মোডে পরিবর্তন':'ইঙ্ক মোডে পরিবর্তন');
+  $('theme').setAttribute('title',inkMode?'Light Mode':'Ink Mode');
 }
 
 function toast(m,e=false){
@@ -324,15 +324,15 @@ $('theme').onclick=()=>{
 
   document.body.style.setProperty('--theme-x',x+'%');
   document.body.style.setProperty('--theme-y',y+'%');
-  document.body.classList.remove('theme-to-ink-mode','theme-to-light');
+  document.body.classList.remove('theme-to-ink'),'theme-to-light');
   void document.body.offsetWidth;
-  document.body.classList.add(goingDark?'theme-to-ink-mode':'theme-to-light');
+  document.body.classList.add(goingInk?'theme-to-ink':'theme-to-light');
 
   localStorage.setItem('roster-display-mode',goingInk?'ink':'light');
   applyTheme();
 
   setTimeout(()=>{
-    document.body.classList.remove('theme-to-ink-mode','theme-to-light');
+    document.body.classList.remove('theme-to-ink'),'theme-to-light');
   },760);
 };
 
