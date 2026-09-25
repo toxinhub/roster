@@ -421,10 +421,49 @@ setInterval(()=>{ if(DATA&&!rosterScrolling) render(); },30000);
 (function(){
   const wrap=document.getElementById('roster');
   if(!wrap || !window.matchMedia('(min-width:901px) and (pointer:fine)').matches) return;
+  let wheelTarget=wrap.scrollLeft;
+  let wheelFrame=0;
+  let wheelActive=false;
+
+  const clampScroll=x=>Math.max(0,Math.min(wrap.scrollWidth-wrap.clientWidth,x));
+
+  const stopWheelFrame=()=>{
+    wheelFrame=0;
+    wheelActive=false;
+  };
+
+  const animateWheel=()=>{
+    wheelFrame=0;
+    const current=wrap.scrollLeft;
+    const distance=wheelTarget-current;
+
+    if(Math.abs(distance)<0.35){
+      wrap.scrollLeft=wheelTarget;
+      stopWheelFrame();
+      return;
+    }
+
+    // Ease toward the accumulated target instead of jumping once per wheel event.
+    wrap.scrollLeft=current+(distance*0.22);
+    wheelFrame=requestAnimationFrame(animateWheel);
+  };
+
+  wrap.addEventListener('scroll',()=>{
+    if(!wheelActive && !wheelFrame){
+      wheelTarget=wrap.scrollLeft;
+    }
+  },{passive:true});
+
   wrap.addEventListener('wheel',e=>{
     if(Math.abs(e.deltaY)<=Math.abs(e.deltaX)) return;
     if(wrap.scrollWidth<=wrap.clientWidth) return;
-    wrap.scrollLeft += e.deltaY;
+
+    // Respect the user's input direction while smoothing high-frequency wheel events.
+    const delta=Math.max(-140,Math.min(140,e.deltaY));
+    wheelTarget=clampScroll(wheelTarget+delta);
+
+    wheelActive=true;
+    if(!wheelFrame) wheelFrame=requestAnimationFrame(animateWheel);
     e.preventDefault();
   },{passive:false});
 })();
