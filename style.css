@@ -768,7 +768,8 @@ color:#aeb9c5
   .roster-wrap{
 -webkit-overflow-scrolling:touch;
 overscroll-behavior-x:contain;
-scroll-behavior:smooth;
+/* Wheel input is smoothed in JS; keep scroll position updates immediate. */
+scroll-behavior:auto;
 scrollbar-width:thin;
 contain:layout style;
 transform:translateZ(0);
