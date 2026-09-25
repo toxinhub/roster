@@ -4330,7 +4330,7 @@ html body.dark .shift-cell.is-today{
   padding:0 max(14px,calc((100vw - 1440px)/2));
   background:#D4D4D4;
   color:#2B2927;
-  border-bottom:1px solid #E6CFA0;
+  border-bottom:1px solid #B8B0AA;
   box-shadow:0 7px 22px rgba(51,88,110,.10);
   position:relative;
   z-index:5;
@@ -4422,7 +4422,7 @@ html body.dark .shift-cell.is-today{
     padding:0 12px;
     background:#D4D4D4;
     border:0;
-    border-bottom:1px solid #E6CFA0;
+    border-bottom:1px solid #B8B0AA;
     border-radius:0;
     box-shadow:0 4px 14px rgba(70,48,40,.08);
     overflow:hidden;
