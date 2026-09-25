@@ -4328,7 +4328,7 @@ html body.dark .shift-cell.is-today{
   align-items:center;
   justify-content:space-between;
   padding:0 max(14px,calc((100vw - 1440px)/2));
-  background:#FFE4B5;
+  background:#D4D4D4;
   color:#2B2927;
   border-bottom:1px solid #E6CFA0;
   box-shadow:0 7px 22px rgba(51,88,110,.10);
@@ -4420,7 +4420,7 @@ html body.dark .shift-cell.is-today{
   .topbar{
     height:56px;
     padding:0 12px;
-    background:#FFE4B5;
+    background:#D4D4D4;
     border:0;
     border-bottom:1px solid #E6CFA0;
     border-radius:0;
