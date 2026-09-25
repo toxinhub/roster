@@ -43,6 +43,11 @@
       </div>
       <div class="roster-wrap" id="roster"></div>
     </section>
+
+    <section class="next-duty" aria-labelledby="next-duty-title">
+      <div class="next-duty-head"><span id="next-duty-title">পরবর্তী ডিউটি তথ্য</span></div>
+      <div id="next-duty" class="next-duty-list"></div>
+    </section>
   </main>
 <footer class="site-footer" aria-label="Project note">
   <div class="footer-switch">Switch to desktop view for more information.</div>
@@ -309,6 +314,39 @@ function render(){
       '<div class="person-head" aria-label="CCTV">📹</div>'+
       '<div class="days" style="'+gridStyle+'">'+head+'</div>'+
     '</div>'+rows;
+
+  const nextInfo=people.map(p=>{
+    const shifts=p.shifts||[];
+    const start=Math.max(todayIndex,0);
+    const current=todayIndex>=0 ? (shifts[todayIndex]||'OFF') : 'OFF';
+    const workCodes=['A','B','C'];
+    let nextShift=null;
+    let nextOff=null;
+
+    for(let i=start+1;i<days.length;i++){
+      const code=shifts[i]||'OFF';
+      if(!nextOff && code==='OFF') nextOff={day:days[i]};
+      if(!nextShift && workCodes.includes(code) &&
+         (workCodes.includes(current) ? code!==current : true)){
+        nextShift={day:days[i],code};
+      }
+      if(nextShift&&nextOff) break;
+    }
+
+    const dateLabel=entry=>{
+      if(!entry) return '—';
+      const d=new Date(entry.day.isoDate+'T12:00:00');
+      return d.toLocaleDateString('bn-BD',{day:'numeric',month:'short'});
+    };
+
+    return '<div class="next-duty-row">'+
+      '<strong class="next-duty-name">'+esc(p.name)+'</strong>'+
+      '<span class="next-duty-item"><small>শিফট চেঞ্জ</small><b>'+(nextShift?esc(dateLabel(nextShift))+' · '+esc(nextShift.code):'—')+'</b></span>'+
+      '<span class="next-duty-item"><small>পরবর্তী OFF</small><b>'+(nextOff?esc(dateLabel(nextOff)):'—')+'</b></span>'+
+    '</div>';
+  }).join('');
+
+  $('next-duty').innerHTML=nextInfo;
 }
 
 $('theme').onclick=()=>{
