@@ -149,6 +149,38 @@ function render(){
     '</div>';
   }).join('');
 
+  // Cache the live-clock calculation once per render instead of once per employee.
+  // This keeps the roster output identical while reducing repeated Intl/date work.
+  const dhakaNow=new Date();
+  const dhakaParts=new Intl.DateTimeFormat('en-CA',{
+    timeZone:'Asia/Dhaka',year:'numeric',month:'2-digit',day:'2-digit',
+    hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false
+  }).formatToParts(dhakaNow);
+  const part=k=>dhakaParts.find(x=>x.type===k)?.value||'00';
+  const liveDate=part('year')+'-'+part('month')+'-'+part('day');
+  const liveMinutes=Number(part('hour'))*60+Number(part('minute'));
+  const todayIndex=days.findIndex(d=>d.isoDate===liveDate);
+
+  const shiftStartMinutes={A:360,B:840,C:1320};
+  const toUtcMs=(isoDate,minutes)=>{
+    const [y,m,d]=isoDate.split('-').map(Number);
+    const base=Date.UTC(y,m-1,d,0,0,0);
+    return base+(minutes-360)*60000;
+  };
+  const addDays=(isoDate,n)=>{
+    const [y,m,d]=isoDate.split('-').map(Number);
+    const dt=new Date(Date.UTC(y,m-1,d+n,12,0,0));
+    return dt.toISOString().slice(0,10);
+  };
+  const occurrence=(index,code)=>{
+    if(index<0||index>=days.length||!['A','B','C'].includes(code)) return null;
+    const date=days[index].isoDate;
+    const startMs=toUtcMs(date,shiftStartMinutes[code]);
+    const endMs=startMs+8*60*60000;
+    return {index,code,date,startMs,endMs,endDate:addDays(date,code==='C'?1:0)};
+  };
+  const nowMs=toUtcMs(liveDate,liveMinutes);
+
   const rows=people.map(p=>{
     const cells=days.map((d,di)=>{
       const code=p.shifts?.[di]||'—';
@@ -164,39 +196,6 @@ function render(){
         '</span>'+
       '</div>';
     }).join('');
-
-    // Live status: date-aware 8-hour shift occurrences.
-    // A = 06:00–14:00, B = 14:00–22:00, C = 22:00–06:00 next day.
-    const dhakaNow=new Date();
-    const dhakaParts=new Intl.DateTimeFormat('en-CA',{
-      timeZone:'Asia/Dhaka',year:'numeric',month:'2-digit',day:'2-digit',
-      hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false
-    }).formatToParts(dhakaNow);
-    const part=k=>dhakaParts.find(x=>x.type===k)?.value||'00';
-    const liveDate=part('year')+'-'+part('month')+'-'+part('day');
-    const liveMinutes=Number(part('hour'))*60+Number(part('minute'));
-    const todayIndex=days.findIndex(d=>d.isoDate===liveDate);
-
-    const shiftTimes={A:[360,840],B:[840,1320],C:[1320,360]};
-    const shiftStartMinutes={A:360,B:840,C:1320};
-    const toUtcMs=(isoDate,minutes)=>{
-      const [y,m,d]=isoDate.split('-').map(Number);
-      const base=Date.UTC(y,m-1,d,0,0,0);
-      return base+(minutes-360)*60000;
-    };
-    const addDays=(isoDate,n)=>{
-      const [y,m,d]=isoDate.split('-').map(Number);
-      const dt=new Date(Date.UTC(y,m-1,d+n,12,0,0));
-      return dt.toISOString().slice(0,10);
-    };
-    const occurrence=(index,code)=>{
-      if(index<0||index>=days.length||!['A','B','C'].includes(code)) return null;
-      const date=days[index].isoDate;
-      const startMs=toUtcMs(date,shiftStartMinutes[code]);
-      const endMs=startMs+8*60*60000;
-      return {index,code,date,startMs,endMs,endDate:addDays(date,code==='C'?1:0)};
-    };
-    const nowMs=toUtcMs(liveDate,liveMinutes);
 
     const assigned=[];
     for(let i=0;i<days.length;i++){
