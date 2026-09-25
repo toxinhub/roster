@@ -5765,3 +5765,38 @@ html body.ink-mode .change-status.dirty{
 html body.ink-mode .remove{
   color:#6F2424 !important;
 }
+
+
+/* HARD OVERRIDE: Ink Mode today date column must remain paper-light.
+   This intentionally overrides every older today/week-start interaction rule. */
+html body.ink-mode .day-head.is-today,
+html body.ink-mode .day-head.is-today.week-start,
+html body.ink-mode .shift-cell.is-today,
+html body.ink-mode .shift-cell.is-today.week-start,
+html body.ink-mode .shift-cell.is-today.week-end{
+  background:#EAE7DD !important;
+  background-image:none !important;
+  color:#171717 !important;
+  box-shadow:inset 2px 0 0 #85827A,inset -2px 0 0 #85827A !important;
+  filter:none !important;
+  opacity:1 !important;
+}
+html body.ink-mode .day-head.is-today::before,
+html body.ink-mode .day-head.is-today::after,
+html body.ink-mode .shift-cell.is-today::before,
+html body.ink-mode .shift-cell.is-today::after{
+  background:none !important;
+  box-shadow:none !important;
+  opacity:1 !important;
+}
+html body.ink-mode .day-head.is-today em{
+  background:#EAE7DD !important;
+  color:#171717 !important;
+  border:1px solid #85827A !important;
+  box-shadow:none !important;
+}
+html body.ink-mode .shift-cell.is-today .shift{
+  background:#F0EDE3 !important;
+  color:#171717 !important;
+  border-color:#85827A !important;
+}
