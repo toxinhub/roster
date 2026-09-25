@@ -5250,3 +5250,304 @@ html body.ink-mode .board,
 html body.ink-mode .topbar{
   transition:none !important;
 }
+
+
+/* =========================================================
+   INK PRINT EDITION — final visual layer
+   Everything becomes a printed-paper/book interface.
+   The header C mark is intentionally excluded so its existing
+   red animation and behavior remain exactly as-is.
+   ========================================================= */
+html body.ink-mode{
+  --bg:#E7E4DA !important;
+  --panel:#F5F2E8 !important;
+  --panel-soft:#ECE9DE !important;
+  --ink:#171717 !important;
+  --muted:#5B5953 !important;
+  --line:#B9B6AC !important;
+  --line-strong:#85827A !important;
+  --navy:#171717 !important;
+  background:#E7E4DA !important;
+  color:#171717 !important;
+  background-image:none !important;
+}
+
+/* Paper page */
+html body.ink-mode .app{
+  background:#E7E4DA !important;
+}
+html body.ink-mode main{
+  background:transparent !important;
+}
+html body.ink-mode .board{
+  background:#F5F2E8 !important;
+  border:1px solid #AFACA2 !important;
+  border-radius:3px !important;
+  box-shadow:0 2px 5px rgba(35,32,27,.08) !important;
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+}
+html body.ink-mode .board-head{
+  background:#ECE9DE !important;
+  border-bottom:2px solid #77746C !important;
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+}
+
+/* Printed header — C mark excluded on purpose */
+html body.ink-mode .topbar{
+  background:#E7E4DA !important;
+  color:#171717 !important;
+  border-bottom:2px solid #77746C !important;
+  box-shadow:none !important;
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+}
+html body.ink-mode .brand-copy strong,
+html body.ink-mode .topbar .brand > div strong{
+  color:#171717 !important;
+}
+html body.ink-mode .status-live{
+  color:#4A4842 !important;
+}
+html body.ink-mode .status-live i{
+  background:#171717 !important;
+  box-shadow:none !important;
+}
+html body.ink-mode .admin-link,
+html body.ink-mode .icon-btn#theme,
+html body.ink-mode .topbar .icon-btn,
+html body.ink-mode .back{
+  background:transparent !important;
+  color:#252420 !important;
+  border:1px solid #85827A !important;
+  border-radius:3px !important;
+  box-shadow:none !important;
+}
+
+/* Roster title and metadata */
+html body.ink-mode #duty-roster-title,
+html body.ink-mode .intro h1{
+  color:#171717 !important;
+  text-shadow:none !important;
+}
+html body.ink-mode #duty-roster-title > span{
+  color:#171717 !important;
+}
+html body.ink-mode .kicker,
+html body.ink-mode .intro p,
+html body.ink-mode .intro-meta span,
+html body.ink-mode .intro-meta b{
+  color:#5B5953 !important;
+}
+
+/* Today control: printed label */
+html body.ink-mode .today-jump{
+  background:#F5F2E8 !important;
+  color:#171717 !important;
+  border:1px solid #85827A !important;
+  border-radius:3px !important;
+  box-shadow:none !important;
+}
+
+/* Legend: monochrome printed labels */
+html body.ink-mode .legend span{
+  background:#F5F2E8 !important;
+  color:#252420 !important;
+  border:1px solid #AAA79E !important;
+  border-radius:3px !important;
+  box-shadow:none !important;
+}
+html body.ink-mode .legend b,
+html body.ink-mode .legend small{
+  color:#252420 !important;
+}
+html body.ink-mode .legend i{
+  background:#252420 !important;
+  box-shadow:none !important;
+  border-color:#252420 !important;
+}
+
+/* Roster grid: paper + rules */
+html body.ink-mode .day-grid,
+html body.ink-mode .person-head,
+html body.ink-mode .day-head{
+  background:#ECE9DE !important;
+  border-color:#AFACA2 !important;
+  box-shadow:none !important;
+}
+html body.ink-mode .person,
+html body.ink-mode .shift-cell{
+  background:#F5F2E8 !important;
+  border-color:#B9B6AC !important;
+  box-shadow:none !important;
+}
+html body.ink-mode .day-head{
+  border-bottom:1px solid #85827A !important;
+}
+html body.ink-mode .day-head span,
+html body.ink-mode .day-head strong,
+html body.ink-mode .person strong,
+html body.ink-mode .person-head{
+  color:#171717 !important;
+  text-shadow:none !important;
+}
+html body.ink-mode .day-head span{
+  font-size:.9em !important;
+  letter-spacing:.02em;
+}
+html body.ink-mode .day-head strong{
+  font-weight:700 !important;
+}
+html body.ink-mode .day-head.is-today,
+html body.ink-mode .shift-cell.is-today{
+  background:#DDD9CD !important;
+}
+html body.ink-mode .day-head em{
+  background:#171717 !important;
+  color:#F5F2E8 !important;
+  border-radius:2px !important;
+  box-shadow:none !important;
+}
+
+/* Shift blocks become ink stamps — no colored UI, no shadows */
+html body.ink-mode .shift-cell .shift{
+  background:#E2DFD5 !important;
+  color:#171717 !important;
+  border:1px solid #85827A !important;
+  border-radius:2px !important;
+  box-shadow:none !important;
+  text-shadow:none !important;
+  filter:none !important;
+}
+html body.ink-mode .shift-cell .shift b,
+html body.ink-mode .shift-cell .shift small{
+  color:#171717 !important;
+  opacity:1 !important;
+}
+
+/* Duty status: simple printed annotation */
+html body.ink-mode .duty-status{
+  background:transparent !important;
+  color:#4A4842 !important;
+  border-color:#AAA79E !important;
+  border-radius:2px !important;
+  box-shadow:none !important;
+  text-shadow:none !important;
+}
+html body.ink-mode .name-active-dot{
+  background:#171717 !important;
+  box-shadow:none !important;
+}
+
+/* Admin: same paper/book language */
+html body.ink-mode .admin-note,
+html body.ink-mode .panel{
+  background:#F5F2E8 !important;
+  color:#171717 !important;
+  border:1px solid #AFAAA2 !important;
+  border-color:#AFAAA2 !important;
+  border-radius:3px !important;
+  box-shadow:none !important;
+}
+html body.ink-mode input,
+html body.ink-mode .grid-scroll input{
+  background:#F5F2E8 !important;
+  color:#171717 !important;
+  border:1px solid #85827A !important;
+  border-radius:2px !important;
+  box-shadow:none !important;
+}
+html body.ink-mode .primary{
+  background:#171717 !important;
+  color:#F5F2E8 !important;
+  border:1px solid #171717 !important;
+  border-radius:2px !important;
+  box-shadow:none !important;
+}
+html body.ink-mode .actions button,
+html body.ink-mode .form-row button,
+html body.ink-mode .edit{
+  background:#ECE9DE !important;
+  color:#171717 !important;
+  border:1px solid #85827A !important;
+  border-radius:2px !important;
+  box-shadow:none !important;
+}
+html body.ink-mode .status{
+  background:#ECE9DE !important;
+  color:#4A4842 !important;
+  border:1px solid #AAA79E !important;
+  border-radius:2px !important;
+  box-shadow:none !important;
+}
+html body.ink-mode .grid-scroll th{
+  background:#ECE9DE !important;
+  color:#171717 !important;
+}
+html body.ink-mode .grid-scroll th,
+html body.ink-mode .grid-scroll td{
+  border-color:#AAA79E !important;
+}
+html body.ink-mode .picker{
+  background:#F5F2E8 !important;
+  border:1px solid #85827A !important;
+  border-radius:3px !important;
+  box-shadow:2px 3px 8px rgba(35,32,27,.10) !important;
+}
+html body.ink-mode .picker .shift-option{
+  background:#ECE9DE !important;
+  color:#171717 !important;
+  border:1px solid #AAA79E !important;
+  border-radius:2px !important;
+  box-shadow:none !important;
+}
+html body.ink-mode .picker .shift-option strong,
+html body.ink-mode .picker .shift-option small{
+  color:#171717 !important;
+}
+
+/* Footer reads like a book colophon */
+html body.ink-mode footer,
+html body.ink-mode .site-footer{
+  color:#5B5953 !important;
+  text-shadow:none !important;
+}
+html body.ink-mode .footer-divider{
+  background:#AFAAA2 !important;
+}
+
+/* No modern glass/lighting tricks anywhere in Ink Mode. */
+html body.ink-mode *,
+html body.ink-mode *::before,
+html body.ink-mode *::after{
+  text-shadow:none !important;
+}
+html body.ink-mode .board,
+html body.ink-mode .topbar,
+html body.ink-mode .today-jump,
+html body.ink-mode .icon-btn,
+html body.ink-mode .admin-link,
+html body.ink-mode .legend span,
+html body.ink-mode .panel,
+html body.ink-mode .admin-note,
+html body.ink-mode .picker,
+html body.ink-mode .shift{
+  background-image:none !important;
+  filter:none !important;
+}
+html body.ink-mode .brand-mark{
+  /* Intentionally untouched: existing C color + 5s red animation stay active. */
+  animation:cctvRedSwitch 5s ease-in-out infinite !important;
+}
+
+@media(max-width:900px){
+  html body.ink-mode .topbar,
+  html body.ink-mode .board{
+    border-radius:2px !important;
+  }
+  html body.ink-mode .shift-cell{
+    background:#F5F2E8 !important;
+    border-color:#B9B6AC !important;
+  }
+}
