@@ -79,7 +79,34 @@ min-height:72px;padding:14px 18px;display:flex;align-items:center;justify-conten
 }
 
  .board-head h2{
-margin:3px 0 0;font-size:20px;font-weight:900;letter-spacing:-.03em
+  position:relative;
+  display:inline-block;
+  margin:3px 0 0;
+  padding:0 0 6px;
+  color:#332F2C;
+  font-size:21px;
+  font-weight:900;
+  letter-spacing:-.035em;
+  line-height:1.05;
+  text-rendering:optimizeLegibility;
+}
+.board-head h2::after{
+  content:"";
+  position:absolute;
+  left:0;
+  bottom:0;
+  width:30px;
+  height:2px;
+  border-radius:99px;
+  background:linear-gradient(90deg,#C9433B,#E7A08F);
+  box-shadow:0 1px 4px rgba(201,67,59,.14);
+}
+body.dark .board-head h2{
+  color:#F1EBE6;
+}
+body.dark .board-head h2::after{
+  background:linear-gradient(90deg,#C96A61,#A9655D);
+  box-shadow:0 1px 5px rgba(201,106,97,.16);
 }
 
  .legend{
@@ -300,6 +327,14 @@ display:inline
 }
 
  @media(max-width:520px){
+.board-head h2{
+  font-size:16px;
+  padding-bottom:5px;
+}
+.board-head h2::after{
+  width:24px;
+  height:1.5px;
+}
 .intro h1{
 font-size:24px
 }
