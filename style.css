@@ -4323,11 +4323,11 @@ html body.dark .shift-cell.is-today{
 
 /* Header — light warm-neutral theme */
 .topbar{
-  height:68px;
+  height:58px;
   display:flex;
   align-items:center;
   justify-content:space-between;
-  padding:0 max(18px,calc((100vw - 1440px)/2));
+  padding:0 max(14px,calc((100vw - 1440px)/2));
   background:#E2B59A;
   color:#2B2927;
   border-bottom:1px solid #D19E82;
@@ -4344,10 +4344,10 @@ html body.dark .shift-cell.is-today{
 .brand-mark{
   display:grid;
   place-items:center;
-  width:34px;
-  height:34px;
-  flex:0 0 34px;
-  border-radius:9px;
+  width:30px;
+  height:30px;
+  flex:0 0 30px;
+  border-radius:7px;
   color:#fff;
   font-size:15px;
   font-weight:950;
@@ -4357,7 +4357,7 @@ html body.dark .shift-cell.is-today{
 .brand-copy{min-width:0}
 .brand-copy strong{
   display:block;
-  font-size:13px;
+  font-size:12px;
   font-weight:850;
   letter-spacing:.02em;
   white-space:nowrap;
@@ -4366,7 +4366,7 @@ html body.dark .shift-cell.is-today{
 .top-actions{
   display:flex;
   align-items:center;
-  gap:8px;
+  gap:6px;
 }
 .status-live{
   display:flex;
@@ -4390,13 +4390,13 @@ html body.dark .shift-cell.is-today{
   border-radius:9px;
   background:#FBF6F2;
   color:#403A36;
-  min-height:34px;
-  padding:7px 10px;
+  min-height:30px;
+  padding:6px 9px;
   cursor:pointer;
   font-size:11px;
   box-shadow:0 2px 7px rgba(70,48,40,.05);
 }
-.icon-btn{width:34px;padding:0;font-size:16px}
+.icon-btn{width:30px;padding:0;font-size:15px}
 .admin-link{font-weight:800}
 .icon-btn#theme{
   position:relative;
@@ -4448,8 +4448,8 @@ html body.dark .shift-cell.is-today{
     display:inline-flex;
     align-items:center;
     justify-content:center;
-    min-height:30px;
-    padding:0 10px;
+    min-height:28px;
+    padding:0 8px;
     border-radius:9px;
     border:1px solid #D7CCC5;
     background:#FBF6F2;
@@ -4461,8 +4461,8 @@ html body.dark .shift-cell.is-today{
     white-space:nowrap;
   }
   .icon-btn#theme{
-    width:32px;
-    min-height:32px;
+    width:30px;
+    min-height:30px;
     border-radius:10px;
     border:1px solid #D7CCC5;
     background:#FBF6F2;
