@@ -78,37 +78,6 @@ background:rgba(255,255,255,.62);border:1px solid rgba(255,255,255,.78);border-r
 min-height:72px;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;gap:20px;border-bottom:1px solid rgba(255,255,255,.65);background:rgba(255,255,255,.2);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)
 }
 
- #duty-roster-title{
-  position:relative;
-  display:inline-block;
-  margin:3px 0 0;
-  padding:0 0 6px;
-  color:#332F2C;
-  font-size:21px;
-  font-weight:900;
-  letter-spacing:-.035em;
-  line-height:1.05;
-  text-rendering:optimizeLegibility;
-}
-#duty-roster-title::after{
-  content:"";
-  position:absolute;
-  left:0;
-  bottom:0;
-  width:30px;
-  height:2px;
-  border-radius:99px;
-  background:linear-gradient(90deg,#C9433B,#E7A08F);
-  box-shadow:0 1px 4px rgba(201,67,59,.14);
-}
-body.dark #duty-roster-title{
-  color:#F1EBE6;
-}
-body.dark #duty-roster-title::after{
-  background:linear-gradient(90deg,#C96A61,#A9655D);
-  box-shadow:0 1px 5px rgba(201,106,97,.16);
-}
-
  .legend{
 display:flex;
 align-items:center;
@@ -327,22 +296,11 @@ display:inline
 }
 
  @media(max-width:520px){
-#duty-roster-title{
-  font-size:16px;
-  padding-bottom:5px;
-}
-#duty-roster-title::after{
-  width:24px;
-  height:1.5px;
-}
 .intro h1{
 font-size:24px
 }
 .intro p{
 font-size:11px
-}
-#duty-roster-title{
-font-size:15px
 }
 .legend{
 gap:5px
@@ -3620,7 +3578,6 @@ background:#28233a !important;
     color:#9b9b9b !important;
   }
 
-  body.dark #duty-roster-title,
   body.dark .day-head strong,
   body.dark .person strong{
     color:#ececec !important;
@@ -4816,20 +4773,20 @@ body.dark footer{color:#8F837B}
   margin:3px 0 0;
   padding:0;
   color:#332F2C !important;
-  font-family:Georgia,"Noto Serif Bengali","Noto Sans Bengali",serif !important;
+  font-family:"Noto Serif Bengali","Noto Sans Bengali","SolaimanLipi","Vrinda",serif !important;
   font-size:21px !important;
-  font-weight:800 !important;
-  letter-spacing:-.02em;
-  line-height:1.15 !important;
+  font-weight:700 !important;
+  letter-spacing:-.015em;
+  line-height:1.2 !important;
   text-rendering:optimizeLegibility;
 }
 #duty-roster-title > span{
   display:inline-block;
   color:#C9433B;
   font-family:Georgia,serif;
-  font-size:24px;
+  font-size:22px;
   font-weight:400;
-  line-height:.9;
+  line-height:1;
   transform:translateY(-1px);
 }
 body.dark #duty-roster-title{
@@ -4844,6 +4801,6 @@ body.dark #duty-roster-title > span{
     font-size:16px !important;
   }
   #duty-roster-title > span{
-    font-size:19px;
+    font-size:18px;
   }
 }
