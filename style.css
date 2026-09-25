@@ -6511,3 +6511,27 @@ html body.ink-mode .day-grid .days .day-head.is-today em{
     background-color:#E1DED4 !important;
   }
 }
+
+
+/* =========================================================
+   INK MODE — SUBTLE WARM PAPER GRAIN
+   Very light e-paper texture; no external asset required.
+   ========================================================= */
+html body.ink-mode::after{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:2;
+  pointer-events:none;
+  opacity:.042;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Cfilter id='paperNoise' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.62' numOctaves='2' seed='17' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23paperNoise)' opacity='.72'/%3E%3C/svg%3E");
+  background-size:180px 180px;
+  background-repeat:repeat;
+  mix-blend-mode:multiply;
+}
+@media(max-width:900px){
+  html body.ink-mode::after{
+    opacity:.032;
+    background-size:160px 160px;
+  }
+}
