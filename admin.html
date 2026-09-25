@@ -27,7 +27,7 @@ body.dark .picker .shift-a{background:linear-gradient(145deg,rgba(216,151,60,.30
         </div>
       </div>
       <div class="top-actions">
-        <button class="icon-btn" id="theme" aria-label="থিম পরিবর্তন" title="থিম পরিবর্তন">☾</button>
+        <button class="icon-btn" id="theme" aria-label="থিম পরিবর্তন" title="Ink Mode">☀</button>
         <a class="back" href="index.html">লাইভ রোস্টার</a>
       </div>
     </header>
@@ -114,8 +114,11 @@ body.dark .picker .shift-a{background:linear-gradient(145deg,rgba(216,151,60,.30
     function applyTheme() {
       const dark = localStorage.getItem('roster-theme') === 'dark';
       document.body.classList.toggle('dark', dark);
-      $('theme').textContent = dark ? '☀' : '☾';
-      $('theme').setAttribute('aria-label', dark ? 'লাইট থিম' : 'ডার্ক থিম');
+      $('theme').textContent = dark ? '☀' : '☀';
+      $('theme').setAttribute('aria-label', dark ? 'লাইট মোড' : 'ইঙ্ক মোড');
+      $('theme').setAttribute('title', dark ? 'Light Mode' : 'Ink Mode');
+      $('theme').setAttribute('aria-label', dark ? 'লাইট মোড' : 'ইঙ্ক মোড');
+      $('theme').setAttribute('title', dark ? 'Light Mode' : 'Ink Mode');
     }
 
     function settings() {
