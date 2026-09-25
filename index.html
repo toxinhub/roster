@@ -73,7 +73,13 @@ const dhakaDateTimeFormatter=new Intl.DateTimeFormat('en-CA',{
   second:'2-digit',
   hour12:false
 });
-const today=()=>new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Dhaka'}).format(new Date());
+const dhakaDateFormatter=new Intl.DateTimeFormat('en-CA',{
+  timeZone:'Asia/Dhaka',
+  year:'numeric',
+  month:'2-digit',
+  day:'2-digit'
+});
+const today=()=>dhakaDateFormatter.format(new Date());
 const timeLabel=d=>{
   if(!d) return '—';
   const date=new Date(d);
