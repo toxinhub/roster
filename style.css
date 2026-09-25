@@ -4503,3 +4503,112 @@ html body.dark .shift-cell.is-today{
   }
   body.dark .status-live{color:#C8BCB3}
 }
+
+
+/* Eye-comfort warm theme — balanced contrast, soft neutral warmth */
+html body:not(.dark){
+  background:#F7F3EE !important;
+  color:#332F2C !important;
+}
+
+html body:not(.dark) .board,
+html body:not(.dark) .board-head{
+  background:#FCF8F4 !important;
+  border-color:#E4DCD5 !important;
+}
+
+html body:not(.dark) .day-grid,
+html body:not(.dark) .person-head,
+html body:not(.dark) .day-head{
+  background:#F0ECE7 !important;
+}
+
+html body:not(.dark) .person,
+html body:not(.dark) .shift-cell{
+  background:#FCF8F4 !important;
+  border-color:#E1DAD4 !important;
+}
+
+html body:not(.dark) .day-head.is-today,
+html body:not(.dark) .shift-cell.is-today{
+  background:rgba(255,224,211,.48) !important;
+}
+
+html body:not(.dark) .legend b,
+html body:not(.dark) .day-head strong,
+html body:not(.dark) .person strong,
+html body:not(.dark) .board-head h2{
+  color:#332F2C !important;
+}
+
+html body:not(.dark) .legend small,
+html body:not(.dark) .intro p,
+html body:not(.dark) .intro-meta b,
+html body:not(.dark) .kicker,
+html body:not(.dark) .intro-meta span{
+  color:#766D67 !important;
+}
+
+html body:not(.dark) .today-jump{
+  background:#F8F4F0 !important;
+  border-color:#DDD4CD !important;
+  color:#403934 !important;
+}
+
+html body.dark{
+  --bg:#1A1715 !important;
+  --panel:#25211E !important;
+  --panel-soft:#211D1A !important;
+  --ink:#F1EBE6 !important;
+  --muted:#B7AAA1 !important;
+  --line:#403831 !important;
+  --line-strong:#51463E !important;
+  background:#1A1715 !important;
+}
+
+html body.dark .board{
+  background:#25211E !important;
+  border-color:#443A34 !important;
+  box-shadow:0 18px 50px rgba(0,0,0,.24),inset 0 1px 0 rgba(255,244,238,.055) !important;
+}
+
+html body.dark .board-head,
+html body.dark .person,
+html body.dark .shift-cell{
+  background:#25211E !important;
+}
+
+html body.dark .day-grid,
+html body.dark .person-head,
+html body.dark .day-head{
+  background:#211D1A !important;
+  border-color:#403831 !important;
+}
+
+html body.dark .day-head.is-today,
+html body.dark .shift-cell.is-today{
+  background:rgba(112,77,65,.28) !important;
+}
+
+html body.dark .legend b,
+html body.dark .board-head h2,
+html body.dark .day-head strong,
+html body.dark .person strong{
+  color:#F1EBE6 !important;
+}
+
+html body.dark .legend small,
+html body.dark .intro p,
+html body.dark .intro-meta b,
+html body.dark .kicker,
+html body.dark .intro-meta span{
+  color:#B7AAA1 !important;
+}
+
+html body.dark .today-jump{
+  background:#2A2521 !important;
+  color:#F1EBE6 !important;
+  border-color:#4A3F38 !important;
+}
+
+/* Keep shift colors and header CCTV red independent from the warm theme. */
