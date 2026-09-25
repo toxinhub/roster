@@ -16,6 +16,38 @@ body.inkMode .picker{box-shadow:0 18px 50px rgba(0,0,0,.45)}
 
 body.inkMode .picker .shift-a{background:linear-gradient(145deg,rgba(216,151,60,.30),rgba(102,76,35,.46));color:#f7d18e}.picker .shift-b{background:linear-gradient(145deg,rgba(189,99,47,.34),rgba(248,220,205,.86));color:#7a2f18;border-color:rgba(189,99,47,.88)}body.inkMode .picker .shift-b{background:linear-gradient(145deg,rgba(189,99,47,.30),rgba(99,52,34,.48));color:#f0b59a}.picker .shift-c{background:linear-gradient(145deg,rgba(39,62,71,.38),rgba(214,224,228,.86));color:#273e47;border-color:rgba(39,62,71,.88)}body.inkMode .picker .shift-c{background:linear-gradient(145deg,rgba(39,62,71,.62),rgba(64,86,96,.48));color:#d7e3e8}.picker .shift-off{background:linear-gradient(145deg,rgba(216,201,155,.46),rgba(250,246,229,.88));color:#5f5533;border-color:rgba(216,201,155,.9)}body.inkMode .picker .shift-off{background:linear-gradient(145deg,rgba(216,201,155,.28),rgba(88,80,51,.42));color:#eee2b9}.picker .shift-l{background:linear-gradient(145deg,rgba(164,36,59,.34),rgba(247,214,221,.86));color:#8b1e34;border-color:rgba(164,36,59,.88)}body.inkMode .picker .shift-l{background:linear-gradient(145deg,rgba(164,36,59,.30),rgba(91,31,45,.48));color:#f2a9b9}
 
+
+/* INK MODE — balanced "no changes" status strip */
+html body.ink-mode .editor-meta{
+  background:#EAE7DD !important;
+  border:1px solid #C1BEB5 !important;
+  box-shadow:none !important;
+  color:#5F5C55 !important;
+}
+html body.ink-mode .editor-meta .change-status{
+  color:#5F5C55 !important;
+  -webkit-text-fill-color:#5F5C55 !important;
+  font-weight:800 !important;
+}
+html body.ink-mode .editor-meta .change-status.clean{
+  color:#5F5C55 !important;
+  -webkit-text-fill-color:#5F5C55 !important;
+}
+html body.ink-mode .editor-meta .quiet{
+  background:#F3F1E9 !important;
+  color:#6D6961 !important;
+  -webkit-text-fill-color:#6D6961 !important;
+  border:1px solid #C8C5BC !important;
+  border-radius:7px !important;
+  box-shadow:none !important;
+}
+html body.ink-mode .editor-meta .quiet:disabled{
+  color:#AAA69D !important;
+  -webkit-text-fill-color:#AAA69D !important;
+  background:#E2DFD6 !important;
+  border-color:#D0CCC3 !important;
+}
+
 /* CONNECTION STATUS — definitive state colors */
 #status.status{
   display:inline-block !important;
