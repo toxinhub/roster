@@ -4350,7 +4350,7 @@ html body.dark .shift-cell.is-today{
   border-radius:7px;
   color:#fff;
   font-size:15px;
-  font-weight:950;
+  font-weight:1000;
   line-height:1;
   animation:cctvRedSwitch 5s ease-in-out infinite;
 }
@@ -4411,9 +4411,8 @@ html body.dark .shift-cell.is-today{
 
 /* Header C color is independent from dark mode and shift colors */
 @keyframes cctvRedSwitch{
-  0%,100%{background-color:#E58B85}
-  50%{background-color:#C9433B}
-  75%{background-color:#FF2B1A}
+  0%,100%{background-color:#C9433B}
+  50%{background-color:#FF2B1A}
 }
 
 /* Mobile header */
