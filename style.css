@@ -5055,3 +5055,181 @@ html body.dark .picker button:hover{
 }
 
 /* Preserve the existing header C animation exactly. */
+
+
+/* =========================================================
+   INK MODE — Kindle / e-ink inspired paper display
+   User-facing replacement for the old Dark Mode concept.
+   Existing functionality, data, shift colors and Header C
+   animation are intentionally preserved.
+   ========================================================= */
+html body.dark{
+  --bg:#F1EFE8 !important;
+  --panel:#F8F7F1 !important;
+  --panel-soft:#ECEAE3 !important;
+  --ink:#242424 !important;
+  --muted:#66645F !important;
+  --line:#C9C7C0 !important;
+  --line-strong:#B8B6AF !important;
+  --navy:#242424 !important;
+  --shadow:none !important;
+  background:#F1EFE8 !important;
+  color:#242424 !important;
+  background-image:repeating-linear-gradient(0deg,rgba(36,36,36,.012) 0,rgba(36,36,36,.012) 1px,transparent 1px,transparent 4px) !important;
+}
+html body.dark .board{
+  background:#F8F7F1 !important;
+  border:1px solid #C9C7C0 !important;
+  box-shadow:none !important;
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+}
+html body.dark .board-head{
+  background:#ECEAE3 !important;
+  border-bottom:1px solid #C9C7C0 !important;
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+}
+html body.dark .day-grid,
+html body.dark .person-head,
+html body.dark .day-head{
+  background:#ECEAE3 !important;
+  border-color:#C9C7C0 !important;
+}
+html body.dark .person,
+html body.dark .shift-cell{
+  background:#F8F7F1 !important;
+  border-color:#C9C7C0 !important;
+}
+html body.dark .legend span{
+  background:#F8F7F1 !important;
+  border-color:#C9C7C0 !important;
+  box-shadow:none !important;
+  color:#3A3936 !important;
+}
+html body.dark .legend b,
+html body.dark .day-head strong,
+html body.dark .person strong,
+html body.dark .shift b,
+html body.dark #duty-roster-title{
+  color:#242424 !important;
+}
+html body.dark .legend small,
+html body.dark .day-head span,
+html body.dark .intro p,
+html body.dark .intro-meta b,
+html body.dark .kicker,
+html body.dark .intro-meta span{
+  color:#66645F !important;
+}
+html body.dark .day-head.is-today,
+html body.dark .shift-cell.is-today{
+  background:#E7E5DD !important;
+}
+html body.dark .day-head em{
+  color:#242424 !important;
+  background:#DDDAD1 !important;
+}
+html body.dark .person-head{
+  color:#66645F !important;
+  text-shadow:none !important;
+}
+html body.dark .today-jump{
+  background:#F8F7F1 !important;
+  color:#242424 !important;
+  border-color:#C9C7C0 !important;
+  box-shadow:none !important;
+}
+html body.dark .topbar{
+  background:#ECEAE3 !important;
+  color:#242424 !important;
+  border-bottom-color:#C9C7C0 !important;
+  box-shadow:none !important;
+}
+html body.dark .brand-copy strong,
+html body.dark .topbar .brand > div strong{
+  color:#242424 !important;
+}
+html body.dark .admin-link,
+html body.dark .icon-btn#theme,
+html body.dark .back,
+html body.dark .topbar .icon-btn{
+  background:#F8F7F1 !important;
+  color:#242424 !important;
+  border-color:#C9C7C0 !important;
+  box-shadow:none !important;
+}
+html body.dark .status-live{
+  color:#66645F !important;
+}
+html body.dark .admin-note,
+html body.dark .panel{
+  background:#F8F7F1 !important;
+  border-color:#C9C7C0 !important;
+  box-shadow:none !important;
+}
+html body.dark input,
+html body.dark .grid-scroll input{
+  background:#F8F7F1 !important;
+  color:#242424 !important;
+  border-color:#C9C7C0 !important;
+  box-shadow:none !important;
+}
+html body.dark .primary{
+  background:#3D3D3A !important;
+  border-color:#3D3D3A !important;
+  color:#F8F7F1 !important;
+  box-shadow:none !important;
+}
+html body.dark .actions button,
+html body.dark .form-row button,
+html body.dark .edit{
+  background:#ECEAE3 !important;
+  color:#242424 !important;
+  border-color:#C9C7C0 !important;
+  box-shadow:none !important;
+}
+html body.dark .status{
+  background:#ECEAE3 !important;
+  color:#66645F !important;
+  border-color:#C9C7C0 !important;
+}
+html body.dark .grid-scroll th{
+  background:#ECEAE3 !important;
+  color:#242424 !important;
+}
+html body.dark .grid-scroll th,
+html body.dark .grid-scroll td{
+  border-color:#C9C7C0 !important;
+}
+html body.dark .picker{
+  background:#F8F7F1 !important;
+  border-color:#C9C7C0 !important;
+  box-shadow:none !important;
+}
+html body.dark .picker button{
+  color:#242424 !important;
+}
+html body.dark .picker button:hover{
+  background:#ECEAE3 !important;
+}
+html body.dark footer{
+  color:#66645F !important;
+}
+@media(max-width:900px){
+  html body.dark .topbar,
+  html body.dark .board,
+  html body.dark .board-head,
+  html body.dark .day-grid,
+  html body.dark .person-head,
+  html body.dark .day-head,
+  html body.dark .person,
+  html body.dark .shift-cell{
+    box-shadow:none !important;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  html body.dark *{
+    transition:none !important;
+  }
+}
