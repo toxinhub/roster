@@ -3644,31 +3644,7 @@ body.dark .picker .shift-c{background:linear-gradient(145deg,rgba(39,62,71,.62),
 body.dark .picker .shift-off{background:linear-gradient(145deg,rgba(216,201,155,.28),rgba(88,80,51,.42));color:#eee2b9;}
 body.dark .picker .shift-l{background:linear-gradient(145deg,rgba(164,36,59,.30),rgba(91,31,45,.48));color:#f2a9b9;}
 
-/* Mobile — slightly wider main content */
-@media(max-width:900px){
-  main{
-    padding-left:10px !important;
-    padding-right:10px !important;
-  }
-}
-
-/* Mobile — legend item gap 5px */
-@media(max-width:900px){
-  .legend{column-gap:5px !important;}
-}
-
-/* Mobile — roster frame side gap */
-@media(max-width:900px){
-  .board{margin-left:5px !important;margin-right:5px !important;}
-}
-
-/* Mobile — roster frame edge-to-edge */
-@media(max-width:900px){
-  main{padding-left:0 !important;padding-right:0 !important;}
-  .board{margin-left:0 !important;margin-right:0 !important;width:100% !important;}
-}
-
-/* Mobile — roster frame edge-to-edge (final) */
+/* Mobile — final edge spacing (consolidated) */
 @media (max-width:900px){
   main{
     width:100% !important;
@@ -3677,60 +3653,14 @@ body.dark .picker .shift-l{background:linear-gradient(145deg,rgba(164,36,59,.30)
     padding-right:0 !important;
   }
   .board{
-    width:100% !important;
-    max-width:none !important;
-    margin-left:0 !important;
-    margin-right:0 !important;
-    border-radius:0 !important;
-  }
-}
-
-/* Mobile — roster frame edge spacing: 1px */
-@media (max-width:900px){
-  main{padding-left:1px !important;padding-right:1px !important;}
-  .board{margin-left:0 !important;margin-right:0 !important;width:100% !important;}
-}
-
-/* Mobile — roster frame edge spacing: balanced 2px */
-@media (max-width:900px){
-  main{padding-left:2px !important;padding-right:2px !important;}
-  .board{margin-left:0 !important;margin-right:0 !important;width:100% !important;max-width:none !important;}
-}
-
-/* Mobile — roster frame 2px physical edge gap (final) */
-@media (max-width:900px){
-  main{padding-left:0 !important;padding-right:0 !important;}
-  .board{
-    width:calc(100% - 4px) !important;
-    max-width:none !important;
-    margin-left:2px !important;
-    margin-right:2px !important;
-    box-sizing:border-box !important;
-  }
-}
-
-/* Mobile — roster frame 4px physical edge gap (final) */
-@media (max-width:900px){
-  main{padding-left:0 !important;padding-right:0 !important;}
-  .board{
-    width:calc(100% - 8px) !important;
-    max-width:none !important;
-    margin-left:4px !important;
-    margin-right:4px !important;
-    box-sizing:border-box !important;
-  }
-}
-
-/* Mobile — roster frame 5px physical edge gap (final) */
-@media (max-width:900px){
-  main{padding-left:0 !important;padding-right:0 !important;}
-  .board{
     width:calc(100% - 10px) !important;
     max-width:none !important;
     margin-left:5px !important;
     margin-right:5px !important;
     box-sizing:border-box !important;
+    border-radius:0 !important;
   }
+  .legend{column-gap:5px !important;}
 }
 
 /* Mobile — today/updated edge balance */
