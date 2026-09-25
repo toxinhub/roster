@@ -6259,3 +6259,17 @@ html body.ink-mode .next-duty-off-item .next-duty-off{
   opacity:1 !important;
   font-weight:700 !important;
 }
+
+
+/* NEXT DUTY — desktop-only vertical alignment of date lines */
+@media(min-width:901px){
+  .next-duty-change-item .next-duty-date{
+    transform:translateY(0);
+  }
+  .next-duty-off-item .next-duty-off{
+    transform:translateY(4px);
+  }
+  html body.ink-mode .next-duty-off-item .next-duty-off{
+    transform:translateY(4px);
+  }
+}
