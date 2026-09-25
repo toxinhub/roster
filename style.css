@@ -6273,3 +6273,29 @@ html body.ink-mode .next-duty-off-item .next-duty-off{
     transform:translateY(4px);
   }
 }
+
+
+/* FOOTER — compact single-page balance */
+.site-footer{
+  padding:4px 12px 7px !important;
+  min-height:0 !important;
+  gap:0 !important;
+}
+.footer-fun{
+  margin:0 !important;
+  font-size:8px !important;
+  line-height:1.15 !important;
+  opacity:.62 !important;
+}
+@media(max-width:900px){
+  .site-footer{
+    padding:3px 8px 5px !important;
+    min-height:0 !important;
+    gap:0 !important;
+  }
+  .footer-fun{
+    font-size:7px !important;
+    line-height:1.15 !important;
+    opacity:.60 !important;
+  }
+}
