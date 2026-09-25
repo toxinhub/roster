@@ -5800,3 +5800,121 @@ html body.ink-mode .shift-cell.is-today .shift{
   color:#171717 !important;
   border-color:#85827A !important;
 }
+
+
+/* =========================================================
+   INK MODE — Today button 24-hour ink progress
+   Keep the normal button/pill form, but replace the red
+   24-hour outline with a black-ink printed outline.
+   ========================================================= */
+
+/* The Today control itself remains a real button in Ink Mode. */
+html body.ink-mode .today-jump{
+  position:relative !important;
+  isolation:isolate !important;
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  min-height:36px !important;
+  height:36px !important;
+  padding:7px 16px !important;
+  border:1px solid #85827A !important;
+  border-radius:999px !important;
+  background:#F5F2E8 !important;
+  color:#171717 !important;
+  box-shadow:none !important;
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+  overflow:visible !important;
+  transform:none !important;
+}
+
+/* Desktop: the existing 24-hour progress ring becomes black ink. */
+@media(min-width:901px){
+  html body.ink-mode .today-jump::before{
+    content:"" !important;
+    position:absolute !important;
+    inset:-3px !important;
+    padding:3px !important;
+    border-radius:inherit !important;
+    pointer-events:none !important;
+    z-index:0 !important;
+    background:conic-gradient(
+      from -90deg,
+      #171717 0 var(--day-remaining),
+      #C5C2B9 var(--day-remaining) 100%
+    ) !important;
+    -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0) !important;
+    -webkit-mask-composite:xor !important;
+    mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0) !important;
+    mask-composite:exclude !important;
+    box-shadow:none !important;
+  }
+
+  html body.ink-mode .today-jump::after{
+    content:"" !important;
+    position:absolute !important;
+    inset:0 !important;
+    border-radius:inherit !important;
+    pointer-events:none !important;
+    z-index:1 !important;
+    background:none !important;
+    box-shadow:inset 0 1px 0 #FFFFFF !important;
+  }
+
+  html body.ink-mode .today-jump:hover,
+  html body.ink-mode .today-jump:focus-visible{
+    background:#F5F2E8 !important;
+    color:#171717 !important;
+    border-color:#85827A !important;
+    box-shadow:none !important;
+    transform:translateY(-1px) !important;
+  }
+
+  html body.ink-mode .today-jump:active{
+    transform:scale(.985) !important;
+  }
+}
+
+/* Mobile: same button language, with a compact black-ink ring. */
+@media(max-width:900px){
+  html body.ink-mode .today-jump{
+    min-height:30px !important;
+    height:30px !important;
+    padding:5px 12px !important;
+    border:1px solid #85827A !important;
+    border-radius:11px !important;
+    background:#F5F2E8 !important;
+    color:#171717 !important;
+    box-shadow:none !important;
+  }
+
+  html body.ink-mode .today-jump::after{
+    content:"" !important;
+    position:absolute !important;
+    inset:-2px !important;
+    padding:1px !important;
+    border-radius:inherit !important;
+    pointer-events:none !important;
+    z-index:0 !important;
+    background:conic-gradient(
+      from -90deg,
+      #171717 0 var(--day-remaining),
+      #C5C2B9 var(--day-remaining) 100%
+    ) !important;
+    -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0) !important;
+    -webkit-mask-composite:xor !important;
+    mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0) !important;
+    mask-composite:exclude !important;
+    box-shadow:none !important;
+  }
+
+  html body.ink-mode .today-jump::before{
+    content:none !important;
+    display:none !important;
+  }
+
+  html body.ink-mode .today-jump:active{
+    transform:scale(.97) !important;
+  }
+}
