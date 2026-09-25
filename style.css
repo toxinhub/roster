@@ -6299,3 +6299,23 @@ html body.ink-mode .next-duty-off-item .next-duty-off{
     opacity:.60 !important;
   }
 }
+
+
+/* MOBILE — footer hugs the viewport without creating bottom whitespace */
+@media(max-width:900px){
+  .site-footer{
+    padding:1px 6px 2px !important;
+    margin:0 !important;
+    min-height:0 !important;
+    height:auto !important;
+  }
+  .footer-fun{
+    font-size:6.5px !important;
+    line-height:1 !important;
+    margin:0 !important;
+    padding:0 !important;
+  }
+  .app{
+    min-height:100dvh;
+  }
+}
