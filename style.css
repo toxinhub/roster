@@ -6537,7 +6537,7 @@ html body.ink-mode::before{
   content:"";
   position:fixed;
   inset:0;
-  z-index:1;
+  z-index:9998;
   pointer-events:none;
   opacity:.20;
   background:
@@ -6548,7 +6548,7 @@ html body.ink-mode::before{
 }
 html body.ink-mode .app{
   position:relative;
-  z-index:3;
+  z-index:1;
 }
 @media(max-width:900px){
   html body.ink-mode::after{
