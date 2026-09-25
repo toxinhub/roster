@@ -4386,8 +4386,10 @@ html body.dark .shift-cell.is-today{
   box-shadow:0 0 0 4px rgba(125,184,74,.10);
 }
 .icon-btn,.admin-link{
+  position:relative;
+  isolation:isolate;
   border:1px solid #D5CAC3;
-  border-radius:9px;
+  border-radius:4px;
   background:#FBF6F2;
   color:#403A36;
   min-height:30px;
@@ -4396,11 +4398,17 @@ html body.dark .shift-cell.is-today{
   font-size:11px;
   box-shadow:0 2px 7px rgba(70,48,40,.05);
 }
+.icon-btn::after,.admin-link::after{
+  content:"";
+  position:absolute;
+  inset:-4px;
+  border:1px solid rgba(94,82,74,.20);
+  border-radius:7px;
+  pointer-events:none;
+}
 .icon-btn{width:30px;padding:0;font-size:15px}
 .admin-link{font-weight:800}
 .icon-btn#theme{
-  position:relative;
-  isolation:isolate;
   overflow:hidden;
 }
 .icon-btn#theme:focus-visible,
@@ -4450,7 +4458,7 @@ html body.dark .shift-cell.is-today{
     justify-content:center;
     min-height:28px;
     padding:0 8px;
-    border-radius:9px;
+    border-radius:4px;
     border:1px solid #D7CCC5;
     background:#FBF6F2;
     color:#514944;
@@ -4463,7 +4471,7 @@ html body.dark .shift-cell.is-today{
   .icon-btn#theme{
     width:30px;
     min-height:30px;
-    border-radius:10px;
+    border-radius:4px;
     border:1px solid #D7CCC5;
     background:#FBF6F2;
     color:#4B433E;
@@ -4479,7 +4487,7 @@ html body.dark .shift-cell.is-today{
     position:absolute;
     inset:-5px;
     border:1px solid rgba(201,123,112,.24);
-    border-radius:14px;
+    border-radius:7px;
     transform:scale(1);
     opacity:1;
     pointer-events:none;
@@ -4495,6 +4503,10 @@ html body.dark .shift-cell.is-today{
     background:#2A2521;
     color:#E8DFD9;
     border-color:#493F38;
+  }
+  body.dark .admin-link::after,
+  body.dark .icon-btn::after{
+    border-color:rgba(232,223,217,.16);
   }
   body.dark .icon-btn#theme{
     background:#2A2521;
