@@ -5675,3 +5675,93 @@ html body.ink-mode .day-head.is-today em{
   background:#171717 !important;
   color:#F5F2E8 !important;
 }
+
+
+/* FINAL INK BALANCE — today cell + readable admin text */
+html body.ink-mode .day-head.is-today,
+html body.ink-mode .shift-cell.is-today,
+html body.ink-mode .shift-cell.is-today:hover,
+html body.ink-mode .shift-cell.is-today:active,
+html body.ink-mode .shift-cell.is-today:focus-within{
+  background:#E3E0D6 !important;
+  color:#171717 !important;
+  opacity:1 !important;
+  filter:none !important;
+}
+html body.ink-mode .shift-cell.is-today .shift,
+html body.ink-mode .shift-cell.is-today .shift *,
+html body.ink-mode .shift-cell.is-today .shift:hover,
+html body.ink-mode .shift-cell.is-today .shift:active{
+  background:#E8E5DB !important;
+  color:#171717 !important;
+  border-color:#85827A !important;
+  box-shadow:none !important;
+  text-shadow:none !important;
+  opacity:1 !important;
+}
+html body.ink-mode .day-head.is-today span,
+html body.ink-mode .day-head.is-today strong{
+  color:#171717 !important;
+}
+html body.ink-mode .day-head.is-today em{
+  background:#171717 !important;
+  color:#F5F2E8 !important;
+}
+
+/* Admin Ink Mode: no white text against paper */
+html body.ink-mode .topbar,
+html body.ink-mode .brand,
+html body.ink-mode .brand strong,
+html body.ink-mode .brand small,
+html body.ink-mode .back,
+html body.ink-mode .icon-btn,
+html body.ink-mode .eyebrow,
+html body.ink-mode .section-head,
+html body.ink-mode .section-head h2,
+html body.ink-mode .admin-note,
+html body.ink-mode .admin-note b,
+html body.ink-mode .admin-note code,
+html body.ink-mode .panel,
+html body.ink-mode .panel *,
+html body.ink-mode .form-grid label,
+html body.ink-mode .form-row label,
+html body.ink-mode .muted,
+html body.ink-mode .change-status,
+html body.ink-mode .quiet,
+html body.ink-mode .change-summary,
+html body.ink-mode .change-summary *,
+html body.ink-mode .grid-scroll th,
+html body.ink-mode .grid-scroll td,
+html body.ink-mode footer,
+html body.ink-mode footer *{
+  color:#252420 !important;
+  text-shadow:none !important;
+}
+html body.ink-mode .brand-icon{
+  color:#252420 !important;
+}
+html body.ink-mode input,
+html body.ink-mode input::placeholder{
+  color:#252420 !important;
+}
+html body.ink-mode .primary,
+html body.ink-mode .primary *{
+  background:#252420 !important;
+  color:#F5F2E8 !important;
+}
+html body.ink-mode .actions button,
+html body.ink-mode .form-row button,
+html body.ink-mode .edit,
+html body.ink-mode .edit *{
+  background:#ECE9DE !important;
+  color:#252420 !important;
+}
+html body.ink-mode .status{
+  color:#4A4842 !important;
+}
+html body.ink-mode .change-status.dirty{
+  color:#6B4A18 !important;
+}
+html body.ink-mode .remove{
+  color:#6F2424 !important;
+}
