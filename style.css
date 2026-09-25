@@ -4323,7 +4323,7 @@ html body.dark .shift-cell.is-today{
 
 /* Header — light warm-neutral theme */
 .topbar{
-  height:58px;
+  height:48px;
   display:flex;
   align-items:center;
   justify-content:space-between;
