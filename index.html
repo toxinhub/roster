@@ -44,8 +44,7 @@
       <div class="roster-wrap" id="roster"></div>
     </section>
 
-    <section class="next-duty" aria-labelledby="next-duty-title">
-      <div class="next-duty-head"><span id="next-duty-title">পরবর্তী ডিউটি তথ্য</span></div>
+    <section class="next-duty" aria-label="পরবর্তী ডিউটি">
       <div id="next-duty" class="next-duty-list"></div>
     </section>
   </main>
@@ -336,13 +335,16 @@ function render(){
     const dateLabel=entry=>{
       if(!entry) return '—';
       const d=new Date(entry.day.isoDate+'T12:00:00');
-      return d.toLocaleDateString('bn-BD',{day:'numeric',month:'short'});
+      const date=d.toLocaleDateString('bn-BD',{day:'numeric',month:'short'});
+      const weekday=entry.day.weekday||d.toLocaleDateString('bn-BD',{weekday:'short'});
+      return date+' · '+weekday;
     };
+    const shiftClass=code=>'next-duty-shift-'+String(code||'').toLowerCase();
 
     return '<div class="next-duty-row">'+
       '<strong class="next-duty-name">'+esc(p.name)+'</strong>'+
-      '<span class="next-duty-item"><small>শিফট চেঞ্জ</small><b>'+(nextShift?esc(dateLabel(nextShift))+' · '+esc(nextShift.code):'—')+'</b></span>'+
-      '<span class="next-duty-item"><small>পরবর্তী OFF</small><b>'+(nextOff?esc(dateLabel(nextOff)):'—')+'</b></span>'+
+      '<span class="next-duty-item"><small>শিফট</small><b class="'+(nextShift?shiftClass(nextShift.code):'')+'">'+(nextShift?esc(dateLabel(nextShift))+' · '+esc(nextShift.code):'—')+'</b></span>'+
+      '<span class="next-duty-item"><small>OFF</small><b class="next-duty-off">'+(nextOff?esc(dateLabel(nextOff)):'—')+'</b></span>'+
     '</div>';
   }).join('');
 
