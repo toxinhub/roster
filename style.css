@@ -6437,3 +6437,77 @@ html body.ink-mode .shift-cell.week-end{
     background:#EAE7DD !important;
   }
 }
+
+
+/* =========================================================
+   INK MODE — FINAL NEUTRAL DAY / WEEKDAY / DATE CELLS
+   Remove the remaining cool/blue cast completely.
+   ========================================================= */
+html body.ink-mode .day-grid .days .day-head,
+html body.ink-mode .day-grid > .days > .day-head{
+  background:#E7E4DB !important;
+  background-image:none !important;
+  background-color:#E7E4DB !important;
+  color:#252420 !important;
+  border-right-color:#B0ADA4 !important;
+  border-bottom-color:#918E86 !important;
+  box-shadow:none !important;
+  text-shadow:none !important;
+  filter:none !important;
+}
+html body.ink-mode .day-grid .days .day-head::before,
+html body.ink-mode .day-grid .days .day-head::after{
+  content:none !important;
+  display:none !important;
+}
+html body.ink-mode .day-grid .days .day-head span{
+  color:#5E5B54 !important;
+  -webkit-text-fill-color:#5E5B54 !important;
+  font-weight:500 !important;
+  text-shadow:none !important;
+}
+html body.ink-mode .day-grid .days .day-head strong{
+  color:#20201D !important;
+  -webkit-text-fill-color:#20201D !important;
+  font-weight:700 !important;
+  text-shadow:none !important;
+}
+html body.ink-mode .day-grid .days .day-head em{
+  background:#DDD9CE !important;
+  color:#292824 !important;
+  -webkit-text-fill-color:#292824 !important;
+  border:1px solid #AAA69D !important;
+  box-shadow:none !important;
+  text-shadow:none !important;
+}
+html body.ink-mode .day-grid .days .day-head.is-today,
+html body.ink-mode .day-grid .days .day-head.is-today.week-start,
+html body.ink-mode .day-grid .days .day-head.is-today.week-end{
+  background:#E1DED4 !important;
+  background-image:none !important;
+  background-color:#E1DED4 !important;
+  border-left-color:#85827A !important;
+  border-right-color:#85827A !important;
+}
+html body.ink-mode .day-grid .days .day-head.is-today span,
+html body.ink-mode .day-grid .days .day-head.is-today strong{
+  color:#171717 !important;
+  -webkit-text-fill-color:#171717 !important;
+}
+html body.ink-mode .day-grid .days .day-head.is-today em{
+  background:#171717 !important;
+  color:#F5F2E8 !important;
+  -webkit-text-fill-color:#F5F2E8 !important;
+  border-color:#171717 !important;
+}
+@media(max-width:900px){
+  html body.ink-mode .day-grid .days .day-head,
+  html body.ink-mode .day-grid > .days > .day-head{
+    background:#E7E4DB !important;
+    background-color:#E7E4DB !important;
+  }
+  html body.ink-mode .day-grid .days .day-head.is-today{
+    background:#E1DED4 !important;
+    background-color:#E1DED4 !important;
+  }
+}
