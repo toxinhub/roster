@@ -4663,3 +4663,130 @@ body.dark .back::after{border-color:rgba(232,223,217,.16)}
 @media(max-width:900px){
   .back{min-height:28px;padding:0 8px;border-radius:4px;font-size:9px;letter-spacing:.025em}
 }
+
+
+/* Admin panel — visual polish only; functionality unchanged */
+.admin-note,
+.panel{
+  border-radius:14px;
+  border-color:#E1D9D2;
+  background:#FFFCF9;
+  box-shadow:0 8px 24px rgba(70,48,40,.055),inset 0 1px 0 rgba(255,255,255,.8);
+}
+.admin-note{
+  border-left:3px solid #C97B70;
+  background:#FBF4F0;
+}
+.section-head{margin-bottom:14px}
+.eyebrow{
+  color:#8A7D76;
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:.14em;
+}
+.section-head h2{color:#332F2C;letter-spacing:-.02em}
+.form-grid label,.form-row label{color:#756A64}
+input{
+  border-color:#DCD3CC;
+  border-radius:7px;
+  background:#F8F4F0;
+  box-shadow:inset 0 1px 2px rgba(70,48,40,.035);
+  transition:border-color .14s ease,box-shadow .14s ease,background .14s ease;
+}
+input:hover{border-color:#CFC3BB}
+input:focus{
+  outline:2px solid rgba(201,123,112,.16);
+  border-color:#C97B70;
+  background:#FFFCF9;
+  box-shadow:0 0 0 1px rgba(201,123,112,.08);
+}
+.primary,.actions button,.form-row button{
+  border-color:#D8CEC7;
+  border-radius:7px;
+  background:#F8F3EF;
+  color:#433B37;
+  transition:transform .12s ease,box-shadow .12s ease,background .12s ease,border-color .12s ease;
+}
+.primary{
+  border-color:#C97B70;
+  background:#C97B70;
+  color:#fff;
+  box-shadow:0 3px 10px rgba(201,123,112,.18);
+}
+.primary:hover,.actions button:hover,.form-row button:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(70,48,40,.08)}
+.primary:active,.actions button:active,.form-row button:active{transform:scale(.98)}
+.status{background:#F7F2EE;border-color:#DDD4CD;color:#756A64}
+.grid-scroll{border-color:#DDD5CE;border-radius:10px;box-shadow:inset 0 1px 2px rgba(70,48,40,.025)}
+.grid-scroll th{background:#F1ECE7;color:#4B433E}
+.grid-scroll th,.grid-scroll td{border-color:#E0D9D3}
+.grid-scroll input{background:#FBF8F5}
+.edit{
+  border-color:#D7CDC6;
+  border-radius:6px;
+  background:#F7F2EE;
+  color:#433B37;
+  transition:transform .12s ease,box-shadow .12s ease,background .12s ease;
+}
+.edit:hover{background:#FFF9F5}
+.remove{color:#B24A42}
+.editor-meta{border-color:#DDD4CD;border-radius:9px;background:#F7F2EE}
+.change-summary{border-color:rgba(201,123,112,.25);background:rgba(201,123,112,.07)}
+
+/* Admin header: visually matches the live board without altering controls */
+.topbar .brand-icon{
+  width:30px;height:30px;display:grid;place-items:center;flex:0 0 30px;
+  border-radius:6px;background:#C97B70;color:#fff;font-size:15px;line-height:1;
+  box-shadow:0 3px 9px rgba(70,48,40,.10);
+}
+.topbar .brand > div strong{color:#332F2C;font-size:12px;font-weight:900;letter-spacing:.015em}
+.topbar .brand > div small{display:block;margin-top:1px;color:#756A64;font-size:8px;font-weight:700;letter-spacing:.025em}
+body:not(.dark) .topbar .back{background:#FBF6F2;color:#403A36;border-color:#D5CAC3}
+body.dark .topbar{background:#211D19;border-bottom-color:#3A332D;color:#F1EBE6;box-shadow:0 5px 18px rgba(0,0,0,.22)}
+body.dark .topbar .brand > div strong{color:#F3EEEA}
+body.dark .topbar .brand > div small{color:#B7AAA1}
+body.dark .topbar .brand-icon{background:#9D5F58;color:#FFF5F1;box-shadow:none}
+body.dark .topbar .icon-btn{background:#2A2521;color:#E8DFD9;border-color:#493F38}
+body.dark .topbar .back{background:#2A2521;color:#E8DFD9;border-color:#493F38}
+
+body.dark .admin-note,
+body.dark .panel{
+  background:#25211E;
+  border-color:#3F3731;
+  box-shadow:0 12px 30px rgba(0,0,0,.20),inset 0 1px 0 rgba(255,244,238,.035);
+}
+body.dark .admin-note{background:#29231F;border-left-color:#B56E65}
+body.dark .section-head h2,
+body.dark .topbar .brand > div strong{color:#F3EEEA}
+body.dark .eyebrow,
+body.dark .form-grid label,
+body.dark .form-row label{color:#B7AAA1}
+body.dark input{background:#1F1B18;border-color:#4A4039;color:#F1EBE6}
+body.dark input:hover{border-color:#5A4D45}
+body.dark input:focus{border-color:#B56E65;background:#231F1C;outline-color:rgba(181,110,101,.20)}
+body.dark .primary{background:#A9655D;border-color:#A9655D;color:#FFF6F3;box-shadow:0 3px 12px rgba(0,0,0,.18)}
+body.dark .actions button,
+body.dark .form-row button{background:#2A2521;color:#E8DFD9;border-color:#4A4039}
+body.dark .actions button:hover,
+body.dark .form-row button:hover{background:#302923}
+body.dark .status{background:#211D1A;border-color:#4A4039;color:#B7AAA1}
+body.dark .grid-scroll{border-color:#463C35}
+body.dark .grid-scroll th{background:#211D1A;color:#E8DFD9}
+body.dark .grid-scroll th,
+body.dark .grid-scroll td{border-color:#403831}
+body.dark .grid-scroll input{background:#24201D}
+body.dark .edit{background:#2A2521;border-color:#4A4039;color:#E8DFD9}
+body.dark .edit:hover{background:#302923}
+body.dark .editor-meta{background:#211D1A;border-color:#463C35}
+body.dark .change-summary{background:rgba(181,110,101,.09);border-color:rgba(181,110,101,.28)}
+body.dark .picker{background:#25211E;border-color:#463C35;box-shadow:0 18px 50px rgba(0,0,0,.42)}
+body.dark .picker .shift-option{background:#211D1A;color:#E8DFD9;border-color:#403831}
+body.dark footer{color:#8F837B}
+
+@media(max-width:600px){
+  .admin-note,.panel{margin-bottom:12px}
+  .section-head{gap:10px}
+  .section-head h2{font-size:17px}
+  .topbar .brand-icon{width:28px;height:28px;flex-basis:28px;border-radius:5px;font-size:14px}
+  .topbar .brand > div strong{font-size:11px}
+  .topbar .brand > div small{font-size:7px}
+}
