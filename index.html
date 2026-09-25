@@ -7,7 +7,7 @@
 <meta name="description" content="CCTV - PJL duty roster">
 <title>Duty Roster • CCTV - PJL</title>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
-<link rel="stylesheet" href="style.css?v=20260924-header-clean">
+<link rel="stylesheet" href="style.css?v=20260925-next-duty-final">
 </head>
 <body>
 <div class="app">
@@ -316,17 +316,19 @@ function render(){
 
   const nextInfo=people.map(p=>{
     const shifts=p.shifts||[];
-    const start=Math.max(todayIndex,0);
+    const start=todayIndex>=0 ? todayIndex : -1;
     const current=todayIndex>=0 ? (shifts[todayIndex]||'OFF') : 'OFF';
     const workCodes=['A','B','C'];
     let nextShift=null;
     let nextOff=null;
 
+    // “শিফট পরিবর্তন” means the next assigned work shift after today,
+    // even when the person returns to the same shift (A → A).
+    // OFF days are skipped for this calculation.
     for(let i=start+1;i<days.length;i++){
       const code=shifts[i]||'OFF';
       if(!nextOff && code==='OFF') nextOff={day:days[i]};
-      if(!nextShift && workCodes.includes(code) &&
-         (workCodes.includes(current) ? code!==current : true)){
+      if(!nextShift && workCodes.includes(code)){
         nextShift={day:days[i],code};
       }
       if(nextShift&&nextOff) break;
