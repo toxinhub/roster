@@ -5551,3 +5551,110 @@ html body.ink-mode .brand-mark{
     border-color:#B9B6AC !important;
   }
 }
+
+
+/* =========================================================
+   INK MODE — interaction balance fix
+   Keep all printed text dark, keep Today control paper-like,
+   and make touch feedback affect only the touched shift cell.
+   ========================================================= */
+
+/* Never let legacy dark-mode rules turn Ink text white. */
+html body.ink-mode .legend span.active-shift b,
+html body.ink-mode .legend span.active-shift small,
+html body.ink-mode .legend span.active-shift,
+html body.ink-mode .day-head span,
+html body.ink-mode .day-head strong,
+html body.ink-mode .person strong,
+html body.ink-mode .person,
+html body.ink-mode .duty-status,
+html body.ink-mode .intro p,
+html body.ink-mode .intro-meta span,
+html body.ink-mode .intro-meta b,
+html body.ink-mode .kicker,
+html body.ink-mode footer{
+  color:#171717 !important;
+}
+
+/* Today button stays printed-paper colored in every state. */
+html body.ink-mode .today-jump,
+html body.ink-mode .today-jump:hover,
+html body.ink-mode .today-jump:focus,
+html body.ink-mode .today-jump:focus-visible,
+html body.ink-mode .today-jump:active{
+  background:#F5F2E8 !important;
+  color:#171717 !important;
+  border-color:#85827A !important;
+  box-shadow:none !important;
+  outline:none !important;
+  transform:none;
+}
+
+/* Preserve the 24-hour progress idea, but print it as a thin monochrome rule. */
+html body.ink-mode .today-jump::before{
+  background:conic-gradient(
+    from -90deg,
+    #171717 0 var(--day-remaining),
+    #C5C2B9 var(--day-remaining) 100%
+  ) !important;
+}
+html body.ink-mode .today-jump::after{
+  background:none !important;
+  box-shadow:none !important;
+}
+
+/* Touch feedback: only the exact shift cell being touched may react. */
+@media (hover:none), (pointer:coarse){
+  html body.ink-mode .person-row:hover .person,
+  html body.ink-mode .person-row:hover .shift-cell,
+  html body.ink-mode .person-row:focus-within .person,
+  html body.ink-mode .person-row:focus-within .shift-cell{
+    background:#F5F2E8 !important;
+    box-shadow:none !important;
+    filter:none !important;
+  }
+
+  html body.ink-mode .shift-cell:active{
+    background:#DDD9CD !important;
+    transform:scale(.985) !important;
+    filter:none !important;
+    opacity:1 !important;
+  }
+
+  html body.ink-mode .shift-cell.is-today:active{
+    background:#D5D1C5 !important;
+  }
+}
+
+/* Desktop hover also stays cell-local in Ink Mode. */
+@media (hover:hover) and (pointer:fine){
+  html body.ink-mode .person-row:hover .person,
+  html body.ink-mode .person-row:hover .shift-cell{
+    background:#F5F2E8 !important;
+    filter:none !important;
+    box-shadow:none !important;
+  }
+
+  html body.ink-mode .shift-cell:hover{
+    background:#EAE7DD !important;
+    filter:none !important;
+  }
+
+  html body.ink-mode .shift-cell.is-today:hover{
+    background:#DDD9CD !important;
+  }
+}
+
+/* Active legend remains emphasized by weight, never by white text. */
+html body.ink-mode .legend span.active-shift b{
+  color:#171717 !important;
+  font-weight:1000 !important;
+}
+html body.ink-mode .legend span.active-shift small{
+  color:#4A4842 !important;
+  font-weight:900 !important;
+}
+html body.ink-mode .legend span.active-shift i{
+  background:#171717 !important;
+  box-shadow:none !important;
+}
