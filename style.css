@@ -4812,3 +4812,40 @@ body.dark #duty-roster-title > span{
     font-size:18px;
   }
 }
+
+
+/* Browser compatibility + low-overhead rendering safeguards.
+   These declarations intentionally do not alter the existing design. */
+html{
+  -webkit-text-size-adjust:100%;
+  text-size-adjust:100%;
+  font-synthesis:none;
+}
+body{
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+img,svg{
+  max-width:100%;
+}
+@media(max-width:900px){
+  /* Avoid reserving a compositor layer for every scrolling element. */
+  .roster-wrap,
+  .day-grid,
+  .person-row{
+    will-change:auto;
+  }
+}
+@supports (scrollbar-gutter:stable){
+  .roster-wrap{
+    scrollbar-gutter:stable;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  .name-active-dot{
+    animation:none !important;
+  }
+  .toast{
+    transition:none !important;
+  }
+}
