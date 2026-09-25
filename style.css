@@ -6301,7 +6301,7 @@ html body.ink-mode .next-duty-off-item .next-duty-off{
 }
 
 
-/* FOOTER — final centered micro-note, balanced at the absolute bottom */
+/* FOOTER — final centered micro-note */
 .site-footer{
   display:flex !important;
   align-items:flex-end !important;
@@ -6315,20 +6315,22 @@ html body.ink-mode .next-duty-off-item .next-duty-off{
   text-align:center !important;
 }
 .footer-fun{
-  margin:0 !important;
+  display:block !important;
+  width:100% !important;
+  margin:0 auto !important;
   padding:0 !important;
   font-size:7px !important;
-  line-height:1 !important;
+  line-height:1.2 !important;
   font-weight:400 !important;
   letter-spacing:.01em !important;
   text-align:center !important;
-  opacity:.46 !important;
+  opacity:.30 !important;
   color:#64748B !important;
-  white-space:nowrap !important;
+  white-space:normal !important;
 }
 html body.ink-mode .footer-fun{
   color:#77746C !important;
-  opacity:.48 !important;
+  opacity:.32 !important;
 }
 @media(max-width:900px){
   .site-footer{
@@ -6336,7 +6338,7 @@ html body.ink-mode .footer-fun{
   }
   .footer-fun{
     font-size:5.75px !important;
-    line-height:1 !important;
-    opacity:.42 !important;
+    line-height:1.2 !important;
+    opacity:.27 !important;
   }
 }
