@@ -16,13 +16,8 @@ body.inkMode .picker{box-shadow:0 18px 50px rgba(0,0,0,.45)}
 
 body.inkMode .picker .shift-a{background:linear-gradient(145deg,rgba(216,151,60,.30),rgba(102,76,35,.46));color:#f7d18e}.picker .shift-b{background:linear-gradient(145deg,rgba(189,99,47,.34),rgba(248,220,205,.86));color:#7a2f18;border-color:rgba(189,99,47,.88)}body.inkMode .picker .shift-b{background:linear-gradient(145deg,rgba(189,99,47,.30),rgba(99,52,34,.48));color:#f0b59a}.picker .shift-c{background:linear-gradient(145deg,rgba(39,62,71,.38),rgba(214,224,228,.86));color:#273e47;border-color:rgba(39,62,71,.88)}body.inkMode .picker .shift-c{background:linear-gradient(145deg,rgba(39,62,71,.62),rgba(64,86,96,.48));color:#d7e3e8}.picker .shift-off{background:linear-gradient(145deg,rgba(216,201,155,.46),rgba(250,246,229,.88));color:#5f5533;border-color:rgba(216,201,155,.9)}body.inkMode .picker .shift-off{background:linear-gradient(145deg,rgba(216,201,155,.28),rgba(88,80,51,.42));color:#eee2b9}.picker .shift-l{background:linear-gradient(145deg,rgba(164,36,59,.34),rgba(247,214,221,.86));color:#8b1e34;border-color:rgba(164,36,59,.88)}body.inkMode .picker .shift-l{background:linear-gradient(145deg,rgba(164,36,59,.30),rgba(91,31,45,.48));color:#f2a9b9}
 
-<style>
 /* CONNECTION STATUS — clear visual state */
-.status.connected{
-  color:#15803D !important;
-  background:#DCFCE7 !important;
-  border-color:#86EFAC !important;
-}
+ .status.connected{\n  color:#15803D !important;\n  background:#DCFCE7 !important;\n  border-color:#86EFAC !important;\n}
 .status.not-connected{
   color:#DC2626 !important;
   background:#FEE2E2 !important;
@@ -38,7 +33,12 @@ html body.ink-mode .status.not-connected{
   background:#F7E5E2 !important;
   border-color:#C58A82 !important;
 }
-</style></style></head>
+
+.status.connected{color:#15803D !important;background:#DCFCE7 !important;border-color:#86EFAC !important;}
+.status.not-connected{color:#DC2626 !important;background:#FEE2E2 !important;border-color:#FCA5A5 !important;}
+html body.ink-mode .status.connected{color:#166534 !important;background:#E8F3E9 !important;border-color:#86A98B !important;}
+html body.ink-mode .status.not-connected{color:#991B1B !important;background:#F7E5E2 !important;border-color:#C58A82 !important;}
+</style></head>
 <body>
   <div class="app">
     <header class="topbar">
