@@ -6233,3 +6233,14 @@ html body.ink-mode .next-duty-name::after{
     font-size:6.75px;
   }
 }
+
+
+/* NEXT DUTY — equal date visibility */
+.next-duty-change-item .next-duty-date,
+.next-duty-off-item .next-duty-off{
+  opacity:.78;
+}
+html body.ink-mode .next-duty-change-item .next-duty-date,
+html body.ink-mode .next-duty-off-item .next-duty-off{
+  opacity:.78;
+}
