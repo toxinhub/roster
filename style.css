@@ -6216,12 +6216,9 @@ html body.ink-mode .next-duty-off-item{
   height:1px;
   background:rgba(100,116,139,.18);
 }
-.next-duty-change-item .next-duty-date{
-  font-size:7.5px;
-  line-height:1.1;
-}
+.next-duty-change-item .next-duty-date,
 .next-duty-off-item .next-duty-off{
-  font-size:7px;
+  font-size:7.25px;
   line-height:1.1;
 }
 html body.ink-mode .next-duty-name::after{
@@ -6231,10 +6228,8 @@ html body.ink-mode .next-duty-name::after{
   .next-duty-name{
     padding-bottom:3px;
   }
-  .next-duty-change-item .next-duty-date{
-    font-size:7px;
-  }
+  .next-duty-change-item .next-duty-date,
   .next-duty-off-item .next-duty-off{
-    font-size:6.5px;
+    font-size:6.75px;
   }
 }
