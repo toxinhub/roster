@@ -3774,14 +3774,14 @@ body.dark .picker .shift-l{background:linear-gradient(145deg,rgba(164,36,59,.30)
   border-color:#E39B91 !important;
 }
 .shift.shift-b{
-  --c:#F6E58D !important;
+  --c:#F8DE7E !important;
   color:#17202A !important;
-  border-color:#D9C96A !important;
+  border-color:#D6B94F !important;
 }
 .shift.shift-c{
-  --c:#A9D8EA !important;
+  --c:#A9D8E9 !important;
   color:#17202A !important;
-  border-color:#7EBFD6 !important;
+  border-color:#7BB8CF !important;
 }
 .shift.shift-off{
   --c:#B7E4C7 !important;
@@ -3795,8 +3795,8 @@ body.dark .picker .shift-l{background:linear-gradient(145deg,rgba(164,36,59,.30)
 }
 
 .picker .shift-a{background:#F6B6AD !important;color:#17202A !important;border-color:#E39B91 !important;}
-.picker .shift-b{background:#F6E58D !important;color:#17202A !important;border-color:#D9C96A !important;}
-.picker .shift-c{background:#A9D8EA !important;color:#17202A !important;border-color:#7EBFD6 !important;}
+.picker .shift-b{background:#F8DE7E !important;color:#17202A !important;border-color:#D6B94F !important;}
+.picker .shift-c{background:#A9D8E9 !important;color:#17202A !important;border-color:#7BB8CF !important;}
 .picker .shift-off{background:#B7E4C7 !important;color:#17202A !important;border-color:#8FD0A4 !important;}
 .picker .shift-l{background:#D8C8EA !important;color:#17202A !important;border-color:#B9A8D2 !important;}
 
@@ -3805,14 +3805,14 @@ body.dark .picker .shift-l{background:linear-gradient(145deg,rgba(164,36,59,.30)
 }
 
 body.dark .shift.shift-a{--c:#F6B6AD !important;color:#17202A !important;border-color:#E39B91 !important;}
-body.dark .shift.shift-b{--c:#F6E58D !important;color:#17202A !important;border-color:#D9C96A !important;}
-body.dark .shift.shift-c{--c:#A9D8EA !important;color:#17202A !important;border-color:#7EBFD6 !important;}
+body.dark .shift.shift-b{--c:#F8DE7E !important;color:#17202A !important;border-color:#D6B94F !important;}
+body.dark .shift.shift-c{--c:#A9D8E9 !important;color:#17202A !important;border-color:#7BB8CF !important;}
 body.dark .shift.shift-off{--c:#B7E4C7 !important;color:#17202A !important;border-color:#8FD0A4 !important;}
 body.dark .shift.shift-l{--c:#D8C8EA !important;color:#17202A !important;border-color:#B9A8D2 !important;}
 
 body.dark .picker .shift-a{background:#F6B6AD !important;color:#17202A !important;border-color:#E39B91 !important;}
-body.dark .picker .shift-b{background:#F6E58D !important;color:#17202A !important;border-color:#D9C96A !important;}
-body.dark .picker .shift-c{background:#A9D8EA !important;color:#17202A !important;border-color:#7EBFD6 !important;}
+body.dark .picker .shift-b{background:#F8DE7E !important;color:#17202A !important;border-color:#D6B94F !important;}
+body.dark .picker .shift-c{background:#A9D8E9 !important;color:#17202A !important;border-color:#7BB8CF !important;}
 body.dark .picker .shift-off{background:#B7E4C7 !important;color:#17202A !important;border-color:#8FD0A4 !important;}
 body.dark .picker .shift-l{background:#D8C8EA !important;color:#17202A !important;border-color:#B9A8D2 !important;}
 
@@ -3848,8 +3848,8 @@ body.dark .picker .shift-l{background:#D8C8EA !important;color:#17202A !importan
 }
 
 .legend span.shift-a i{background:#F6B6AD !important;}
-.legend span.shift-b i{background:#F6E58D !important;}
-.legend span.shift-c i{background:#A9D8EA !important;}
+.legend span.shift-b i{background:#F8DE7E !important;}
+.legend span.shift-c i{background:#A9D8E9 !important;}
 .legend span.shift-off i{background:#B7E4C7 !important;}
 .legend span.shift-l i{background:#D8C8EA !important;}
 
@@ -4328,9 +4328,9 @@ html body.dark .shift-cell.is-today{
   align-items:center;
   justify-content:space-between;
   padding:0 max(14px,calc((100vw - 1440px)/2));
-  background:#F7CBAD;
+  background:#FFE4B5;
   color:#2B2927;
-  border-bottom:1px solid #D9B9A6;
+  border-bottom:1px solid #E6CFA0;
   box-shadow:0 7px 22px rgba(51,88,110,.10);
   position:relative;
   z-index:5;
@@ -4420,9 +4420,9 @@ html body.dark .shift-cell.is-today{
   .topbar{
     height:56px;
     padding:0 12px;
-    background:#F7CBAD;
+    background:#FFE4B5;
     border:0;
-    border-bottom:1px solid #D9B9A6;
+    border-bottom:1px solid #E6CFA0;
     border-radius:0;
     box-shadow:0 4px 14px rgba(70,48,40,.08);
     overflow:hidden;
