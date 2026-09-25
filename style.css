@@ -215,7 +215,9 @@ background:#fbfff3
 }
 
  .shift{
-width:100%;max-width:104px;min-height:46px;padding:7px 10px;display:flex;align-items:center;justify-content:center;gap:6px;border-radius:9px;background:var(--c);color:#25313c;border:1px solid color-mix(in srgb,var(--c) 82%,#fff);box-shadow:0 3px 8px color-mix(in srgb,var(--c) 18%,transparent)
+width:100%;max-width:104px;min-height:46px;padding:7px 10px;display:flex;align-items:center;justify-content:center;gap:6px;border-radius:9px;background:var(--c);color:#25313c;border:1px solid rgba(255,255,255,.35);
+   border:1px solid color-mix(in srgb,var(--c) 82%,#fff);box-shadow:0 3px 8px rgba(15,23,42,.08);
+   box-shadow:0 3px 8px color-mix(in srgb,var(--c) 18%,transparent)
 }
 
  .shift b{
@@ -4848,4 +4850,12 @@ img,svg{
   .toast{
     transition:none !important;
   }
+}
+
+
+/* Graceful fallbacks for browsers without backdrop-filter support.
+   Supported browsers keep the existing glass effect unchanged. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))){
+  .board,.topbar,.today-jump,.icon-btn,.admin-link,.status-live{background:rgba(255,255,255,.92)}
+  body.dark .board,body.dark .topbar,body.dark .today-jump,body.dark .icon-btn,body.dark .admin-link,body.dark .status-live{background:rgba(17,26,36,.96)}
 }
