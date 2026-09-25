@@ -6364,3 +6364,11 @@ main{
     margin-top:8px !important;
   }
 }
+
+
+/* HEADER → TODAY — mobile spacing fine-tune */
+@media(max-width:900px){
+  .intro{
+    margin-top:10px !important;
+  }
+}
