@@ -4433,8 +4433,8 @@ html body.dark .shift-cell.is-today{
     height:28px;
     flex:0 0 28px;
     border-radius:2px;
-    font-size:13px;
-    font-weight:900;
+    font-size:14px;
+    font-weight:1000;
   }
   .brand-copy strong{
     font-size:12px;
