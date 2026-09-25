@@ -6514,8 +6514,8 @@ html body.ink-mode .day-grid .days .day-head.is-today em{
 
 
 /* =========================================================
-   INK MODE — SUBTLE WARM PAPER GRAIN
-   Very light paper texture: just enough to suggest natural stock.
+   INK MODE — SOFT WARM PAPER TEXTURE
+   Diffused, smooth paper surface — texture should be felt, not seen.
    ========================================================= */
 html body.ink-mode::after{
   content:"";
@@ -6523,9 +6523,9 @@ html body.ink-mode::after{
   inset:0;
   z-index:9999;
   pointer-events:none;
-  opacity:.11;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Cfilter id='paperNoise' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.62' numOctaves='2' seed='17' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23paperNoise)' opacity='.55'/%3E%3C/svg%3E");
-  background-size:180px 180px;
+  opacity:.075;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240' viewBox='0 0 240 240'%3E%3Cfilter id='paperSoft' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.38' numOctaves='2' seed='23' stitchTiles='stitch'/%3E%3CfeGaussianBlur stdDeviation='.65'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23paperSoft)' opacity='.58'/%3E%3C/svg%3E");
+  background-size:240px 240px;
   background-repeat:repeat;
   mix-blend-mode:multiply;
 }
@@ -6535,13 +6535,33 @@ html body.ink-mode::before{
   inset:0;
   z-index:9998;
   pointer-events:none;
-  opacity:.035;
-  background:repeating-linear-gradient(0deg,rgba(92,82,68,.010) 0 1px,transparent 1px 5px);
+  opacity:.025;
+  background:
+    radial-gradient(ellipse at 20% 25%,rgba(92,82,68,.025),transparent 42%),
+    radial-gradient(ellipse at 78% 70%,rgba(92,82,68,.020),transparent 46%);
   mix-blend-mode:multiply;
 }
 html body.ink-mode .app{
   position:relative;
   z-index:1;
+}
+@media(max-width:900px){
+  html body.ink-mode::after{
+    opacity:.085;
+    background-size:230px 230px;
+  }
+  html body.ink-mode::before{
+    opacity:.03;
+  }
+}
+@media(max-width:520px){
+  html body.ink-mode::after{
+    opacity:.09;
+    background-size:220px 220px;
+  }
+  html body.ink-mode::before{
+    opacity:.032;
+  }
 }
 @media(max-width:900px){
   html body.ink-mode::after{
