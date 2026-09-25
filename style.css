@@ -6356,3 +6356,11 @@ main{
     margin-top:2px !important;
   }
 }
+
+
+/* HEADER → TODAY — restore a little breathing room on mobile */
+@media(max-width:900px){
+  .intro{
+    margin-top:8px !important;
+  }
+}
