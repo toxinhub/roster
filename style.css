@@ -6218,7 +6218,7 @@ html body.ink-mode .next-duty-off-item{
 }
 .next-duty-change-item .next-duty-date,
 .next-duty-off-item .next-duty-off{
-  font-size:7.25px;
+  font-size:8.25px;
   line-height:1.1;
 }
 html body.ink-mode .next-duty-name::after{
@@ -6230,7 +6230,7 @@ html body.ink-mode .next-duty-name::after{
   }
   .next-duty-change-item .next-duty-date,
   .next-duty-off-item .next-duty-off{
-    font-size:6.75px;
+    font-size:7.5px;
   }
 }
 
