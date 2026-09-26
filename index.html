@@ -314,36 +314,55 @@ function render(){
 
   const nextInfo=people.map(p=>{
     const shifts=p.shifts||[];
-    const current=todayIndex>=0 ? (shifts[todayIndex]||'OFF') : 'OFF';
-    const workCodes=['A','B','C'];
-    let nextShiftChange=null;
+    const workCodes=new Set(['A','B','C']);
+    const current=todayIndex>=0?(shifts[todayIndex]||'OFF'):'OFF';
+
+    // OFF logic: today gets priority. Otherwise use the first future OFF/Leave.
     let nextOff=null;
-
-    // Keep every future day in the timeline. Shift change = first future
-    // work shift whose code differs from today's/current work shift.
-    // OFF is independently reported and is never skipped for its own date.
-    for(let i=Math.max(todayIndex+1,0);i<days.length;i++){
-      const code=shifts[i]||'OFF';
-
-      if(!nextOff && (code==='OFF'||code==='L')){
-        nextOff={day:days[i],code};
-      }
-
-      if(!nextShiftChange && workCodes.includes(code)){
-        const from=workCodes.includes(current)?current:null;
-        if(from && code!==from){
-          nextShiftChange={day:days[i],from,to:code};
+    if(todayIndex>=0 && (current==='OFF'||current==='L')){
+      nextOff={day:days[todayIndex],code:current};
+    }else{
+      for(let i=Math.max(todayIndex+1,0);i<days.length;i++){
+        const code=shifts[i]||'OFF';
+        if(code==='OFF'||code==='L'){
+          nextOff={day:days[i],code};
+          break;
         }
       }
-
-      if(nextShiftChange&&nextOff) break;
     }
 
+    // Shift-change logic: OFF/Leave does not reset the last work shift.
+    // Find the current work shift, or the latest work shift before today.
+    let referenceCode=workCodes.has(current)?current:null;
+    if(!referenceCode){
+      for(let i=Math.min(todayIndex-1,shifts.length-1);i>=0;i--){
+        const code=shifts[i]||'OFF';
+        if(workCodes.has(code)){
+          referenceCode=code;
+          break;
+        }
+      }
+    }
+
+    // Find the first future work shift that is actually different.
+    let nextShiftChange=null;
+    if(referenceCode){
+      for(let i=Math.max(todayIndex+1,0);i<days.length;i++){
+        const code=shifts[i]||'OFF';
+        if(workCodes.has(code)&&code!==referenceCode){
+          nextShiftChange={day:days[i],from:referenceCode,to:code};
+          break;
+        }
+      }
+    }
+
+    const liveToday=today();
     const dateLabel=entry=>{
-      if(!entry) return '—';
+      if(!entry)return '—';
       const d=new Date(entry.day.isoDate+'T12:00:00');
-      const date=d.toLocaleDateString('bn-BD',{day:'numeric',month:'long'});
       const weekday=entry.day.weekday||d.toLocaleDateString('bn-BD',{weekday:'long'});
+      if(entry.day.isoDate===liveToday)return 'আজ · '+weekday;
+      const date=d.toLocaleDateString('bn-BD',{day:'numeric',month:'long'});
       return date+' · '+weekday;
     };
 
@@ -351,16 +370,15 @@ function render(){
       '<strong class="next-duty-name">'+esc(p.name)+'</strong>'+
       '<span class="next-duty-item next-duty-change-item">'+
         '<small>শিফট পরিবর্তন</small>'+
-        '<b class="next-duty-change">'+(nextShiftChange?esc(nextShiftChange.from)+' → '+esc(nextShiftChange.to):'—')+'</b>'+
-        '<em class="next-duty-date">'+(nextShiftChange?esc(dateLabel(nextShiftChange)):'পরিবর্তন নেই')+'</em>'+
-      '</span>'+
+        '<b class="next-duty-change">'+(nextShiftChange?esc(nextShiftChange.from)+' → '+esc(nextShiftChange.to):'—')+'</b>'+ 
+        '<em class="next-duty-date">'+(nextShiftChange?esc(dateLabel(nextShiftChange)):'পরিবর্তন নেই')+'</em>'+ 
+      '</span>'+ 
       '<span class="next-duty-item next-duty-off-item">'+
-        '<small>OFF</small>'+
-        '<b class="next-duty-off">'+(nextOff?esc(dateLabel(nextOff)):'—')+'</b>'+
-      '</span>'+
+        '<small>OFF</small>'+ 
+        '<b class="next-duty-off">'+(nextOff?esc(dateLabel(nextOff)):'—')+'</b>'+ 
+      '</span>'+ 
     '</div>';
   }).join('');
-
   $('next-duty').innerHTML=nextInfo;
 }
 
