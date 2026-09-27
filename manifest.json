@@ -1,0 +1,23 @@
+{
+  "id": "/roster/",
+  "name": "CCTV · PJL Duty Roster",
+  "short_name": "CCTV Roster",
+  "description": "CCTV - PJL duty roster",
+  "lang": "bn",
+  "dir": "ltr",
+  "start_url": "/roster/index.html",
+  "scope": "/roster/",
+  "display": "standalone",
+  "orientation": "landscape-primary",
+  "background_color": "#101828",
+  "theme_color": "#101828",
+  "prefer_related_applications": false,
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
