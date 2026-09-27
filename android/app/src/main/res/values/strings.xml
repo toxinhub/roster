@@ -2,4 +2,6 @@
 <resources>
     <string name="app_name">CCTV ডিউটি রোস্টার</string>
     <string name="app_short_name">CCTV Roster</string>
+    <string name="notification_channel_name">ডিউটি আপডেট</string>
+    <string name="notification_channel_description">রোস্টারের গুরুত্বপূর্ণ ডিউটি পরিবর্তনের নোটিফিকেশন</string>
 </resources>
