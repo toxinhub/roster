@@ -43,7 +43,7 @@ public class MainActivity extends Activity {
                     "(function(){return document.body?document.body.innerText:'';})()",
                     value -> {
                         if (value == null) return;
-                        String text = value.replace("\\n", " ").replace("\\"", """);
+                        String text = value.replace("\\n", " ").replace("\\\"", "\"");
                         String key = extractStatus(text);
                         if (!key.isEmpty() && !key.equals(lastNotice)) {
                             lastNotice = key;
