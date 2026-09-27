@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - "android/**"
+      - "schedule.json"
       - ".github/workflows/android-build-test.yml"
   workflow_dispatch:
 
@@ -11,8 +12,31 @@ permissions:
   contents: read
 
 jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate live roster data
+        run: |
+          python - <<'PY'
+          import json, urllib.request
+          url = "https://toxinhub.github.io/roster/schedule.json"
+          with urllib.request.urlopen(url, timeout=20) as r:
+              data = json.load(r)
+          assert isinstance(data.get("days"), list) and data["days"], "days missing"
+          assert isinstance(data.get("employees"), list) and data["employees"], "employees missing"
+          for employee in data["employees"]:
+              assert employee.get("name"), "employee name missing"
+              shifts = employee.get("shifts")
+              assert isinstance(shifts, list), "employee shifts missing"
+              assert len(shifts) >= len(data["days"]), f"shift array shorter than days for {employee['name']}"
+              for code in shifts[:len(data["days"])]:
+                  assert code in {"A","B","C","OFF","L",""}, f"invalid shift code: {code}"
+          print(f"Validated {len(data['employees'])} employees and {len(data['days'])} days")
+          PY
+
   build:
     runs-on: ubuntu-latest
+    needs: validate
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -36,6 +60,10 @@ jobs:
       - name: Build debug APK
         working-directory: android
         run: gradle clean assembleDebug --stacktrace --no-daemon
+
+      - name: Run Android lint
+        working-directory: android
+        run: gradle lintDebug --stacktrace --no-daemon
 
       - name: Verify APK
         working-directory: android
