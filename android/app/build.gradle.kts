@@ -10,15 +10,15 @@ android {
         applicationId = "com.toxinhub.roster"
         minSdk = 24
         targetSdk = 36
-        versionCode = 3
-        versionName = "1.2"
+        versionCode = 4
+        versionName = "1.3"
     }
 
     signingConfigs {
         create("release") {
-            val storeFilePath = System.getenv("ANDROID_KEYSTORE_PATH")
-            if (!storeFilePath.isNullOrBlank()) {
-                storeFile = file(storeFilePath)
+            val p = System.getenv("ANDROID_KEYSTORE_PATH")
+            if (!p.isNullOrBlank()) {
+                storeFile = file(p)
                 storePassword = System.getenv("ANDROID_KEYSTORE_PASSWORD")
                 keyAlias = System.getenv("ANDROID_KEY_ALIAS")
                 keyPassword = System.getenv("ANDROID_KEY_PASSWORD")
@@ -30,11 +30,8 @@ android {
         release {
             isMinifyEnabled = true
             isShrinkResources = true
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
             signingConfig = signingConfigs.getByName("release")
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
 
@@ -45,5 +42,6 @@ android {
 }
 
 dependencies {
+    implementation("androidx.core:core:1.16.0")
     implementation("androidx.webkit:webkit:1.17.0")
 }
