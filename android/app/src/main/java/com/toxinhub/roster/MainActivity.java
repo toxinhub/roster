@@ -1,119 +1,173 @@
 package com.toxinhub.roster;
 
+import android.Manifest;
 import android.app.Activity;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
+import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
-import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
 public class MainActivity extends Activity {
-
-    private static final String ROSTER_URL =
-            "https://toxinhub.github.io/roster/index.html";
-
+    private static final String URL = "https://toxinhub.github.io/roster/index.html";
+    private static final String CHANNEL_ID = "duty_updates";
+    private static final int NOTIFICATION_REQUEST = 7001;
+    private final Handler handler = new Handler();
     private WebView webView;
+    private String lastNotice = "";
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    private final Runnable rosterWatcher = new Runnable() {
+        @Override public void run() {
+            if (webView != null) {
+                webView.evaluateJavascript(
+                    "(function(){return document.body?document.body.innerText:'';})()",
+                    value -> {
+                        if (value == null) return;
+                        String text = value.replace("\\n", " ").replace("\\"", """);
+                        String key = extractStatus(text);
+                        if (!key.isEmpty() && !key.equals(lastNotice)) {
+                            lastNotice = key;
+                            notifyUser("রোস্টার আপডেট", key);
+                        }
+                    });
+            }
+            handler.postDelayed(this, 60000);
+        }
+    };
+
+    @Override protected void onCreate(Bundle state) {
+        super.onCreate(state);
+        createNotificationChannel();
 
         webView = new WebView(this);
-        webView.setBackgroundColor(Color.rgb(16, 24, 40));
+        webView.setBackgroundColor(Color.rgb(16,24,40));
         webView.setOverScrollMode(View.OVER_SCROLL_NEVER);
         webView.setVerticalScrollBarEnabled(false);
         webView.setHorizontalScrollBarEnabled(false);
 
-        WebSettings settings = webView.getSettings();
-        settings.setJavaScriptEnabled(true);
-        settings.setDomStorageEnabled(true);
-        settings.setDatabaseEnabled(true);
-        settings.setLoadsImagesAutomatically(true);
-        settings.setMediaPlaybackRequiresUserGesture(false);
-        settings.setBuiltInZoomControls(false);
-        settings.setDisplayZoomControls(false);
-        settings.setSupportZoom(false);
-        settings.setAllowFileAccess(false);
-        settings.setAllowContentAccess(false);
-        settings.setMixedContentMode(WebSettings.MIXED_CONTENT_NEVER_ALLOW);
+        WebSettings s = webView.getSettings();
+        s.setJavaScriptEnabled(true);
+        s.setDomStorageEnabled(true);
+        s.setDatabaseEnabled(true);
+        s.setLoadsImagesAutomatically(true);
+        s.setBuiltInZoomControls(false);
+        s.setDisplayZoomControls(false);
+        s.setSupportZoom(false);
+        s.setAllowFileAccess(false);
+        s.setAllowContentAccess(false);
+        s.setMixedContentMode(WebSettings.MIXED_CONTENT_NEVER_ALLOW);
 
         webView.setWebChromeClient(new WebChromeClient());
+        webView.addJavascriptInterface(new AndroidBridge(), "AndroidRoster");
         webView.setWebViewClient(new WebViewClient() {
-            @Override
-            public boolean shouldOverrideUrlLoading(
-                    WebView view, WebResourceRequest request) {
-                return handleNavigation(request.getUrl());
+            @Override public boolean shouldOverrideUrlLoading(WebView v, WebResourceRequest r) {
+                return navigate(r.getUrl());
             }
-
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                return handleNavigation(Uri.parse(url));
-            }
-
-            @Override
-            public void onReceivedError(
-                    WebView view, WebResourceRequest request,
-                    android.webkit.WebResourceError error) {
-                super.onReceivedError(view, request, error);
-            }
-
-            @Override
-            public WebResourceResponse shouldInterceptRequest(
-                    WebView view, WebResourceRequest request) {
-                return super.shouldInterceptRequest(view, request);
+            @Override public boolean shouldOverrideUrlLoading(WebView v, String u) {
+                return navigate(Uri.parse(u));
             }
         });
 
-        setContentView(webView);
+        // Android 15+ is edge-to-edge by default. Keep critical web content below
+        // the status/navigation bars so the roster header is never hidden.
+        ViewCompat.setOnApplyWindowInsetsListener(webView, (v, insets) -> {
+            int top = insets.getInsets(WindowInsetsCompat.Type.statusBars()
+                    | WindowInsetsCompat.Type.displayCutout()).top;
+            int bottom = insets.getInsets(WindowInsetsCompat.Type.navigationBars()).bottom;
+            v.setPadding(v.getPaddingLeft(), top, v.getPaddingRight(), bottom);
+            return insets;
+        });
 
-        if (savedInstanceState == null) {
-            webView.loadUrl(ROSTER_URL);
-        } else {
-            webView.restoreState(savedInstanceState);
-        }
+        setContentView(webView);
+        if (state == null) webView.loadUrl(URL); else webView.restoreState(state);
+        requestNotificationPermission();
+        handler.postDelayed(rosterWatcher, 15000);
     }
 
-    private boolean handleNavigation(Uri uri) {
-        String host = uri.getHost();
-        if ("toxinhub.github.io".equalsIgnoreCase(host)) {
-            return false;
+    private String extractStatus(String body) {
+        String lower = body.toLowerCase();
+        int i = lower.indexOf("upcoming");
+        if (i >= 0) {
+            int end = Math.min(body.length(), i + 100);
+            return body.substring(i, end).replaceAll("\\s+", " ").trim();
         }
+        return "";
+    }
 
-        try {
-            startActivity(new Intent(Intent.ACTION_VIEW, uri));
-        } catch (Exception ignored) {
-        }
+    private boolean navigate(Uri uri) {
+        if ("toxinhub.github.io".equalsIgnoreCase(uri.getHost())) return false;
+        try { startActivity(new Intent(Intent.ACTION_VIEW, uri)); } catch (Exception ignored) {}
         return true;
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        webView.saveState(outState);
-        super.onSaveInstanceState(outState);
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (webView != null && webView.canGoBack()) {
-            webView.goBack();
-        } else {
-            super.onBackPressed();
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel c = new NotificationChannel(
+                CHANNEL_ID, getString(R.string.notification_channel_name),
+                NotificationManager.IMPORTANCE_DEFAULT);
+            c.setDescription(getString(R.string.notification_channel_description));
+            getSystemService(NotificationManager.class).createNotificationChannel(c);
         }
     }
 
-    @Override
-    protected void onDestroy() {
-        if (webView != null) {
-            webView.stopLoading();
-            webView.destroy();
-            webView = null;
+    private void requestNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= 33 &&
+            ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                new String[]{Manifest.permission.POST_NOTIFICATIONS},
+                NOTIFICATION_REQUEST);
         }
+    }
+
+    private void notifyUser(String title, String message) {
+        if (Build.VERSION.SDK_INT >= 33 &&
+            ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+                != PackageManager.PERMISSION_GRANTED) return;
+
+        NotificationCompat.Builder b = new NotificationCompat.Builder(this, CHANNEL_ID)
+            .setSmallIcon(com.toxinhub.roster.R.drawable.ic_launcher)
+            .setContentTitle(title)
+            .setContentText(message)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setAutoCancel(true);
+        getSystemService(NotificationManager.class).notify(1001, b.build());
+    }
+
+    public class AndroidBridge {
+        @JavascriptInterface public void notifyRoster(String title, String message) {
+            runOnUiThread(() -> notifyUser(title, message));
+        }
+    }
+
+    @Override protected void onSaveInstanceState(Bundle out) {
+        webView.saveState(out); super.onSaveInstanceState(out);
+    }
+
+    @Override public void onBackPressed() {
+        if (webView != null && webView.canGoBack()) webView.goBack(); else super.onBackPressed();
+    }
+
+    @Override protected void onDestroy() {
+        handler.removeCallbacksAndMessages(null);
+        if (webView != null) { webView.stopLoading(); webView.destroy(); webView = null; }
         super.onDestroy();
     }
 }
