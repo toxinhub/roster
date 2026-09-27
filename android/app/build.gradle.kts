@@ -10,8 +10,8 @@ android {
         applicationId = "com.toxinhub.roster"
         minSdk = 24
         targetSdk = 36
-        versionCode = 4
-        versionName = "1.3"
+        versionCode = 5
+        versionName = "1.4"
     }
 
     signingConfigs {
