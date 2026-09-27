@@ -42,6 +42,7 @@ android {
 }
 
 dependencies {
+    implementation("androidx.activity:activity:1.10.1")
     implementation("androidx.core:core:1.16.0")
     implementation("androidx.webkit:webkit:1.17.0")
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
