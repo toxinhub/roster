@@ -8,9 +8,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
+import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+
+import androidx.webkit.WebViewCompat;
 
 public class MainActivity extends Activity {
 
@@ -26,6 +29,8 @@ public class MainActivity extends Activity {
         webView = new WebView(this);
         webView.setBackgroundColor(Color.rgb(16, 24, 40));
         webView.setOverScrollMode(View.OVER_SCROLL_NEVER);
+        webView.setVerticalScrollBarEnabled(false);
+        webView.setHorizontalScrollBarEnabled(false);
 
         WebSettings settings = webView.getSettings();
         settings.setJavaScriptEnabled(true);
@@ -35,46 +40,64 @@ public class MainActivity extends Activity {
         settings.setMediaPlaybackRequiresUserGesture(false);
         settings.setBuiltInZoomControls(false);
         settings.setDisplayZoomControls(false);
+        settings.setSupportZoom(false);
+        settings.setAllowFileAccess(false);
+        settings.setAllowContentAccess(false);
+        settings.setMixedContentMode(WebSettings.MIXED_CONTENT_NEVER_ALLOW);
 
         webView.setWebChromeClient(new WebChromeClient());
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(
                     WebView view, WebResourceRequest request) {
-                Uri uri = request.getUrl();
-                String host = uri.getHost();
-
-                if ("toxinhub.github.io".equalsIgnoreCase(host)) {
-                    return false;
-                }
-
-                try {
-                    startActivity(new Intent(Intent.ACTION_VIEW, uri));
-                } catch (Exception ignored) {
-                    // Keep the roster usable if no external browser is available.
-                }
-                return true;
+                return handleNavigation(request.getUrl());
             }
 
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                Uri uri = Uri.parse(url);
-                String host = uri.getHost();
+                return handleNavigation(Uri.parse(url));
+            }
 
-                if ("toxinhub.github.io".equalsIgnoreCase(host)) {
-                    return false;
-                }
+            @Override
+            public void onReceivedError(
+                    WebView view, WebResourceRequest request,
+                    android.webkit.WebResourceError error) {
+                super.onReceivedError(view, request, error);
+            }
 
-                try {
-                    startActivity(new Intent(Intent.ACTION_VIEW, uri));
-                } catch (Exception ignored) {
-                }
-                return true;
+            @Override
+            public WebResourceResponse shouldInterceptRequest(
+                    WebView view, WebResourceRequest request) {
+                return super.shouldInterceptRequest(view, request);
             }
         });
 
         setContentView(webView);
-        webView.loadUrl(ROSTER_URL);
+
+        if (savedInstanceState == null) {
+            WebViewCompat.navigate(webView, Uri.parse(ROSTER_URL), null);
+        } else {
+            webView.restoreState(savedInstanceState);
+        }
+    }
+
+    private boolean handleNavigation(Uri uri) {
+        String host = uri.getHost();
+        if ("toxinhub.github.io".equalsIgnoreCase(host)) {
+            return false;
+        }
+
+        try {
+            startActivity(new Intent(Intent.ACTION_VIEW, uri));
+        } catch (Exception ignored) {
+        }
+        return true;
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        webView.saveState(outState);
+        super.onSaveInstanceState(outState);
     }
 
     @Override
