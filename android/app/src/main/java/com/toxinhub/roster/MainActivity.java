@@ -13,8 +13,6 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import androidx.webkit.WebViewCompat;
-
 public class MainActivity extends Activity {
 
     private static final String ROSTER_URL =
@@ -75,7 +73,7 @@ public class MainActivity extends Activity {
         setContentView(webView);
 
         if (savedInstanceState == null) {
-            WebViewCompat.navigate(webView, Uri.parse(ROSTER_URL), null);
+            webView.loadUrl(ROSTER_URL);
         } else {
             webView.restoreState(savedInstanceState);
         }
