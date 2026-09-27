@@ -20,6 +20,8 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import androidx.activity.ComponentActivity;
+import androidx.activity.OnBackPressedCallback;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
@@ -27,7 +29,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-public class MainActivity extends Activity {
+public class MainActivity extends ComponentActivity {
     private static final String URL = "https://toxinhub.github.io/roster/index.html";
     private static final String CHANNEL_ID = "duty_updates";
     private static final int NOTIFICATION_REQUEST = 7001;
@@ -103,6 +105,14 @@ public class MainActivity extends Activity {
         refreshLayout.setOnRefreshListener(() -> webView.reload());
         refreshLayout.addView(webView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         setContentView(refreshLayout);
+
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override public void handleOnBackPressed() {
+                if (webView != null && webView.canGoBack()) webView.goBack();
+                else finish();
+            }
+        });
+
         if (state == null) webView.loadUrl(URL); else webView.restoreState(state);
         RosterWorker.schedule(this);
         requestNotificationPermission();
@@ -169,9 +179,6 @@ public class MainActivity extends Activity {
         webView.saveState(out); super.onSaveInstanceState(out);
     }
 
-    @Override public void onBackPressed() {
-        if (webView != null && webView.canGoBack()) webView.goBack(); else super.onBackPressed();
-    }
 
     @Override protected void onDestroy() {
         handler.removeCallbacksAndMessages(null);
