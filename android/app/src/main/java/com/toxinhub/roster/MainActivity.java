@@ -12,6 +12,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
@@ -24,6 +25,7 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 public class MainActivity extends Activity {
     private static final String URL = "https://toxinhub.github.io/roster/index.html";
@@ -31,6 +33,7 @@ public class MainActivity extends Activity {
     private static final int NOTIFICATION_REQUEST = 7001;
     private final Handler handler = new Handler();
     private WebView webView;
+    private SwipeRefreshLayout refreshLayout;
     private String lastNotice = "";
 
     private final Runnable rosterWatcher = new Runnable() {
@@ -56,6 +59,7 @@ public class MainActivity extends Activity {
         super.onCreate(state);
         createNotificationChannel();
 
+        refreshLayout = new SwipeRefreshLayout(this);
         webView = new WebView(this);
         webView.setBackgroundColor(Color.rgb(16,24,40));
         webView.setOverScrollMode(View.OVER_SCROLL_NEVER);
@@ -95,8 +99,12 @@ public class MainActivity extends Activity {
             return insets;
         });
 
-        setContentView(webView);
+        refreshLayout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        refreshLayout.setOnRefreshListener(() -> webView.reload());
+        refreshLayout.addView(webView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        setContentView(refreshLayout);
         if (state == null) webView.loadUrl(URL); else webView.restoreState(state);
+        RosterWorker.schedule(this);
         requestNotificationPermission();
         handler.postDelayed(rosterWatcher, 15000);
     }
