@@ -7967,3 +7967,30 @@ html body.ink-mode .next-duty-item .next-duty-status-label{
     line-height:1.1 !important;
   }
 }
+
+
+/* Final fix: OFF / LEAVE label is always explicit; today's label gets stronger emphasis. */
+.next-duty-off-item .next-duty-status-label{
+  display:block !important;
+  visibility:visible !important;
+  font-size:10px !important;
+  font-weight:900 !important;
+  line-height:1 !important;
+  letter-spacing:.03em !important;
+  color:#334155 !important;
+  opacity:1 !important;
+}
+.next-duty-off-item .next-duty-status-label.is-leave{
+  color:#9f1239 !important;
+}
+html body.ink-mode .next-duty-off-item .next-duty-status-label{
+  color:#252420 !important;
+}
+html body.ink-mode .next-duty-off-item .next-duty-status-label.is-leave{
+  color:#7f1d1d !important;
+}
+@media(max-width:700px){
+  .next-duty-off-item .next-duty-status-label{
+    font-size:9px !important;
+  }
+}
