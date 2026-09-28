@@ -395,7 +395,7 @@ html body.ink-mode #status.status.not-connected{
     $('monthPicker').onchange = () => { syncMonth(); markDirty(); };
 
     $('addDay').onclick = () => {
-      const lastIso = [...(S.days || [])].reverse().find(d => /^\\d{4}-\\d{2}-\\d{2}$/.test(d?.isoDate || ''))?.isoDate;
+      const lastIso = [...(S.days || [])].reverse().find(d => /^\d{4}-\d{2}-\d{2}$/.test(d?.isoDate || ''))?.isoDate;
       let nextDate;
 
       if (lastIso) {
@@ -407,7 +407,7 @@ html body.ink-mode #status.status.not-connected{
           day: dt.getUTCDate()
         };
       } else {
-        const match = String(S.month || '').match(/(\\d{4})/);
+        const match = String(S.month || '').match(/(\d{4})/);
         const months = ['জানুয়ারি','ফেব্রুয়ারি','মার্চ','এপ্রিল','মে','জুন','জুলাই','আগস্ট','সেপ্টেম্বর','অক্টোবর','নভেম্বর','ডিসেম্বর'];
         const monthIndex = months.findIndex(x => String(S.month || '').includes(x));
         const year = match ? Number(match[1]) : new Date().getFullYear();
