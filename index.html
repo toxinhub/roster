@@ -378,8 +378,14 @@ function render(){
         '<em class="next-duty-date">'+(nextShiftChange?esc(dateLabel(nextShiftChange)):'পরিবর্তন নেই')+'</em>'+ 
       '</span>'+ 
       '<span class="next-duty-item next-duty-off-item">'+
-        '<small>OFF</small>'+ 
-        '<b class="next-duty-off">'+(nextOff?esc(dateLabel(nextOff)):'—')+'</b>'+ 
+        '<small>'+(nextOff?.code==='L'?'LEAVE':'OFF')+'</small>'+ 
+        '<b class="next-duty-off">'+(
+          nextOff
+            ? (nextOff.code==='L' && nextOff.day.isoDate===liveToday
+                ? 'আজ · লিভ'
+                : esc(dateLabel(nextOff)))
+            : '—'
+        )+'</b>'+ 
       '</span>'+ 
     '</div>';
   }).join('');
