@@ -7875,3 +7875,46 @@ html body.ink-mode .app{
     .site-footer:hover .footer-fun{transform:none}
   }
 }
+
+
+/* =========================================================
+   CROSS-BROWSER — SAFE VISUAL FALLBACKS
+   Modern browsers keep the existing styling unchanged.
+   ========================================================= */
+@supports not (color:color-mix(in srgb,#000 50%,#fff)){
+  .shift{
+    border-color:rgba(180,190,198,.65);
+    box-shadow:0 3px 8px rgba(15,23,42,.08);
+  }
+  @media(max-width:900px){
+    .shift{
+      border-color:rgba(180,190,198,.65) !important;
+      box-shadow:
+        0 4px 10px rgba(15,23,42,.07),
+        inset 0 1px 0 rgba(255,255,255,.48) !important;
+    }
+  }
+}
+
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  .legend span,
+  .next-duty,
+  .next-duty::before{
+    backdrop-filter:none !important;
+    -webkit-backdrop-filter:none !important;
+  }
+  .legend span{background:rgba(255,255,255,.88)}
+  .next-duty{background:rgba(255,255,255,.92) !important}
+  body.ink-mode .legend span{background:rgba(245,242,232,.92)}
+  body.ink-mode .next-duty{background:#F5F2E8 !important}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .roster-wrap,
+  .board,
+  .legend span,
+  .next-duty,
+  .site-footer{
+    scroll-behavior:auto !important;
+  }
+}
