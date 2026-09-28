@@ -6712,3 +6712,17 @@ html body.ink-mode .app{
   .next-duty-item em{font-size:10px !important;}
   .next-duty-off-item{padding-left:18px !important;}
 }
+
+
+/* NEXT DUTY — slightly larger desktop board, preserving the restored layout */
+@media (min-width:901px){
+  .next-duty{margin-top:17px !important;border-radius:15px !important;}
+  .next-duty::before{padding:14px 19px 12px !important;font-size:15px !important;}
+  .next-duty-row{min-height:84px !important;padding:12px 19px !important;column-gap:22px !important;}
+  .next-duty-name{font-size:16px !important;min-width:78px !important;}
+  .next-duty-item{gap:4px !important;}
+  .next-duty-item small{font-size:10.5px !important;}
+  .next-duty-item b{font-size:14px !important;}
+  .next-duty-item em{font-size:10.5px !important;}
+  .next-duty-off-item{padding-left:19px !important;}
+}
