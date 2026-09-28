@@ -7091,3 +7091,103 @@ html body.ink-mode .app{
     transition:none !important;
   }
 }
+
+
+/* =========================================================
+   DESKTOP — ROSTER INTELLIGENT FOCUS
+   Subtle row + column crosshair for faster grid scanning.
+   Desktop only; no layout/data changes.
+   ========================================================= */
+@media (min-width:901px) and (pointer:fine){
+  .roster-wrap .shift-cell,
+  .roster-wrap .day-head,
+  .roster-wrap .person{
+    transition:
+      background-color .12s ease,
+      box-shadow .12s ease,
+      color .12s ease;
+  }
+
+  .roster-wrap .shift-cell.roster-focus-col,
+  .roster-wrap .day-head.roster-focus-col{
+    background-color:rgba(255,228,181,.16) !important;
+  }
+
+  .roster-wrap .person-row.roster-focus-row .person{
+    background-color:rgba(255,228,181,.14) !important;
+    box-shadow:
+      inset 3px 0 0 rgba(217,119,6,.42),
+      8px 0 14px rgba(16,24,40,.045);
+  }
+
+  .roster-wrap .person-row.roster-focus-row .shift-cell{
+    background-color:rgba(255,255,255,.18);
+  }
+
+  .roster-wrap .shift-cell.roster-focus-cell{
+    background-color:rgba(255,228,181,.30) !important;
+    box-shadow:
+      inset 0 0 0 1px rgba(217,119,6,.30),
+      inset 0 3px 0 rgba(217,119,6,.18),
+      inset 0 -3px 0 rgba(217,119,6,.10);
+  }
+
+  .roster-wrap .shift-cell.roster-focus-cell .shift{
+    transform:translateY(-1px);
+    box-shadow:
+      0 7px 16px color-mix(in srgb,var(--c) 27%,transparent),
+      inset 0 1px 0 rgba(255,255,255,.48);
+  }
+
+  .roster-wrap .day-head.roster-focus-col{
+    box-shadow:inset 0 -2px 0 rgba(217,119,6,.36);
+  }
+
+  .roster-wrap .day-head.roster-focus-col strong{
+    color:#9A5B00;
+  }
+
+  html body.ink-mode .roster-wrap .shift-cell.roster-focus-col,
+  html body.ink-mode .roster-wrap .day-head.roster-focus-col{
+    background-color:rgba(168,106,19,.10) !important;
+  }
+
+  html body.ink-mode .roster-wrap .person-row.roster-focus-row .person{
+    background-color:#E9E5DA !important;
+    box-shadow:
+      inset 3px 0 0 #A86A13,
+      8px 0 14px rgba(64,58,48,.045);
+  }
+
+  html body.ink-mode .roster-wrap .person-row.roster-focus-row .shift-cell{
+    background-color:rgba(255,255,255,.10);
+  }
+
+  html body.ink-mode .roster-wrap .shift-cell.roster-focus-cell{
+    background-color:#E4DFD2 !important;
+    box-shadow:
+      inset 0 0 0 1px rgba(168,106,19,.34),
+      inset 0 3px 0 rgba(168,106,19,.18),
+      inset 0 -3px 0 rgba(168,106,19,.10);
+  }
+
+  html body.ink-mode .roster-wrap .day-head.roster-focus-col{
+    box-shadow:inset 0 -2px 0 #A86A13;
+  }
+
+  html body.ink-mode .roster-wrap .day-head.roster-focus-col strong{
+    color:#7B4B08 !important;
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    .roster-wrap .shift-cell,
+    .roster-wrap .day-head,
+    .roster-wrap .person,
+    .roster-wrap .shift{
+      transition:none !important;
+    }
+    .roster-wrap .shift-cell.roster-focus-cell .shift{
+      transform:none !important;
+    }
+  }
+}
