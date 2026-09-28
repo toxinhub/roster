@@ -6735,3 +6735,131 @@ html body.ink-mode .app{
     max-width:none !important;
   }
 }
+
+
+/* NEXT DUTY — polished professional treatment
+   Visual-only enhancement: no HTML/JS/data changes. */
+@media (min-width:901px){
+  .next-duty{
+    position:relative;
+    border-color:rgba(148,163,184,.22) !important;
+    background:
+      linear-gradient(135deg,rgba(255,255,255,.72),rgba(255,248,232,.48)) !important;
+    box-shadow:
+      0 12px 30px rgba(31,41,55,.07),
+      inset 0 1px 0 rgba(255,255,255,.72) !important;
+  }
+
+  .next-duty-list{
+    position:relative;
+    isolation:isolate;
+  }
+
+  /* A very subtle moving "live board" trace */
+  .next-duty-list::after{
+    content:"";
+    position:absolute;
+    top:0;
+    left:-28%;
+    width:28%;
+    height:2px;
+    pointer-events:none;
+    z-index:3;
+    background:linear-gradient(90deg,transparent,rgba(217,119,6,.65),rgba(59,130,246,.5),transparent);
+    animation:nextDutyScan 6s ease-in-out infinite;
+  }
+
+  .next-duty::before{
+    position:relative;
+    letter-spacing:.035em !important;
+    background:
+      linear-gradient(90deg,rgba(255,244,214,.82),rgba(255,255,255,.30)) !important;
+    box-shadow:inset 0 -1px 0 rgba(100,116,139,.10);
+  }
+
+  .next-duty-row{
+    position:relative;
+    background:rgba(255,255,255,.20);
+    transition:
+      background-color .22s ease,
+      transform .22s ease,
+      box-shadow .22s ease;
+  }
+
+  .next-duty-row:nth-child(even){
+    background:rgba(248,250,252,.30);
+  }
+
+  .next-duty-row:hover{
+    z-index:2;
+    background:rgba(255,247,225,.62);
+    box-shadow:
+      inset 3px 0 0 rgba(217,119,6,.68),
+      0 5px 16px rgba(31,41,55,.055);
+    transform:translateY(-1px);
+  }
+
+  .next-duty-name{
+    letter-spacing:.01em;
+  }
+
+  .next-duty-change-item b{
+    color:#9A5B00;
+  }
+
+  .next-duty-off-item b{
+    color:#334155;
+  }
+
+  .next-duty-item em{
+    color:#64748B;
+  }
+
+  html body.ink-mode .next-duty{
+    background:#F5F2E8 !important;
+    border-color:#AAA79E !important;
+    box-shadow:0 8px 22px rgba(64,58,48,.08) !important;
+  }
+
+  html body.ink-mode .next-duty::before{
+    background:linear-gradient(90deg,#E8E2D3,#ECE9DE) !important;
+  }
+
+  html body.ink-mode .next-duty-row{
+    background:rgba(255,255,255,.12);
+  }
+
+  html body.ink-mode .next-duty-row:nth-child(even){
+    background:rgba(231,228,219,.28);
+  }
+
+  html body.ink-mode .next-duty-row:hover{
+    background:#EDE8DB;
+    box-shadow:inset 3px 0 0 #A86A13,0 4px 14px rgba(64,58,48,.06);
+  }
+
+  html body.ink-mode .next-duty-change-item b{
+    color:#8A5300;
+  }
+
+  html body.ink-mode .next-duty-off-item b{
+    color:#252525;
+  }
+
+  html body.ink-mode .next-duty-list::after{
+    background:linear-gradient(90deg,transparent,rgba(168,106,19,.48),rgba(72,94,110,.36),transparent);
+  }
+}
+
+@keyframes nextDutyScan{
+  0%,18%{transform:translateX(0);opacity:0}
+  28%{opacity:.9}
+  72%{opacity:.9}
+  82%,100%{transform:translateX(465%);opacity:0}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .next-duty-list::after{animation:none !important;opacity:0 !important;}
+  .next-duty-row{transition:none !important;}
+  .next-duty-row:hover{transform:none !important;}
+}
