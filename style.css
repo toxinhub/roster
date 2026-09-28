@@ -7941,3 +7941,29 @@ html body.ink-mode .next-duty-item .next-duty-status-label{
     font-weight:900 !important;
   }
 }
+
+
+/* Final balance: today's OFF / LEAVE status must remain clearly visible above inherited small-text rules. */
+.next-duty-item .next-duty-status-label{
+  display:block !important;
+  visibility:visible !important;
+  font-size:9px !important;
+  font-weight:900 !important;
+  line-height:1.1 !important;
+  letter-spacing:.02em !important;
+  color:#334155 !important;
+  opacity:1 !important;
+  text-shadow:none !important;
+}
+
+html body.ink-mode .next-duty-item .next-duty-status-label{
+  color:#252420 !important;
+}
+
+@media (max-width:700px){
+  .next-duty-item .next-duty-status-label{
+    font-size:8px !important;
+    font-weight:900 !important;
+    line-height:1.1 !important;
+  }
+}
