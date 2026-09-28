@@ -6726,3 +6726,12 @@ html body.ink-mode .app{
   .next-duty-item em{font-size:10.5px !important;}
   .next-duty-off-item{padding-left:19px !important;}
 }
+
+
+/* NEXT DUTY — wider desktop section */
+@media (min-width:901px){
+  .next-duty{
+    width:100% !important;
+    max-width:none !important;
+  }
+}
