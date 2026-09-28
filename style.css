@@ -6676,3 +6676,25 @@ html body.ink-mode .app{
     border-left-color:#D1CEC5 !important;
   }
 }
+
+
+/* NEXT DUTY — desktop readability boost */
+@media (min-width:901px){
+  .next-duty{margin-top:14px !important;border-radius:14px !important;}
+  .next-duty::before{
+    padding:10px 16px 9px !important;
+    font-size:12px !important;
+  }
+  .next-duty-row{
+    min-height:62px !important;
+    padding:9px 16px !important;
+    column-gap:18px !important;
+  }
+  .next-duty-name{font-size:13px !important;min-width:64px !important;}
+  .next-duty-item{gap:3px !important;}
+  .next-duty-item small{font-size:9px !important;}
+  .next-duty-item b{font-size:11.5px !important;}
+  .next-duty-item em{font-size:9px !important;}
+  .next-duty-off-item{padding-left:16px !important;}
+  html body.ink-mode .next-duty::before{background:#ECE9DE !important;}
+}
