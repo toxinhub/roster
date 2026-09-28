@@ -178,7 +178,9 @@ function render(){
   const dhakaParts=dhakaDateTimeFormatter.formatToParts(dhakaNow);
   const part=k=>dhakaParts.find(x=>x.type===k)?.value||'00';
   const liveDate=part('year')+'-'+part('month')+'-'+part('day');
-  const liveMinutes=Number(part('hour'))*60+Number(part('minute'));
+  let liveHour=Number(part('hour'));
+  if(liveHour===24) liveHour=0;
+  const liveMinutes=(liveHour*60)+Number(part('minute'));
   const todayIndex=days.findIndex(d=>d.isoDate===liveDate);
 
   const shiftStartMinutes={A:360,B:840,C:1320};
