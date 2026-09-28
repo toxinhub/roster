@@ -7994,3 +7994,67 @@ html body.ink-mode .next-duty-off-item .next-duty-status-label.is-leave{
     font-size:9px !important;
   }
 }
+
+
+/* FINAL: distinguish today's OFF/LEAVE from future entries. */
+.next-duty-off-item .next-duty-status-label{font-size:8px !important;font-weight:700 !important;line-height:1 !important;color:#64748B !important;}
+.next-duty-off-item .next-duty-status-label.today-off-leave{font-size:13px !important;font-weight:900 !important;letter-spacing:.04em !important;color:#171717 !important;}
+.next-duty-off-item .next-duty-status-label.today-off-leave.is-leave{color:#171717 !important;}
+@media(max-width:700px){.next-duty-off-item .next-duty-status-label{font-size:7px !important}.next-duty-off-item .next-duty-status-label.today-off-leave{font-size:10px !important;font-weight:900 !important}}
+
+/* INK MODE: strictly neutral black/white/grey only. Header C button is excluded. */
+html body.ink-mode,
+html body.ink-mode .app,
+html body.ink-mode main,
+html body.ink-mode .board,
+html body.ink-mode .intro,
+html body.ink-mode .next-duty,
+html body.ink-mode .next-duty-list,
+html body.ink-mode .next-duty-row,
+html body.ink-mode .roster-wrap,
+html body.ink-mode .day-grid,
+html body.ink-mode .days,
+html body.ink-mode .person,
+html body.ink-mode .person-row,
+html body.ink-mode .shift-cell{color:#202020 !important;}
+html body.ink-mode .next-duty *{text-shadow:none !important;}
+html body.ink-mode .next-duty-row::before,
+html body.ink-mode .next-duty-list::after,
+html body.ink-mode .site-footer::before{background:#555 !important;}
+html body.ink-mode .next-duty-change-item b,
+html body.ink-mode .next-duty-off-item b,
+html body.ink-mode .next-duty-name,
+html body.ink-mode .next-duty-item small,
+html body.ink-mode .next-duty-item em,
+html body.ink-mode .next-duty-off-item .next-duty-status-label,
+html body.ink-mode .next-duty-off-item .next-duty-status-label.today-off-leave,
+html body.ink-mode .footer-fun,
+html body.ink-mode .site-footer::after{color:#333 !important;}
+html body.ink-mode .next-duty-change-item .next-duty-date,
+html body.ink-mode .next-duty-off-item .next-duty-off{color:#555 !important;}
+html body.ink-mode .next-duty{background:#F2F2F2 !important;border-color:#999 !important;}
+html body.ink-mode .next-duty::before{background:#E5E5E5 !important;color:#222 !important;border-bottom-color:#AAA !important;}
+html body.ink-mode .next-duty-row,
+html body.ink-mode .next-duty-row:nth-child(even),
+html body.ink-mode .next-duty-row:hover{background:#F2F2F2 !important;box-shadow:none !important;}
+html body.ink-mode .next-duty-off-item{border-color:#AAA !important;}
+html body.ink-mode .site-footer{border-color:#AAA !important;}
+html body.ink-mode .topbar .status-live,
+html body.ink-mode .topbar .icon-btn,
+html body.ink-mode .topbar .admin-link{color:#222 !important;background:#F0F0F0 !important;border-color:#AAA !important;box-shadow:none !important;}
+html body.ink-mode .topbar .brand-copy strong{color:#222 !important;}
+html body.ink-mode .topbar .status-live i{background:#444 !important;box-shadow:none !important;}
+html body.ink-mode .legend span,
+html body.ink-mode .legend .active-shift{color:#222 !important;background:#F0F0F0 !important;border-color:#AAA !important;box-shadow:none !important;filter:none !important;}
+html body.ink-mode .legend span i{background:#555 !important;box-shadow:none !important;}
+html body.ink-mode .roster-wrap .shift-cell .shift{filter:grayscale(1) !important;color:#222 !important;background:#E8E8E8 !important;border-color:#999 !important;box-shadow:none !important;}
+html body.ink-mode .roster-wrap .shift-cell .shift b{color:#222 !important;-webkit-text-fill-color:#222 !important;}
+html body.ink-mode .duty-status{color:#333 !important;}
+html body.ink-mode .duty-status::before,
+html body.ink-mode .duty-status::after{background:#555 !important;box-shadow:none !important;}
+html body.ink-mode .name-active-dot{background:#333 !important;box-shadow:none !important;}
+html body.ink-mode .today-jump{color:#222 !important;background:#EAEAEA !important;border-color:#999 !important;box-shadow:none !important;}
+html body.ink-mode .today-jump::before{background:linear-gradient(90deg,#DDD,transparent 46%,#EEE) !important;}
+html body.ink-mode .today-jump::after{background:#555 !important;box-shadow:none !important;}
+html body.ink-mode .intro-meta{color:#333 !important;background:#EFEFEF !important;border-color:#999 !important;box-shadow:none !important;}
+html body.ink-mode .intro-meta::before{background:#555 !important;box-shadow:none !important;}
