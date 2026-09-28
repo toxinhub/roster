@@ -7401,3 +7401,72 @@ html body.ink-mode .app{
     }
   }
 }
+
+
+/* =========================================================
+   DESKTOP — NEXT DUTY TIMELINE REVEAL
+   Adds a quiet information hierarchy to existing rows.
+   ========================================================= */
+@media (min-width:901px){
+  .next-duty-row{
+    position:relative;
+    overflow:hidden;
+  }
+
+  .next-duty-row::before{
+    content:"";
+    position:absolute;
+    left:0;
+    top:7px;
+    bottom:7px;
+    width:2px;
+    border-radius:999px;
+    background:rgba(217,119,6,.20);
+    transform:scaleY(.45);
+    transform-origin:center;
+    transition:transform .25s ease,opacity .25s ease,background-color .25s ease;
+    opacity:.65;
+    pointer-events:none;
+  }
+
+  .next-duty-row:hover::before{
+    transform:scaleY(1);
+    opacity:.9;
+    background:rgba(217,119,6,.55);
+  }
+
+  .next-duty-change-item b,
+  .next-duty-off-item b,
+  .next-duty-item em{
+    transition:transform .22s ease,opacity .22s ease;
+  }
+
+  .next-duty-row:hover .next-duty-change-item b{
+    transform:translateX(2px);
+  }
+
+  .next-duty-row:hover .next-duty-off-item b{
+    transform:translateX(1px);
+  }
+
+  .next-duty-row:hover .next-duty-item em{
+    opacity:1;
+  }
+
+  html body.ink-mode .next-duty-row::before{
+    background:#A86A13;
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    .next-duty-row::before,
+    .next-duty-change-item b,
+    .next-duty-off-item b,
+    .next-duty-item em{
+      transition:none !important;
+    }
+    .next-duty-row:hover .next-duty-change-item b,
+    .next-duty-row:hover .next-duty-off-item b{
+      transform:none !important;
+    }
+  }
+}
