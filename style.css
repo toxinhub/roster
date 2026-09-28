@@ -6599,3 +6599,80 @@ html body.ink-mode .app{
     opacity:.08;
   }
 }
+
+
+/* =========================================================
+   NEXT DUTY — desktop presentation
+   Keeps the mobile layout untouched.
+   ========================================================= */
+@media (min-width:901px){
+  .next-duty{
+    width:min(100%,1180px);
+    margin:12px auto 0;
+    padding:0;
+    border:1px solid rgba(100,116,139,.16) !important;
+    border-radius:12px !important;
+    background:rgba(255,255,255,.42) !important;
+    box-shadow:0 8px 24px rgba(31,41,55,.055) !important;
+    overflow:hidden;
+    backdrop-filter:blur(14px) saturate(120%);
+    -webkit-backdrop-filter:blur(14px) saturate(120%);
+  }
+  .next-duty::before{
+    content:"পরবর্তী ডিউটি তথ্য";
+    display:block;
+    padding:8px 14px 7px;
+    border-bottom:1px solid rgba(100,116,139,.13);
+    background:rgba(255,255,255,.24);
+    color:#475569;
+    font-size:10px;
+    font-weight:900;
+    letter-spacing:.02em;
+  }
+  .next-duty-list{
+    grid-template-columns:repeat(3,minmax(0,1fr));
+  }
+  .next-duty-row{
+    min-height:48px;
+    padding:6px 14px;
+    column-gap:14px;
+    border-left:1px solid rgba(100,116,139,.16) !important;
+  }
+  .next-duty-name{
+    font-size:11px;
+    min-width:54px;
+    padding-bottom:0;
+  }
+  .next-duty-name::after{display:none}
+  .next-duty-item{gap:2px}
+  .next-duty-item small{
+    font-size:7.5px;
+    letter-spacing:.02em;
+  }
+  .next-duty-item b{
+    font-size:9.5px;
+  }
+  .next-duty-item em{
+    font-size:7.5px;
+  }
+  .next-duty-off-item{
+    padding-left:12px;
+    border-left:1px solid rgba(100,116,139,.12);
+  }
+  html body.ink-mode .next-duty{
+    background:#F5F2E8 !important;
+    border-color:#AAA79E !important;
+    box-shadow:none !important;
+  }
+  html body.ink-mode .next-duty::before{
+    background:#ECE9DE;
+    border-bottom-color:#C5C2B9;
+    color:#4A4842;
+  }
+  html body.ink-mode .next-duty-row{
+    border-left-color:#C5C2B9 !important;
+  }
+  html body.ink-mode .next-duty-off-item{
+    border-left-color:#D1CEC5 !important;
+  }
+}
