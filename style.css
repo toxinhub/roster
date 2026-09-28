@@ -7739,3 +7739,82 @@ html body.ink-mode .app{
     }
   }
 }
+
+
+/* =========================================================
+   DESKTOP — TODAY COLUMN INTELLIGENCE
+   Connects today's header and cells into one quiet focus lane.
+   ========================================================= */
+@media (min-width:901px){
+  .roster-wrap .day-head.is-today{
+    background:
+      linear-gradient(180deg,rgba(255,228,181,.30),rgba(255,255,255,.34)),
+      #fbfff3;
+    box-shadow:
+      inset 0 3px 0 rgba(217,119,6,.48),
+      inset 1px 0 0 rgba(217,119,6,.08),
+      inset -1px 0 0 rgba(217,119,6,.08);
+    z-index:1;
+  }
+
+  .roster-wrap .day-head.is-today strong{
+    color:#9A5B00;
+    transition:transform .22s ease,color .22s ease;
+  }
+
+  .roster-wrap .day-head.is-today span{
+    color:#6F655D;
+  }
+
+  .roster-wrap .day-head.is-today em{
+    box-shadow:0 2px 7px rgba(31,41,55,.06);
+  }
+
+  .roster-wrap .shift-cell.is-today{
+    background:
+      linear-gradient(180deg,rgba(255,228,181,.12),rgba(251,255,243,.76)),
+      #fbfff3;
+    box-shadow:
+      inset 1px 0 0 rgba(217,119,6,.055),
+      inset -1px 0 0 rgba(217,119,6,.055);
+    transition:background-color .22s ease,box-shadow .22s ease;
+  }
+
+  .roster-wrap .person-row:hover .shift-cell.is-today{
+    background:
+      linear-gradient(180deg,rgba(255,228,181,.20),rgba(251,255,243,.82)),
+      #fbfff3;
+  }
+
+  html body.ink-mode .roster-wrap .day-head.is-today{
+    background:
+      linear-gradient(180deg,rgba(168,106,19,.12),rgba(255,255,255,.22)),
+      #F1EEE4;
+    box-shadow:
+      inset 0 3px 0 #A86A13,
+      inset 1px 0 0 rgba(168,106,19,.08),
+      inset -1px 0 0 rgba(168,106,19,.08);
+  }
+
+  html body.ink-mode .roster-wrap .day-head.is-today strong{
+    color:#7A4D0A;
+  }
+
+  html body.ink-mode .roster-wrap .shift-cell.is-today{
+    background:
+      linear-gradient(180deg,rgba(168,106,19,.07),rgba(245,242,232,.74)),
+      #F5F2E8;
+    box-shadow:
+      inset 1px 0 0 rgba(168,106,19,.05),
+      inset -1px 0 0 rgba(168,106,19,.05);
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    .roster-wrap .shift-cell.is-today{
+      transition:none !important;
+    }
+    .roster-wrap .day-head.is-today strong{
+      transition:none !important;
+    }
+  }
+}
