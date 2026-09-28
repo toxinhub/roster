@@ -7470,3 +7470,117 @@ html body.ink-mode .app{
     }
   }
 }
+
+
+/* =========================================================
+   DESKTOP — HEADER COMMAND BAR
+   Subtle live-state hierarchy; existing controls unchanged.
+   ========================================================= */
+@media (min-width:901px){
+  .topbar{
+    background:
+      linear-gradient(180deg,rgba(255,255,255,.28),rgba(255,228,181,.18)),
+      #D4D4D4;
+    border-bottom-color:rgba(71,85,105,.16);
+    box-shadow:
+      0 8px 28px rgba(31,41,55,.055),
+      inset 0 -1px 0 rgba(255,255,255,.55);
+  }
+
+  .brand{
+    position:relative;
+    padding-right:10px;
+  }
+
+  .brand::after{
+    content:"";
+    position:absolute;
+    right:0;
+    top:20%;
+    bottom:20%;
+    width:1px;
+    background:rgba(71,85,105,.16);
+    pointer-events:none;
+  }
+
+  .brand-mark{
+    box-shadow:0 4px 12px rgba(201,67,59,.12);
+    transition:transform .25s ease,box-shadow .25s ease;
+  }
+
+  .brand:hover .brand-mark{
+    transform:scale(1.04);
+    box-shadow:0 6px 16px rgba(201,67,59,.18);
+  }
+
+  .status-live{
+    position:relative;
+    padding:5px 7px;
+    border:1px solid rgba(71,85,105,.10);
+    border-radius:999px;
+    background:rgba(255,255,255,.22);
+    transition:background-color .2s ease,border-color .2s ease;
+  }
+
+  .status-live i{
+    animation:desktopLivePulse 2.8s ease-in-out infinite;
+  }
+
+  .status-live:hover{
+    background:rgba(255,255,255,.34);
+    border-color:rgba(71,85,105,.16);
+  }
+
+  .icon-btn,
+  .admin-link{
+    border-color:rgba(71,85,105,.14);
+    background:rgba(255,255,255,.42);
+    box-shadow:
+      0 3px 10px rgba(31,41,55,.045),
+      inset 0 1px 0 rgba(255,255,255,.60);
+    transition:transform .2s ease,background-color .2s ease,box-shadow .2s ease;
+  }
+
+  .icon-btn:hover,
+  .admin-link:hover{
+    transform:translateY(-1px);
+    background:rgba(255,255,255,.58);
+    box-shadow:
+      0 6px 15px rgba(31,41,55,.065),
+      inset 0 1px 0 rgba(255,255,255,.72);
+  }
+
+  html body.ink-mode .topbar{
+    background:
+      linear-gradient(180deg,rgba(255,255,255,.22),rgba(232,226,211,.30)),
+      #D4D1C8;
+    border-bottom-color:#B9B5AC;
+  }
+
+  html body.ink-mode .status-live{
+    background:rgba(255,255,255,.20);
+    border-color:rgba(74,72,66,.13);
+  }
+
+  html body.ink-mode .icon-btn,
+  html body.ink-mode .admin-link{
+    background:rgba(255,255,255,.38);
+    border-color:#C5C2B9;
+  }
+
+  @keyframes desktopLivePulse{
+    0%,100%{transform:scale(.88);opacity:.72;box-shadow:0 0 0 3px rgba(125,184,74,.08)}
+    50%{transform:scale(1);opacity:1;box-shadow:0 0 0 5px rgba(125,184,74,.14)}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    .brand-mark,
+    .icon-btn,
+    .admin-link,
+    .status-live,
+    .status-live i{
+      transition:none !important;
+      animation:none !important;
+    }
+  }
+}
