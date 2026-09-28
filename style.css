@@ -7818,3 +7818,60 @@ html body.ink-mode .app{
     }
   }
 }
+
+/* =========================================================
+   DESKTOP — QUIET SYSTEM FOOTER
+   ========================================================= */
+@media (min-width:901px){
+  .site-footer{
+    position:relative;
+    width:min(100%,1180px);
+    margin:16px auto 18px;
+    padding:9px 14px 10px;
+    border-top:1px solid rgba(71,85,105,.10);
+    text-align:center;
+    overflow:hidden;
+  }
+  .site-footer::before{
+    content:"";
+    position:absolute;
+    left:50%; top:-1px;
+    width:42px; height:2px;
+    border-radius:999px;
+    background:linear-gradient(90deg,transparent,#D97706,transparent);
+    transform:translateX(-50%) scaleX(.7);
+    opacity:.46;
+    transition:transform .28s ease,opacity .28s ease;
+  }
+  .site-footer:hover::before{
+    transform:translateX(-50%) scaleX(1);
+    opacity:.72;
+  }
+  .site-footer::after{
+    content:"SYSTEM • CCTV PJL";
+    display:block;
+    margin-top:5px;
+    color:#94A0AA;
+    font-size:6.5px;
+    font-weight:800;
+    letter-spacing:.16em;
+    opacity:.72;
+  }
+  .site-footer .footer-fun{
+    color:#7C736C;
+    font-size:7.5px;
+    line-height:1.55;
+    letter-spacing:.01em;
+    transition:opacity .22s ease,transform .22s ease;
+  }
+  .site-footer:hover .footer-fun{opacity:1;transform:translateY(-1px)}
+  html body.ink-mode .site-footer{border-top-color:#C5C2B9}
+  html body.ink-mode .site-footer::before{background:linear-gradient(90deg,transparent,#A86A13,transparent);opacity:.42}
+  html body.ink-mode .site-footer::after{color:#8A867D}
+  html body.ink-mode .site-footer .footer-fun{color:#6F6B63}
+  @media (prefers-reduced-motion:reduce){
+    .site-footer::before,.site-footer .footer-fun{transition:none !important}
+    .site-footer:hover::before{transform:translateX(-50%) scaleX(.7)}
+    .site-footer:hover .footer-fun{transform:none}
+  }
+}
