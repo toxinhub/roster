@@ -7584,3 +7584,76 @@ html body.ink-mode .app{
     }
   }
 }
+
+
+/* =========================================================
+   DESKTOP — UPDATED / DATA FRESHNESS INDICATOR
+   Visualizes freshness of the existing timestamp only.
+   ========================================================= */
+@media (min-width:901px){
+  .intro-meta{
+    position:relative;
+    min-width:92px;
+    padding:5px 8px 5px 10px;
+    border-left:2px solid rgba(217,119,6,.22);
+    border-radius:3px 8px 8px 3px;
+    background:rgba(255,255,255,.20);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.42);
+    transition:background-color .22s ease,border-color .22s ease;
+  }
+
+  .intro-meta::before{
+    content:"";
+    position:absolute;
+    left:-2px;
+    top:50%;
+    width:4px;
+    height:4px;
+    border-radius:50%;
+    background:#D97706;
+    box-shadow:0 0 0 3px rgba(217,119,6,.09);
+    transform:translateY(-50%);
+    animation:updatedFreshPulse 3.2s ease-in-out infinite;
+  }
+
+  .intro-meta span{
+    color:#7C736C !important;
+  }
+
+  .intro-meta b{
+    color:#475569 !important;
+    letter-spacing:.01em;
+  }
+
+  .intro-meta:hover{
+    background:rgba(255,255,255,.34);
+    border-left-color:rgba(217,119,6,.38);
+  }
+
+  html body.ink-mode .intro-meta{
+    background:rgba(255,255,255,.18);
+    border-left-color:#A86A13;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.34);
+  }
+
+  html body.ink-mode .intro-meta::before{
+    background:#A86A13;
+    box-shadow:0 0 0 3px rgba(168,106,19,.09);
+  }
+
+  html body.ink-mode .intro-meta span,
+  html body.ink-mode .intro-meta b{
+    color:#4A4842 !important;
+  }
+
+  @keyframes updatedFreshPulse{
+    0%,100%{opacity:.52;transform:translateY(-50%) scale(.86)}
+    50%{opacity:1;transform:translateY(-50%) scale(1)}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    .intro-meta::before{
+      animation:none !important;
+    }
+  }
+}
