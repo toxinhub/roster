@@ -7191,3 +7191,77 @@ html body.ink-mode .app{
     }
   }
 }
+
+/* =========================================================
+   DESKTOP — ACTIVE SHIFT TRANSITION
+   ========================================================= */
+@media (min-width:901px){
+  .legend{
+    position:relative;
+  }
+
+  .legend .active-shift{
+    position:relative;
+    box-shadow:
+      0 4px 14px rgba(31,41,55,.09),
+      inset 0 -2px 0 rgba(217,119,6,.32);
+  }
+
+  .legend .active-shift::after{
+    content:"";
+    position:absolute;
+    left:12%;
+    right:12%;
+    bottom:-1px;
+    height:2px;
+    border-radius:999px;
+    background:currentColor;
+    opacity:.28;
+    transform:scaleX(.45);
+    transform-origin:center;
+  }
+
+  html.active-shift-transition .legend .active-shift{
+    animation:activeShiftArrive .72s cubic-bezier(.22,.8,.24,1) both;
+  }
+
+  html.active-shift-transition .legend .active-shift::after{
+    animation:activeShiftLine .9s ease-out both;
+  }
+
+  html.active-shift-transition .roster-wrap .shift-cell.is-today .shift{
+    animation:activeShiftCell .72s cubic-bezier(.22,.8,.24,1) both;
+  }
+
+  html body.ink-mode .legend .active-shift{
+    box-shadow:
+      0 4px 13px rgba(64,58,48,.09),
+      inset 0 -2px 0 rgba(168,106,19,.42);
+  }
+
+  @keyframes activeShiftArrive{
+    0%{transform:translateY(2px) scale(.985);filter:brightness(.98)}
+    45%{transform:translateY(-1px) scale(1.025);filter:brightness(1.035)}
+    100%{transform:translateY(0) scale(1);filter:brightness(1)}
+  }
+
+  @keyframes activeShiftLine{
+    0%{transform:scaleX(.15);opacity:0}
+    35%{transform:scaleX(1);opacity:.48}
+    100%{transform:scaleX(.55);opacity:.28}
+  }
+
+  @keyframes activeShiftCell{
+    0%{transform:translateY(1px) scale(.98);filter:brightness(.99)}
+    48%{transform:translateY(-1px) scale(1.035);filter:brightness(1.025)}
+    100%{transform:translateY(0) scale(1);filter:brightness(1)}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    html.active-shift-transition .legend .active-shift,
+    html.active-shift-transition .legend .active-shift::after,
+    html.active-shift-transition .roster-wrap .shift-cell.is-today .shift{
+      animation:none !important;
+    }
+  }
+}
