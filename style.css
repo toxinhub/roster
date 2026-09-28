@@ -7265,3 +7265,86 @@ html body.ink-mode .app{
     }
   }
 }
+
+
+/* =========================================================
+   DESKTOP — TODAY / 24H TIME INSTRUMENT
+   Uses the existing --day-remaining progress value.
+   No layout or data changes.
+   ========================================================= */
+@media (min-width:901px){
+  .today-jump{
+    position:relative;
+    isolation:isolate;
+    overflow:hidden;
+    background:
+      linear-gradient(
+        90deg,
+        rgba(255,228,181,.18) 0 var(--day-remaining),
+        rgba(255,255,255,.34) var(--day-remaining) 100%
+      ) !important;
+    border-color:rgba(217,119,6,.20) !important;
+  }
+
+  .today-jump::before{
+    content:"";
+    position:absolute;
+    inset:1px;
+    border-radius:inherit;
+    pointer-events:none;
+    background:
+      linear-gradient(
+        90deg,
+        rgba(255,255,255,.34),
+        transparent 46%,
+        rgba(255,255,255,.18)
+      );
+    opacity:.62;
+    z-index:-1;
+  }
+
+  .today-jump::after{
+    content:"";
+    position:absolute;
+    top:2px;
+    bottom:2px;
+    left:var(--day-remaining);
+    width:1px;
+    border-radius:999px;
+    background:rgba(217,119,6,.48);
+    box-shadow:0 0 7px rgba(217,119,6,.16);
+    transform:translateX(-.5px);
+    pointer-events:none;
+    transition:left 1s linear;
+  }
+
+  .today-jump:hover{
+    background:
+      linear-gradient(
+        90deg,
+        rgba(255,228,181,.26) 0 var(--day-remaining),
+        rgba(255,255,255,.40) var(--day-remaining) 100%
+      ) !important;
+  }
+
+  html body.ink-mode .today-jump{
+    background:
+      linear-gradient(
+        90deg,
+        rgba(168,106,19,.14) 0 var(--day-remaining),
+        rgba(255,255,255,.26) var(--day-remaining) 100%
+      ) !important;
+    border-color:rgba(168,106,19,.30) !important;
+  }
+
+  html body.ink-mode .today-jump::after{
+    background:#A86A13;
+    box-shadow:0 0 7px rgba(168,106,19,.12);
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    .today-jump::after{
+      transition:none !important;
+    }
+  }
+}
