@@ -365,7 +365,7 @@ function render(){
       if(!entry)return '—';
       const d=new Date(entry.day.isoDate+'T12:00:00');
       const weekday=entry.day.weekday||d.toLocaleDateString('bn-BD',{weekday:'long'});
-      if(entry.day.isoDate===liveToday)return 'আজ · '+weekday;
+      if(entry.day.isoDate===liveToday)return 'আজ • '+weekday;
       const date=d.toLocaleDateString('bn-BD',{day:'numeric',month:'long'});
       return date+' · '+weekday;
     };
@@ -381,9 +381,7 @@ function render(){
         '<small>'+(nextOff?.code==='L'?'LEAVE':'OFF')+'</small>'+ 
         '<b class="next-duty-off">'+(
           nextOff
-            ? (nextOff.code==='L' && nextOff.day.isoDate===liveToday
-                ? 'আজ · লিভ'
-                : esc(dateLabel(nextOff)))
+            ? esc(dateLabel(nextOff))
             : '—'
         )+'</b>'+ 
       '</span>'+ 
