@@ -7348,3 +7348,56 @@ html body.ink-mode .app{
     }
   }
 }
+
+
+/* =========================================================
+   DESKTOP — EMPLOYEE ROW FOCUS
+   Complements roster focus without changing layout/data.
+   ========================================================= */
+@media (min-width:901px) and (pointer:fine){
+  .roster-wrap .person-row .person{
+    transition:
+      background-color .22s ease,
+      box-shadow .22s ease;
+  }
+
+  .roster-wrap .person-row .person strong{
+    transition:
+      transform .22s ease,
+      letter-spacing .22s ease,
+      opacity .22s ease;
+    transform-origin:left center;
+  }
+
+  .roster-wrap .person-row.roster-focus-row .person strong{
+    transform:translateX(2px);
+    letter-spacing:-.015em;
+  }
+
+  .roster-wrap .person-row.roster-focus-row .duty-status{
+    opacity:.92 !important;
+    transition:opacity .22s ease,filter .22s ease;
+  }
+
+  .roster-wrap .person-row:not(.roster-focus-row) .person strong{
+    opacity:.88;
+  }
+
+  html body.ink-mode .roster-wrap .person-row.roster-focus-row .person{
+    background-color:rgba(168,106,19,.08) !important;
+    box-shadow:
+      inset 3px 0 0 rgba(168,106,19,.38),
+      7px 0 14px rgba(64,58,48,.045);
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    .roster-wrap .person-row .person,
+    .roster-wrap .person-row .person strong,
+    .roster-wrap .person-row.roster-focus-row .duty-status{
+      transition:none !important;
+    }
+    .roster-wrap .person-row.roster-focus-row .person strong{
+      transform:none !important;
+    }
+  }
+}
