@@ -7657,3 +7657,85 @@ html body.ink-mode .app{
     }
   }
 }
+
+
+/* =========================================================
+   DESKTOP — LEGEND / ACTIVE SHIFT INTELLIGENCE
+   Makes the current shift unmistakable without adding noise.
+   ========================================================= */
+@media (min-width:901px){
+  .legend{
+    position:relative;
+    padding:2px;
+    border-radius:999px;
+  }
+
+  .legend span{
+    position:relative;
+    opacity:.78;
+    transition:
+      opacity .22s ease,
+      transform .22s ease,
+      background-color .22s ease,
+      box-shadow .22s ease,
+      border-color .22s ease;
+  }
+
+  .legend span:not(.active-shift){
+    filter:saturate(.88);
+  }
+
+  .legend .active-shift{
+    opacity:1;
+    background:rgba(255,255,255,.64);
+    border-color:rgba(217,119,6,.24);
+    box-shadow:
+      0 4px 14px rgba(31,41,55,.09),
+      inset 0 -2px 0 rgba(217,119,6,.32);
+  }
+
+  .legend .active-shift i{
+    animation:legendActiveDot 2.6s ease-in-out infinite;
+  }
+
+  .legend .active-shift::before{
+    content:"NOW";
+    position:absolute;
+    right:6px;
+    top:-7px;
+    padding:1px 3px;
+    border-radius:3px;
+    background:rgba(217,119,6,.10);
+    color:#9A5B00;
+    font-size:5.5px;
+    font-weight:900;
+    letter-spacing:.08em;
+    line-height:1;
+    opacity:.78;
+  }
+
+  html body.ink-mode .legend .active-shift{
+    background:#F5F2E8;
+    border-color:#A86A13;
+    box-shadow:0 4px 13px rgba(64,58,48,.08),inset 0 -2px 0 rgba(168,106,19,.38);
+  }
+
+  html body.ink-mode .legend .active-shift::before{
+    background:#E8E2D3;
+    color:#7A4D0A;
+  }
+
+  @keyframes legendActiveDot{
+    0%,100%{transform:scale(.88);opacity:.72}
+    50%{transform:scale(1.08);opacity:1}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    .legend span{
+      transition:none !important;
+    }
+    .legend .active-shift i{
+      animation:none !important;
+    }
+  }
+}
