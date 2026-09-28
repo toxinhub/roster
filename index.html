@@ -150,7 +150,9 @@ function render(){
 
   const dhakaHour=Number(dhakaClockFormatter.formatToParts(new Date()).find(p=>p.type==='hour')?.value||0);
   const activeShift=dhakaHour>=6&&dhakaHour<14?'A':dhakaHour>=14&&dhakaHour<22?'B':'C';
-  $('legend').innerHTML=Object.entries(types).map(([k,v])=>{
+  $('legend').dataset.activeShift=activeShift;
+  $('legend').setAttribute('aria-label','বর্তমান সক্রিয় শিফট: '+activeShift);
+    $('legend').innerHTML=Object.entries(types).map(([k,v])=>{
     const note=(v.note||'').replace(/–/g,' - ');
     const active=k===activeShift?' active-shift':'';
     const tone=' shift-'+String(k).toLowerCase();
@@ -602,6 +604,37 @@ setInterval(()=>{ if(DATA&&!rosterScrolling) render(); },30000);
 
   wrap.addEventListener('pointerleave',clearFocus);
   window.addEventListener('blur',clearFocus);
+})();
+</script>
+<script>
+/* Desktop — active shift transition
+   Gives the active legend and today's matching shift cells a restrained
+   transition when A/B/C changes. */
+(function(){
+  let previousShift=null;
+  const getActiveShift=()=>{
+    const parts=new Intl.DateTimeFormat('en-GB',{
+      timeZone:'Asia/Dhaka',hour:'2-digit',hour12:false
+    }).formatToParts(new Date());
+    let h=Number(parts.find(p=>p.type==='hour')?.value||0);
+    if(h===24) h=0;
+    return h>=6&&h<14?'A':h>=14&&h<22?'B':'C';
+  };
+  const pulse=shift=>{
+    if(window.matchMedia('(prefers-reduced-motion:reduce)').matches) return;
+    document.documentElement.classList.remove('active-shift-transition');
+    void document.documentElement.offsetWidth;
+    document.documentElement.style.setProperty('--active-shift-code',JSON.stringify(shift));
+    document.documentElement.classList.add('active-shift-transition');
+    setTimeout(()=>document.documentElement.classList.remove('active-shift-transition'),900);
+  };
+  const check=()=>{
+    const current=getActiveShift();
+    if(previousShift!==null && current!==previousShift) pulse(current);
+    previousShift=current;
+  };
+  check();
+  setInterval(check,1000);
 })();
 </script>
 </body>
