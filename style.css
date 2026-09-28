@@ -7918,3 +7918,26 @@ html body.ink-mode .app{
     scroll-behavior:auto !important;
   }
 }
+
+
+/* Emphasize today's OFF / LEAVE status in the next-duty panel. */
+.next-duty-status-label{
+  font-size:12px !important;
+  font-weight:900 !important;
+  line-height:1.1 !important;
+  letter-spacing:.035em;
+  color:#334155 !important;
+  opacity:1 !important;
+}
+
+html body.ink-mode .next-duty-status-label{
+  color:#252420 !important;
+  opacity:1 !important;
+}
+
+@media (max-width:700px){
+  .next-duty-status-label{
+    font-size:10px !important;
+    font-weight:900 !important;
+  }
+}
