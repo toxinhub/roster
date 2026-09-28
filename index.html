@@ -547,5 +547,62 @@ setInterval(()=>{ if(DATA&&!rosterScrolling) render(); },30000);
   },{passive:false});
 })();
 </script>
+<script>
+/* Desktop — intelligent roster focus
+   Highlights the hovered person + date intersection without changing data. */
+(function(){
+  const wrap=document.getElementById('roster');
+  if(!wrap || !window.matchMedia('(min-width:901px) and (pointer:fine)').matches) return;
+
+  let activeCell=null;
+  let activeRow=null;
+  let activeCol=null;
+
+  const clearFocus=()=>{
+    activeCell?.classList.remove('roster-focus-cell');
+    activeRow?.classList.remove('roster-focus-row');
+    activeCol?.forEach(el=>el.classList.remove('roster-focus-col'));
+    activeCell=null;
+    activeRow=null;
+    activeCol=null;
+  };
+
+  const focusCell=cell=>{
+    const row=cell.closest('.person-row');
+    const cells=Array.from(row?.querySelectorAll('.shift-cell')||[]);
+    const index=cells.indexOf(cell);
+    if(!row || index<0) return;
+
+    clearFocus();
+
+    const col=[];
+    const head=document.querySelector('.day-grid .day-head:nth-child('+(index+1)+')');
+    if(head) col.push(head);
+    document.querySelectorAll('.person-row .days').forEach(days=>{
+      const item=days.children[index];
+      if(item) col.push(item);
+    });
+
+    activeCell=cell;
+    activeRow=row;
+    activeCol=col;
+
+    cell.classList.add('roster-focus-cell');
+    row.classList.add('roster-focus-row');
+    col.forEach(el=>el.classList.add('roster-focus-col'));
+  };
+
+  wrap.addEventListener('pointerover',e=>{
+    if(e.pointerType!=='mouse') return;
+    const cell=e.target.closest('.shift-cell');
+    if(!cell || !wrap.contains(cell)) return;
+    if(cell===activeCell) return;
+    focusCell(cell);
+  });
+
+  wrap.addEventListener('pointerleave',clearFocus);
+  window.addEventListener('blur',clearFocus);
+})();
+</script>
 </body>
 </html>
