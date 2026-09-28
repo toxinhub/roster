@@ -378,7 +378,7 @@ function render(){
         '<em class="next-duty-date">'+(nextShiftChange?esc(dateLabel(nextShiftChange)):'পরিবর্তন নেই')+'</em>'+ 
       '</span>'+ 
       '<span class="next-duty-item next-duty-off-item">'+
-        '<small>'+(nextOff?.code==='L'?'LEAVE':'OFF')+'</small>'+ 
+        '<small class="next-duty-status-label '+(nextOff?.code==='L'?'LEAVE':'OFF')+'</small>'+ 
         '<b class="next-duty-off">'+(
           nextOff
             ? esc(dateLabel(nextOff))
