@@ -6523,6 +6523,16 @@ html body.ink-mode .day-grid .days .day-head.is-today em{
 @keyframes skeletonSweep{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
 @media(prefers-reduced-motion:reduce){#roster:empty,#roster:empty::after{animation:none}}
 @media(max-width:900px){#roster:empty{min-height:300px}}
-html body.ink-mode #roster:empty{background:linear-gradient(90deg,transparent 0%,rgba(23,23,23,.08) 45%,rgba(23,23,23,.14) 50%,rgba(23,23,23,.08) 55%,transparent 100%),linear-gradient(#E7E4DB,#E7E4DB);background-size:220% 100%,100% 100%}
-html body.ink-mode #roster:empty::before{background:linear-gradient(#AAA69D,#AAA69D) 14px 14px/58px 12px no-repeat,linear-gradient(#C1BEB5,#C1BEB5) 14px 36px/72px 9px no-repeat,repeating-linear-gradient(to bottom,transparent 0 63px,#C1BEB5 63px 64px,transparent 64px 80px),repeating-linear-gradient(to right,transparent 0 94px,#C1BEB5 94px 95px,transparent 95px 126px)}
-html body.ink-mode #roster:empty::after{background:linear-gradient(90deg,transparent 0%,rgba(23,23,23,.16) 50%,transparent 100%)}
+
+/* INK MODE — balanced neutral skeleton */
+html body.ink-mode #roster:empty{
+  background:linear-gradient(90deg,transparent 0%,rgba(37,36,32,.055) 44%,rgba(37,36,32,.105) 50%,rgba(37,36,32,.055) 56%,transparent 100%),linear-gradient(#E7E4DB,#E7E4DB);
+  background-size:220% 100%,100% 100%;
+}
+html body.ink-mode #roster:empty::before{
+  background:linear-gradient(#AAA69D,#AAA69D) 14px 14px/58px 12px no-repeat,linear-gradient(#C1BEB5,#C1BEB5) 14px 36px/72px 9px no-repeat,repeating-linear-gradient(to bottom,transparent 0 63px,#C1BEB5 63px 64px,transparent 64px 80px),repeating-linear-gradient(to right,transparent 0 94px,#C1BEB5 94px 95px,transparent 95px 126px);
+  opacity:.62;
+}
+html body.ink-mode #roster:empty::after{
+  background:linear-gradient(90deg,transparent 0%,rgba(37,36,32,.12) 50%,transparent 100%);
+}
