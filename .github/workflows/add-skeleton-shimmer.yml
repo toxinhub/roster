@@ -1,0 +1,62 @@
+name: Add Skeleton Shimmer
+on:
+  push:
+    paths:
+      - '.github/workflows/add-skeleton-shimmer.yml'
+permissions:
+  contents: write
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Append one-time skeleton shimmer CSS
+        run: |
+          cat >> style.css <<'CSS'
+
+/* Skeleton shimmer — initial roster loading only */
+#roster:empty{
+  position:relative;
+  min-height:clamp(270px, 42vw, 420px);
+  overflow:hidden;
+  border-radius:inherit;
+  background:
+    linear-gradient(90deg, transparent 0%, rgba(255,255,255,.52) 45%, rgba(255,255,255,.82) 50%, rgba(255,255,255,.52) 55%, transparent 100%),
+    linear-gradient(var(--panel-soft),var(--panel-soft));
+  background-size:220% 100%,100% 100%;
+  animation:skeletonShimmer 1.65s ease-in-out infinite;
+}
+#roster:empty::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(var(--line-strong),var(--line-strong)) 14px 14px / 58px 12px no-repeat,
+    linear-gradient(var(--line),var(--line)) 14px 36px / 72px 9px no-repeat,
+    repeating-linear-gradient(to bottom,transparent 0 63px,var(--line) 63px 64px,transparent 64px 80px),
+    repeating-linear-gradient(to right,transparent 0 94px,var(--line) 94px 95px,transparent 95px 126px);
+  opacity:.82;
+}
+#roster:empty::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(90deg,transparent 0%,rgba(255,255,255,.7) 50%,transparent 100%);
+  transform:translateX(-100%);
+  animation:skeletonSweep 1.65s ease-in-out infinite;
+  pointer-events:none;
+}
+@keyframes skeletonShimmer{0%,100%{background-position:180% 0,0 0}50%{background-position:0 0,0 0}}
+@keyframes skeletonSweep{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+@media(prefers-reduced-motion:reduce){#roster:empty,#roster:empty::after{animation:none}}
+@media(max-width:900px){#roster:empty{min-height:300px}}
+CSS
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add style.css
+          git commit -m 'feat: add lightweight roster skeleton shimmer'
+          git push
+          rm -f .github/workflows/add-skeleton-shimmer.yml
+          git add -A
+          git commit -m 'chore: remove one-time skeleton setup workflow'
+          git push
