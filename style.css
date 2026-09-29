@@ -6536,3 +6536,40 @@ html body.ink-mode #roster:empty::before{
 html body.ink-mode #roster:empty::after{
   background:linear-gradient(90deg,transparent 0%,rgba(37,36,32,.12) 50%,transparent 100%);
 }
+
+
+/* =========================================================
+   STAGGERED FADE-IN — first roster render only
+   ========================================================= */
+#roster.staggered-in .person-row{
+  opacity:0;
+  animation:rosterRowFadeIn .42s cubic-bezier(.22,.7,.25,1) forwards;
+  animation-delay:calc(var(--row-index,0) * 55ms);
+  will-change:opacity,transform;
+}
+#roster.staggered-in .person-row:nth-child(2){--row-index:0}
+#roster.staggered-in .person-row:nth-child(3){--row-index:1}
+#roster.staggered-in .person-row:nth-child(4){--row-index:2}
+#roster.staggered-in .person-row:nth-child(5){--row-index:3}
+#roster.staggered-in .person-row:nth-child(6){--row-index:4}
+#roster.staggered-in .person-row:nth-child(7){--row-index:5}
+#roster.staggered-in .person-row:nth-child(8){--row-index:6}
+#roster.staggered-in .person-row:nth-child(9){--row-index:7}
+#roster.staggered-in .person-row:nth-child(10){--row-index:8}
+#roster.staggered-in .person-row:nth-child(11){--row-index:9}
+#roster.staggered-in .person-row:nth-child(12){--row-index:10}
+#roster.staggered-in .person-row:nth-child(13){--row-index:11}
+#roster.staggered-in .person-row:nth-child(14){--row-index:12}
+#roster.staggered-in .person-row:nth-child(15){--row-index:13}
+#roster.staggered-in .person-row:nth-child(16){--row-index:14}
+@keyframes rosterRowFadeIn{
+  from{opacity:0;transform:translate3d(0,6px,0)}
+  to{opacity:1;transform:translate3d(0,0,0)}
+}
+@media(prefers-reduced-motion:reduce){
+  #roster.staggered-in .person-row{
+    opacity:1;
+    animation:none;
+    transform:none;
+  }
+}
