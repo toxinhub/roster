@@ -306,11 +306,24 @@ function render(){
     '</div>';
   }).join('');
 
+  // Keep the loading skeleton visible until the roster DOM is ready.
+  // The staggered class is added only once, so the 30-second live refresh
+  // does not replay the entrance animation.
+  const firstRosterRender=!$('roster').classList.contains('staggered-in');
+  $('roster').classList.remove('staggered-in');
   $('roster').innerHTML=
     '<div class="day-grid">'+
       '<div class="person-head" aria-label="CCTV">📹</div>'+
       '<div class="days" style="'+gridStyle+'">'+head+'</div>'+
     '</div>'+rows;
+
+  if(firstRosterRender){
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{
+      $('roster').classList.add('staggered-in');
+    }));
+  }else{
+    $('roster').classList.add('staggered-in');
+  }
 
   const nextInfo=people.map(p=>{
     const shifts=p.shifts||[];
