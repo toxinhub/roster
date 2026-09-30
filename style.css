@@ -6662,3 +6662,38 @@ html body.ink-mode #roster:empty::after{
     padding-left:12px;
   }
 }
+
+
+/* PC ONLY — Next Duty: larger, clearer typography. */
+@media(min-width:901px){
+  .next-duty-row{
+    min-height:54px;
+    padding:6px 16px;
+    column-gap:16px;
+  }
+  .next-duty-name{
+    font-size:15px;
+    line-height:1.2;
+    padding-bottom:7px;
+  }
+  .next-duty-item{
+    gap:4px;
+  }
+  .next-duty-item small{
+    font-size:10px;
+    line-height:1.2;
+  }
+  .next-duty-item b{
+    font-size:13px;
+    line-height:1.25;
+  }
+  .next-duty-item em,
+  .next-duty-change-item .next-duty-date,
+  .next-duty-off-item .next-duty-off{
+    font-size:10px;
+    line-height:1.25;
+  }
+  .next-duty-off-item{
+    padding-left:14px;
+  }
+}
