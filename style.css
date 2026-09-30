@@ -6627,3 +6627,38 @@ html body.ink-mode #roster:empty::after{
     padding-left:10px;
   }
 }
+
+
+/* PC ONLY — Next Duty: increase readability while keeping the compact layout. */
+@media(min-width:901px){
+  .next-duty-row{
+    min-height:48px;
+    padding:5px 14px;
+    column-gap:14px;
+  }
+  .next-duty-name{
+    font-size:13px;
+    line-height:1.15;
+    padding-bottom:6px;
+  }
+  .next-duty-item{
+    gap:3px;
+  }
+  .next-duty-item small{
+    font-size:9px;
+    line-height:1.15;
+  }
+  .next-duty-item b{
+    font-size:12px;
+    line-height:1.2;
+  }
+  .next-duty-item em,
+  .next-duty-change-item .next-duty-date,
+  .next-duty-off-item .next-duty-off{
+    font-size:9px;
+    line-height:1.2;
+  }
+  .next-duty-off-item{
+    padding-left:12px;
+  }
+}
