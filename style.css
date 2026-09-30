@@ -6573,3 +6573,57 @@ html body.ink-mode #roster:empty::after{
     transform:none;
   }
 }
+
+
+/* PC ONLY — Next Duty information: improve width, alignment and text hierarchy.
+   Mobile layout remains unchanged. */
+@media(min-width:901px){
+  .next-duty{
+    width:calc(100% + 24px);
+    margin:6px -12px 0;
+    padding:6px 0 0;
+  }
+
+  .next-duty-list{
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:0;
+  }
+
+  .next-duty-row{
+    grid-template-columns:minmax(58px,.62fr) minmax(175px,1.55fr) minmax(155px,1.3fr);
+    column-gap:12px;
+    min-height:42px;
+    padding:4px 14px;
+  }
+
+  .next-duty-name{
+    font-size:11px;
+    line-height:1.1;
+    padding-bottom:5px;
+  }
+
+  .next-duty-item{
+    gap:2px;
+  }
+
+  .next-duty-item small{
+    font-size:8px;
+    line-height:1.1;
+  }
+
+  .next-duty-item b{
+    font-size:10.5px;
+    line-height:1.15;
+  }
+
+  .next-duty-item em,
+  .next-duty-change-item .next-duty-date,
+  .next-duty-off-item .next-duty-off{
+    font-size:7.5px;
+    line-height:1.15;
+  }
+
+  .next-duty-off-item{
+    padding-left:10px;
+  }
+}
