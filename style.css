@@ -6664,11 +6664,11 @@ html body.ink-mode #roster:empty::after{
 }
 
 
-/* PC ONLY — Next Duty: larger, clearer typography. */
+/* PC ONLY — Next Duty: final typography balance. */
 @media(min-width:901px){
   .next-duty-row{
-    min-height:54px;
-    padding:6px 16px;
+    min-height:50px;
+    padding:5px 16px;
     column-gap:16px;
   }
   .next-duty-name{
@@ -6680,17 +6680,17 @@ html body.ink-mode #roster:empty::after{
     gap:4px;
   }
   .next-duty-item small{
-    font-size:10px;
+    font-size:12px;
     line-height:1.2;
   }
   .next-duty-item b{
-    font-size:13px;
+    font-size:14px;
     line-height:1.25;
   }
   .next-duty-item em,
   .next-duty-change-item .next-duty-date,
   .next-duty-off-item .next-duty-off{
-    font-size:10px;
+    font-size:14px;
     line-height:1.25;
   }
   .next-duty-off-item{
