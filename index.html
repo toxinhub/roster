@@ -58,65 +58,486 @@
 let DATA=null;
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
-const dhakaClockFormatter=new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Dhaka',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false});
-const dhakaDateTimeFormatter=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Dhaka',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false});
-const dhakaDateFormatter=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Dhaka',year:'numeric',month:'2-digit',day:'2-digit'});
+const dhakaClockFormatter=new Intl.DateTimeFormat('en-GB',{
+  timeZone:'Asia/Dhaka',
+  hour:'2-digit',
+  minute:'2-digit',
+  second:'2-digit',
+  hour12:false
+});
+const dhakaDateTimeFormatter=new Intl.DateTimeFormat('en-CA',{
+  timeZone:'Asia/Dhaka',
+  year:'numeric',
+  month:'2-digit',
+  day:'2-digit',
+  hour:'2-digit',
+  minute:'2-digit',
+  second:'2-digit',
+  hour12:false
+});
+const dhakaDateFormatter=new Intl.DateTimeFormat('en-CA',{
+  timeZone:'Asia/Dhaka',
+  year:'numeric',
+  month:'2-digit',
+  day:'2-digit'
+});
 const today=()=>dhakaDateFormatter.format(new Date());
-const timeLabel=d=>{if(!d)return '—';const date=new Date(d);if(Number.isNaN(date.getTime()))return '—';return date.toLocaleString('bn-BD',{timeZone:'Asia/Dhaka',dateStyle:'medium',timeStyle:'short'});};
-function applyTheme(){const inkMode=localStorage.getItem('roster-display-mode')==='ink';document.body.classList.toggle('ink-mode',inkMode);$('theme').textContent=inkMode?'☀':'☀';$('theme').setAttribute('aria-label',inkMode?'লাইট মোডে পরিবর্তন':'ইঙ্ক মোডে পরিবর্তন');$('theme').setAttribute('title',inkMode?'Light Mode':'Ink Mode');}
-function toast(m,e=false){const t=$('toast');t.textContent=m;t.className='toast show'+(e?' err':'');setTimeout(()=>t.className='toast',2800);}
-async function load(){try{const r=await fetch('schedule.json?v='+Date.now());if(!r.ok)throw Error();DATA=await r.json();render();}catch{toast('রোস্টার লোড করা যায়নি',true);}}
-function updateDateProgress(){const btn=$('todayJump');if(!btn)return;const parts=dhakaClockFormatter.formatToParts(new Date());const get=k=>Number(parts.find(x=>x.type===k)?.value||0);let hour=get('hour');if(hour===24)hour=0;const elapsed=(hour*3600)+(get('minute')*60)+get('second');const remaining=86400-elapsed;const percent=Math.max(0,Math.min(100,(remaining/86400)*100));btn.style.setProperty('--day-remaining',percent.toFixed(4)+'%');}
+const timeLabel=d=>{
+  if(!d) return '—';
+  const date=new Date(d);
+  if(Number.isNaN(date.getTime())) return '—';
+  return date.toLocaleString('bn-BD',{timeZone:'Asia/Dhaka',dateStyle:'medium',timeStyle:'short'});
+};
+
+function applyTheme(){
+  const inkMode=localStorage.getItem('roster-display-mode')==='ink';
+  document.body.classList.toggle('ink-mode',inkMode);
+  $('theme').textContent=inkMode?'☀':'☀';
+  $('theme').setAttribute('aria-label',inkMode?'লাইট মোডে পরিবর্তন':'ইঙ্ক মোডে পরিবর্তন');
+  $('theme').setAttribute('title',inkMode?'Light Mode':'Ink Mode');
+}
+
+function toast(m,e=false){
+  const t=$('toast');
+  t.textContent=m;
+  t.className='toast show'+(e?' err':'');
+  setTimeout(()=>t.className='toast',2800);
+}
+
+async function load(){
+  try{
+    const r=await fetch('schedule.json?v='+Date.now());
+    if(!r.ok) throw Error();
+    DATA=await r.json();
+    render();
+  }catch{
+    toast('রোস্টার লোড করা যায়নি',true);
+  }
+}
+
+function updateDateProgress(){
+  const btn=$('todayJump');
+  if(!btn) return;
+
+  const parts=dhakaClockFormatter.formatToParts(new Date());
+
+  const get=k=>Number(parts.find(x=>x.type===k)?.value||0);
+  let hour=get('hour');
+  if(hour===24) hour=0;
+
+  const elapsed=(hour*3600)+(get('minute')*60)+get('second');
+  const remaining=86400-elapsed;
+  const percent=Math.max(0,Math.min(100,(remaining/86400)*100));
+
+  btn.style.setProperty('--day-remaining',percent.toFixed(4)+'%');
+}
+
 function render(){
-  const days=DATA.days||[],people=DATA.employees||[],types=DATA.shiftTypes||{},now=today(),cols=Math.max(days.length,1),gridStyle='grid-template-columns:repeat('+cols+',minmax(78px,1fr));';
+
+  const days=DATA.days||[];
+  const people=DATA.employees||[];
+  const types=DATA.shiftTypes||{};
+  const now=today();
+  const cols=Math.max(days.length,1);
+  const gridStyle='grid-template-columns:repeat('+cols+',minmax(78px,1fr));';
+
   const todayDateObj=new Date(now+'T12:00:00');
   const todayLabel=todayDateObj.toLocaleDateString('en-US',{day:'2-digit',month:'short',weekday:'short'}).replace(',', ' ·').toUpperCase();
-  $('todayJump').textContent=todayLabel;$('todayJump').dataset.iso=now;updateDateProgress();$('updated').textContent=timeLabel(DATA.updatedAt);
-  const dhakaHour=Number(dhakaClockFormatter.formatToParts(new Date()).find(p=>p.type==='hour')?.value||0);const activeShift=dhakaHour>=6&&dhakaHour<14?'A':dhakaHour>=14&&dhakaHour<22?'B':'C';
-  $('legend').innerHTML=Object.entries(types).map(([k,v])=>{const note=(v.note||'').replace(/–/g,' - '),active=k===activeShift?' active-shift':'',tone=' shift-'+String(k).toLowerCase();return '<span class="'+(active+tone).trim()+'"><i style="--c:'+esc(v.color||'#64748b')+'"></i><b>'+esc(k)+'</b><small><strong class="legend-dash">·</strong>'+esc(note)+'</small></span>';}).join('');
-  const head=days.map(d=>{const isToday=d.isoDate===now,dateObj=new Date(d.isoDate+'T12:00:00'),dayNo=dateObj.getDay(),weekStart=dayNo===5,weekEnd=dayNo===4;return '<div class="day-head '+(isToday?'is-today ':'')+(weekStart?'week-start ':'')+(weekEnd?'week-end':'')+'" data-iso="'+esc(d.isoDate)+'"><span>'+esc(d.weekday||'')+'</span><strong>'+esc(d.date||'')+'</strong>'+(isToday?'<em>আজ</em>':'')+'</div>';}).join('');
-  const dhakaNow=new Date(),dhakaParts=dhakaDateTimeFormatter.formatToParts(dhakaNow),part=k=>dhakaParts.find(x=>x.type===k)?.value||'00',liveDate=part('year')+'-'+part('month')+'-'+part('day'),liveMinutes=Number(part('hour'))*60+Number(part('minute')),todayIndex=days.findIndex(d=>d.isoDate===liveDate);
+  $('todayJump').textContent=todayLabel;
+  $('todayJump').dataset.iso=now;
+  updateDateProgress();
+  $('updated').textContent=timeLabel(DATA.updatedAt);
+
+  const dhakaHour=Number(dhakaClockFormatter.formatToParts(new Date()).find(p=>p.type==='hour')?.value||0);
+  const activeShift=dhakaHour>=6&&dhakaHour<14?'A':dhakaHour>=14&&dhakaHour<22?'B':'C';
+  $('legend').innerHTML=Object.entries(types).map(([k,v])=>{
+    const note=(v.note||'').replace(/–/g,' - ');
+    const active=k===activeShift?' active-shift':'';
+    const tone=' shift-'+String(k).toLowerCase();
+    return '<span class="'+(active+tone).trim()+'"><i style="--c:'+esc(v.color||'#64748b')+'"></i><b>'+esc(k)+'</b><small><strong class="legend-dash">·</strong>'+esc(note)+'</small></span>';
+  }).join('');
+
+  const head=days.map(d=>{
+    const isToday=d.isoDate===now;
+    const dateObj=new Date(d.isoDate+'T12:00:00');
+    const dayNo=dateObj.getDay();
+    const weekStart=dayNo===5;
+    const weekEnd=dayNo===4;
+    return '<div class="day-head '+(isToday?'is-today ':'')+(weekStart?'week-start ':'')+(weekEnd?'week-end':'')+'" data-iso="'+esc(d.isoDate)+'">'+
+      '<span>'+esc(d.weekday||'')+'</span>'+
+      '<strong>'+esc(d.date||'')+'</strong>'+
+      (isToday?'<em>আজ</em>':'')+
+    '</div>';
+  }).join('');
+
+  // Cache the live-clock calculation once per render instead of once per employee.
+  // This keeps the roster output identical while reducing repeated Intl/date work.
+  const dhakaNow=new Date();
+  const dhakaParts=dhakaDateTimeFormatter.formatToParts(dhakaNow);
+  const part=k=>dhakaParts.find(x=>x.type===k)?.value||'00';
+  const liveDate=part('year')+'-'+part('month')+'-'+part('day');
+  const liveMinutes=Number(part('hour'))*60+Number(part('minute'));
+  const todayIndex=days.findIndex(d=>d.isoDate===liveDate);
+
   const shiftStartMinutes={A:360,B:840,C:1320};
-  const toUtcMs=(isoDate,minutes)=>{const[y,m,d]=isoDate.split('-').map(Number),base=Date.UTC(y,m-1,d,0,0,0);return base+(minutes-360)*60000;};
-  const addDays=(isoDate,n)=>{const[y,m,d]=isoDate.split('-').map(Number),dt=new Date(Date.UTC(y,m-1,d+n,12,0,0));return dt.toISOString().slice(0,10);};
-  const occurrence=(index,code)=>{if(index<0||index>=days.length||!['A','B','C'].includes(code))return null;const date=days[index].isoDate,startMs=toUtcMs(date,shiftStartMinutes[code]),endMs=startMs+8*60*60000;return{index,code,date,startMs,endMs,endDate:addDays(date,code==='C'?1:0)};};
+  const toUtcMs=(isoDate,minutes)=>{
+    const [y,m,d]=isoDate.split('-').map(Number);
+    const base=Date.UTC(y,m-1,d,0,0,0);
+    return base+(minutes-360)*60000;
+  };
+  const addDays=(isoDate,n)=>{
+    const [y,m,d]=isoDate.split('-').map(Number);
+    const dt=new Date(Date.UTC(y,m-1,d+n,12,0,0));
+    return dt.toISOString().slice(0,10);
+  };
+  const occurrence=(index,code)=>{
+    if(index<0||index>=days.length||!['A','B','C'].includes(code)) return null;
+    const date=days[index].isoDate;
+    const startMs=toUtcMs(date,shiftStartMinutes[code]);
+    const endMs=startMs+8*60*60000;
+    return {index,code,date,startMs,endMs,endDate:addDays(date,code==='C'?1:0)};
+  };
   const nowMs=toUtcMs(liveDate,liveMinutes);
+
   const rows=people.map(p=>{
-    const cells=days.map((d,di)=>{const code=p.shifts?.[di]||'—',type=types[code]||{},isToday=d.isoDate===now,dateObj=new Date(d.isoDate+'T12:00:00'),dayNo=dateObj.getDay(),weekStart=dayNo===5,weekEnd=dayNo===4;return '<div class="shift-cell '+(isToday?'is-today ':'')+(weekStart?'week-start ':'')+(weekEnd?'week-end':'')+'"><span class="shift shift-'+String(code).toLowerCase()+'" style="--c:'+esc(type.color||'#64748b')+'"><b>'+esc(code)+'</b></span></div>';}).join('');
-    const assigned=[];for(let i=0;i<days.length;i++){const code=p.shifts?.[i];if(['A','B','C'].includes(code))assigned.push(occurrence(i,code));}
-    let active=null;for(const occ of assigned){if(nowMs>=occ.startMs&&nowMs<occ.endMs){active=occ;break;}}
-    let previous=null,next=null;if(active){const pos=assigned.indexOf(active);previous=pos>0?assigned[pos-1]:null;next=pos>=0&&pos<assigned.length-1?assigned[pos+1]:null;}else{for(const occ of assigned){if(occ.startMs>nowMs){next=occ;break;}}for(let i=assigned.length-1;i>=0;i--){if(assigned[i].endMs<=nowMs){previous=assigned[i];break;}}}
-    let status='OFF',statusText='OFF',displayCode='OFF';
-    if(active){const isDouble=previous&&previous.endMs===active.startMs;status='ON DUTY';statusText=isDouble?'ON DUTY (DOUBLE DUTY) - '+previous.code+' → '+active.code:'ON DUTY - '+active.code;displayCode=active.code;}
-    else{const currentCode=todayIndex>=0?(p.shifts?.[todayIndex]||'OFF'):'OFF',todayOccurrence=todayIndex>=0&&['A','B','C'].includes(currentCode)?occurrence(todayIndex,currentCode):null;
-      if(todayOccurrence&&nowMs<todayOccurrence.startMs){status='UPCOMING';statusText='UPCOMING - '+todayOccurrence.code;displayCode=todayOccurrence.code;}
-      else{const isAssignedToday=['A','B','C'].includes(currentCode),tomorrowIso=addDays(liveDate,1),nextIsTomorrow=next&&next.date===tomorrowIso,isNoShiftDay=currentCode==='OFF'||currentCode==='L',hoursUntilNext=next?(next.startMs-nowMs)/(60*60000):Infinity;
-        if(isAssignedToday&&nextIsTomorrow){status='UPCOMING';statusText='UPCOMING - '+next.code;displayCode=next.code;}
-        else if(isNoShiftDay&&next&&hoursUntilNext>0&&hoursUntilNext<=4){status='UPCOMING';statusText='UPCOMING - '+next.code;displayCode=next.code;}
-        else if(currentCode==='L'){status='OFF';statusText='LEAVE';displayCode='L';}
-        else{status='OFF';statusText='OFF';displayCode='OFF';}
+    const cells=days.map((d,di)=>{
+      const code=p.shifts?.[di]||'—';
+      const type=types[code]||{};
+      const isToday=d.isoDate===now;
+      const dateObj=new Date(d.isoDate+'T12:00:00');
+      const dayNo=dateObj.getDay();
+      const weekStart=dayNo===5;
+      const weekEnd=dayNo===4;
+      return '<div class="shift-cell '+(isToday?'is-today ':'')+(weekStart?'week-start ':'')+(weekEnd?'week-end':'')+'">'+
+        '<span class="shift shift-'+String(code).toLowerCase()+'" style="--c:'+esc(type.color||'#64748b')+'">'+
+          '<b>'+esc(code)+'</b>'+
+        '</span>'+
+      '</div>';
+    }).join('');
+
+    const assigned=[];
+    for(let i=0;i<days.length;i++){
+      const code=p.shifts?.[i];
+      if(['A','B','C'].includes(code)) assigned.push(occurrence(i,code));
+    }
+
+    let active=null;
+    for(const occ of assigned){
+      if(nowMs>=occ.startMs&&nowMs<occ.endMs){
+        active=occ;
+        break;
       }
     }
-    const displayType=types[displayCode]||{},statusColor=displayType.color||types.OFF?.color||'#64748b';const statusHtml='<span class="duty-status status-'+status.toLowerCase().replace(/\s+/g,'-')+(status==='ON DUTY'?' is-active':'')+'" style="--status-color:'+esc(statusColor)+'"><b>'+esc(statusText)+'</b></span>';
-    return '<div class="person-row"><div class="person"><div class="person-name"><strong>'+esc(p.name)+'</strong>'+(status==='ON DUTY'?'<i class="name-active-dot" style="--status-color:'+esc(statusColor)+'" aria-hidden="true"></i>':'')+'</div>'+statusHtml+'</div><div class="days" style="'+gridStyle+'">'+cells+'</div></div>';
+
+    let previous=null,next=null;
+    if(active){
+      const pos=assigned.indexOf(active);
+      previous=pos>0?assigned[pos-1]:null;
+      next=pos>=0&&pos<assigned.length-1?assigned[pos+1]:null;
+    }else{
+      for(const occ of assigned){
+        if(occ.startMs>nowMs){next=occ;break;}
+      }
+      for(let i=assigned.length-1;i>=0;i--){
+        if(assigned[i].endMs<=nowMs){previous=assigned[i];break;}
+      }
+    }
+
+    let status='OFF', statusText='OFF', displayCode='OFF';
+
+    // Active shift always takes priority. If the previous assigned shift
+    // ends exactly when this one starts, this is a 16-hour double duty.
+    if(active){
+      const isDouble=previous&&previous.endMs===active.startMs;
+      status='ON DUTY';
+      statusText=isDouble
+        ? 'ON DUTY (DOUBLE DUTY) - '+previous.code+' → '+active.code
+        : 'ON DUTY - '+active.code;
+      displayCode=active.code;
+    }else{
+      const currentCode=todayIndex>=0 ? (p.shifts?.[todayIndex]||'OFF') : 'OFF';
+      const todayOccurrence=
+        todayIndex>=0&&['A','B','C'].includes(currentCode)
+          ? occurrence(todayIndex,currentCode)
+          : null;
+
+      // A future shift assigned for TODAY is UPCOMING until it starts.
+      // The 4-hour rule is not used for this case.
+      if(todayOccurrence&&nowMs<todayOccurrence.startMs){
+        status='UPCOMING';
+        statusText='UPCOMING - '+todayOccurrence.code;
+        displayCode=todayOccurrence.code;
+      }else{
+        // If today's assigned shift has ended and the next assigned shift
+        // is tomorrow, show that next shift as UPCOMING immediately.
+        const isAssignedToday=['A','B','C'].includes(currentCode);
+        const tomorrowIso=addDays(liveDate,1);
+        const nextIsTomorrow=next&&next.date===tomorrowIso;
+        const isNoShiftDay=currentCode==='OFF'||currentCode==='L';
+        const hoursUntilNext=next?(next.startMs-nowMs)/(60*60000):Infinity;
+
+        if(isAssignedToday&&nextIsTomorrow){
+          status='UPCOMING';
+          statusText='UPCOMING - '+next.code;
+          displayCode=next.code;
+        }else if(isNoShiftDay&&next&&hoursUntilNext>0&&hoursUntilNext<=4){
+          status='UPCOMING';
+          statusText='UPCOMING - '+next.code;
+          displayCode=next.code;
+        }else if(currentCode==='L'){
+          status='OFF';
+          statusText='LEAVE';
+          displayCode='L';
+        }else{
+          // A normal gap between assigned shifts remains OFF by default.
+          status='OFF';
+          statusText='OFF';
+          displayCode='OFF';
+        }
+      }
+    }
+    const displayType=types[displayCode]||{};
+    const statusColor=displayType.color||types.OFF?.color||'#64748b';
+    const statusHtml='<span class="duty-status status-'+status.toLowerCase().replace(/\s+/g,'-')+(status==='ON DUTY'?' is-active':'')+'" style="--status-color:'+esc(statusColor)+'"><b>'+esc(statusText)+'</b></span>';
+
+    return '<div class="person-row">'+
+      '<div class="person"><div class="person-name"><strong>'+esc(p.name)+'</strong>'+(status==='ON DUTY'?'<i class="name-active-dot" style="--status-color:'+esc(statusColor)+'" aria-hidden="true"></i>':'')+'</div>'+statusHtml+'</div>'+
+      '<div class="days" style="'+gridStyle+'">'+cells+'</div>'+
+    '</div>';
   }).join('');
-  const firstRosterRender=!$('roster').classList.contains('staggered-in');$('roster').innerHTML='<div class="day-grid"><div class="person-head" aria-label="CCTV">📹</div><div class="days" style="'+gridStyle+'">'+head+'</div></div>'+rows;if(firstRosterRender){requestAnimationFrame(()=>requestAnimationFrame(()=>$('roster').classList.add('staggered-in')));}
+
+  // Keep the loading skeleton visible until the roster DOM is ready.
+  // The staggered class is added only once, so the 30-second live refresh
+  // does not replay the entrance animation.
+  const firstRosterRender=!$('roster').classList.contains('staggered-in');
+  $('roster').innerHTML=
+    '<div class="day-grid">'+
+      '<div class="person-head" aria-label="CCTV">📹</div>'+
+      '<div class="days" style="'+gridStyle+'">'+head+'</div>'+
+    '</div>'+rows;
+
+  if(firstRosterRender){
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{
+      $('roster').classList.add('staggered-in');
+    }));
+  }
 
   const nextInfo=people.map(p=>{
-    const shifts=p.shifts||[],current=todayIndex>=0?(shifts[todayIndex]||'OFF'):'OFF',workCodes=['A','B','C'];
-    // Leave must remain Leave in the next-duty panel; it must never be
-    // collapsed into OFF when today's assignment is L.
-    if(current==='L') return {name:p.name,code:'L',kind:'LEAVE',label:'LEAVE',date:liveDate,index:todayIndex};
-    let candidate=null;
-    for(let i=Math.max(todayIndex,0);i<days.length;i++){const code=shifts[i];if(workCodes.includes(code)){candidate={name:p.name,code,date:days[i].isoDate,index:i,kind:'SHIFT'};break;}if(i===todayIndex&&code==='L'){candidate={name:p.name,code:'L',kind:'LEAVE',label:'LEAVE',date:days[i].isoDate,index:i};break;}}
-    if(!candidate){for(let i=0;i<days.length;i++){const code=shifts[i];if(workCodes.includes(code)){candidate={name:p.name,code,date:days[i].isoDate,index:i,kind:'SHIFT'};break;}}}
-    return candidate||{name:p.name,code:'OFF',kind:'OFF',label:'OFF',date:liveDate,index:todayIndex};
-  });
-  $('next-duty').innerHTML=nextInfo.map(x=>{const type=types[x.code]||{},label=x.kind==='LEAVE'?'LEAVE':x.kind==='OFF'?'OFF':x.code,day=x.date===liveDate?'আজ':new Date(x.date+'T12:00:00').toLocaleDateString('bn-BD',{weekday:'long'});return '<div class="next-duty-item"><strong>'+esc(x.name)+'</strong><span class="next-duty-status" style="--c:'+esc(type.color||'#64748b')+'">'+esc(label)+'</span><small>'+esc(day)+'</small></div>';}).join('');
+    const shifts=p.shifts||[];
+    const current=todayIndex>=0 ? (shifts[todayIndex]||'OFF') : 'OFF';
+    const workCodes=['A','B','C'];
+    let nextShiftChange=null;
+    let nextOff=null;
+
+    // Keep every future day in the timeline. Shift change = first future
+    // work shift whose code differs from today's/current work shift.
+    // OFF is independently reported and is never skipped for its own date.
+    for(let i=Math.max(todayIndex+1,0);i<days.length;i++){
+      const code=shifts[i]||'OFF';
+
+      if(!nextOff && (code==='OFF'||code==='L')){
+        nextOff={day:days[i],code};
+      }
+
+      if(!nextShiftChange && workCodes.includes(code)){
+        const from=workCodes.includes(current)?current:null;
+        if(from && code!==from){
+          nextShiftChange={day:days[i],from,to:code};
+        }
+      }
+
+      if(nextShiftChange&&nextOff) break;
+    }
+
+    const dateLabel=entry=>{
+      if(!entry) return '—';
+      const d=new Date(entry.day.isoDate+'T12:00:00');
+      const date=d.toLocaleDateString('bn-BD',{day:'numeric',month:'long'});
+      const weekday=entry.day.weekday||d.toLocaleDateString('bn-BD',{weekday:'long'});
+      return date+' · '+weekday;
+    };
+
+    return '<div class="next-duty-row">'+
+      '<strong class="next-duty-name">'+esc(p.name)+'</strong>'+
+      '<span class="next-duty-item next-duty-change-item">'+
+        '<small>শিফট পরিবর্তন</small>'+
+        '<b class="next-duty-change">'+(nextShiftChange?esc(nextShiftChange.from)+' → '+esc(nextShiftChange.to):'—')+'</b>'+
+        '<em class="next-duty-date">'+(nextShiftChange?esc(dateLabel(nextShiftChange)):'পরিবর্তন নেই')+'</em>'+
+      '</span>'+
+      '<span class="next-duty-item next-duty-off-item">'+
+        '<small>'+(nextOff&&nextOff.code==='L'?'LEAVE':'OFF')+'</small>'+
+        '<b class="next-duty-off">'+(nextOff?esc(dateLabel(nextOff)):'—')+'</b>+
+      '</span>'+
+    '</div>';
+  }).join('');
+
+  $('next-duty').innerHTML=nextInfo;
 }
-$('todayJump').addEventListener('click',()=>{const el=document.querySelector('.day-head.is-today');if(el)el.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});});
-$('theme').addEventListener('click',()=>{const next=localStorage.getItem('roster-display-mode')==='ink'?'light':'ink';localStorage.setItem('roster-display-mode',next);applyTheme();});
-applyTheme();load();setInterval(()=>{if(DATA){render();}else load();},30000);setInterval(updateDateProgress,1000);
+
+$('theme').onclick=()=>{
+  const button=$('theme');
+  button.classList.remove('theme-clicked');
+  void button.offsetWidth;
+  button.classList.add('theme-clicked');
+  setTimeout(()=>button.classList.remove('theme-clicked'),620);
+  const rect=button.getBoundingClientRect();
+  const x=((rect.left+rect.width/2)/window.innerWidth)*100;
+  const y=((rect.top+rect.height/2)/window.innerHeight)*100;
+  const goingInk=!document.body.classList.contains('ink-mode');
+
+  document.body.style.setProperty('--theme-x',x+'%');
+  document.body.style.setProperty('--theme-y',y+'%');
+  document.body.classList.remove('theme-to-ink','theme-to-light');
+  void document.body.offsetWidth;
+  document.body.classList.add(goingInk?'theme-to-ink':'theme-to-light');
+
+  localStorage.setItem('roster-display-mode',goingInk?'ink':'light');
+  applyTheme();
+
+  setTimeout(()=>{
+    document.body.classList.remove('theme-to-ink','theme-to-light');
+  },760);
+};
+
+applyTheme();
+
+$('todayJump').onclick=()=>{
+  const iso=$('todayJump')?.dataset.iso||today();
+  const target=$('roster')?.querySelector('.day-head[data-iso="'+iso+'"]');
+  if(target){
+    const wrap=$('roster');
+    const targetCenter=target.offsetLeft+(target.offsetWidth/2);
+    const desired=Math.max(0,targetCenter-(wrap.clientWidth/2));
+    const start=wrap.scrollLeft;
+    const distance=desired-start;
+    const duration=Math.min(900,Math.max(500,Math.abs(distance)*0.75));
+    const startTime=performance.now();
+    const ease=t=>1-Math.pow(1-t,3);
+    const animate=now=>{
+      const p=Math.min(1,(now-startTime)/duration);
+      wrap.scrollLeft=start+(distance*ease(p));
+      if(p<1) requestAnimationFrame(animate);
+    };
+    requestAnimationFrame(animate);
+    target.classList.add('today-jump-focus');
+    setTimeout(()=>target.classList.remove('today-jump-focus'),1200);
+  }
+};
+
+load();
+// Recalculate live duty status as shift boundaries are crossed.
+let rosterScrolling=false,rosterScrollTimer=0;
+const rosterEl=$('roster');
+if(rosterEl){
+  rosterEl.addEventListener('scroll',()=>{
+    rosterScrolling=true;
+    clearTimeout(rosterScrollTimer);
+    rosterScrollTimer=setTimeout(()=>{rosterScrolling=false},200);
+  },{passive:true});
+}
+setInterval(()=>{ updateDateProgress(); },1000);
+setInterval(()=>{ if(DATA&&!rosterScrolling) render(); },30000);
+
+(function(){
+  const wrap=$('roster');
+  if(!wrap) return;
+
+  // Native touch scrolling is intentionally left untouched for zero-lag swipes.
+  // Mouse users still get click-and-drag scrolling on desktop.
+  if(!window.matchMedia('(pointer:fine)').matches) return;
+
+  let dragging=false;
+  let startX=0;
+  let startScroll=0;
+
+  const stop=e=>{
+    if(!dragging) return;
+    dragging=false;
+    wrap.classList.remove('is-dragging');
+    if(e?.pointerId!=null){
+      try{wrap.releasePointerCapture(e.pointerId)}catch{}
+    }
+  };
+
+  wrap.addEventListener('pointerdown',e=>{
+    if(e.pointerType!=='mouse' || e.button!==0) return;
+    dragging=true;
+    startX=e.clientX;
+    startScroll=wrap.scrollLeft;
+    wrap.classList.add('is-dragging');
+    try{wrap.setPointerCapture(e.pointerId)}catch{}
+  });
+
+  wrap.addEventListener('pointermove',e=>{
+    if(!dragging) return;
+    wrap.scrollLeft=startScroll-(e.clientX-startX);
+    e.preventDefault();
+  },{passive:false});
+
+  wrap.addEventListener('pointerup',stop);
+  wrap.addEventListener('pointercancel',stop);
+  wrap.addEventListener('lostpointercapture',stop);
+})();
+</script>
+
+
+<script>
+/* Desktop — mouse wheel scrolls the roster horizontally */
+(function(){
+  const wrap=document.getElementById('roster');
+  if(!wrap || !window.matchMedia('(min-width:901px) and (pointer:fine)').matches) return;
+  let wheelTarget=wrap.scrollLeft;
+  let wheelFrame=0;
+  let wheelActive=false;
+
+  const clampScroll=x=>Math.max(0,Math.min(wrap.scrollWidth-wrap.clientWidth,x));
+
+  const stopWheelFrame=()=>{
+    wheelFrame=0;
+    wheelActive=false;
+  };
+
+  const animateWheel=()=>{
+    wheelFrame=0;
+    const current=wrap.scrollLeft;
+    const distance=wheelTarget-current;
+
+    if(Math.abs(distance)<0.35){
+      wrap.scrollLeft=wheelTarget;
+      stopWheelFrame();
+      return;
+    }
+
+    // Use a responsive ease: fast for small corrections, still smooth for
+    // larger wheel gestures. This avoids the "rubber-band"/laggy feeling.
+    const ratio=Math.min(1,Math.abs(distance)/220);
+    const ease=0.30+(ratio*0.08);
+    wrap.scrollLeft=current+(distance*ease);
+    wheelFrame=requestAnimationFrame(animateWheel);
+  };
+
+  wrap.addEventListener('scroll',()=>{
+    if(!wheelActive && !wheelFrame){
+      wheelTarget=wrap.scrollLeft;
+    }
+  },{passive:true});
+
+  wrap.addEventListener('wheel',e=>{
+    if(Math.abs(e.deltaY)<=Math.abs(e.deltaX)) return;
+    if(wrap.scrollWidth<=wrap.clientWidth) return;
+
+    // Respect the user's input direction while smoothing high-frequency wheel events.
+    // Normalize different wheel hardware (mouse wheel / trackpad)
+    // without allowing a single event to jump too far.
+    const unit=e.deltaMode===1?16:(e.deltaMode===2?wrap.clientWidth:1);
+    const delta=Math.max(-120,Math.min(120,e.deltaY*unit));
+    wheelTarget=clampScroll(wheelTarget+delta);
+
+    wheelActive=true;
+    if(!wheelFrame) wheelFrame=requestAnimationFrame(animateWheel);
+    e.preventDefault();
+  },{passive:false});
+})();
 </script>
 </body>
 </html>
