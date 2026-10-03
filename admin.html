@@ -166,6 +166,7 @@ html body.ink-mode #status.status.not-connected{
     let sha = null;
     let cleanSnapshot = '';
     let dirty = false;
+    let archivePending = null;
     const $ = id => document.getElementById(id);
     const key = 'cctv_roster_admin';
 
@@ -232,6 +233,18 @@ html body.ink-mode #status.status.not-connected{
       const daysInMonth = new Date(Date.UTC(year, month, 0)).getUTCDate();
       const oldDays = Array.isArray(S.days) ? S.days : [];
       const oldEmployees = Array.isArray(S.employees) ? S.employees : [];
+
+      // When changing the editor to another month, keep an untouched snapshot
+      // of the month that is about to leave the live schedule. It will be
+      // written to archive/ only when Save is pressed.
+      const oldKey = oldDays[0]?.isoDate?.slice(0,7) || '';
+      const newKey = value;
+      if(oldKey && newKey && oldKey!==newKey){
+        archivePending = {
+          key: oldKey,
+          data: JSON.parse(JSON.stringify(S))
+        };
+      }
 
       // Preserve shifts by actual ISO date, never by array index.
       const oldShiftByDate = new Map();
@@ -444,6 +457,34 @@ html body.ink-mode #status.status.not-connected{
       if (ok) sessionStorage.setItem(key, JSON.stringify(s));
     };
 
+    async function archiveIfNeeded(s) {
+      if(!archivePending?.key || !archivePending?.data) return;
+      const path='archive/'+archivePending.key+'.json';
+      try{
+        const existing=await api(
+          'https://api.github.com/repos/'+s.owner+'/'+s.repo+'/contents/'+path+'?ref='+encodeURIComponent(s.branch)
+        );
+        if(existing.ok){
+          archivePending=null;
+          return;
+        }
+        if(existing.status!==404) throw new Error('archive check failed');
+
+        const r=await api('https://api.github.com/repos/'+s.owner+'/'+s.repo+'/contents/'+path,{
+          method:'PUT',
+          body:JSON.stringify({
+            message:'Archive '+archivePending.key+' duty roster',
+            content:btoa(unescape(encodeURIComponent(JSON.stringify(archivePending.data,null,2)))),
+            branch:s.branch
+          })
+        });
+        if(!r.ok) throw new Error('archive save failed');
+        archivePending=null;
+      }catch(err){
+        throw err;
+      }
+    }
+
     $('save').onclick = async () => {
       const s = settings();
       if (!s.token) return toast('আগে GitHub connection সেট করুন', true);
@@ -451,6 +492,7 @@ html body.ink-mode #status.status.not-connected{
       S.updatedAt = new Date().toISOString();
 
       try {
+        await archiveIfNeeded(s);
         if (!sha) {
           const g = await api('https://api.github.com/repos/' + s.owner + '/' + s.repo + '/contents/schedule.json?ref=' + encodeURIComponent(s.branch));
           if (g.ok) {
