@@ -183,9 +183,10 @@ function render(){
 
   const todayDateObj=new Date(now+'T12:00:00');
   const todayLabel=todayDateObj.toLocaleDateString('en-US',{day:'2-digit',month:'short',weekday:'short'}).replace(',', ' ·').toUpperCase();
-  $('todayJump').textContent=todayLabel;
+  $('todayJump').textContent=VIEW_MODE==='current'?todayLabel:(DATA.month||monthLabel(CURRENT_MONTH_KEY));
   $('todayJump').dataset.iso=now;
-  updateDateProgress();
+  $('todayJump').disabled=VIEW_MODE==='archive';
+  if(VIEW_MODE==='current') updateDateProgress();
   $('updated').textContent=timeLabel(DATA.updatedAt);
 
   const dhakaHour=Number(dhakaClockFormatter.formatToParts(new Date()).find(p=>p.type==='hour')?.value||0);
