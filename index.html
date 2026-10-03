@@ -27,6 +27,11 @@
     <section class="intro">
       <div>
         <button class="today-jump" id="todayJump" type="button" aria-label="আজকের রোস্টারে যান">লোড হচ্ছে…</button>
+        <div class="month-history" aria-label="রোস্টার মাস পরিবর্তন">
+          <button id="prevMonth" type="button" aria-label="পূর্ব মাস">‹ <span>পূর্ব মাস</span></button>
+          <span id="viewMonth">—</span>
+          <button id="currentMonth" type="button" aria-label="বর্তমান মাস">বর্তমান</button>
+        </div>
       </div>
       <div class="intro-meta">
         <span>UPDATED</span>
@@ -56,6 +61,8 @@
 
 <script>
 let DATA=null;
+let VIEW_MODE='current';
+let CURRENT_MONTH_KEY='';
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 const dhakaClockFormatter=new Intl.DateTimeFormat('en-GB',{
@@ -104,12 +111,45 @@ function toast(m,e=false){
   setTimeout(()=>t.className='toast',2800);
 }
 
+async function fetchSchedule(url,mode='current'){
+  const r=await fetch(url+(url.includes('?')?'&':'?')+'v='+Date.now());
+  if(!r.ok) throw Error();
+  DATA=await r.json();
+  VIEW_MODE=mode;
+  CURRENT_MONTH_KEY=(DATA.days?.[0]?.isoDate||'').slice(0,7);
+  document.body.classList.toggle('archive-view',VIEW_MODE==='archive');
+  render();
+  updateMonthHistoryUI();
+}
+
+function monthKeyFromDate(date){
+  return date.getUTCFullYear()+'-'+String(date.getUTCMonth()+1).padStart(2,'0');
+}
+function monthLabel(key){
+  if(!/^\\d{4}-\\d{2}$/.test(key)) return '—';
+  const [y,m]=key.split('-').map(Number);
+  return new Intl.DateTimeFormat('bn-BD',{month:'long',year:'numeric'}).format(new Date(Date.UTC(y,m-1,1)));
+}
+function previousMonthKey(key){
+  if(!/^\\d{4}-\\d{2}$/.test(key)) return '';
+  const [y,m]=key.split('-').map(Number);
+  return monthKeyFromDate(new Date(Date.UTC(y,m-2,1)));
+}
+function updateMonthHistoryUI(){
+  const label=$('viewMonth');
+  const prev=$('prevMonth');
+  const current=$('currentMonth');
+  if(!label||!prev||!current) return;
+  label.textContent=DATA?.month||monthLabel(CURRENT_MONTH_KEY)||'—';
+  const prevKey=previousMonthKey(CURRENT_MONTH_KEY);
+  prev.querySelector('span').textContent=monthLabel(prevKey);
+  prev.disabled=!prevKey;
+  current.hidden=VIEW_MODE==='current';
+}
+
 async function load(){
   try{
-    const r=await fetch('schedule.json?v='+Date.now());
-    if(!r.ok) throw Error();
-    DATA=await r.json();
-    render();
+    await fetchSchedule('schedule.json','current');
   }catch{
     toast('রোস্টার লোড করা যায়নি',true);
   }
@@ -177,7 +217,7 @@ function render(){
   const part=k=>dhakaParts.find(x=>x.type===k)?.value||'00';
   const liveDate=part('year')+'-'+part('month')+'-'+part('day');
   const liveMinutes=Number(part('hour'))*60+Number(part('minute'));
-  const todayIndex=days.findIndex(d=>d.isoDate===liveDate);
+  const todayIndex=VIEW_MODE==='current'?days.findIndex(d=>d.isoDate===liveDate):-1;
 
   const shiftStartMinutes={A:360,B:840,C:1320};
   const toUtcMs=(isoDate,minutes)=>{
@@ -298,7 +338,9 @@ function render(){
     }
     const displayType=types[displayCode]||{};
     const statusColor=displayType.color||types.OFF?.color||'#64748b';
-    const statusHtml='<span class="duty-status status-'+status.toLowerCase().replace(/\s+/g,'-')+(status==='ON DUTY'?' is-active':'')+'" style="--status-color:'+esc(statusColor)+'"><b>'+esc(statusText)+'</b></span>';
+    const statusHtml=VIEW_MODE==='archive'
+      ? '<span class="duty-status archive-status"><b>পূর্ব মাস</b></span>'
+      : '<span class="duty-status status-'+status.toLowerCase().replace(/\s+/g,'-')+(status==='ON DUTY'?' is-active':'')+'" style="--status-color:'+esc(statusColor)+'"><b>'+esc(statusText)+'</b></span>';
 
     return '<div class="person-row">'+
       '<div class="person"><div class="person-name"><strong>'+esc(p.name)+'</strong>'+(status==='ON DUTY'?'<i class="name-active-dot" style="--status-color:'+esc(statusColor)+'" aria-hidden="true"></i>':'')+'</div>'+statusHtml+'</div>'+
@@ -371,7 +413,7 @@ function render(){
     '</div>';
   }).join('');
 
-  $('next-duty').innerHTML=nextInfo;
+  $('next-duty').innerHTML=VIEW_MODE==='archive'?'':nextInfo;
 }
 
 $('theme').onclick=()=>{
@@ -424,6 +466,23 @@ $('todayJump').onclick=()=>{
   }
 };
 
+$('prevMonth').onclick=async()=>{
+  const key=previousMonthKey(CURRENT_MONTH_KEY);
+  if(!key) return;
+  try{
+    await fetchSchedule('archive/'+key+'.json','archive');
+  }catch{
+    toast(monthLabel(key)+'-এর সংরক্ষিত রোস্টার পাওয়া যায়নি',true);
+  }
+};
+$('currentMonth').onclick=async()=>{
+  try{
+    await fetchSchedule('schedule.json','current');
+  }catch{
+    toast('বর্তমান রোস্টার লোড করা যায়নি',true);
+  }
+};
+
 load();
 // Recalculate live duty status as shift boundaries are crossed.
 let rosterScrolling=false,rosterScrollTimer=0;
@@ -436,7 +495,7 @@ if(rosterEl){
   },{passive:true});
 }
 setInterval(()=>{ updateDateProgress(); },1000);
-setInterval(()=>{ if(DATA&&!rosterScrolling) render(); },30000);
+setInterval(()=>{ if(DATA&&VIEW_MODE==='current'&&!rosterScrolling) render(); },30000);
 
 (function(){
   const wrap=$('roster');
