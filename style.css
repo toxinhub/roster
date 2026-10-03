@@ -6821,3 +6821,30 @@ html body.ink-mode .month-history > span{
 html body.ink-mode .month-history > span{
   color:#3F3D38 !important;
 }
+
+
+/* MONTH HISTORY — final label/button spacing balance */
+.month-history{
+  gap:7px;
+}
+.month-history > span{
+  min-width:88px;
+  font-size:13px;
+  font-weight:700;
+  line-height:22px;
+  letter-spacing:0;
+}
+@media(max-width:900px){
+  .month-history{
+    gap:6px;
+  }
+  .month-history > span{
+    min-width:84px;
+    font-size:12px;
+    font-weight:700;
+    line-height:20px;
+  }
+}
+html body.ink-mode .month-history > span{
+  color:#3F3D38 !important;
+}
