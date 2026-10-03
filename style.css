@@ -6717,35 +6717,44 @@ html body.ink-mode #roster:empty::after{
   display:flex;
   align-items:center;
   justify-content:flex-start;
-  gap:6px;
+  gap:3px;
   margin-top:6px;
   min-height:22px;
 }
 .month-history button{
+  width:22px;
+  height:22px;
+  min-height:22px;
+  padding:0;
   border:1px solid rgba(92,72,48,.24);
   background:rgba(255,248,235,.62);
   color:#5B4632;
-  border-radius:7px;
-  min-height:22px;
-  padding:2px 7px;
-  font:700 8px/1 inherit;
+  border-radius:6px;
+  font:700 13px/20px inherit;
+  text-align:center;
   cursor:pointer;
   transition:.15s ease;
 }
 .month-history button:hover:not(:disabled){
   background:rgba(255,244,218,.9);
   border-color:rgba(92,72,48,.38);
+  transform:translateY(-1px);
+}
+.month-history button:active:not(:disabled){
+  transform:translateY(0);
 }
 .month-history button:disabled{
-  opacity:.4;
+  opacity:.35;
   cursor:default;
 }
 .month-history button[hidden]{display:none}
 .month-history > span{
+  min-width:78px;
   color:#6F6255;
   font-size:8px;
   font-weight:800;
-  line-height:1;
+  line-height:22px;
+  text-align:center;
   white-space:nowrap;
 }
 .archive-view .today-jump{
@@ -6773,16 +6782,20 @@ html body.ink-mode .month-history > span{
 
 @media(max-width:900px){
   .month-history{
-    gap:4px;
+    gap:3px;
     margin-top:5px;
   }
   .month-history button{
-    min-height:21px;
-    padding:2px 6px;
-    font-size:7px;
-    border-radius:6px;
+    width:20px;
+    height:20px;
+    min-height:20px;
+    font-size:12px;
+    line-height:18px;
+    border-radius:5px;
   }
   .month-history > span{
+    min-width:72px;
     font-size:7px;
+    line-height:20px;
   }
 }
