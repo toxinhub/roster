@@ -6708,3 +6708,81 @@ html body.ink-mode #roster:empty::after{
   .next-duty-change-item .next-duty-date,
   .next-duty-off-item .next-duty-off{font-size:8px !important;}
 }
+
+
+/* =========================================================
+   MONTH HISTORY — compact archive navigation
+   ========================================================= */
+.month-history{
+  display:flex;
+  align-items:center;
+  justify-content:flex-start;
+  gap:6px;
+  margin-top:6px;
+  min-height:22px;
+}
+.month-history button{
+  border:1px solid rgba(92,72,48,.24);
+  background:rgba(255,248,235,.62);
+  color:#5B4632;
+  border-radius:7px;
+  min-height:22px;
+  padding:2px 7px;
+  font:700 8px/1 inherit;
+  cursor:pointer;
+  transition:.15s ease;
+}
+.month-history button:hover:not(:disabled){
+  background:rgba(255,244,218,.9);
+  border-color:rgba(92,72,48,.38);
+}
+.month-history button:disabled{
+  opacity:.4;
+  cursor:default;
+}
+.month-history button[hidden]{display:none}
+.month-history > span{
+  color:#6F6255;
+  font-size:8px;
+  font-weight:800;
+  line-height:1;
+  white-space:nowrap;
+}
+.archive-view .today-jump{
+  cursor:default;
+}
+.archive-view .today-jump::after{
+  content:" · পূর্ব মাস";
+}
+.archive-view .duty-status.archive-status{
+  color:#665C50 !important;
+  -webkit-text-fill-color:#665C50 !important;
+}
+.archive-view .next-duty{
+  display:none !important;
+}
+
+html body.ink-mode .month-history button{
+  background:#E7E4DB !important;
+  border-color:#B0ADA4 !important;
+  color:#292824 !important;
+}
+html body.ink-mode .month-history > span{
+  color:#5E5B54 !important;
+}
+
+@media(max-width:900px){
+  .month-history{
+    gap:4px;
+    margin-top:5px;
+  }
+  .month-history button{
+    min-height:21px;
+    padding:2px 6px;
+    font-size:7px;
+    border-radius:6px;
+  }
+  .month-history > span{
+    font-size:7px;
+  }
+}
