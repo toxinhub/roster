@@ -113,7 +113,11 @@ function toast(m,e=false){
 
 async function fetchSchedule(url,mode='current'){
   const r=await fetch(url+(url.includes('?')?'&':'?')+'v='+Date.now());
-  if(!r.ok) throw Error();
+  if(!r.ok){
+    const err=new Error(r.status===404?'NOT_FOUND':'LOAD_FAILED');
+    err.status=r.status;
+    throw err;
+  }
   DATA=await r.json();
   VIEW_MODE=mode;
   CURRENT_MONTH_KEY=(DATA.days?.[0]?.isoDate||'').slice(0,7);
@@ -128,7 +132,7 @@ function monthKeyFromDate(date){
 function monthLabel(key){
   if(!/^\d{4}-\d{2}$/.test(key)) return '—';
   const [y,m]=key.split('-').map(Number);
-  return new Intl.DateTimeFormat('bn-BD',{month:'long',year:'numeric'}).format(new Date(Date.UTC(y,m-1,1)));
+  return new Intl.DateTimeFormat('bn-BD',{month:'long'}).format(new Date(Date.UTC(y,m-1,1)));
 }
 function previousMonthKey(key){
   if(!/^\d{4}-\d{2}$/.test(key)) return '';
@@ -140,9 +144,8 @@ function updateMonthHistoryUI(){
   const prev=$('prevMonth');
   const current=$('currentMonth');
   if(!label||!prev||!current) return;
-  label.textContent=DATA?.month||monthLabel(CURRENT_MONTH_KEY)||'—';
+  label.textContent=monthLabel(CURRENT_MONTH_KEY)||'—';
   const prevKey=previousMonthKey(CURRENT_MONTH_KEY);
-  prev.querySelector('span').textContent=monthLabel(prevKey);
   prev.disabled=!prevKey;
   current.hidden=VIEW_MODE==='current';
 }
@@ -472,15 +475,19 @@ $('prevMonth').onclick=async()=>{
   if(!key) return;
   try{
     await fetchSchedule('archive/'+key+'.json','archive');
-  }catch{
-    toast(monthLabel(key)+'-এর সংরক্ষিত রোস্টার পাওয়া যায়নি',true);
+  }catch(err){
+    toast(err?.status===404
+      ? monthLabel(key)+' মাসের সংরক্ষিত রোস্টার নেই'
+      : monthLabel(key)+' মাসের রোস্টার লোড করা যাচ্ছে না',true);
   }
 };
 $('currentMonth').onclick=async()=>{
   try{
     await fetchSchedule('schedule.json','current');
-  }catch{
-    toast('বর্তমান রোস্টার লোড করা যায়নি',true);
+  }catch(err){
+    toast(err?.status===404
+      ? 'বর্তমান মাসের রোস্টার পাওয়া যাচ্ছে না'
+      : 'বর্তমান রোস্টার লোড করা যাচ্ছে না',true);
   }
 };
 
