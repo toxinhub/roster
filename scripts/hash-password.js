@@ -5,7 +5,13 @@ if (!process.stdin.isTTY || !process.stdout.isTTY || typeof process.stdin.setRaw
   process.exit(1);
 }
 
-process.stdout.write("Enter password (hidden; minimum 12 characters): ");
+const configuredMin = Number(process.env.PASSWORD_MIN_LENGTH || 12);
+if (!Number.isInteger(configuredMin) || configuredMin < 1 || configuredMin > 256) {
+  console.error("PASSWORD_MIN_LENGTH must be a whole number from 1 to 256.");
+  process.exit(1);
+}
+
+process.stdout.write(`Enter password (hidden; minimum ${configuredMin} characters): `);
 let password = "";
 let finished = false;
 process.stdin.setRawMode(true);
@@ -30,9 +36,9 @@ function onData(chunk) {
     }
     if (byte === 13 || byte === 10) {
       finish(0);
-      if (password.length < 12) {
+      if (password.length < configuredMin) {
         password = "";
-        console.error("Use a password of at least 12 characters.");
+        console.error(`Use a password of at least ${configuredMin} characters.`);
         process.exitCode = 1;
         return;
       }
