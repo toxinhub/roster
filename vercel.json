@@ -22,24 +22,5 @@
       ]
     }
   ],
-  "routes": [
-    {
-      "src": "^/schedule\\.json/?$",
-      "status": 404
-    },
-    {
-      "src": "^/schedule\\.js/?$",
-      "status": 404
-    },
-    {
-      "src": "^/archive(?:/.*)?$",
-      "status": 404
-    },
-    {
-      "handle": "filesystem"
-    },
-    {
-      "handle": "filesystem"
-    }
-  ]
+  "$schema": "https://openapi.vercel.sh/vercel.json"
 }
