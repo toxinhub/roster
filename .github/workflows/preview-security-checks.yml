@@ -1,0 +1,80 @@
+name: Preview security checks
+
+on:
+  push:
+    branches:
+      - security/preview-shared-password
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Check JavaScript syntax
+        shell: bash
+        run: |
+          set -euo pipefail
+          find api lib scripts -type f -name '*.js' -print0 | xargs -0 -r -n1 node --check
+          node --check auth.js
+
+      - name: Validate Vercel config and all roster JSON
+        shell: bash
+        run: |
+          set -euo pipefail
+          node <<'NODE'
+          const fs = require('node:fs');
+          const path = require('node:path');
+          JSON.parse(fs.readFileSync('vercel.json', 'utf8'));
+          const files = ['schedule.json'];
+          function walk(dir) {
+            if (!fs.existsSync(dir)) return;
+            for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+              const full = path.join(dir, entry.name);
+              if (entry.isDirectory()) walk(full);
+              else if (entry.isFile() && entry.name.endsWith('.json')) files.push(full);
+            }
+          }
+          walk('archive');
+          const codes = new Set(['A', 'B', 'C', 'OFF', 'L']);
+          for (const file of files) {
+            const data = JSON.parse(fs.readFileSync(file, 'utf8'));
+            if (!data || !Array.isArray(data.days) || !Array.isArray(data.employees)) {
+              throw new Error(file + ': missing days/employees arrays');
+            }
+            if (data.days.length > 40 || data.employees.length > 100) {
+              throw new Error(file + ': unreasonable roster dimensions');
+            }
+            for (const employee of data.employees) {
+              if (!employee || typeof employee.name !== 'string' || !Array.isArray(employee.shifts) ||
+                  employee.shifts.length !== data.days.length ||
+                  !employee.shifts.every(code => codes.has(code))) {
+                throw new Error(file + ': invalid shifts for an employee');
+              }
+            }
+          }
+          console.log('Validated ' + files.length + ' roster/archive JSON file(s).');
+          NODE
+
+      - name: Ensure app uses protected APIs
+        shell: bash
+        run: |
+          set -euo pipefail
+          grep -q '/api/roster' index.html
+          grep -q '/api/archive?month=' index.html
+          grep -q '/api/admin/save' admin.html
+          grep -q '/api/admin/archive' admin.html
+          ! grep -Eq 'fetch\(["\x27]schedule\.json|fetch\(["\x27]archive/' index.html admin.html
+          test -f .vercelignore
+          grep -q '^schedule\.json$' .vercelignore
+          grep -q '^archive/\*\*$' .vercelignore
