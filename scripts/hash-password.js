@@ -17,7 +17,7 @@ function finish(exitCode) {
   process.stdin.setRawMode(false);
   process.stdin.pause();
   process.stdin.removeListener("data", onData);
-  process.stdout.write("\\n");
+  process.stdout.write(String.fromCharCode(10));
   if (exitCode !== 0) process.exit(exitCode);
 }
 
@@ -45,8 +45,8 @@ function onData(chunk) {
           process.exitCode = 1;
           return;
         }
-        process.stdout.write("Copy this hash into the matching Vercel environment variable; never share the password itself:\\n");
-        process.stdout.write("scrypt$" + salt.toString("base64url") + "$" + key.toString("base64url") + "\\n");
+        process.stdout.write("Copy this hash into the matching Vercel environment variable; never share the password itself:" + String.fromCharCode(10));
+        process.stdout.write("scrypt$" + salt.toString("base64url") + "$" + key.toString("base64url") + String.fromCharCode(10));
       });
       return;
     }
