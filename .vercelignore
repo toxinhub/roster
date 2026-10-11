@@ -1,0 +1,4 @@
+# Never publish live or historical roster data as static files.
+schedule.json
+schedule.js
+archive/**
