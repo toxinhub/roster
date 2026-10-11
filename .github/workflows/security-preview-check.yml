@@ -35,4 +35,4 @@ jobs:
       - name: Ensure browser code contains no GitHub token flow
         run: |
           ! grep -Eq 'Authorization:|github_pat_|api.github.com/repos' admin.html
-          ! grep -Eq "fetchSchedule\\(['\\\"](schedule\\.json|archive/)" index.html admin.html
+          ! grep -Eq "fetchSchedule.*(schedule\\.json|archive/)" index.html admin.html
