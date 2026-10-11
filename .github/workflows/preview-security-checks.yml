@@ -74,7 +74,19 @@ jobs:
           grep -q '/api/archive?month=' index.html
           grep -q '/api/admin/save' admin.html
           grep -q '/api/admin/archive' admin.html
-          ! grep -Eq 'fetch\(["\x27]schedule\.json|fetch\(["\x27]archive/' index.html admin.html
+          node <<'NODE'
+          const fs = require('node:fs');
+          for (const file of ['index.html', 'admin.html']) {
+            const source = fs.readFileSync(file, 'utf8');
+            const forbidden = [
+              "fetch('schedule.json", 'fetch("schedule.json',
+              "fetch('archive/", 'fetch("archive/'
+            ];
+            if (forbidden.some(pattern => source.includes(pattern))) {
+              throw new Error(file + ': direct static roster fetch found');
+            }
+          }
+          NODE
           test -f .vercelignore
           grep -q '^schedule\.json$' .vercelignore
           grep -q '^archive/\*\*$' .vercelignore
