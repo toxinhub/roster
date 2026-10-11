@@ -20,7 +20,7 @@ module.exports = async function handler(req, res) {
   if (!allowedAttempt(req)) return sendJson(res, 429, { error: "TOO_MANY_ATTEMPTS" }, { "Retry-After": "900" });
   const siteHash = process.env.SITE_PASSWORD_HASH;
   const adminHash = process.env.ADMIN_PASSWORD_HASH;
-  if (!siteHash || !adminHash || !process.env.SESSION_SECRET) return sendJson(res, 503, { error: "AUTH_NOT_CONFIGURED" });
+  if (!siteHash || !adminHash || !process.env.SESSION_SECRET || process.env.SESSION_SECRET.length < 32) return sendJson(res, 503, { error: "AUTH_NOT_CONFIGURED" });
   const password = req.body?.password;
   if (typeof password !== "string" || password.length < 1 || password.length > 256) return sendJson(res, 400, { error: "INVALID_PASSWORD" });
 
