@@ -484,7 +484,7 @@ $('prevMonth').onclick=async()=>{
 };
 $('currentMonth').onclick=async()=>{
   try{
-    await fetchSchedule('schedule.json','current');
+    await fetchSchedule('/api/roster','current');
   }catch(err){
     toast(err?.status===404
       ? 'বর্তমান মাসের রোস্টার পাওয়া যাচ্ছে না'
