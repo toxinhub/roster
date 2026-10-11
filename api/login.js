@@ -2,7 +2,7 @@ const { sendJson, createSession, setSessionCookie, originIsSame, verifyPassword 
 
 const attempts = new Map();
 function allowedAttempt(req) {
-  const key = String(req.headers["x-forwarded-for"] || req.socket?.remoteAddress || "unknown").split(",")[0].trim();
+  const key = String(req.headers["x-real-ip"] || req.socket?.remoteAddress || "unknown").trim().slice(0, 128);
   const now = Date.now();
   const item = attempts.get(key) || { count: 0, start: now };
   if (now - item.start > 15 * 60 * 1000) { item.count = 0; item.start = now; }
