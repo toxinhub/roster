@@ -27,10 +27,10 @@ jobs:
           set -euo pipefail
           find api lib scripts -type f -name '*.js' -print0 | xargs -0 -r -n1 node --check
           node --check auth.js
-      - name: Verify protected data routing configuration
+      - name: Verify Vercel config and static data exclusions
         run: |
           set -euo pipefail
-          node -e "const v=require('./vercel.json'); if(!Array.isArray(v.routes)||!v.routes.some(r=>r.handle==='filesystem')||!v.routes.some(r=>r.status===404&&r.src.includes('schedule'))||!v.routes.some(r=>r.status===404&&r.src.includes('archive'))) process.exit(1)"
+          node -e "const v=require('./vercel.json'); if(!Array.isArray(v.headers)||v.routes) process.exit(1)"
           grep -Fxq 'schedule.json' .vercelignore
           grep -Fxq 'schedule.js' .vercelignore
           grep -Fxq 'archive/**' .vercelignore
@@ -67,9 +67,21 @@ jobs:
           }
           console.log('Validated ' + files.length + ' roster/archive JSON file(s).');
           NODE
-      - name: Ensure browser code contains no GitHub token flow
+      - name: Ensure browser code contains no GitHub token flow or direct data fetches
         run: |
           set -euo pipefail
           ! grep -Eq 'Authorization:|github_pat_|api.github.com/repos' admin.html
           ! grep -Eq 'fetchSchedule.*(schedule[.]json|archive/)' index.html admin.html
-          ! grep -Eq 'fetch\(["\x27]schedule\.json|fetch\(["\x27]archive/' index.html admin.html
+          node <<'NODE'
+          const fs = require('node:fs');
+          for (const file of ['index.html', 'admin.html']) {
+            const source = fs.readFileSync(file, 'utf8');
+            const forbidden = [
+              "fetch('schedule.json", 'fetch("schedule.json',
+              "fetch('archive/", 'fetch("archive/'
+            ];
+            if (forbidden.some(pattern => source.includes(pattern))) {
+              throw new Error(file + ': direct static roster fetch found');
+            }
+          }
+          NODE
