@@ -13,7 +13,6 @@
   "routes": [
     { "src": "^/schedule\\.json/?$", "status": 404 },
     { "src": "^/schedule\\.js/?$", "status": 404 },
-    { "src": "^/archive(?:/.*)?$", "status": 404 },
-    { "src": "^/(.*)$", "dest": "/$1" }
+    { "src": "^/archive(?:/.*)?$", "status": 404 }
   ]
 }
