@@ -71,21 +71,40 @@ archive/YYYY-MM.json
 
 **Admin:** https://toxinhub.github.io/roster/admin.html
 
-### GitHub connection
+### Shared-password security (Preview)
 
-Admin panel-এ GitHub repository connection-এর জন্য:
-- Username: `toxinhub`
-- Repository: `roster`
-- Branch: `main`
-- Fine-grained GitHub token
+The secure-preview branch replaces browser-held GitHub tokens with server-side APIs. There are no user accounts or sign-up flow.
 
-প্রয়োজন।
+- One shared **site password** opens the roster; a separate **Admin password** is required for editing.
+- Sessions expire after **8 hours**. Cookies are HttpOnly, Secure and SameSite=Strict.
+- `schedule.json` and `archive/YYYY-MM.json` are read through authenticated APIs and excluded from Vercel's static deployment with `.vercelignore`.
+- Admin saves and archive creation run server-side; the GitHub token is never sent to the browser.
+- Preview writes must target `security/preview-shared-password`. Do not configure a Preview deployment to write to `main`.
+- The current GitHub Pages URL remains the existing live site until a separately approved migration; this branch does not change it.
 
-Token-এর জন্য এই repository-তে **Contents: Read and write** permission যথেষ্ট।
+#### Vercel Preview configuration
 
-Token browser-এর **sessionStorage**-এ রাখা হয় এবং session শেষ হলে আর থাকে না।
+Create these environment variables in the Vercel project's **Preview** environment only while validating this branch:
 
-> ⚠️ `admin.html` আলাদা password protection ব্যবহার করে না। তাই trusted users-দের কাছেই admin link ও token access রাখা উচিত। কাজ শেষ হলে প্রয়োজন অনুযায়ী token revoke করা ভালো।
+| Variable | Value |
+|---|---|
+| `SITE_PASSWORD_HASH` | scrypt hash generated locally for the shared site password |
+| `ADMIN_PASSWORD_HASH` | a different scrypt hash generated locally for the Admin password |
+| `SESSION_SECRET` | cryptographically random secret, at least 32 characters |
+| `GITHUB_TOKEN` | fine-grained token with access to this repository and Contents read/write permission |
+| `GITHUB_OWNER` | `toxinhub` |
+| `GITHUB_REPO` | `roster` |
+| `GITHUB_BRANCH` | `security/preview-shared-password` |
+
+Generate each password hash in a trusted local terminal with:
+
+```bash
+node scripts/hash-password.js
+```
+
+Run it once for the site password and again for the distinct Admin password. The script hides password input and prints only the hash. Paste each hash into its matching Vercel environment variable. Generate `SESSION_SECRET` locally with a cryptographically secure random generator; never commit any real secret or send it in chat.
+
+**Important limitations before production:** the current login-attempt limiter is per serverless instance, not globally shared across all instances. Before production approval, add a durable distributed rate limiter (for example, a managed Redis integration), verify Vercel Preview environment scoping, test all archive paths and write conflicts, and confirm no roster/archive JSON appears in the deployment output. Do not merge this branch or configure Production secrets until Preview checks pass.
 
 ## 🎨 UI / UX
 
@@ -138,24 +157,17 @@ http://localhost:8000/
 ## 🔄 Data flow
 
 ```
-schedule.json
-     │
-     ▼
- index.html
-     │
-     ├── Live duty status
-     ├── Month navigation
-     ├── Next Duty
-     └── Responsive roster
-     
- admin.html
-     │
-     ▼
- GitHub Contents API
-     │
-     ├── schedule.json
-     └── archive/YYYY-MM.json
+Browser
+  │
+  ├── /api/login + /api/session ──► 8-hour signed session cookie
+  │
+  ├── /api/roster ────────────────► authenticated read of schedule.json
+  ├── /api/archive?month=YYYY-MM ─► authenticated read of archive/YYYY-MM.json
+  │
+  └── Admin-only write APIs ──────► GitHub Contents API (server-side token)
 ```
+
+The roster and archive files remain in the private GitHub repository as the source of truth, but are excluded from the Vercel static deployment. They must not be available through public raw/static URLs.
 
 ## 📝 Notes
 
