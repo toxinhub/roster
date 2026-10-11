@@ -32,6 +32,17 @@ jobs:
           node --check api/admin/save.js
           node --check api/admin/archive.js
           node --check scripts/hash-password.js
+      - name: Verify protected data routing configuration
+        run: |
+          node -e "const v=require('./vercel.json'); if(!Array.isArray(v.routes)||!v.routes.some(r=>r.handle==='filesystem')||!v.routes.some(r=>r.status===404&&r.src.includes('schedule'))||!v.routes.some(r=>r.status===404&&r.src.includes('archive'))) process.exit(1)"
+          grep -Eq '^schedule\\.json        run: |
+          ! grep -Eq 'Authorization:|github_pat_|api.github.com/repos' admin.html
+          ! grep -Eq "fetchSchedule.*(schedule\\.json|archive/)" index.html admin.html
+ .vercelignore
+          grep -Eq '^archive/\\*\\*        run: |
+          ! grep -Eq 'Authorization:|github_pat_|api.github.com/repos' admin.html
+          ! grep -Eq "fetchSchedule.*(schedule\\.json|archive/)" index.html admin.html
+ .vercelignore
       - name: Ensure browser code contains no GitHub token flow
         run: |
           ! grep -Eq 'Authorization:|github_pat_|api.github.com/repos' admin.html
