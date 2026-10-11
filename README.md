@@ -102,7 +102,7 @@ Generate each password hash in a trusted local terminal with:
 node scripts/hash-password.js
 ```
 
-Run it once for the site password and again for the distinct Admin password. The script hides password input and prints only the hash. Paste each hash into its matching Vercel environment variable. Generate `SESSION_SECRET` locally with a cryptographically secure random generator; never commit any real secret or send it in chat.
+Run it once for the site password and again for the distinct Admin password. The script hides password input and prints only the hash. Paste each hash into its matching Vercel environment variable. Generate `SESSION_SECRET` locally with `node -e "console.log(require('node:crypto').randomBytes(32).toString('base64url'))"`; never commit any real secret or send it in chat.
 
 **Important limitations before production:** the current login-attempt limiter is per serverless instance, not globally shared across all instances. Before production approval, add a durable distributed rate limiter (for example, a managed Redis integration), verify Vercel Preview environment scoping, test all archive paths and write conflicts, and confirm no roster/archive JSON appears in the deployment output. Do not merge this branch or configure Production secrets until Preview checks pass.
 
