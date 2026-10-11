@@ -15,29 +15,61 @@ jobs:
   syntax:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
           node-version: 22
       - name: Check server and client JavaScript syntax
         run: |
+          set -euo pipefail
+          find api lib scripts -type f -name '*.js' -print0 | xargs -0 -r -n1 node --check
           node --check auth.js
-          node --check lib/security.js
-          node --check lib/github-data.js
-          node --check api/login.js
-          node --check api/session.js
-          node --check api/logout.js
-          node --check api/roster.js
-          node --check api/archive.js
-          node --check api/admin/save.js
-          node --check api/admin/archive.js
-          node --check scripts/hash-password.js
       - name: Verify protected data routing configuration
         run: |
+          set -euo pipefail
           node -e "const v=require('./vercel.json'); if(!Array.isArray(v.routes)||!v.routes.some(r=>r.handle==='filesystem')||!v.routes.some(r=>r.status===404&&r.src.includes('schedule'))||!v.routes.some(r=>r.status===404&&r.src.includes('archive'))) process.exit(1)"
           grep -Fxq 'schedule.json' .vercelignore
+          grep -Fxq 'schedule.js' .vercelignore
           grep -Fxq 'archive/**' .vercelignore
+      - name: Validate every roster and archive JSON file
+        run: |
+          set -euo pipefail
+          node <<'NODE'
+          const fs = require('node:fs');
+          const path = require('node:path');
+          const files = ['schedule.json'];
+          function walk(dir) {
+            if (!fs.existsSync(dir)) return;
+            for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+              const full = path.join(dir, entry.name);
+              if (entry.isDirectory()) walk(full);
+              else if (entry.isFile() && entry.name.endsWith('.json')) files.push(full);
+            }
+          }
+          walk('archive');
+          const codes = new Set(['A', 'B', 'C', 'OFF', 'L']);
+          for (const file of files) {
+            const data = JSON.parse(fs.readFileSync(file, 'utf8'));
+            if (!data || !Array.isArray(data.days) || !Array.isArray(data.employees) ||
+                data.days.length > 40 || data.employees.length > 100) {
+              throw new Error(file + ': invalid roster dimensions');
+            }
+            for (const employee of data.employees) {
+              if (!employee || typeof employee.name !== 'string' || !Array.isArray(employee.shifts) ||
+                  employee.shifts.length !== data.days.length ||
+                  !employee.shifts.every(code => codes.has(code))) {
+                throw new Error(file + ': invalid shifts for an employee');
+              }
+            }
+          }
+          console.log('Validated ' + files.length + ' roster/archive JSON file(s).');
+          NODE
       - name: Ensure browser code contains no GitHub token flow
         run: |
+          set -euo pipefail
           ! grep -Eq 'Authorization:|github_pat_|api.github.com/repos' admin.html
           ! grep -Eq 'fetchSchedule.*(schedule[.]json|archive/)' index.html admin.html
+          ! grep -Eq 'fetch\(["\x27]schedule\.json|fetch\(["\x27]archive/' index.html admin.html
