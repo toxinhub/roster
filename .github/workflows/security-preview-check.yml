@@ -1,0 +1,38 @@
+name: Security Preview Syntax Check
+
+on:
+  push:
+    branches:
+      - security/preview-shared-password
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  syntax:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Check server and client JavaScript syntax
+        run: |
+          node --check auth.js
+          node --check lib/security.js
+          node --check lib/github-data.js
+          node --check api/login.js
+          node --check api/session.js
+          node --check api/logout.js
+          node --check api/roster.js
+          node --check api/archive.js
+          node --check api/admin/save.js
+          node --check api/admin/archive.js
+          node --check scripts/hash-password.js
+      - name: Ensure browser code contains no GitHub token flow
+        run: |
+          ! grep -Eq 'Authorization:[[:space:]]*["'\''"]Bearer|github_pat_|api.github.com/repos' admin.html
+          ! grep -Eq 'fetch\(["'\''][^"'\'']*(schedule\.json|archive/)' index.html admin.html
