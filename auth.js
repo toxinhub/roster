@@ -55,7 +55,7 @@
             AUTH_NOT_CONFIGURED: "নিরাপত্তা configuration এখনো সম্পূর্ণ হয়নি।",
             PASSWORDS_MUST_DIFFER: "Site ও Admin password আলাদা হতে হবে।",
             TOO_MANY_ATTEMPTS: "অনেকবার চেষ্টা হয়েছে। ১৫ মিনিট পরে আবার চেষ্টা করুন।",
-            BAD_ORIGIN: "অনুরোধ যাচাই করা যায়নি। পেজটি refresh করুন।"
+            ORIGIN_NOT_ALLOWED: "এই পেজের উৎস অনুমোদিত নয়। Preview origin configuration পরীক্ষা করুন।"
           };
           throw new Error(messages[data.error] || "প্রবেশ করা যায়নি। আবার চেষ্টা করুন।");
         }
