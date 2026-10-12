@@ -16,7 +16,7 @@ Setup and test instructions: [Cloudflare Preview guide](cloudflare/README.md). S
 
 - The Worker has not been deployed and this branch has not passed end-to-end tests.
 - The current public GitHub Pages deployment and Git history may still expose roster data.
-- The existing `github.io` URL cannot itself be protected by Cloudflare Pages; keeping that exact URL while putting the whole site behind Cloudflare would require a separately controlled custom domain or an alternative approved migration plan.
+- The existing `github.io` URL can be preserved by continuing to host the frontend on GitHub Pages and pointing it to the authenticated Cloudflare Worker API. The roster JSON must be removed from the public deployment; old Git history still needs a separate privacy review.
 - Do not put passwords, tokens, or session secrets in this repository or send them in chat.
 - Do not merge this branch, change Production hosting, or remove Production files without explicit approval.
 
