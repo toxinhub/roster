@@ -1,187 +1,27 @@
-> **Cloudflare security preview branch:** this branch is being prepared for a shared-password login using Cloudflare Workers Free and private KV. The live GitHub Pages site and `main` branch are unchanged. The current roster data files have intentionally been removed from this branch's latest snapshot; seed a private KV namespace before testing. Setup details: [cloudflare/README.md](cloudflare/README.md). Do not use this branch as Production until security testing is complete.
+# CCTV · PJL — Duty Roster
 
----
+> **Security preview only.** This branch is being prepared for a shared-password login with Cloudflare Workers and private KV. The live GitHub Pages site and `main` branch have not been changed. Do not merge or use this branch as Production yet.
 
-# 📹 CCTV · PJL — ডিউটি রোস্টার
+Setup and test instructions: [Cloudflare Preview guide](cloudflare/README.md). Security caveats: [SECURITY-PREVIEW.md](SECURITY-PREVIEW.md).
 
-CCTV · PJL টিমের জন্য তৈরি একটি **mobile-first, responsive duty roster**। এটি GitHub Pages-এ সরাসরি চলে এবং কোনো build tool বা framework ছাড়াই roster দেখা, মাস পরিবর্তন, live duty status এবং admin editing করা যায়।
+## What this preview is intended to do
 
-**Live:** https://toxinhub.github.io/roster/
+- Require a shared site password to view the roster.
+- Require a separate Admin password to edit it.
+- Keep roster and archive JSON in a private Cloudflare KV namespace, not in the static frontend.
+- Use an eight-hour signed session token stored in the current browser tab's session storage.
+- Route reads and writes through the Cloudflare Worker API.
 
-## ✨ বর্তমান ফিচার
+## Important limitations
 
-### 📅 লাইভ রোস্টার
-- Dhaka time অনুযায়ী **আজকের তারিখ ও day-progress indicator**।
-- বর্তমান মাসের roster এবং আগের মাসের **archive view** দেখা যায়।
-- মাসের পাশে compact **‹ / › navigation** দিয়ে মাস পরিবর্তন করা যায়।
-- আজকের দিনের column-এ দ্রুত jump/center করা যায়।
-- Friday → Thursday weekly boundaries visually আলাদা করা হয়।
-- desktop-এ roster horizontal mouse-wheel ও click-drag scrolling সমর্থন করে।
-- mobile-এ touch scrolling optimized।
+- The Worker has not been deployed and this branch has not passed end-to-end tests.
+- The current public GitHub Pages deployment and Git history may still expose roster data.
+- The existing `github.io` URL cannot itself be protected by Cloudflare Pages; keeping that exact URL while putting the whole site behind Cloudflare would require a separately controlled custom domain or an alternative approved migration plan.
+- Do not put passwords, tokens, or session secrets in this repository or send them in chat.
+- Do not merge this branch, change Production hosting, or remove Production files without explicit approval.
 
-### 🕐 শিফট
-| Code | সময় | অর্থ |
-|---|---|---|
-| **A** | 06:00–14:00 | সকাল/দিনের শিফট |
-| **B** | 14:00–22:00 | বিকেল/সন্ধ্যার শিফট |
-| **C** | 22:00–06:00 | রাতের/overnight শিফট |
-| **OFF** | — | নির্ধারিত ছুটি |
-| **L** | — | অনুমোদিত ছুটি (Leave) |
+## Preview links
 
-### 👤 Live duty status
-রোস্টারের নিচে/নামের সঙ্গে বর্তমান পরিস্থিতি স্বয়ংক্রিয়ভাবে দেখানো হয়:
-
-- **ON DUTY - A/B/C** — বর্তমানে যে শিফট চলছে।
-- **UPCOMING - A/B/C** — পরবর্তী প্রাসঙ্গিক শিফট।
-- **OFF** — কোনো active/upcoming duty নেই।
-- **LEAVE** — ঐ দিনের অনুমোদিত ছুটি।
-- একই সময়ের duty transition হলে double-duty context-ও দেখানো হয়।
-- ON DUTY কর্মীর নামের পাশে একটি ছোট active indicator থাকে।
-- Status calculation Dhaka timezone অনুসরণ করে এবং live page নিয়মিত refresh হয়।
-
-### 📋 Next Duty
-Live roster-এর নিচে প্রতিটি কর্মীর জন্য:
-- পরবর্তী **shift change**
-- পরবর্তী **OFF/Leave**
-- সংশ্লিষ্ট তারিখ
-
-দেখানো হয়।
-
-## 🗂️ মাসের archive
-
-বর্তমান মাসের roster `schedule.json` থেকে আসে।
-
-আগের মাসের archived roster:
-
-```
-archive/YYYY-MM.json
-```
-
-ফরম্যাটে রাখা হয়। ফলে মাস পরিবর্তন করলেও historical roster আলাদা করে দেখা যায়।
-
-## ⚙️ Admin Panel
-
-`admin.html` থেকে roster পরিচালনা করা যায়:
-
-- মাস ও সাল পরিবর্তন
-- তারিখ/বার সম্পাদনা
-- কর্মী যোগ/সম্পাদনা
-- A / B / C / OFF / L assignment
-- পরিবর্তনের summary দেখা
-- পরিবর্তন বাতিল করা
-- `schedule.json`-এ GitHub-এ Save
-- JSON Download
-- প্রয়োজন হলে পুরোনো মাস archive করা
-
-**Admin:** https://toxinhub.github.io/roster/admin.html
-
-### Shared-password security (Preview)
-
-The secure-preview branch replaces browser-held GitHub tokens with server-side APIs. There are no user accounts or sign-up flow.
-
-- One shared **site password** opens the roster; a separate **Admin password** is required for editing.
-- Sessions expire after **8 hours**. Cookies are HttpOnly, Secure and SameSite=Strict.
-- `schedule.json` and `archive/YYYY-MM.json` are read through authenticated APIs and excluded from Vercel's static deployment with `.vercelignore`.
-- Admin saves and archive creation run server-side; the GitHub token is never sent to the browser.
-- Preview writes must target `security/preview-shared-password`. Do not configure a Preview deployment to write to `main`.
-- The current GitHub Pages URL remains the existing live site until a separately approved migration; this branch does not change it.
-
-#### Vercel Preview configuration
-
-Create these environment variables in the Vercel project's **Preview** environment only while validating this branch:
-
-| Variable | Value |
-|---|---|
-| `SITE_PASSWORD_HASH` | scrypt hash generated locally for the shared site password |
-| `ADMIN_PASSWORD_HASH` | a different scrypt hash generated locally for the Admin password |
-| `SESSION_SECRET` | cryptographically random secret, at least 32 characters |
-| `GITHUB_TOKEN` | fine-grained token with access to this repository and Contents read/write permission |
-| `GITHUB_OWNER` | `toxinhub` |
-| `GITHUB_REPO` | `roster` |
-| `GITHUB_BRANCH` | `security/preview-shared-password` |
-
-Generate each password hash in a trusted local terminal with:
-
-```bash
-node scripts/hash-password.js
-```
-
-Run it once for the site password and again for the distinct Admin password. The script hides password input and prints only the hash. Paste each hash into its matching Vercel environment variable. Generate `SESSION_SECRET` locally with `node -e "console.log(require('node:crypto').randomBytes(32).toString('base64url'))"`; never commit any real secret or send it in chat.
-
-**Important limitations before production:** the current login-attempt limiter is per serverless instance, not globally shared across all instances. Before production approval, add a durable distributed rate limiter (for example, a managed Redis integration), verify Vercel Preview environment scoping, test all archive paths and write conflicts, and confirm no roster/archive JSON appears in the deployment output. Do not merge this branch or configure Production secrets until Preview checks pass.
-
-## 🎨 UI / UX
-
-সাইটটি lightweight, warm এবং low-glare visual direction অনুসরণ করে:
-
-- responsive desktop + mobile layout
-- compact roster/table presentation
-- light mode ও **Ink Mode**
-- contrast-focused typography
-- subtle glass/paper-like surfaces
-- minimal borders and spacing
-- initial **skeleton shimmer** loading state
-- first roster render-এ subtle staggered entrance
-- `prefers-reduced-motion` support
-- mobile-এর জন্য compact footer note
-- Bangla-first interface
-
-## 📁 Project structure
-
-```
-/
-├── index.html       # Live roster
-├── admin.html       # Roster management
-├── schedule.json    # Current roster data
-├── archive/         # Previous-month roster snapshots
-├── style.css        # Main responsive styling
-├── landscape.css    # Legacy/compatibility layout overrides
-├── schedule.js      # Legacy data format / compatibility
-└── favicon.svg      # Site icon
-```
-
-## 🚀 Run locally
-
-এটি একটি **build-free static site**।
-
-Python থাকলে:
-
-```bash
-python3 -m http.server 8000
-```
-
-তারপর browser-এ:
-
-```
-http://localhost:8000/
-```
-
-খুলুন।
-
-## 🔄 Data flow
-
-```
-Browser
-  │
-  ├── /api/login + /api/session ──► 8-hour signed session cookie
-  │
-  ├── /api/roster ────────────────► authenticated read of schedule.json
-  ├── /api/archive?month=YYYY-MM ─► authenticated read of archive/YYYY-MM.json
-  │
-  └── Admin-only write APIs ──────► GitHub Contents API (server-side token)
-```
-
-The roster and archive files remain in the private GitHub repository as the source of truth, but are excluded from the Vercel static deployment. They must not be available through public raw/static URLs.
-
-## 📝 Notes
-
-- Current roster data-এর source of truth হলো `schedule.json`।
-- Archive files historical reference হিসেবে ব্যবহৃত হয়।
-- Site-টি static হওয়ায় কোনো server/database প্রয়োজন নেই।
-- Browser cache এড়াতে roster data fetch করার সময় cache-busting query ব্যবহার করা হয়।
-- JavaScript এবং CSS পরিবর্তনের পর deployment/cache propagation হতে কয়েক মুহূর্ত লাগতে পারে।
-
----
-
-**CCTV · PJL Duty Roster**  
-_একটি ছোট, practical team project — still under construction._
+- [Cloudflare Worker source](cloudflare/worker.js)
+- [Worker configuration](cloudflare/wrangler.toml)
+- [Setup and test checklist](cloudflare/README.md)
