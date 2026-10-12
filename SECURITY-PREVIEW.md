@@ -11,10 +11,10 @@
 ## Current state
 
 - No passwords, password hashes, API tokens, or session secrets are committed.
-- The Worker is not deployed from this repository.
-- Cloudflare KV has not been created or seeded.
-- The frontend API URL is intentionally blank until the Worker is deployed.
-- The branch has not passed end-to-end browser testing.
+- Worker source in this branch has been hardened with KV-backed session revocation and KV-backed best-effort login throttling. These changes are committed but are not active until the Worker is redeployed from `cloudflare/worker.js`.
+- The Preview frontend currently points to the configured Worker URL.
+- The Preview KV namespace is seeded with the current roster.
+- Basic browser checks have been reported by the owner, but the updated Worker changes still require deployment and replay-token/rate-limit retesting.
 
 ## Critical privacy and hosting limitations
 
