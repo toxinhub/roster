@@ -42,15 +42,11 @@
       display: flex; align-items: center; gap: 11px; margin: 0 0 9px;
       color: #35291e; font-size: 23px; line-height: 1.25; font-weight: 800; letter-spacing: -.035em;
     }
-    .roster-auth-card h1::before {
-      content: "C"; display: grid; flex: 0 0 38px; width: 38px; height: 38px; place-items: center;
-      box-sizing: border-box; border: 1px solid rgba(255,255,255,.55); border-radius: 12px;
-      color: #fff8ec; font-size: 20px; font-weight: 800; letter-spacing: -.04em;
-      background: linear-gradient(145deg, #72583c, #3f3023);
-      box-shadow: 0 5px 13px rgba(63,48,35,.2), inset 0 1px 0 rgba(255,255,255,.22);
-    }
     .roster-auth-card > p:not(.roster-auth-error) {
       margin: 0 0 22px; color: #756657; font-size: 13px; line-height: 1.65;
+    }
+    .roster-auth-card .roster-auth-help {
+      margin: -13px 0 19px; color: #94816b; font-size: 10.5px; line-height: 1.5;
     }
     .roster-auth-card label { display: block; color: #574637; font-size: 12px; font-weight: 750; }
     .roster-auth-card input {
@@ -104,6 +100,7 @@
       .roster-auth-card h1 { color: #f2e6d5; }
       .roster-auth-card > p:not(.roster-auth-error) { color: #c8b8a3; }
       .roster-auth-card label { color: #e0cfb9; }
+      .roster-auth-card .roster-auth-help { color: #b8a58e; }
       .roster-auth-card input { border-color: rgba(218,190,151,.24); background: rgba(29,23,18,.56); color: #f5e9d8; }
       .roster-auth-card input:focus { border-color: #b99461; background: rgba(29,23,18,.8); }
       .roster-auth-card button { background: linear-gradient(135deg, #8b6a42, #60472d); color: #fff7e9; }
@@ -120,8 +117,9 @@
     const required = document.body?.dataset.requiredRole || "site";
     layer.innerHTML = `
       <form class="roster-auth-card" autocomplete="on">
-        <h1>CCTV · PJL</h1>
+        <h1>📹 · PJL</h1>
         <p>${required === "admin" ? "Admin panel-এ প্রবেশের জন্য আলাদা Admin password দিন।" : "রোস্টার দেখতে shared site password দিন।"}</p>
+        ${required === "site" ? '<p class="roster-auth-help">পাসওয়ার্ড না জানা থাকলে তন্ময়ের সাথে যোগাযোগ করুন</p>' : ""}
         <label>পাসওয়ার্ড
           <input name="password" type="password" autocomplete="current-password" required maxlength="256" autofocus>
         </label>
