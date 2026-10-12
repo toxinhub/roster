@@ -114,6 +114,7 @@ async function handler(request, env) {
       checks: {
         sitePasswordPresent: Boolean(env.SITE_PASSWORD),
         adminPasswordPresent: Boolean(env.ADMIN_PASSWORD),
+        siteAndAdminPasswordsDiffer: Boolean(env.SITE_PASSWORD && env.ADMIN_PASSWORD && env.SITE_PASSWORD !== env.ADMIN_PASSWORD),
         sessionSecretLengthAtLeast32: Boolean(env.SESSION_SECRET && env.SESSION_SECRET.length >= 32),
         dataBindingPresent: Boolean(env.ROSTER_DATA),
         originAllowed: true
