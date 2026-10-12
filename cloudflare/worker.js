@@ -53,7 +53,8 @@ function withCors(response, cors) {
   return new Response(response.body, { status: response.status, statusText: response.statusText, headers });
 }
 function requireConfig(env) {
-  return Boolean(env.SITE_PASSWORD && env.ADMIN_PASSWORD && env.SESSION_SECRET && env.SESSION_SECRET.length >= 32 && env.ROSTER_DATA);
+  return Boolean(env.SITE_PASSWORD && env.ADMIN_PASSWORD && env.SITE_PASSWORD !== env.ADMIN_PASSWORD &&
+    env.SESSION_SECRET && env.SESSION_SECRET.length >= 32 && env.ROSTER_DATA);
 }
 async function makeToken(role, env) {
   const now = Math.floor(Date.now() / 1000);
@@ -79,17 +80,28 @@ async function requireRole(request, env, role = "site") {
   if (!session || (role === "admin" && session.role !== "admin")) return null;
   return session;
 }
-function rateAllowed(request) {
-  const key = request.headers.get("CF-Connecting-IP") || "unknown";
+function attemptKey(request) {
+  return request.headers.get("CF-Connecting-IP") || "unknown";
+}
+function attemptRecord(request) {
+  const key = attemptKey(request);
   const now = Date.now();
-  const item = memoryAttempts.get(key) || { count: 0, start: now };
-  if (now - item.start > 15 * 60 * 1000) { item.count = 0; item.start = now; }
-  item.count++;
+  let item = memoryAttempts.get(key);
+  if (!item || now - item.start > 15 * 60 * 1000) item = { count: 0, start: now };
   memoryAttempts.set(key, item);
   if (memoryAttempts.size > 2000) {
     for (const [k, v] of memoryAttempts) if (now - v.start > 15 * 60 * 1000) memoryAttempts.delete(k);
   }
-  return item.count <= 8;
+  return item;
+}
+function canAttempt(request) {
+  return attemptRecord(request).count < 8;
+}
+function recordFailedAttempt(request) {
+  attemptRecord(request).count++;
+}
+function clearFailedAttempts(request) {
+  memoryAttempts.delete(attemptKey(request));
 }
 function validRoster(data) {
   return data && typeof data === "object" && !Array.isArray(data) &&
@@ -124,7 +136,7 @@ async function handler(request, env) {
   if (!requireConfig(env)) return json({ error: "AUTH_NOT_CONFIGURED" }, 503);
 
   if (path === "/api/login" && request.method === "POST") {
-    if (!rateAllowed(request)) return json({ error: "TOO_MANY_ATTEMPTS" }, 429, { "Retry-After": "900" });
+    if (!canAttempt(request)) return json({ error: "TOO_MANY_ATTEMPTS" }, 429, { "Retry-After": "900" });
     let body;
     try { body = await request.json(); } catch { return json({ error: "INVALID_JSON" }, 400); }
     if (typeof body.password !== "string" || body.password.length < 1 || body.password.length > 256) return json({ error: "INVALID_PASSWORD" }, 400);
@@ -132,7 +144,11 @@ async function handler(request, env) {
     const supplied = await digest(body.password);
     const isAdmin = constantEqual(supplied, await digest(env.ADMIN_PASSWORD));
     const isSite = constantEqual(supplied, await digest(env.SITE_PASSWORD));
-    if (!isAdmin && !isSite) return json({ error: "INVALID_CREDENTIALS" }, 401);
+    if (!isAdmin && !isSite) {
+      recordFailedAttempt(request);
+      return json({ error: "INVALID_CREDENTIALS" }, 401);
+    }
+    clearFailedAttempts(request);
     return json({ ok: true, role: isAdmin ? "admin" : "site", token: await makeToken(isAdmin ? "admin" : "site", env), expiresIn: SESSION_SECONDS });
   }
   if (path === "/api/session" && request.method === "GET") {
