@@ -61,6 +61,7 @@
         }
         window.RosterAPI.setToken(data.token);
         if (required === "admin" && data.role !== "admin") {
+          window.RosterAPI.clearToken();
           form.elements.password.value = "";
           throw new Error("Admin panel-এর জন্য আলাদা Admin password প্রয়োজন।");
         }
