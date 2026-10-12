@@ -3,17 +3,113 @@
   const style = document.createElement("style");
   style.textContent = `
     html.auth-pending body > .app { visibility: hidden !important; }
-    .roster-auth-layer { position: fixed; inset: 0; z-index: 2147483000; display: grid; place-items: center; padding: 18px; background: #f3eee3; color: #34291f; font-family: inherit; }
-    .roster-auth-card { width: min(100%, 360px); padding: 24px; border: 1px solid #d5c8b5; border-radius: 16px; background: #fffaf1; box-shadow: 0 18px 60px rgba(45,31,18,.14); }
-    .roster-auth-card h1 { margin: 0 0 6px; font-size: 22px; }
-    .roster-auth-card p { margin: 0 0 16px; color: #75685b; font-size: 13px; line-height: 1.55; }
-    .roster-auth-card label { display:block; font-size: 12px; font-weight: 700; }
-    .roster-auth-card input { display:block; box-sizing:border-box; width:100%; margin-top:7px; padding:12px; border:1px solid #cfc1ad; border-radius:9px; background:#fff; color:#34291f; font:inherit; }
-    .roster-auth-card button { width:100%; margin-top:12px; padding:12px; border:0; border-radius:9px; background:#4a392a; color:#fff8ed; font:inherit; font-weight:800; cursor:pointer; }
-    .roster-auth-error { min-height:18px; margin-top:10px !important; color:#a32929 !important; font-size:12px !important; }
-    .roster-auth-logout { border:1px solid currentColor; border-radius:8px; padding:6px 9px; background:transparent; color:inherit; font:inherit; font-size:11px; font-weight:800; cursor:pointer; }
-    @media(prefers-color-scheme:dark) { .roster-auth-layer { background:#201a15; color:#f1e5d4; } .roster-auth-card { background:#2d251e; border-color:#514335; } .roster-auth-card p { color:#c3b4a1; } .roster-auth-card input { background:#201a15; border-color:#65533f; color:#f1e5d4; } }
-  `;
+    html.auth-pending body { overflow: hidden; }
+    .roster-auth-layer {
+      position: fixed; inset: 0; z-index: 2147483000; display: grid; place-items: center;
+      padding: max(20px, env(safe-area-inset-top)) 18px max(20px, env(safe-area-inset-bottom));
+      overflow: auto; isolation: isolate; box-sizing: border-box;
+      color: #35291e; font-family: inherit;
+      background:
+        radial-gradient(ellipse at 12% 12%, rgba(225,190,129,.32), transparent 42%),
+        radial-gradient(ellipse at 88% 82%, rgba(164,132,91,.18), transparent 40%),
+        linear-gradient(145deg, #f7f1e7 0%, #eee4d5 52%, #f4ecdf 100%);
+    }
+    .roster-auth-layer::before, .roster-auth-layer::after {
+      content: ""; position: absolute; z-index: 0; pointer-events: none; border-radius: 50%;
+      filter: blur(1px); opacity: .7;
+    }
+    .roster-auth-layer::before {
+      width: min(62vw, 390px); aspect-ratio: 1; top: -18%; right: -12%;
+      background: radial-gradient(circle at 35% 35%, rgba(255,255,255,.72), rgba(218,187,139,.12) 58%, transparent 72%);
+    }
+    .roster-auth-layer::after {
+      width: min(56vw, 340px); aspect-ratio: 1; bottom: -20%; left: -12%;
+      background: radial-gradient(circle at 55% 45%, rgba(255,255,255,.62), rgba(191,159,116,.12) 60%, transparent 74%);
+    }
+    .roster-auth-card {
+      position: relative; z-index: 1; box-sizing: border-box; width: min(100%, 390px);
+      padding: 29px 27px 23px; border: 1px solid rgba(255,255,255,.82); border-radius: 21px;
+      background: rgba(255,251,244,.72);
+      box-shadow: 0 24px 70px rgba(73,53,31,.13), 0 3px 12px rgba(73,53,31,.06), inset 0 1px 0 rgba(255,255,255,.92);
+      -webkit-backdrop-filter: blur(20px) saturate(112%); backdrop-filter: blur(20px) saturate(112%);
+      animation: roster-auth-arrive .34s cubic-bezier(.2,.75,.25,1) both;
+    }
+    .roster-auth-card::before {
+      content: "SECURE ACCESS"; display: block; margin: 0 0 15px;
+      color: #8b765b; font-size: 10px; font-weight: 800; letter-spacing: .19em;
+    }
+    .roster-auth-card h1 {
+      display: flex; align-items: center; gap: 11px; margin: 0 0 9px;
+      color: #35291e; font-size: 23px; line-height: 1.25; font-weight: 800; letter-spacing: -.035em;
+    }
+    .roster-auth-card h1::before {
+      content: "C"; display: grid; flex: 0 0 38px; width: 38px; height: 38px; place-items: center;
+      box-sizing: border-box; border: 1px solid rgba(255,255,255,.55); border-radius: 12px;
+      color: #fff8ec; font-size: 20px; font-weight: 800; letter-spacing: -.04em;
+      background: linear-gradient(145deg, #72583c, #3f3023);
+      box-shadow: 0 5px 13px rgba(63,48,35,.2), inset 0 1px 0 rgba(255,255,255,.22);
+    }
+    .roster-auth-card > p:not(.roster-auth-error) {
+      margin: 0 0 22px; color: #756657; font-size: 13px; line-height: 1.65;
+    }
+    .roster-auth-card label { display: block; color: #574637; font-size: 12px; font-weight: 750; }
+    .roster-auth-card input {
+      display: block; box-sizing: border-box; width: 100%; min-height: 47px; margin-top: 8px; padding: 12px 13px;
+      border: 1px solid rgba(143,116,82,.31); border-radius: 11px;
+      outline: none; background: rgba(255,255,255,.66); color: #35291e;
+      font: inherit; font-size: 15px; box-shadow: inset 0 1px 2px rgba(67,48,29,.035);
+      transition: border-color .16s ease, box-shadow .16s ease, background .16s ease;
+    }
+    .roster-auth-card input::placeholder { color: #9b8d7b; }
+    .roster-auth-card input:focus {
+      border-color: #9d7b4e; background: rgba(255,255,255,.92);
+      box-shadow: 0 0 0 3px rgba(173,137,84,.15), inset 0 1px 2px rgba(67,48,29,.025);
+    }
+    .roster-auth-card button {
+      display: flex; align-items: center; justify-content: center; box-sizing: border-box; width: 100%; min-height: 47px;
+      margin-top: 14px; padding: 12px 15px; border: 1px solid rgba(255,255,255,.13); border-radius: 11px;
+      color: #fff9ef; background: linear-gradient(135deg, #5e4832, #392a1e);
+      box-shadow: 0 7px 16px rgba(64,45,27,.17), inset 0 1px 0 rgba(255,255,255,.14);
+      font: inherit; font-size: 14px; font-weight: 800; cursor: pointer;
+      transition: transform .16s ease, box-shadow .16s ease, opacity .16s ease;
+    }
+    .roster-auth-card button:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 10px 20px rgba(64,45,27,.21), inset 0 1px 0 rgba(255,255,255,.16); }
+    .roster-auth-card button:active:not(:disabled) { transform: translateY(0); }
+    .roster-auth-card button:focus-visible { outline: 3px solid rgba(157,123,78,.42); outline-offset: 3px; }
+    .roster-auth-card button:disabled { cursor: wait; opacity: .72; }
+    .roster-auth-error { min-height: 18px; margin: 12px 0 0 !important; color: #a13c31 !important; font-size: 12px !important; line-height: 1.5; overflow-wrap: anywhere; }
+    .roster-auth-logout {
+      border: 1px solid currentColor; border-radius: 8px; padding: 6px 9px; background: transparent;
+      color: inherit; font: inherit; font-size: 11px; font-weight: 800; cursor: pointer;
+    }
+    @keyframes roster-auth-arrive { from { opacity: 0; transform: translateY(7px) scale(.99); } to { opacity: 1; transform: translateY(0) scale(1); } }
+    @media (max-width: 420px) {
+      .roster-auth-layer { padding-left: 15px; padding-right: 15px; }
+      .roster-auth-card { padding: 25px 21px 20px; border-radius: 18px; }
+      .roster-auth-card h1 { font-size: 21px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .roster-auth-card, .roster-auth-card input, .roster-auth-card button { animation: none !important; transition: none !important; }
+    }
+    @media (prefers-color-scheme: dark) {
+      .roster-auth-layer {
+        color: #f2e6d5;
+        background:
+          radial-gradient(ellipse at 12% 12%, rgba(151,112,64,.19), transparent 42%),
+          radial-gradient(ellipse at 88% 82%, rgba(122,91,57,.18), transparent 40%),
+          linear-gradient(145deg, #211b16 0%, #2a2119 52%, #211b16 100%);
+      }
+      .roster-auth-card { border-color: rgba(255,240,218,.13); background: rgba(53,42,31,.76); box-shadow: 0 24px 70px rgba(0,0,0,.28), 0 3px 12px rgba(0,0,0,.15), inset 0 1px 0 rgba(255,245,227,.08); }
+      .roster-auth-card::before { color: #c6aa82; }
+      .roster-auth-card h1 { color: #f2e6d5; }
+      .roster-auth-card > p:not(.roster-auth-error) { color: #c8b8a3; }
+      .roster-auth-card label { color: #e0cfb9; }
+      .roster-auth-card input { border-color: rgba(218,190,151,.24); background: rgba(29,23,18,.56); color: #f5e9d8; }
+      .roster-auth-card input:focus { border-color: #b99461; background: rgba(29,23,18,.8); }
+      .roster-auth-card button { background: linear-gradient(135deg, #8b6a42, #60472d); color: #fff7e9; }
+      .roster-auth-error { color: #ffb0a4 !important; }
+    }
+`;
   document.head.appendChild(style);
 
   function showLogin(message) {
