@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#0e2c2d">
+  <script src="auth.js"></script>
   <title>এডমিন • ডিউটি রোস্টার</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="stylesheet" href="style.css">
@@ -83,7 +84,7 @@ html body.ink-mode #status.status.not-connected{
   border-color:#C58A82 !important;
 }
 </style></head>
-<body>
+<body data-required-role="admin">
   <div class="app">
     <header class="topbar">
       <div class="brand" aria-label="রোস্টার এডমিন">
@@ -106,20 +107,10 @@ html body.ink-mode #status.status.not-connected{
 
       <section class="panel">
         <div class="section-head">
-          <div>
-            <span class="eyebrow">CONNECTION</span>
-            <h2>GitHub সংযোগ</h2>
-          </div>
-          <span id="status" class="status not-connected">সংযুক্ত নয়</span>
+          <div><span class="eyebrow">SECURITY</span><h2>নিরাপদ Admin সংযোগ</h2></div>
+          <span id="status" class="status connected">Admin access যাচাইকৃত</span>
         </div>
-        <div class="form-grid">
-          <label>Username<input id="owner" value="toxinhub"></label>
-          <label>Repository<input id="repo" value="roster"></label>
-          <label>Branch<input id="branch" value="main"></label>
-          <label>Fine-grained token<input id="token" type="password" placeholder="github_pat_…"></label>
-        </div>
-        <p class="muted">Token browser tab বন্ধ হলে <b>sessionStorage</b>-এ সংরক্ষিত থাকবে।</p>
-        <button class="primary" id="connect">সংযোগ যাচাই / সংরক্ষণ</button>
+        <p class="muted">এই প্যানেলে আলাদা Admin password প্রয়োজন। GitHub token সার্ভারে সুরক্ষিত থাকে; browser-এ token সংরক্ষণ করা হয় না। Session মেয়াদ ৮ ঘণ্টা।</p>
       </section>
 
       <section class="panel">
@@ -187,40 +178,6 @@ html body.ink-mode #status.status.not-connected{
       $('theme').setAttribute('title', inkMode ? 'Light Mode' : 'Ink Mode');
       $('theme').setAttribute('aria-label', inkMode ? 'লাইট মোড' : 'ইঙ্ক মোড');
       $('theme').setAttribute('title', inkMode ? 'Light Mode' : 'Ink Mode');
-    }
-
-    function settings() {
-      return {
-        owner: $('owner').value.trim(),
-        repo: $('repo').value.trim(),
-        branch: $('branch').value.trim() || 'main',
-        token: $('token').value.trim()
-      };
-    }
-
-    function loadSaved() {
-      try {
-        const s = JSON.parse(sessionStorage.getItem(key) || 'null');
-        if (s) {
-          $('owner').value = s.owner || 'toxinhub';
-          $('repo').value = s.repo || 'roster';
-          $('branch').value = s.branch || 'main';
-          $('token').value = s.token || '';
-        }
-      } catch {}
-    }
-
-    async function api(url, opt = {}) {
-      const s = settings();
-      return fetch(url, {
-        ...opt,
-        headers: {
-          Accept: 'application/vnd.github+json',
-          Authorization: 'Bearer ' + s.token,
-          'X-GitHub-Api-Version': '2022-11-28',
-          'Content-Type': 'application/json'
-        }
-      });
     }
 
     function syncMonth() {
@@ -296,7 +253,8 @@ html body.ink-mode #status.status.not-connected{
 
     async function load() {
       try {
-        const r = await fetch('schedule.json?v=' + Date.now());
+        const r = await fetch('/api/roster?v=' + Date.now(), { credentials: 'same-origin', cache: 'no-store' });
+        if (!r.ok) throw new Error('roster load failed');
         S = await r.json();
         $('month').value = S.month || '';
         $('monthHead').textContent = S.month || 'রোস্টার সম্পাদনা';
@@ -428,96 +386,40 @@ html body.ink-mode #status.status.not-connected{
       a.click();
     };
 
-    async function verifySavedConnection(showToast = false) {
-      const s = settings();
-      if (!s.token) {
-        $('status').textContent = 'সংযুক্ত নয়';
-        $('status').className = 'status not-connected';
-        return false;
-      }
-      try {
-        const r = await api('https://api.github.com/repos/' + s.owner + '/' + s.repo);
-        if (!r.ok) throw new Error('api check failed');
-        $('status').textContent = 'সংযুক্ত';
-        $('status').className = 'status connected';
-        if(showToast) toast('GitHub সংযোগ সফল');
-        return true;
-      } catch {
-        $('status').textContent = 'সংযুক্ত নয়';
-        $('status').className = 'status not-connected';
-        if(showToast) toast('সংযোগ যাচাই করা যায়নি', true);
-        return false;
-      }
-    }
-
-    $('connect').onclick = async () => {
-      const s = settings();
-      if (!s.token) return toast('Token দিন', true);
-      const ok = await verifySavedConnection(true);
-      if (ok) sessionStorage.setItem(key, JSON.stringify(s));
-    };
-
-    async function archiveIfNeeded(s) {
-      if(!archivePending?.key || !archivePending?.data) return;
-      const path='archive/'+archivePending.key+'.json';
-      try{
-        const existing=await api(
-          'https://api.github.com/repos/'+s.owner+'/'+s.repo+'/contents/'+path+'?ref='+encodeURIComponent(s.branch)
-        );
-        if(existing.ok){
-          archivePending=null;
-          return;
-        }
-        if(existing.status!==404) throw new Error('archive check failed');
-
-        const r=await api('https://api.github.com/repos/'+s.owner+'/'+s.repo+'/contents/'+path,{
-          method:'PUT',
-          body:JSON.stringify({
-            message:'Archive '+archivePending.key+' duty roster',
-            content:btoa(unescape(encodeURIComponent(JSON.stringify(archivePending.data,null,2)))),
-            branch:s.branch
-          })
-        });
-        if(!r.ok) throw new Error('archive save failed');
-        archivePending=null;
-      }catch(err){
-        throw err;
-      }
+    async function archiveIfNeeded() {
+      if (!archivePending?.key || !archivePending?.data) return;
+      const r = await fetch('/api/admin/archive', {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ month: archivePending.key, data: archivePending.data })
+      });
+      const result = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(result.error || 'archive save failed');
+      archivePending = null;
     }
 
     $('save').onclick = async () => {
-      const s = settings();
-      if (!s.token) return toast('আগে GitHub connection সেট করুন', true);
       S.month = $('month').value;
       S.updatedAt = new Date().toISOString();
-
       try {
-        await archiveIfNeeded(s);
-        if (!sha) {
-          const g = await api('https://api.github.com/repos/' + s.owner + '/' + s.repo + '/contents/schedule.json?ref=' + encodeURIComponent(s.branch));
-          if (g.ok) {
-            const x = await g.json();
-            sha = x.sha;
-          }
-        }
-
-        const r = await api('https://api.github.com/repos/' + s.owner + '/' + s.repo + '/contents/schedule.json', {
-          method: 'PUT',
-          body: JSON.stringify({
-            message: 'Update duty roster',
-            content: btoa(unescape(encodeURIComponent(JSON.stringify(S, null, 2)))),
-            branch: s.branch,
-            sha: sha
-          })
+        await archiveIfNeeded();
+        const r = await fetch('/api/admin/save', {
+          method: 'POST',
+          credentials: 'same-origin',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ data: S })
         });
-
-        if (!r.ok) throw new Error('save failed');
-        const data = await r.json();
-        sha = data.content?.sha || sha;
-        cleanSnapshot=snapshot(); dirty=false; updateChangeUI();
-        toast('রোস্টার GitHub-এ সংরক্ষিত');
-      } catch {
-        toast('Save করা যায়নি', true);
+        const result = await r.json().catch(() => ({}));
+        if (!r.ok) throw new Error(result.error || 'save failed');
+        cleanSnapshot = snapshot(); dirty = false; updateChangeUI();
+        toast('রোস্টার নিরাপদে GitHub-এ সংরক্ষিত');
+      } catch (error) {
+        if (error.message === 'WRITE_CONFLICT' || error.message === 'SAVE_FAILED') {
+          toast('Save করা যায়নি। GitHub-এর সর্বশেষ পরিবর্তন যাচাই করে আবার চেষ্টা করুন।', true);
+        } else {
+          toast('Save করা যায়নি। Session বা server configuration পরীক্ষা করুন।', true);
+        }
       }
     };
 
@@ -526,9 +428,7 @@ html body.ink-mode #status.status.not-connected{
       applyTheme();
     };
 
-    loadSaved();
     applyTheme();
-    if ($('token').value.trim()) verifySavedConnection(false);
     load();
   </script>
 </body>
