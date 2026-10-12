@@ -4,6 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#0e2c2d">
+  <script src="api-config.js"></script>
+  <script src="api-client.js"></script>
+  <script src="auth.js"></script>
   <title>এডমিন • ডিউটি রোস্টার</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="stylesheet" href="style.css">
@@ -83,7 +86,7 @@ html body.ink-mode #status.status.not-connected{
   border-color:#C58A82 !important;
 }
 </style></head>
-<body>
+<body data-required-role="admin">
   <div class="app">
     <header class="topbar">
       <div class="brand" aria-label="রোস্টার এডমিন">
@@ -101,25 +104,15 @@ html body.ink-mode #status.status.not-connected{
 
     <main class="page-shell">
       <section class="admin-note">
-        <b>নিরাপত্তা:</b> Save করলে <code>schedule.json</code> GitHub-এ আপডেট হবে। Token-এ শুধু এই repository-এর <b>Contents: Read and write</b> permission দিন।
+        <b>নিরাপত্তা:</b> Save করলে রোস্টার private Cloudflare KV storage-এ সংরক্ষিত হবে। এই Preview-তে GitHub-এর মাধ্যমে সরাসরি কোনো পরিবর্তন করা হয় না।
       </section>
 
       <section class="panel">
         <div class="section-head">
-          <div>
-            <span class="eyebrow">CONNECTION</span>
-            <h2>GitHub সংযোগ</h2>
-          </div>
-          <span id="status" class="status not-connected">সংযুক্ত নয়</span>
+          <div><span class="eyebrow">SECURITY</span><h2>নিরাপদ Admin সংযোগ</h2></div>
+          <span id="status" class="status connected">Admin access যাচাইকৃত</span>
         </div>
-        <div class="form-grid">
-          <label>Username<input id="owner" value="toxinhub"></label>
-          <label>Repository<input id="repo" value="roster"></label>
-          <label>Branch<input id="branch" value="main"></label>
-          <label>Fine-grained token<input id="token" type="password" placeholder="github_pat_…"></label>
-        </div>
-        <p class="muted">Token browser tab বন্ধ হলে <b>sessionStorage</b>-এ সংরক্ষিত থাকবে।</p>
-        <button class="primary" id="connect">সংযোগ যাচাই / সংরক্ষণ</button>
+        <p class="muted">এই প্যানেলে আলাদা Admin password প্রয়োজন। সেশন যাচাই ও রোস্টার সংরক্ষণ Worker API-এর মাধ্যমে হয়। Session মেয়াদ ৮ ঘণ্টা।</p>
       </section>
 
       <section class="panel">
@@ -147,7 +140,7 @@ html body.ink-mode #status.status.not-connected{
 
         <div class="editor-meta"><span id="changeStatus" class="change-status clean">● কোনো পরিবর্তন নেই</span><button id="clearChanges" class="quiet" type="button" disabled>পরিবর্তন বাতিল</button></div><div id="changeSummary" class="change-summary" hidden></div>
         <div class="form-row">
-          <button class="primary" id="save">✓ GitHub-এ Save</button>
+          <button class="primary" id="save">✓ নিরাপদে Save</button>
           <button id="download">JSON Download</button>
         </div>
       </section>
@@ -155,7 +148,7 @@ html body.ink-mode #status.status.not-connected{
 
     <footer>
       <a href="index.html">← লাইভ রোস্টার</a>
-      <span>Admin changes publish to GitHub</span>
+      <span>Admin changes save to private storage</span>
     </footer>
   </div>
 
@@ -187,40 +180,6 @@ html body.ink-mode #status.status.not-connected{
       $('theme').setAttribute('title', inkMode ? 'Light Mode' : 'Ink Mode');
       $('theme').setAttribute('aria-label', inkMode ? 'লাইট মোড' : 'ইঙ্ক মোড');
       $('theme').setAttribute('title', inkMode ? 'Light Mode' : 'Ink Mode');
-    }
-
-    function settings() {
-      return {
-        owner: $('owner').value.trim(),
-        repo: $('repo').value.trim(),
-        branch: $('branch').value.trim() || 'main',
-        token: $('token').value.trim()
-      };
-    }
-
-    function loadSaved() {
-      try {
-        const s = JSON.parse(sessionStorage.getItem(key) || 'null');
-        if (s) {
-          $('owner').value = s.owner || 'toxinhub';
-          $('repo').value = s.repo || 'roster';
-          $('branch').value = s.branch || 'main';
-          $('token').value = s.token || '';
-        }
-      } catch {}
-    }
-
-    async function api(url, opt = {}) {
-      const s = settings();
-      return fetch(url, {
-        ...opt,
-        headers: {
-          Accept: 'application/vnd.github+json',
-          Authorization: 'Bearer ' + s.token,
-          'X-GitHub-Api-Version': '2022-11-28',
-          'Content-Type': 'application/json'
-        }
-      });
     }
 
     function syncMonth() {
@@ -296,7 +255,8 @@ html body.ink-mode #status.status.not-connected{
 
     async function load() {
       try {
-        const r = await fetch('schedule.json?v=' + Date.now());
+        const r = await window.RosterAPI.request('/api/roster?v=' + Date.now(), { cache: 'no-store' });
+        if (!r.ok) throw new Error('roster load failed');
         S = await r.json();
         $('month').value = S.month || '';
         $('monthHead').textContent = S.month || 'রোস্টার সম্পাদনা';
@@ -304,7 +264,7 @@ html body.ink-mode #status.status.not-connected{
         setPicker();
         cleanSnapshot=snapshot(); dirty=false; updateChangeUI();
       } catch {
-        toast('schedule.json লোড হয়নি', true);
+        toast('নিরাপদ সার্ভার থেকে রোস্টার লোড হয়নি', true);
       }
     }
 
@@ -428,96 +388,40 @@ html body.ink-mode #status.status.not-connected{
       a.click();
     };
 
-    async function verifySavedConnection(showToast = false) {
-      const s = settings();
-      if (!s.token) {
-        $('status').textContent = 'সংযুক্ত নয়';
-        $('status').className = 'status not-connected';
-        return false;
-      }
-      try {
-        const r = await api('https://api.github.com/repos/' + s.owner + '/' + s.repo);
-        if (!r.ok) throw new Error('api check failed');
-        $('status').textContent = 'সংযুক্ত';
-        $('status').className = 'status connected';
-        if(showToast) toast('GitHub সংযোগ সফল');
-        return true;
-      } catch {
-        $('status').textContent = 'সংযুক্ত নয়';
-        $('status').className = 'status not-connected';
-        if(showToast) toast('সংযোগ যাচাই করা যায়নি', true);
-        return false;
-      }
-    }
-
-    $('connect').onclick = async () => {
-      const s = settings();
-      if (!s.token) return toast('Token দিন', true);
-      const ok = await verifySavedConnection(true);
-      if (ok) sessionStorage.setItem(key, JSON.stringify(s));
-    };
-
-    async function archiveIfNeeded(s) {
-      if(!archivePending?.key || !archivePending?.data) return;
-      const path='archive/'+archivePending.key+'.json';
-      try{
-        const existing=await api(
-          'https://api.github.com/repos/'+s.owner+'/'+s.repo+'/contents/'+path+'?ref='+encodeURIComponent(s.branch)
-        );
-        if(existing.ok){
-          archivePending=null;
-          return;
-        }
-        if(existing.status!==404) throw new Error('archive check failed');
-
-        const r=await api('https://api.github.com/repos/'+s.owner+'/'+s.repo+'/contents/'+path,{
-          method:'PUT',
-          body:JSON.stringify({
-            message:'Archive '+archivePending.key+' duty roster',
-            content:btoa(unescape(encodeURIComponent(JSON.stringify(archivePending.data,null,2)))),
-            branch:s.branch
-          })
-        });
-        if(!r.ok) throw new Error('archive save failed');
-        archivePending=null;
-      }catch(err){
-        throw err;
-      }
+    async function archiveIfNeeded() {
+      if (!archivePending?.key || !archivePending?.data) return;
+      const r = await window.RosterAPI.request('/api/admin/archive', {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ month: archivePending.key, data: archivePending.data })
+      });
+      const result = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(result.error || 'archive save failed');
+      archivePending = null;
     }
 
     $('save').onclick = async () => {
-      const s = settings();
-      if (!s.token) return toast('আগে GitHub connection সেট করুন', true);
       S.month = $('month').value;
       S.updatedAt = new Date().toISOString();
-
       try {
-        await archiveIfNeeded(s);
-        if (!sha) {
-          const g = await api('https://api.github.com/repos/' + s.owner + '/' + s.repo + '/contents/schedule.json?ref=' + encodeURIComponent(s.branch));
-          if (g.ok) {
-            const x = await g.json();
-            sha = x.sha;
-          }
-        }
-
-        const r = await api('https://api.github.com/repos/' + s.owner + '/' + s.repo + '/contents/schedule.json', {
-          method: 'PUT',
-          body: JSON.stringify({
-            message: 'Update duty roster',
-            content: btoa(unescape(encodeURIComponent(JSON.stringify(S, null, 2)))),
-            branch: s.branch,
-            sha: sha
-          })
+        await archiveIfNeeded();
+        const r = await window.RosterAPI.request('/api/admin/save', {
+          method: 'POST',
+          credentials: 'same-origin',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ data: S })
         });
-
-        if (!r.ok) throw new Error('save failed');
-        const data = await r.json();
-        sha = data.content?.sha || sha;
-        cleanSnapshot=snapshot(); dirty=false; updateChangeUI();
-        toast('রোস্টার GitHub-এ সংরক্ষিত');
-      } catch {
-        toast('Save করা যায়নি', true);
+        const result = await r.json().catch(() => ({}));
+        if (!r.ok) throw new Error(result.error || 'save failed');
+        cleanSnapshot = snapshot(); dirty = false; updateChangeUI();
+        toast('রোস্টার নিরাপদ স্টোরেজে সংরক্ষিত');
+      } catch (error) {
+        if (error.message === 'WRITE_CONFLICT' || error.message === 'SAVE_FAILED') {
+          toast('Save করা যায়নি। রোস্টার সংযোগ যাচাই করে আবার চেষ্টা করুন।', true);
+        } else {
+          toast('Save করা যায়নি। Session বা server configuration পরীক্ষা করুন।', true);
+        }
       }
     };
 
@@ -526,10 +430,45 @@ html body.ink-mode #status.status.not-connected{
       applyTheme();
     };
 
-    loadSaved();
     applyTheme();
-    if ($('token').value.trim()) verifySavedConnection(false);
     load();
   </script>
+<script>
+/* One-time recovery helper: import the existing public September archive into private KV. */
+(async function(){
+  const shell=document.querySelector('.page-shell');
+  if(!shell || !window.RosterAPI) return;
+  try {
+    const check=await window.RosterAPI.request('/api/archive?month=2026-09',{cache:'no-store'});
+    if(check.ok || check.status!==404) return;
+    const box=document.createElement('section');
+    box.className='panel';
+    box.style.marginBottom='16px';
+    box.innerHTML='<div class="section-head"><div><span class="eyebrow">ONE-TIME RECOVERY</span><h2>সেপ্টেম্বর ২০২৬ আর্কাইভ সংরক্ষণ</h2></div></div><p style="color:var(--muted);font-size:13px;line-height:1.6">বর্তমান প্রকাশ্য archive ফাইল থেকে সেপ্টেম্বরের রোস্টার নিরাপদ KV-তে কপি করবে। বর্তমান অক্টোবর রোস্টার বদলাবে না। কাজ সফল হওয়ার পর প্রকাশ্য archive ফাইল সরানো যাবে।</p><button id="importSeptemberArchive" class="primary" type="button">সেপ্টেম্বরের ডেটা নিরাপদে সংরক্ষণ</button><p id="archiveImportStatus" role="status" style="margin-top:8px;font-size:12px"></p>';
+    shell.insertBefore(box,shell.firstChild);
+    const button=box.querySelector('#importSeptemberArchive');
+    const status=box.querySelector('#archiveImportStatus');
+    button.addEventListener('click',async()=>{
+      button.disabled=true; status.textContent='ডেটা কপি হচ্ছে…';
+      try {
+        const source=await fetch('archive/2026-09.json?recovery='+Date.now(),{cache:'no-store'});
+        if(!source.ok) throw new Error('সেপ্টেম্বরের পুরোনো ফাইল পাওয়া যায়নি');
+        const data=await source.json();
+        const saved=await window.RosterAPI.request('/api/admin/archive',{
+          method:'POST',headers:{'Content-Type':'application/json'},cache:'no-store',
+          body:JSON.stringify({month:'2026-09',data})
+        });
+        const result=await saved.json().catch(()=>({}));
+        if(!saved.ok) throw new Error(result.error==='ARCHIVE_EXISTS'?'সেপ্টেম্বরের আর্কাইভ আগে থেকেই সংরক্ষিত আছে':(result.error||'সংরক্ষণ করা যায়নি'));
+        status.textContent='সেপ্টেম্বরের রোস্টার নিরাপদে সংরক্ষিত হয়েছে। এখন সাইটে গিয়ে সেপ্টেম্বর মাস খুলে যাচাই করো।';
+        button.textContent='সংরক্ষণ সম্পন্ন'; 
+      } catch(error) {
+        status.textContent=error.message||'সংরক্ষণ করা যায়নি।';
+        button.disabled=false;
+      }
+    });
+  } catch {}
+})();
+</script>
 </body>
 </html>
