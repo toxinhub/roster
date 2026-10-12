@@ -104,7 +104,7 @@ html body.ink-mode #status.status.not-connected{
 
     <main class="page-shell">
       <section class="admin-note">
-        <b>নিরাপত্তা:</b> Save করলে <code>schedule.json</code> GitHub-এ আপডেট হবে। Token-এ শুধু এই repository-এর <b>Contents: Read and write</b> permission দিন।
+        <b>নিরাপত্তা:</b> Save করলে রোস্টার private Cloudflare KV storage-এ সংরক্ষিত হবে। এই Preview-তে GitHub token ব্যবহার করা হয় না।
       </section>
 
       <section class="panel">
@@ -112,7 +112,7 @@ html body.ink-mode #status.status.not-connected{
           <div><span class="eyebrow">SECURITY</span><h2>নিরাপদ Admin সংযোগ</h2></div>
           <span id="status" class="status connected">Admin access যাচাইকৃত</span>
         </div>
-        <p class="muted">এই প্যানেলে আলাদা Admin password প্রয়োজন। GitHub token সার্ভারে সুরক্ষিত থাকে; browser-এ token সংরক্ষণ করা হয় না। Session মেয়াদ ৮ ঘণ্টা।</p>
+        <p class="muted">এই প্যানেলে আলাদা Admin password প্রয়োজন। কোনো GitHub token browser-এ ব্যবহার করা হয় না। Session মেয়াদ ৮ ঘণ্টা।</p>
       </section>
 
       <section class="panel">
@@ -140,7 +140,7 @@ html body.ink-mode #status.status.not-connected{
 
         <div class="editor-meta"><span id="changeStatus" class="change-status clean">● কোনো পরিবর্তন নেই</span><button id="clearChanges" class="quiet" type="button" disabled>পরিবর্তন বাতিল</button></div><div id="changeSummary" class="change-summary" hidden></div>
         <div class="form-row">
-          <button class="primary" id="save">✓ GitHub-এ Save</button>
+          <button class="primary" id="save">✓ নিরাপদে Save</button>
           <button id="download">JSON Download</button>
         </div>
       </section>
@@ -148,7 +148,7 @@ html body.ink-mode #status.status.not-connected{
 
     <footer>
       <a href="index.html">← লাইভ রোস্টার</a>
-      <span>Admin changes publish to GitHub</span>
+      <span>Admin changes save to private storage</span>
     </footer>
   </div>
 
@@ -418,7 +418,7 @@ html body.ink-mode #status.status.not-connected{
         toast('রোস্টার নিরাপদ স্টোরেজে সংরক্ষিত');
       } catch (error) {
         if (error.message === 'WRITE_CONFLICT' || error.message === 'SAVE_FAILED') {
-          toast('Save করা যায়নি। GitHub-এর সর্বশেষ পরিবর্তন যাচাই করে আবার চেষ্টা করুন।', true);
+          toast('Save করা যায়নি। রোস্টার সংযোগ যাচাই করে আবার চেষ্টা করুন।', true);
         } else {
           toast('Save করা যায়নি। Session বা server configuration পরীক্ষা করুন।', true);
         }
