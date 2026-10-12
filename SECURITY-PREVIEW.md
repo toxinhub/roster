@@ -20,6 +20,6 @@
 
 Roster files were removed from this branch's latest snapshot, but this does not remove copies from the public `main` branch, public GitHub Pages, Git history, caches, or anyone's downloads. Data already exposed must be treated as potentially copied.
 
-The current `https://toxinhub.github.io/roster/` URL is hosted by GitHub Pages and is not automatically protected by Cloudflare. Cloudflare Pages preview can test the new login system, but protecting the same production URL would require a custom domain or an alternative approved migration plan.
+The current `https://toxinhub.github.io/roster/` URL can be preserved: GitHub Pages can continue serving the static frontend while the frontend reads/writes roster data only through the authenticated Cloudflare Worker API. The current and archived JSON files must be removed from the public deployment before cutover. Previously committed copies remain accessible in Git history unless that history is separately cleaned.
 
 Do not merge this branch, change Production hosting, or delete Production files until the preview is deployed, all tests pass, the public-data exposure is addressed, and the owner explicitly approves the migration.
