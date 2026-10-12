@@ -32,7 +32,8 @@ Keep these values in the private KV namespace. Do not add passwords or session t
 
 - `POST /api/login` — checks the shared site/Admin password and returns an eight-hour signed bearer token.
 - `GET /api/session` — validates the bearer token.
-- `POST /api/logout` — the client clears the current tab's token; the signed token remains usable until expiry if copied.
+- `POST /api/logout` — requires a valid session and records that session ID as revoked in KV until expiry; copied tokens for that session should then fail validation.
+- Login failures are counted in KV for a 15-minute window using a hashed IP-derived key, not the raw IP. KV consistency and simultaneous requests mean this remains best-effort, not a strict global limiter.
 - `GET /api/roster` and `GET /api/archive?month=YYYY-MM` — require a valid site or Admin session.
 - `POST /api/admin/save` and `POST /api/admin/archive` — require the Admin role.
 - CORS allows only exact origins listed in `ALLOWED_ORIGINS`.
@@ -50,6 +51,8 @@ Keep these values in the private KV namespace. Do not add passwords or session t
 - [ ] Admin can save a change; the updated value is in KV.
 - [ ] Admin can archive a month; duplicate archive creation is rejected.
 - [ ] Requests from an unapproved origin are rejected.
+- [ ] After logout, replaying the old Bearer token to `/api/session` and `/api/roster` fails.
+- [ ] Repeated bad logins across fresh requests trigger `429 TOO_MANY_ATTEMPTS`.
 - [ ] Missing KV data and expired/invalid tokens fail safely.
 - [ ] Check the Pages deployment output and confirm no roster/archive JSON is published.
 
