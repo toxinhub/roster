@@ -1,6 +1,5 @@
 const SESSION_SECONDS = 8 * 60 * 60;
 const encoder = new TextEncoder();
-const memoryAttempts = new Map();
 
 function json(body, status = 200, headers = {}) {
   return new Response(JSON.stringify(body), {
@@ -58,7 +57,7 @@ function requireConfig(env) {
 }
 async function makeToken(role, env) {
   const now = Math.floor(Date.now() / 1000);
-  const payload = b64url(encoder.encode(JSON.stringify({ role, iat: now, exp: now + SESSION_SECONDS })));
+  const payload = b64url(encoder.encode(JSON.stringify({ role, iat: now, exp: now + SESSION_SECONDS, jti: crypto.randomUUID() })));
   return payload + "." + b64url(await hmac(payload, env.SESSION_SECRET));
 }
 async function getSession(request, env) {
@@ -71,7 +70,8 @@ async function getSession(request, env) {
     if (!constantEqual(unb64url(signature), expected)) return null;
     const session = JSON.parse(new TextDecoder().decode(unb64url(payload)));
     const now = Math.floor(Date.now() / 1000);
-    if (!["site", "admin"].includes(session.role) || !Number.isInteger(session.exp) || session.exp <= now || session.iat > now + 60) return null;
+    if (!["site", "admin"].includes(session.role) || !Number.isInteger(session.exp) || session.exp <= now || session.iat > now + 60 || typeof session.jti !== "string") return null;
+    if (await env.ROSTER_DATA.get("revoked:" + session.jti)) return null;
     return session;
   } catch { return null; }
 }
@@ -80,28 +80,33 @@ async function requireRole(request, env, role = "site") {
   if (!session || (role === "admin" && session.role !== "admin")) return null;
   return session;
 }
-function attemptKey(request) {
-  return request.headers.get("CF-Connecting-IP") || "unknown";
+async function attemptKey(request) {
+  // Hash the IP before storing the rate-limit key; never store the raw IP in KV.
+  const ip = request.headers.get("CF-Connecting-IP") || "unknown";
+  const hash = await digest(ip);
+  return "login-attempts:" + Array.from(hash, b => b.toString(16).padStart(2, "0")).join("");
 }
-function attemptRecord(request) {
-  const key = attemptKey(request);
+async function attemptRecord(request, env) {
+  const key = await attemptKey(request);
   const now = Date.now();
-  let item = memoryAttempts.get(key);
-  if (!item || now - item.start > 15 * 60 * 1000) item = { count: 0, start: now };
-  memoryAttempts.set(key, item);
-  if (memoryAttempts.size > 2000) {
-    for (const [k, v] of memoryAttempts) if (now - v.start > 15 * 60 * 1000) memoryAttempts.delete(k);
+  let item;
+  try { item = JSON.parse(await env.ROSTER_DATA.get(key) || "null"); } catch {}
+  if (!item || !Number.isFinite(item.start) || now - item.start > 15 * 60 * 1000) {
+    item = { count: 0, start: now };
   }
-  return item;
+  return { key, item };
 }
-function canAttempt(request) {
-  return attemptRecord(request).count < 8;
+async function canAttempt(request, env) {
+  const { item } = await attemptRecord(request, env);
+  return item.count < 8;
 }
-function recordFailedAttempt(request) {
-  attemptRecord(request).count++;
+async function recordFailedAttempt(request, env) {
+  const { key, item } = await attemptRecord(request, env);
+  item.count++;
+  await env.ROSTER_DATA.put(key, JSON.stringify(item), { expirationTtl: 900 });
 }
-function clearFailedAttempts(request) {
-  memoryAttempts.delete(attemptKey(request));
+async function clearFailedAttempts(request, env) {
+  await env.ROSTER_DATA.delete(await attemptKey(request));
 }
 function validRoster(data) {
   return data && typeof data === "object" && !Array.isArray(data) &&
@@ -136,7 +141,7 @@ async function handler(request, env) {
   if (!requireConfig(env)) return json({ error: "AUTH_NOT_CONFIGURED" }, 503);
 
   if (path === "/api/login" && request.method === "POST") {
-    if (!canAttempt(request)) return json({ error: "TOO_MANY_ATTEMPTS" }, 429, { "Retry-After": "900" });
+    if (!await canAttempt(request, env)) return json({ error: "TOO_MANY_ATTEMPTS" }, 429, { "Retry-After": "900" });
     let body;
     try { body = await request.json(); } catch { return json({ error: "INVALID_JSON" }, 400); }
     if (typeof body.password !== "string" || body.password.length < 1 || body.password.length > 256) return json({ error: "INVALID_PASSWORD" }, 400);
@@ -145,17 +150,23 @@ async function handler(request, env) {
     const isAdmin = constantEqual(supplied, await digest(env.ADMIN_PASSWORD));
     const isSite = constantEqual(supplied, await digest(env.SITE_PASSWORD));
     if (!isAdmin && !isSite) {
-      recordFailedAttempt(request);
+      await recordFailedAttempt(request, env);
       return json({ error: "INVALID_CREDENTIALS" }, 401);
     }
-    clearFailedAttempts(request);
+    await clearFailedAttempts(request, env);
     return json({ ok: true, role: isAdmin ? "admin" : "site", token: await makeToken(isAdmin ? "admin" : "site", env), expiresIn: SESSION_SECONDS });
   }
   if (path === "/api/session" && request.method === "GET") {
     const session = await getSession(request, env);
     return session ? json({ authenticated: true, role: session.role, expiresAt: session.exp }) : json({ authenticated: false }, 401);
   }
-  if (path === "/api/logout" && request.method === "POST") return json({ ok: true });
+  if (path === "/api/logout" && request.method === "POST") {
+    const session = await getSession(request, env);
+    if (!session) return json({ error: "AUTH_REQUIRED" }, 401);
+    const remaining = Math.max(1, session.exp - Math.floor(Date.now() / 1000));
+    await env.ROSTER_DATA.put("revoked:" + session.jti, "1", { expirationTtl: remaining });
+    return json({ ok: true });
+  }
   if (path === "/api/roster" && request.method === "GET") {
     if (!await requireRole(request, env, "site")) return json({ error: "AUTH_REQUIRED" }, 401);
     const raw = await env.ROSTER_DATA.get("schedule");
