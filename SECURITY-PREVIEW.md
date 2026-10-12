@@ -35,6 +35,14 @@ Run these against the exact Preview deployment URL after the environment variabl
 9. Logout clears the session; the cookie is HttpOnly, Secure, SameSite=Strict, and expires after eight hours.
 10. Verify current schedule and every historical archive still parse and match the expected roster structure. Do not test by editing real staff shifts unless you first use a disposable test copy.
 
+## Critical architecture blockers (must resolve before calling this secure)
+
+- This application currently uses same-origin API paths such as `/api/login`. It can run as a Vercel-hosted preview, but it does **not** protect the existing GitHub Pages site by itself. On GitHub Pages, those relative API requests go to `github.io`, where these serverless functions do not exist.
+- Do not point a GitHub Pages frontend at this backend until cross-origin API support is deliberately implemented and tested: exact-origin CORS allowlisting, bearer-session handling, preflight support, and client requests to the API origin. Do not use wildcard CORS.
+- The current `GITHUB_OWNER` / `GITHUB_REPO` configuration defaults to the app repository. If that repository is public, serving data through an authenticated API does not make the source files private. A separate **private data repository** (or private database) is required for live schedule and archive data. Do not treat the current public repository as a secure data store.
+- Existing copies in the public repository's commit history may remain accessible even after files are removed from the latest commit. A private data store protects future/current data; it cannot recall copies already downloaded or cached by others.
+- These blockers must be resolved and the tests below repeated against the actual GitHub Pages URL before production approval.
+
 ## Important limitations before production approval
 
 - The Preview URL is currently protected by Vercel Deployment Protection. That is separate from the shared-password login in this app.
