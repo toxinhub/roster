@@ -3,11 +3,12 @@
   const style = document.createElement("style");
   style.textContent = `
     html.auth-pending body > .app { visibility: hidden !important; }
-    html.auth-pending body { overflow: hidden; }
+    html.auth-pending, html.auth-pending body { width: 100%; height: 100%; overflow: hidden !important; overscroll-behavior: none; }
+    html.auth-pending body { position: fixed; inset: 0; }
     .roster-auth-layer {
       position: fixed; inset: 0; z-index: 2147483000; display: grid; place-items: center;
-      padding: max(20px, env(safe-area-inset-top)) 18px max(20px, env(safe-area-inset-bottom));
-      overflow: auto; isolation: isolate; box-sizing: border-box;
+      padding: max(10px, env(safe-area-inset-top)) 18px max(10px, env(safe-area-inset-bottom));
+      overflow: hidden; isolation: isolate; box-sizing: border-box; width: 100%; height: 100%;
       color: #35291e; font-family: inherit;
       background:
         radial-gradient(ellipse at 12% 12%, rgba(225,190,129,.32), transparent 42%),
@@ -27,7 +28,7 @@
       background: radial-gradient(circle at 55% 45%, rgba(255,255,255,.62), rgba(191,159,116,.12) 60%, transparent 74%);
     }
     .roster-auth-card {
-      position: relative; z-index: 1; box-sizing: border-box; width: min(100%, 390px);
+      position: relative; z-index: 1; box-sizing: border-box; width: min(100%, 390px); max-height: 100%;
       padding: 29px 27px 23px; border: 1px solid rgba(255,255,255,.82); border-radius: 21px;
       background: rgba(255,251,244,.72);
       box-shadow: 0 24px 70px rgba(73,53,31,.13), 0 3px 12px rgba(73,53,31,.06), inset 0 1px 0 rgba(255,255,255,.92);
@@ -81,10 +82,10 @@
     @keyframes roster-auth-arrive { from { opacity: 0; transform: translateY(7px) scale(.99); } to { opacity: 1; transform: translateY(0) scale(1); } }
     @media (max-width: 420px) {
       .roster-auth-layer {
-        padding: max(8px, env(safe-area-inset-top)) 12px max(8px, env(safe-area-inset-bottom));
-        overflow-y: auto;
+        padding: max(5px, env(safe-area-inset-top)) 12px max(5px, env(safe-area-inset-bottom));
+        overflow: hidden;
       }
-      .roster-auth-card { padding: 18px 17px 15px; border-radius: 16px; }
+      .roster-auth-card { padding: 15px 16px 12px; border-radius: 16px; max-width: 100%; }
       .roster-auth-card::before { margin-bottom: 9px; font-size: 9px; }
       .roster-auth-card h1 { gap: 8px; margin-bottom: 6px; font-size: 20px; }
       .roster-auth-card .roster-auth-help { margin-bottom: 12px; font-size: 9px; }
@@ -94,10 +95,14 @@
       .roster-auth-error { margin-top: 8px !important; }
     }
     @media (max-width: 420px) and (max-height: 700px) {
-      .roster-auth-card { padding-top: 14px; padding-bottom: 12px; }
-      .roster-auth-card::before { margin-bottom: 7px; }
-      .roster-auth-card .roster-auth-help { margin-bottom: 9px; }
-      .roster-auth-card button { margin-top: 8px; }
+      .roster-auth-layer { padding-top: max(4px, env(safe-area-inset-top)); padding-bottom: max(4px, env(safe-area-inset-bottom)); }
+      .roster-auth-card { padding: 11px 14px 9px; }
+      .roster-auth-card::before { margin-bottom: 5px; }
+      .roster-auth-card h1 { font-size: 19px; }
+      .roster-auth-card .roster-auth-help { margin-bottom: 7px; }
+      .roster-auth-card input { min-height: 40px; }
+      .roster-auth-card button { min-height: 40px; margin-top: 7px; }
+      .roster-auth-error { min-height: 0; margin-top: 5px !important; }
     }
     @media (prefers-reduced-motion: reduce) {
       .roster-auth-card, .roster-auth-card input, .roster-auth-card button { animation: none !important; transition: none !important; }
