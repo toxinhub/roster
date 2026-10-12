@@ -42,7 +42,7 @@
       button.textContent = "যাচাই হচ্ছে…";
       errorEl.textContent = "";
       try {
-        const response = await fetch("/api/login", {
+        const response = await window.RosterAPI.request("/api/login", {
           method: "POST",
           credentials: "same-origin",
           headers: { "Content-Type": "application/json" },
@@ -59,6 +59,7 @@
           };
           throw new Error(messages[data.error] || "প্রবেশ করা যায়নি। আবার চেষ্টা করুন।");
         }
+        window.RosterAPI.setToken(data.token);
         if (required === "admin" && data.role !== "admin") {
           form.elements.password.value = "";
           throw new Error("Admin panel-এর জন্য আলাদা Admin password প্রয়োজন।");
@@ -77,7 +78,7 @@
   async function init() {
     const required = document.body?.dataset.requiredRole || "site";
     try {
-      const response = await fetch("/api/session", { credentials: "same-origin", cache: "no-store" });
+      const response = await window.RosterAPI.request("/api/session", { cache: "no-store" });
       const data = await response.json().catch(() => ({}));
       if (response.ok && data.authenticated && (required !== "admin" || data.role === "admin")) {
         document.documentElement.classList.remove("auth-pending");
@@ -90,8 +91,9 @@
           button.setAttribute("aria-label", "সাইট থেকে লগআউট");
           button.addEventListener("click", async () => {
             try {
-              await fetch("/api/logout", { method: "POST", credentials: "same-origin" });
+              await window.RosterAPI.request("/api/logout", { method: "POST" });
             } finally {
+              window.RosterAPI.clearToken();
               window.location.reload();
             }
           });
