@@ -1,37 +1,55 @@
 # CCTV · PJL — Duty Roster
 
-Mobile-first duty roster for the CCTV · PJL team.
+A responsive duty-roster website for the CCTV · PJL team, designed for quick access on mobile and desktop.
 
 **Live site:** https://toxinhub.github.io/roster/
 
-## Security architecture
+## Features
 
-- `index.html` requires the shared site password.
-- `admin.html` requires a separate Admin password.
-- `api-client.js` sends the short-lived session token to the Cloudflare Worker.
-- `cloudflare/worker.js` validates roles, rate-limits failed login attempts on a best-effort basis, and revokes logged-out sessions.
-- Current roster and archived months are served from Cloudflare KV through authenticated API routes.
-- Passwords and session secrets must be configured as Worker secrets; never commit them to this repository.
+- View the current roster and navigate between available months.
+- See duty status using the Dhaka time zone.
+- Use the roster on mobile phones, tablets, and desktop screens.
+- Manage roster entries through a separate admin interface.
+- Review changes before saving and download a JSON copy when needed.
 
-## Current migration note
+## Shift reference
 
-The Production frontend has been connected to the Cloudflare Worker. The old public files `schedule.json` and `archive/2026-09.json` are intentionally still present temporarily so the September archive can be imported into KV and verified first. **They remain publicly readable until they are removed in a later cleanup step. Do not treat the migration as fully complete until that step is done.**
+| Code | Time / meaning |
+| --- | --- |
+| **A** | 06:00–14:00 |
+| **B** | 14:00–22:00 |
+| **C** | 22:00–06:00 |
+| **OFF** | Scheduled day off |
+| **L** | Leave |
 
-The Worker is currently using the existing `roster-data-preview` KV binding. Preview and Production therefore share this data store for the migration; a separate Production namespace can be introduced later if environment isolation is needed.
+Times use the Dhaka time zone.
 
-## Roster features
+## Using the site
 
-- Current month and archived month navigation.
-- Dhaka timezone-based live duty status.
-- Shift codes: A (06:00–14:00), B (14:00–22:00), C (22:00–06:00), OFF, L.
-- Responsive desktop and mobile roster table.
-- Admin editing with a change summary, save, and JSON download.
+1. Open the [live roster](https://toxinhub.github.io/roster/).
+2. Enter the site password when prompted.
+3. Navigate to the month you want to view.
+4. For roster updates, use the authorized admin interface and save changes after reviewing them.
 
-## Files
+If you do not have the required access, contact the roster administrator.
 
-- `index.html` — password-protected roster view
-- `admin.html` — Admin-only editor
-- `api-config.js`, `api-client.js`, `auth.js` — frontend API and authentication
-- `cloudflare/worker.js` — authenticated API implementation
-- `schedule.json`, `archive/` — legacy public files pending removal after KV verification
-- `style.css`, `landscape.css` — responsive styles
+## Project structure
+
+| File / directory | Purpose |
+| --- | --- |
+| `index.html` | Main roster interface |
+| `admin.html` | Admin interface |
+| `style.css`, `landscape.css` | Responsive presentation and layout |
+| `api-client.js`, `api-config.js`, `auth.js` | Frontend API and access-control integration |
+| `cloudflare/worker.js` | Server-side API implementation |
+
+## Security
+
+- Do not commit passwords, API tokens, session secrets, or other credentials.
+- Keep production secrets in the appropriate hosting-platform secret settings.
+- Restrict administrative access to authorized users.
+- Review repository files and deployment settings before making the repository public.
+
+## Maintenance
+
+Keep this README aligned with the deployed site. Document user-facing features and setup guidance here; keep private operational notes, environment details, migration status, and secret configuration values out of the public README.
