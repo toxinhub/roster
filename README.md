@@ -1,3 +1,7 @@
+> **Cloudflare security preview branch:** this branch is being prepared for a shared-password login using Cloudflare Workers Free and private KV. The live GitHub Pages site and `main` branch are unchanged. The current roster data files have intentionally been removed from this branch's latest snapshot; seed a private KV namespace before testing. Setup details: [cloudflare/README.md](cloudflare/README.md). Do not use this branch as Production until security testing is complete.
+
+---
+
 # 📹 CCTV · PJL — ডিউটি রোস্টার
 
 CCTV · PJL টিমের জন্য তৈরি একটি **mobile-first, responsive duty roster**। এটি GitHub Pages-এ সরাসরি চলে এবং কোনো build tool বা framework ছাড়াই roster দেখা, মাস পরিবর্তন, live duty status এবং admin editing করা যায়।
