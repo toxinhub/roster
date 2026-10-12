@@ -50,3 +50,8 @@ Run these against the exact Preview deployment URL after the environment variabl
 - Login throttling uses per-instance memory and is not a global/distributed rate limiter.
 - This is not production-approved until the Preview acceptance tests pass, environment variable scopes are verified, and archive integrity is checked.
 - The old GitHub Pages URL is not protected by this branch. Leave it alone until a separate migration/cutover plan is approved.
+
+
+## Safe configuration diagnostic
+
+After deploying this branch to a Vercel Preview, open `/api/security-status` on that exact Preview URL. It reports only true/false checks for required configuration; it never returns passwords, hashes, tokens, or secret values. It returns 404 outside the Preview environment or when the deployed branch is not `security/preview-shared-password`. Use the result to identify which Preview variable is missing or malformed, then redeploy Preview after correcting it.
