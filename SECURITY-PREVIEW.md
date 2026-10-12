@@ -1,20 +1,25 @@
 # Security Preview — Cloudflare Workers Free
 
-This branch replaces the earlier Vercel experiment. **Vercel is not part of this setup.** The current production branch and GitHub Pages URL remain untouched.
+**Preview-only.** The `main` branch and current GitHub Pages site have not been changed.
 
-See [Cloudflare Preview setup](cloudflare/README.md) for the Worker API, free-tier setup, secrets, KV seeding, and test checklist.
+- Preview branch: `security/cloudflare-preview`
+- Worker: `cloudflare/worker.js`
+- Configuration: `cloudflare/wrangler.toml`
+- Frontend API config: `api-config.js`
+- Setup: [cloudflare/README.md](cloudflare/README.md)
 
 ## Current state
 
-- Preview-only branch: `security/cloudflare-preview`
-- Backend source: `cloudflare/worker.js`
-- Worker configuration: `cloudflare/wrangler.toml`
-- Frontend API configuration: `api-config.js`
-- Frontend client: `api-client.js`
 - No passwords, password hashes, API tokens, or session secrets are committed.
-- The Cloudflare Worker has **not** been deployed from this repository; deployment requires the owner to connect their Cloudflare account and set secrets/bindings.
-- Do not merge this branch, change GitHub Pages settings, or delete production data until the Preview passes its tests and the owner explicitly approves.
+- The Worker is not deployed from this repository.
+- Cloudflare KV has not been created or seeded.
+- The frontend API URL is intentionally blank until the Worker is deployed.
+- The branch has not passed end-to-end browser testing.
 
-## Critical privacy limitation
+## Critical privacy and hosting limitations
 
-The existing public GitHub repository and its commit history may contain current or historical roster data. Moving future reads/writes to private Cloudflare KV does not erase copies already committed or downloaded. The roster must be seeded into KV and the public-data exposure plan reviewed before the setup can be considered secure.
+Roster files were removed from this branch's latest snapshot, but this does not remove copies from the public `main` branch, public GitHub Pages, Git history, caches, or anyone's downloads. Data already exposed must be treated as potentially copied.
+
+The current `https://toxinhub.github.io/roster/` URL is hosted by GitHub Pages and is not automatically protected by Cloudflare. Cloudflare Pages preview can test the new login system, but protecting the same production URL would require a custom domain or an alternative approved migration plan.
+
+Do not merge this branch, change Production hosting, or delete Production files until the preview is deployed, all tests pass, the public-data exposure is addressed, and the owner explicitly approves the migration.
