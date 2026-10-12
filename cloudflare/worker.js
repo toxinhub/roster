@@ -100,7 +100,9 @@ async function handler(request, env) {
   const url = new URL(request.url);
   const path = url.pathname;
   if (!path.startsWith("/api/")) return json({ error: "NOT_FOUND" }, 404);
-  if (!allowedOrigins(env).includes(request.headers.get("Origin") || "")) {
+  const requestOrigin = request.headers.get("Origin") || "";
+  // Status exposes only boolean configuration checks, so it can also be opened directly.
+  if (!(path === "/api/status" && !requestOrigin) && !allowedOrigins(env).includes(requestOrigin)) {
     return json({ error: "ORIGIN_NOT_ALLOWED" }, 403);
   }
   if (request.method === "OPTIONS") {
