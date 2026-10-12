@@ -42,11 +42,11 @@
       display: flex; align-items: center; gap: 11px; margin: 0 0 9px;
       color: #35291e; font-size: 23px; line-height: 1.25; font-weight: 800; letter-spacing: -.035em;
     }
-    .roster-auth-card > p:not(.roster-auth-error) {
+    .roster-auth-card > p:not(.roster-auth-error):not(.roster-auth-help) {
       margin: 0 0 22px; color: #756657; font-size: 13px; line-height: 1.65;
     }
     .roster-auth-card .roster-auth-help {
-      margin: -1px 0 17px; color: #a39786; font-size: 9.5px; font-weight: 400; line-height: 1.45;
+      margin: 0 0 14px; color: #b0a493; font-size: 9px; font-weight: 400; line-height: 1.35;
     }
     .roster-auth-card label { display: block; color: #574637; font-size: 12px; font-weight: 750; }
     .roster-auth-card input {
@@ -80,9 +80,24 @@
     }
     @keyframes roster-auth-arrive { from { opacity: 0; transform: translateY(7px) scale(.99); } to { opacity: 1; transform: translateY(0) scale(1); } }
     @media (max-width: 420px) {
-      .roster-auth-layer { padding-left: 15px; padding-right: 15px; }
-      .roster-auth-card { padding: 25px 21px 20px; border-radius: 18px; }
-      .roster-auth-card h1 { font-size: 21px; }
+      .roster-auth-layer {
+        padding: max(8px, env(safe-area-inset-top)) 12px max(8px, env(safe-area-inset-bottom));
+        overflow-y: auto;
+      }
+      .roster-auth-card { padding: 18px 17px 15px; border-radius: 16px; }
+      .roster-auth-card::before { margin-bottom: 9px; font-size: 9px; }
+      .roster-auth-card h1 { gap: 8px; margin-bottom: 6px; font-size: 20px; }
+      .roster-auth-card .roster-auth-help { margin-bottom: 12px; font-size: 9px; }
+      .roster-auth-card label { font-size: 11px; }
+      .roster-auth-card input { min-height: 43px; margin-top: 6px; padding: 10px 11px; font-size: 14px; }
+      .roster-auth-card button { min-height: 43px; margin-top: 10px; padding: 10px 12px; }
+      .roster-auth-error { margin-top: 8px !important; }
+    }
+    @media (max-width: 420px) and (max-height: 700px) {
+      .roster-auth-card { padding-top: 14px; padding-bottom: 12px; }
+      .roster-auth-card::before { margin-bottom: 7px; }
+      .roster-auth-card .roster-auth-help { margin-bottom: 9px; }
+      .roster-auth-card button { margin-top: 8px; }
     }
     @media (prefers-reduced-motion: reduce) {
       .roster-auth-card, .roster-auth-card input, .roster-auth-card button { animation: none !important; transition: none !important; }
@@ -119,7 +134,7 @@
       <form class="roster-auth-card" autocomplete="on">
         <h1>📹 · PJL</h1>
         ${required === "admin" ? '<p>Admin panel-এ প্রবেশের জন্য আলাদা Admin password দিন।</p>' : ""}
-        ${required === "site" ? '<p class="roster-auth-help">পাসওয়ার্ড না জানা থাকলে তন্ময়ের সাথে যোগাযোগ করুন</p>' : ""}
+        ${required === "site" ? '<p class="roster-auth-help">পাসওয়ার্ড না জানা থাকলে তন্ময়ের সাথে যোগাযোগ করুন...</p>' : ""}
         <label>পাসওয়ার্ড
           <input name="password" type="password" autocomplete="current-password" required maxlength="256" autofocus>
         </label>
