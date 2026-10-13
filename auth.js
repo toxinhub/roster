@@ -221,8 +221,8 @@
       const reason = String(error?.message || "").trim();
       showLogin(
         reason === "API_URL_NOT_CONFIGURED"
-          ? "API ঠিকানা লোড হয়নি। পেজটি Ctrl + Shift + R দিয়ে নতুন করে লোড করুন।"
-          : "Authentication server-এ সংযোগ ব্যর্থ" + (reason ? " (" + reason + ")" : " (Network/CORS error)") + "। পেজটি Ctrl + Shift + R দিয়ে নতুন করে লোড করুন।"
+          ? "API ঠিকানা লোড হয়নি। If you see a connection security error, try using a VPN."
+          : "Authentication server-এ সংযোগ ব্যর্থ" + (reason ? " (" + reason + ")" : " (Network/CORS error)") + "। If you see a connection security error, try using a VPN."
       );
     }
   }
