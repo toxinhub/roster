@@ -1,3 +1,3 @@
-/* Cloudflare Worker API origin for the password-protected roster.
+/* Use the Cloudflare Pages same-origin API proxy.
    Never put passwords, tokens, or session secrets in this file. */
-window.ROSTER_API_BASE = "https://empty-block-84d1.toxinmoy.workers.dev";
+window.ROSTER_API_BASE = "https://roster-bps.pages.dev";
