@@ -31,7 +31,12 @@ export async function onRequest({ request }) {
   const incoming = new URL(request.url);
   const target = new URL(incoming.pathname + incoming.search, UPSTREAM);
   try {
-    const upstreamResponse = await fetch(new Request(target.toString(), request));
+    const forwarded = new Request(target.toString(), request);
+    const forwardedHeaders = new Headers(forwarded.headers);
+    // Same-origin GET requests may omit Origin. Supply the Pages origin so
+    // the upstream Worker can apply its normal allowlist consistently.
+    if (!forwardedHeaders.has("Origin")) forwardedHeaders.set("Origin", incoming.origin);
+    const upstreamResponse = await fetch(new Request(forwarded, { headers: forwardedHeaders }));
     const headers = new Headers(upstreamResponse.headers);
     headers.set("Cache-Control", "no-store, private");
     for (const [key, value] of Object.entries(cors(origin))) headers.set(key, value);
