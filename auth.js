@@ -217,8 +217,13 @@
         return;
       }
       showLogin(required === "admin" && data.role === "site" ? "Admin password প্রয়োজন।" : "");
-    } catch {
-      showLogin("Authentication server-এর সঙ্গে সংযোগ করা যায়নি। Preview deployment ও environment variables পরীক্ষা করুন।");
+    } catch (error) {
+      const reason = String(error?.message || "").trim();
+      showLogin(
+        reason === "API_URL_NOT_CONFIGURED"
+          ? "API ঠিকানা লোড হয়নি। পেজটি Ctrl + Shift + R দিয়ে নতুন করে লোড করুন।"
+          : "Authentication server-এ সংযোগ ব্যর্থ" + (reason ? " (" + reason + ")" : " (Network/CORS error)") + "। পেজটি Ctrl + Shift + R দিয়ে নতুন করে লোড করুন।"
+      );
     }
   }
 
