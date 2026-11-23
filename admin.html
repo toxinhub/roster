@@ -489,6 +489,8 @@ html body.ink-mode #status.status.not-connected{
           toast(error.message.split(':')[1]+' মাসের Archive-এ ভিন্ন ডেটা আছে। বর্তমান Save বন্ধ রাখা হয়েছে।', true);
         } else if (error.message === 'WRITE_CONFLICT' || error.message === 'SAVE_FAILED') {
           toast('Save করা যায়নি। রোস্টার সংযোগ যাচাই করে আবার চেষ্টা করুন।', true);
+        } else if (error.message === 'PREVIEW_READ_ONLY') {
+          toast('Preview পরিবেশে Save বন্ধ। Production সাইট থেকে পরিবর্তন করুন।', true);
         } else if (error.message === 'INVALID_ROSTER') {
           toast('রোস্টারের তারিখ, কর্মীর নাম, শিফট অথবা ডেটা কাঠামো যাচাই করুন।', true);
         } else {
@@ -505,6 +507,18 @@ html body.ink-mode #status.status.not-connected{
     };
 
     applyTheme();
+    const apiBaseHost = (() => {
+      try { return new URL(window.ROSTER_API_BASE || window.location.origin).hostname; }
+      catch { return window.location.hostname; }
+    })();
+    if(apiBaseHost !== 'roster-bps.pages.dev'){
+      $('save').disabled = true;
+      $('save').textContent = 'Preview · Read only';
+      const notice = document.createElement('p');
+      notice.className = 'muted';
+      notice.textContent = 'Preview mode: Production roster data is read-only here. Save changes from the production site.';
+      $('save').parentElement.before(notice);
+    }
     window.addEventListener('roster:authenticated', load, {once:true});
   </script>
 </body>
