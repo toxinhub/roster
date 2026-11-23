@@ -324,8 +324,8 @@ html body.ink-mode #status.status.not-connected{
 
       const h = '<tr><th>কর্মী</th>' + S.days.map((d, i) => `
         <th>
-          <input value="${esc(d.date)}" data-day="${i}">
-          <small><input value="${esc(d.weekday)}" data-wd="${i}"></small>
+          <input value="${esc(d.date)}" data-day="${i}" readonly title="তারিখ ISO Date অনুযায়ী স্বয়ংক্রিয়">
+          <small><input value="${esc(d.weekday)}" data-wd="${i}" readonly title="বার ISO Date অনুযায়ী স্বয়ংক্রিয়"></small>
           <button class="remove" data-rmday="${i}">বাদ</button>
         </th>
       `).join('') + '</tr>';
