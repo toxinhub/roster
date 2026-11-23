@@ -1,67 +1,92 @@
-# Cloudflare Workers Free — Preview setup
+# Cloudflare Deployment and Security Notes
 
-This is a **Preview-only** setup. It does not deploy itself and does not change GitHub Pages or the `main` branch. Do not merge this branch into Production.
+## Verified live architecture
 
-## What you need to do in Cloudflare
+The connected Cloudflare account currently has:
 
-1. Sign in to your own Cloudflare account. Never share your password, recovery codes, or API tokens in chat.
-2. Create a **KV namespace** named `roster-data-preview`.
-3. Create a Worker named `cctv-roster-security-preview` and deploy the source from `cloudflare/worker.js`. If using the Wrangler file, replace the placeholder KV namespace ID in `cloudflare/wrangler.toml` with the ID shown in your own Cloudflare dashboard before deploying.
-4. In the Worker settings, bind that KV namespace using the exact binding name `ROSTER_DATA`.
-5. Add these as **Worker secrets**, not plain variables and never in GitHub:
-   - `SITE_PASSWORD`: the shared password for viewing the roster
-   - `ADMIN_PASSWORD`: a different password for the Admin panel
-   - `SESSION_SECRET`: a cryptographically random secret with at least 32 characters (use 32 random bytes or more)
-6. Add a normal Worker variable named `ALLOWED_ORIGINS`. For the initial preview, use the exact Cloudflare Pages preview origin once it exists. Separate multiple origins with commas; do not use a wildcard.
-7. Deploy this branch as a **separate Cloudflare Pages preview project** (not the Production project). Use the repository root as the static output directory and leave the build command empty.
-8. After the Pages preview URL is created, add that exact origin to `ALLOWED_ORIGINS`. In the Preview branch only, set `window.ROSTER_API_BASE` in `api-config.js` to the exact HTTPS Worker URL. Redeploy the Pages preview after changing it.
-9. Open the Worker URL ending in `/api/status`. It should report `configured: true` after all required bindings and secrets are set. This endpoint reports configuration booleans only, not the secret values.
-10. Seed the KV namespace with the data keys described below, then run the test checklist.
+- Pages project: `roster`
+- Production hostname: `https://roster-bps.pages.dev`
+- Production branch: `security/cloudflare-preview` (the name is misleading; Cloudflare currently treats it as Production)
+- Pages Functions: `functions/api/`
+- Upstream Worker: `empty-block-84d1` at `https://empty-block-84d1.toxinmoy.workers.dev`
+- KV binding: `ROSTER_DATA`
+- Worker secrets: `SITE_PASSWORD`, `ADMIN_PASSWORD`, `SESSION_SECRET`
+- Worker plain-text variable: `ALLOWED_ORIGINS`
 
-## Seed private KV data
+The current Worker uses KV for the current schedule, archived months, session revocation, and best-effort login throttling. Do not recreate the Worker or replace its bindings when deploying code.
 
-The roster data files have intentionally been removed from this branch's latest snapshot. Use a local copy from a trusted source; do not paste staff roster data into chat.
+## Preview isolation
 
-In Cloudflare KV, add:
-- Key `schedule` — value is the full current roster JSON.
-- One key per archived month, e.g. `archive:2026-09` — value is that month's full archived roster JSON.
+Pages Preview and Production currently share the upstream Worker and KV namespace.
 
-Keep these values in the private KV namespace. Do not add passwords or session tokens as KV values. This does **not** erase any copies already committed to the public GitHub repository or its history.
+The audit branch changes the frontend API base so each Cloudflare Pages deployment uses its own same-origin Pages Functions proxy. GitHub Pages continues to use the Production Pages API.
+
+- The Pages proxy rejects Admin Save and Archive writes from Preview hostnames and Preview origins.
+- The deployed Worker now adds a second production-origin check for Admin writes. Its code-only update preserved the existing secret bindings and KV binding.
+- Preview can read authenticated roster data through the shared Worker. Do not use Preview for Admin changes.
+- The Worker allowlist still includes an older Preview origin for read/login compatibility, but the deployed Worker-level Admin write guard rejects writes from it. Treat that legacy URL as read-only.
+
+## Worker configuration
+
+Keep these values in Cloudflare settings, never in GitHub:
+
+- `SITE_PASSWORD`: shared viewer password.
+- `ADMIN_PASSWORD`: a different password for Admin access.
+- `SESSION_SECRET`: cryptographically random secret with at least 32 characters.
+- `ROSTER_DATA`: existing KV namespace binding.
+- `ALLOWED_ORIGINS`: exact allowed frontend origins, comma-separated; no wildcard.
+
+The proposed Worker code defaults Admin write origins to:
+
+- `https://toxinhub.github.io`
+- `https://roster-bps.pages.dev`
+
+If a legitimate Production domain changes, set `ADMIN_WRITE_ORIGINS` explicitly. Do not include Preview origins.
+
+## Private KV data
+
+The existing KV namespace contains:
+
+- `schedule` — current roster JSON.
+- `archive:YYYY-MM` — archived roster JSON for each month.
+- Session revocation and login-throttle records.
+
+Do not commit roster JSON, passwords, session tokens, or other secrets to the repository.
 
 ## API and permissions
 
-- `POST /api/login` — checks the shared site/Admin password and returns an eight-hour signed bearer token.
+- `POST /api/login` — validates the shared viewer or Admin password and issues an eight-hour signed bearer token.
 - `GET /api/session` — validates the bearer token.
-- `POST /api/logout` — requires a valid session and records that session ID as revoked in KV until expiry; copied tokens for that session should then fail validation.
-- Login failures are counted in KV for a 15-minute window using a hashed IP-derived key, not the raw IP. KV consistency and simultaneous requests mean this remains best-effort, not a strict global limiter.
-- `GET /api/roster` and `GET /api/archive?month=YYYY-MM` — require a valid site or Admin session.
-- `POST /api/admin/save` and `POST /api/admin/archive` — require the Admin role.
-- CORS allows only exact origins listed in `ALLOWED_ORIGINS`.
+- `POST /api/logout` — revokes the current session token in KV.
+- `GET /api/roster` and `GET /api/archive?month=YYYY-MM` — require a valid viewer or Admin session.
+- `POST /api/admin/save` and `POST /api/admin/archive` — require the Admin role and a Production write origin.
+- `GET /api/status` — exposes configuration booleans only, not secret values.
 
-## Preview test checklist
+CORS origin checks are not a substitute for bearer-token authentication.
 
-- [ ] `/api/status` reports `configured: true` and all checks pass.
-- [ ] No password, token, or session secret appears in repository files or browser source.
-- [ ] A wrong password is rejected.
-- [ ] Site password opens the roster but cannot open Admin editing.
-- [ ] Admin password opens both roster and Admin editing.
-- [ ] Reload preserves the session in the same browser tab.
-- [ ] A fresh tab asks for a password.
-- [ ] Current roster and an existing archive load from KV.
-- [ ] Admin can save a change; the updated value is in KV.
-- [ ] Admin can archive a month; duplicate archive creation is rejected.
-- [ ] Requests from an unapproved origin are rejected.
-- [ ] After logout, replaying the old Bearer token to `/api/session` and `/api/roster` fails.
-- [ ] Repeated bad logins across fresh requests trigger `429 TOO_MANY_ATTEMPTS`.
-- [ ] Missing KV data and expired/invalid tokens fail safely.
-- [ ] Check the Pages deployment output and confirm no roster/archive JSON is published.
+## Verification completed on the audit branch
 
-## Limits and caveats
+- GitHub Actions Worker regression suite: **11 tests passed, 0 failed**.
+- Current KV `schedule`, `archive:2026-09`, and `archive:2026-10` values pass the proposed schema validation, including displayed-date and weekday consistency.
+- The September archive includes an October 1 boundary date; archive validation permits adjacent-month boundary dates when the first date matches the archive key.
+- Latest Cloudflare Pages audit Preview deployment completed with Pages Functions enabled.
+- Preview `/api/status` returns HTTP 200; unauthenticated `/api/roster` returns HTTP 401.
+- Preview Admin Save returns HTTP 403 `PREVIEW_READ_ONLY` from the Pages proxy.
+- Production Admin Save without a token returns HTTP 401 `ADMIN_AUTH_REQUIRED`.
 
-- Cloudflare Workers Free has historically included 100,000 requests per day and a 10 ms CPU limit per request; confirm current plan limits in your Cloudflare dashboard before relying on them.
-- The login throttle in this preview is best-effort per Worker isolate, not a global rate limiter.
-- KV is not a transactional database; simultaneous archive writes can race.
-- The signed bearer token is stored in sessionStorage and is accessible to JavaScript running on the page. This is a deliberate compatibility trade-off for a cross-origin Worker API, not equivalent to an HttpOnly cookie.
-- Most importantly, the existing public GitHub repository, raw files, and Git history may expose current or historical roster data. Moving new reads/writes to KV does not erase those copies.
-- The exact existing `https://toxinhub.github.io/roster/` URL can be retained by keeping the static frontend on GitHub Pages and configuring the frontend to use the authenticated Worker API. For the final cutover, `ALLOWED_ORIGINS` must include `https://toxinhub.github.io`, and the public deployment must contain no roster/archive JSON. This does not erase older copies from Git history; handle that separately before claiming historical roster data is private.
-- Do not merge this branch, change Production hosting, or delete Production data unless the owner explicitly approves after the Preview tests.
+## Remaining risks
+
+- The deployed Worker has not yet been updated with the reviewed source changes.
+- KV does not provide atomic compare-and-swap. The `updatedAt` check detects sequential stale edits but cannot fully serialize truly simultaneous writes. A Durable Object or transactional database is required for that.
+- KV-backed login throttling remains best-effort under concurrent requests.
+- A public backup branch still exposes old roster snapshot files through raw GitHub URLs. Git history and other backup branches may contain further copies. Removing the current `main/schedule.js` file does not erase those historical copies.
+- Do not claim historical roster data is private until backup branches and Git history have been reviewed and, if approved, cleaned.
+
+## Release sequence
+
+1. Review the open draft PR and its green CI/Preview checks.
+2. Update the existing Worker script content only, preserving its secret bindings and KV binding.
+3. Verify Production viewer login, Admin login, save, archive creation, and Preview write rejection.
+4. Merge to `security/cloudflare-preview` only after explicit Production approval.
+5. Review public backup branches and Git history separately; history rewriting or backup deletion requires explicit approval.
+6. Consider Durable Object coordination as a separate reliability upgrade.

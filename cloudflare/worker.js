@@ -34,6 +34,13 @@ function allowedOrigins(env) {
   return String(env.ALLOWED_ORIGINS || "https://toxinhub.github.io")
     .split(",").map(s => s.trim()).filter(Boolean);
 }
+
+function adminWriteOrigins(env) {
+  // Preview deployments share the upstream Worker in this project. Only the
+  // two production frontend origins may write to the live KV namespace.
+  return String(env.ADMIN_WRITE_ORIGINS || "https://toxinhub.github.io,https://roster-bps.pages.dev")
+    .split(",").map(s => s.trim()).filter(Boolean);
+}
 function corsHeaders(request, env) {
   const origin = request.headers.get("Origin") || "";
   const allowed = allowedOrigins(env);
@@ -109,9 +116,54 @@ async function clearFailedAttempts(request, env) {
   await env.ROSTER_DATA.delete(await attemptKey(request));
 }
 function validRoster(data) {
-  return data && typeof data === "object" && !Array.isArray(data) &&
-    typeof data.month === "string" && Array.isArray(data.days) && Array.isArray(data.employees) &&
-    data.employees.every(e => e && typeof e.name === "string" && Array.isArray(e.shifts));
+  if (!data || typeof data !== "object" || Array.isArray(data)) return false;
+  if (typeof data.month !== "string" || !data.month.trim() || data.month.length > 80) return false;
+  if (!Array.isArray(data.days) || data.days.length < 1 || data.days.length > 31) return false;
+  if (!Array.isArray(data.employees) || data.employees.length > 100) return false;
+  if (!data.shiftTypes || typeof data.shiftTypes !== "object" || Array.isArray(data.shiftTypes)) return false;
+
+  const allowedCodes = new Set(["A", "B", "C", "OFF", "L"]);
+  for (const required of ["A", "B", "C", "OFF"]) {
+    if (!Object.prototype.hasOwnProperty.call(data.shiftTypes, required)) return false;
+  }
+  for (const [code, type] of Object.entries(data.shiftTypes)) {
+    if (!allowedCodes.has(code) || !type || typeof type !== "object" || Array.isArray(type)) return false;
+    if (typeof type.label !== "string" || !type.label.trim() || type.label.length > 40) return false;
+    if (type.note != null && (typeof type.note !== "string" || type.note.length > 120)) return false;
+    if (typeof type.color !== "string" || !/^#[0-9a-fA-F]{6}$/.test(type.color)) return false;
+  }
+
+  const dates = new Set();
+  let previousDate = "";
+  for (const day of data.days) {
+    if (!day || typeof day !== "object" || Array.isArray(day)) return false;
+    if (typeof day.date !== "string" || !day.date.trim() || day.date.length > 8) return false;
+    if (typeof day.weekday !== "string" || !day.weekday.trim() || day.weekday.length > 24) return false;
+    if (typeof day.isoDate !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(day.isoDate)) return false;
+    const parsed = new Date(day.isoDate + "T00:00:00.000Z");
+    if (!Number.isFinite(parsed.getTime()) || parsed.toISOString().slice(0, 10) !== day.isoDate) return false;
+    const numericDate = Number(day.date.replace(/[০-৯]/g, digit => String("০১২৩৪৫৬৭৮৯".indexOf(digit))));
+    const weekdays = ["রবিবার", "সোমবার", "মঙ্গলবার", "বুধবার", "বৃহস্পতিবার", "শুক্রবার", "শনিবার"];
+    if (!Number.isInteger(numericDate) || numericDate !== parsed.getUTCDate()) return false;
+    if (day.weekday !== weekdays[parsed.getUTCDay()]) return false;
+    if (dates.has(day.isoDate) || (previousDate && day.isoDate <= previousDate)) return false;
+    dates.add(day.isoDate);
+    previousDate = day.isoDate;
+  }
+
+  const names = new Set();
+  for (const employee of data.employees) {
+    if (!employee || typeof employee !== "object" || Array.isArray(employee)) return false;
+    if (typeof employee.name !== "string" || !employee.name.trim() || employee.name.length > 80) return false;
+    const normalizedName = employee.name.trim().toLocaleLowerCase();
+    if (names.has(normalizedName)) return false;
+    names.add(normalizedName);
+    if (!Array.isArray(employee.shifts) || employee.shifts.length !== data.days.length) return false;
+    if (!employee.shifts.every(code => typeof code === "string" && allowedCodes.has(code))) return false;
+  }
+
+  if (data.updatedAt != null && (typeof data.updatedAt !== "string" || data.updatedAt.length > 100)) return false;
+  return true;
 }
 async function handler(request, env) {
   const url = new URL(request.url);
@@ -144,6 +196,7 @@ async function handler(request, env) {
     if (!await canAttempt(request, env)) return json({ error: "TOO_MANY_ATTEMPTS" }, 429, { "Retry-After": "900" });
     let body;
     try { body = await request.json(); } catch { return json({ error: "INVALID_JSON" }, 400); }
+    if (!body || typeof body !== "object" || Array.isArray(body)) return json({ error: "INVALID_JSON" }, 400);
     if (typeof body.password !== "string" || body.password.length < 1 || body.password.length > 256) return json({ error: "INVALID_PASSWORD" }, 400);
     if (env.SITE_PASSWORD === env.ADMIN_PASSWORD) return json({ error: "PASSWORDS_MUST_DIFFER" }, 503);
     const supplied = await digest(body.password);
@@ -183,17 +236,34 @@ async function handler(request, env) {
   }
   if (path === "/api/admin/save" && request.method === "POST") {
     if (!await requireRole(request, env, "admin")) return json({ error: "ADMIN_AUTH_REQUIRED" }, 401);
+    if (!adminWriteOrigins(env).includes(requestOrigin)) return json({ error: "PREVIEW_READ_ONLY" }, 403);
     let body;
     try { body = await request.json(); } catch { return json({ error: "INVALID_JSON" }, 400); }
-    if (!validRoster(body.data)) return json({ error: "INVALID_ROSTER" }, 400);
+    if (!body || typeof body !== "object" || Array.isArray(body) || !validRoster(body.data)) return json({ error: "INVALID_ROSTER" }, 400);
+    if (Object.prototype.hasOwnProperty.call(body, "expectedUpdatedAt")) {
+      if (body.expectedUpdatedAt !== null && typeof body.expectedUpdatedAt !== "string") {
+        return json({ error: "INVALID_VERSION" }, 400);
+      }
+      const currentRaw = await env.ROSTER_DATA.get("schedule");
+      let currentUpdatedAt = null;
+      try { currentUpdatedAt = currentRaw ? (JSON.parse(currentRaw).updatedAt ?? null) : null; }
+      catch { return json({ error: "ROSTER_INVALID" }, 503); }
+      if (body.expectedUpdatedAt !== currentUpdatedAt) return json({ error: "WRITE_CONFLICT" }, 409);
+    }
     await env.ROSTER_DATA.put("schedule", JSON.stringify(body.data));
     return json({ ok: true, updatedAt: body.data.updatedAt || null });
   }
   if (path === "/api/admin/archive" && request.method === "POST") {
     if (!await requireRole(request, env, "admin")) return json({ error: "ADMIN_AUTH_REQUIRED" }, 401);
+    if (!adminWriteOrigins(env).includes(requestOrigin)) return json({ error: "PREVIEW_READ_ONLY" }, 403);
     let body;
     try { body = await request.json(); } catch { return json({ error: "INVALID_JSON" }, 400); }
-    if (!/^\d{4}-(0[1-9]|1[0-2])$/.test(body.month || "") || !validRoster(body.data)) return json({ error: "INVALID_ARCHIVE" }, 400);
+    if (!body || typeof body !== "object" || Array.isArray(body) ||
+        !/^\d{4}-(0[1-9]|1[0-2])$/.test(body.month || "") ||
+        !validRoster(body.data) ||
+        body.data.days[0].isoDate.slice(0, 7) !== body.month) {
+      return json({ error: "INVALID_ARCHIVE" }, 400);
+    }
     const key = "archive:" + body.month;
     if (await env.ROSTER_DATA.get(key)) return json({ error: "ARCHIVE_EXISTS" }, 409);
     await env.ROSTER_DATA.put(key, JSON.stringify(body.data));

@@ -1,25 +1,39 @@
-# Security Preview — Cloudflare Workers Free
+# Roster Security Audit — Deployment State
 
-**Preview-only.** The `main` branch and current GitHub Pages site have not been changed.
+## Deployment warning
 
-- Preview branch: `security/cloudflare-preview`
-- Worker: `cloudflare/worker.js`
-- Configuration: `cloudflare/wrangler.toml`
-- Frontend API config: `api-config.js`
-- Setup: [cloudflare/README.md](cloudflare/README.md)
+The connected Cloudflare Pages project currently sets `security/cloudflare-preview` as its `production_branch`. Despite the branch name, that branch is serving as the Pages Production source. The audit changes are in a separate draft PR and have not been merged into Production.
 
-## Current state
+## Current architecture
 
-- No passwords, password hashes, API tokens, or session secrets are committed.
-- Worker source in this branch has been hardened with KV-backed session revocation and KV-backed best-effort login throttling. These changes are committed but are not active until the Worker is redeployed from `cloudflare/worker.js`.
-- The Preview frontend currently points to the configured Worker URL.
-- The Preview KV namespace is seeded with the current roster.
-- Basic browser checks have been reported by the owner, but the updated Worker changes still require deployment and replay-token/rate-limit retesting.
+- Cloudflare Pages serves the frontend and the `functions/api/` proxy.
+- The Pages proxy forwards API requests to the deployed Worker `empty-block-84d1`.
+- The Worker uses a Cloudflare KV namespace for the current roster, archives, sessions, and best-effort login throttling.
+- The Pages Preview and Production deployments currently share the same upstream Worker and KV namespace.
+- The audit branch routes Pages deployments through their own same-origin API proxy. Preview Admin Save and Archive writes are blocked in the Pages proxy and in the proposed Worker source.
+- The reviewed Worker source was deployed to the existing `empty-block-84d1` script on 23 November 2026 using the content-only endpoint. Existing secret bindings and the KV binding were preserved.
 
-## Critical privacy and hosting limitations
+## Verification completed
 
-Roster files were removed from this branch's latest snapshot, but this does not remove copies from the public `main` branch, public GitHub Pages, Git history, caches, or anyone's downloads. Data already exposed must be treated as potentially copied.
+- Current KV `schedule`, `archive:2026-09`, and `archive:2026-10` records pass the proposed schema validation.
+- The September archive legitimately includes an October 1 boundary date; validation checks the first date against the archive key rather than rejecting adjacent-month boundary dates.
+- The audit branch's GitHub Actions suite passed all 10 Worker regression tests.
+- The latest Cloudflare Pages audit Preview deployment completed successfully with Pages Functions enabled.
+- Preview `/api/status` returns HTTP 200; unauthenticated `/api/roster` returns HTTP 401.
+- Preview `/api/admin/save` returns HTTP 403 `PREVIEW_READ_ONLY`; Production Admin Save without a token returns HTTP 401.
+- The obsolete public `schedule.js` snapshot was removed from `main`, and its GitHub Pages URL now returns HTTP 404.
 
-The current `https://toxinhub.github.io/roster/` URL can be preserved: GitHub Pages can continue serving the static frontend while the frontend reads/writes roster data only through the authenticated Cloudflare Worker API. The current and archived JSON files must be removed from the public deployment before cutover. Previously committed copies remain accessible in Git history unless that history is separately cleaned.
+## Residual privacy and reliability risks
 
-Do not merge this branch, change Production hosting, or delete Production files until the preview is deployed, all tests pass, the public-data exposure is addressed, and the owner explicitly approves the migration.
+- Public backup branches and Git history still contain historical roster snapshots. A representative public backup branch serves old `schedule.js`, `schedule.json`, and `archive/2026-09.json` files through raw GitHub URLs. This audit has not deleted backup branches or rewritten Git history.
+- KV stale-edit checks detect sequential stale saves, but KV does not provide atomic compare-and-swap. Truly simultaneous Admin writes still require a Durable Object or transactional storage.
+- KV-backed login throttling is also best-effort under concurrent requests.
+- The deployed Worker now enforces the new schema validation, stale-edit check, and production-only Admin write origin policy. The Pages source changes remain in the unmerged draft PR.
+
+## Release sequence
+
+1. Review the open draft PR and its successful CI/Preview checks.
+2. Deploy the reviewed Worker source to the existing Worker script without replacing its secret or KV bindings.
+3. Verify Production login, roster read, Admin save, archive creation, and Preview read-only behavior.
+4. Merge to `security/cloudflare-preview` only after explicit Production approval.
+5. Handle backup-branch/history cleanup and Durable Object concurrency coordination as separate, explicitly approved changes.

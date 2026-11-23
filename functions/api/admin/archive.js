@@ -3,6 +3,7 @@ const ALLOWED_ORIGINS = new Set([
   "https://toxinhub.github.io",
   "https://roster-bps.pages.dev",
   "https://dc30fdd7.roster-bps.pages.dev",
+  "https://audit-fix-production-roster.roster-bps.pages.dev",
 ]);
 function cors(origin) {
   if (!ALLOWED_ORIGINS.has(origin)) return {};
@@ -29,12 +30,13 @@ export async function onRequest({ request }) {
   }
   if (!["GET", "HEAD", "POST"].includes(request.method)) return fail("METHOD_NOT_ALLOWED", 405, origin);
   const incoming = new URL(request.url);
+  if (incoming.hostname !== "roster-bps.pages.dev" || origin === "https://dc30fdd7.roster-bps.pages.dev" || origin === "https://audit-fix-production-roster.roster-bps.pages.dev") return fail("PREVIEW_READ_ONLY", 403, origin);
   const target = new URL(incoming.pathname + incoming.search, UPSTREAM);
   try {
     const forwarded = new Request(target.toString(), request);
     const forwardedHeaders = new Headers(forwarded.headers);
     // Same-origin GET requests may omit Origin; supply the Pages origin.
-    if (!forwardedHeaders.has("Origin")) forwardedHeaders.set("Origin", incoming.origin);
+    forwardedHeaders.set("Origin", "https://roster-bps.pages.dev");
     const upstreamResponse = await fetch(new Request(forwarded, { headers: forwardedHeaders }));
     const headers = new Headers(upstreamResponse.headers);
     headers.set("Cache-Control", "no-store, private");

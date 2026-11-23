@@ -1,0 +1,26 @@
+name: Roster Worker Tests
+
+on:
+  push:
+    branches:
+      - audit/fix-production-roster
+      - security/cloudflare-preview
+  pull_request:
+    branches:
+      - security/cloudflare-preview
+
+permissions:
+  contents: read
+
+jobs:
+  worker-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Run Worker regression tests
+        run: node --test cloudflare/worker.test.mjs
