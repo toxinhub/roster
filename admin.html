@@ -160,6 +160,7 @@ html body.ink-mode #status.status.not-connected{
     let cleanSnapshot = '';
     let dirty = false;
     const archivePending = new Map();
+    let expectedUpdatedAt = null;
     const $ = id => document.getElementById(id);
     const key = 'cctv_roster_admin';
 
@@ -260,6 +261,7 @@ html body.ink-mode #status.status.not-connected{
         const r = await window.RosterAPI.request('/api/roster?v=' + Date.now(), { cache: 'no-store' });
         if (!r.ok) throw new Error('roster load failed');
         S = await r.json();
+        expectedUpdatedAt = S.updatedAt ?? null;
         $('month').value = S.month || '';
         $('monthHead').textContent = S.month || 'রোস্টার সম্পাদনা';
         render();
@@ -478,16 +480,19 @@ html body.ink-mode #status.status.not-connected{
           method: 'POST',
           credentials: 'same-origin',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ data: S })
+          body: JSON.stringify({ data: S, expectedUpdatedAt })
         });
         const result = await r.json().catch(() => ({}));
         if (!r.ok) throw new Error(result.error || 'save failed');
+        expectedUpdatedAt = result.updatedAt ?? S.updatedAt ?? null;
         cleanSnapshot = snapshot(); dirty = false; updateChangeUI();
         toast('রোস্টার নিরাপদ স্টোরেজে সংরক্ষিত');
       } catch (error) {
         if (error.message?.startsWith('ARCHIVE_CONFLICT:')) {
           toast(error.message.split(':')[1]+' মাসের Archive-এ ভিন্ন ডেটা আছে। বর্তমান Save বন্ধ রাখা হয়েছে।', true);
-        } else if (error.message === 'WRITE_CONFLICT' || error.message === 'SAVE_FAILED') {
+        } else if (error.message === 'WRITE_CONFLICT') {
+          toast('অন্য Admin রোস্টার পরিবর্তন করেছেন। নতুন ডেটা লোড করে আবার চেষ্টা করুন।', true);
+        } else if (error.message === 'SAVE_FAILED') {
           toast('Save করা যায়নি। রোস্টার সংযোগ যাচাই করে আবার চেষ্টা করুন।', true);
         } else if (error.message === 'INVALID_ROSTER') {
           toast('রোস্টারের তারিখ, কর্মীর নাম, শিফট অথবা ডেটা কাঠামো যাচাই করুন।', true);
