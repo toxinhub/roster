@@ -372,8 +372,8 @@ html body.ink-mode #status.status.not-connected{
     $('monthPicker').onchange = () => { syncMonth(); markDirty(); };
 
     $('addDay').onclick = () => {
-      const monthKey = $('monthPicker').value || S.days.find(d => /^\\d{4}-\\d{2}-\\d{2}$/.test(d?.isoDate || ''))?.isoDate.slice(0,7);
-      if(!/^\\d{4}-(0[1-9]|1[0-2])$/.test(monthKey || '')){
+      const monthKey = $('monthPicker').value || S.days.find(d => /^\d{4}-\d{2}-\d{2}$/.test(d?.isoDate || ''))?.isoDate.slice(0,7);
+      if(!/^\d{4}-(0[1-9]|1[0-2])$/.test(monthKey || '')){
         toast('তারিখ যোগ করার আগে মাস ও সাল নির্বাচন করুন', true);
         return;
       }
