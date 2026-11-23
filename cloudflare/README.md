@@ -2,6 +2,15 @@
 
 This is a **Preview-only** setup. It does not deploy itself and does not change GitHub Pages or the `main` branch. Do not merge this branch into Production.
 
+> **Deployment warning:** The connected Cloudflare Pages project currently reports `security/cloudflare-preview` as its `production_branch`. Despite the branch name and this document's original Preview-only wording, merging changes into that branch triggers a Production deployment. Treat it as Production until the Pages project configuration is deliberately changed.
+
+## Preview write protection
+
+- Pages preview URLs use their own same-origin API proxy; GitHub Pages continues to use the Production Pages API.
+- Preview deployments may read the authenticated roster through the shared upstream Worker, but Admin Save and Archive writes are blocked in both the Pages proxy and Worker.
+- The Worker defaults Admin write origins to `https://toxinhub.github.io` and `https://roster-bps.pages.dev`. If a legitimate Production domain changes, update `ADMIN_WRITE_ORIGINS` deliberately.
+- Do not test Save or Archive from a Preview deployment. The UI is read-only there, and the API independently rejects Preview-origin writes.
+
 ## What you need to do in Cloudflare
 
 1. Sign in to your own Cloudflare account. Never share your password, recovery codes, or API tokens in chat.
