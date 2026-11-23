@@ -374,7 +374,11 @@ html body.ink-mode #status.status.not-connected{
     $('monthPicker').onchange = () => { syncMonth(); markDirty(); };
 
     $('addDay').onclick = () => {
-      const lastIso = [...S.days].reverse().find(d => /^\\d{4}-\\d{2}-\\d{2}$/.test(d?.isoDate || ''))?.isoDate;
+      const lastIso = [...S.days].reverse().find(d => {
+        const value = d?.isoDate || '';
+        return value.length === 10 && value[4] === '-' && value[7] === '-' &&
+          [...value].every((char, index) => index === 4 || index === 7 || (char >= '0' && char <= '9'));
+      })?.isoDate;
       let nextDate;
       if (lastIso) {
         const [y, m, d] = lastIso.split('-').map(Number);
