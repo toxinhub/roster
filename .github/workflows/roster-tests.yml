@@ -1,0 +1,24 @@
+name: Roster Worker tests
+
+on:
+  pull_request:
+    paths:
+      - "cloudflare/worker.js"
+      - "tests/**"
+      - ".github/workflows/roster-tests.yml"
+  push:
+    branches: [main]
+    paths:
+      - "cloudflare/worker.js"
+      - "tests/**"
+      - ".github/workflows/roster-tests.yml"
+
+jobs:
+  worker-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node --test tests/roster-worker.test.cjs
