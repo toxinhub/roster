@@ -34,6 +34,13 @@ function allowedOrigins(env) {
   return String(env.ALLOWED_ORIGINS || "https://toxinhub.github.io")
     .split(",").map(s => s.trim()).filter(Boolean);
 }
+
+function adminWriteOrigins(env) {
+  // Preview deployments share the upstream Worker in this project. Only the
+  // two production frontend origins may write to the live KV namespace.
+  return String(env.ADMIN_WRITE_ORIGINS || "https://toxinhub.github.io,https://roster-bps.pages.dev")
+    .split(",").map(s => s.trim()).filter(Boolean);
+}
 function corsHeaders(request, env) {
   const origin = request.headers.get("Origin") || "";
   const allowed = allowedOrigins(env);
@@ -225,6 +232,7 @@ async function handler(request, env) {
   }
   if (path === "/api/admin/save" && request.method === "POST") {
     if (!await requireRole(request, env, "admin")) return json({ error: "ADMIN_AUTH_REQUIRED" }, 401);
+    if (!adminWriteOrigins(env).includes(requestOrigin)) return json({ error: "PREVIEW_READ_ONLY" }, 403);
     let body;
     try { body = await request.json(); } catch { return json({ error: "INVALID_JSON" }, 400); }
     if (!body || typeof body !== "object" || Array.isArray(body) || !validRoster(body.data)) return json({ error: "INVALID_ROSTER" }, 400);
@@ -233,6 +241,7 @@ async function handler(request, env) {
   }
   if (path === "/api/admin/archive" && request.method === "POST") {
     if (!await requireRole(request, env, "admin")) return json({ error: "ADMIN_AUTH_REQUIRED" }, 401);
+    if (!adminWriteOrigins(env).includes(requestOrigin)) return json({ error: "PREVIEW_READ_ONLY" }, 403);
     let body;
     try { body = await request.json(); } catch { return json({ error: "INVALID_JSON" }, 400); }
     if (!body || typeof body !== "object" || Array.isArray(body) ||
