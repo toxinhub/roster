@@ -234,8 +234,8 @@
       const reason = String(error?.message || "").trim();
       showLogin(
         reason === "API_URL_NOT_CONFIGURED"
-          ? "API ঠিকানা লোড হয়নি। If you see a connection security error, try using a VPN."
-          : "Authentication server-এ সংযোগ ব্যর্থ" + (reason ? " (" + reason + ")" : " (Network/CORS error)") + "। If you see a connection security error, try using a VPN."
+          ? "API ঠিকানা লোড হয়নি। পেজ refresh করে API configuration পরীক্ষা করুন।"
+          : "Authentication server-এ সংযোগ ব্যর্থ" + (reason ? " (" + reason + ")" : " (Network/CORS error)") + "। Internet connection, API URL ও allowed-origin configuration পরীক্ষা করুন।"
       );
       announceAuth({ authenticated: false, role: null });
     }
