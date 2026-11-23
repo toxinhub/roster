@@ -154,6 +154,8 @@ function updateMonthHistoryUI(){
 }
 
 async function load(){
+  const auth = await window.RosterAuthReady();
+  if (!auth?.authenticated) return;
   try{
     await fetchSchedule('/api/roster','current');
   }catch{
