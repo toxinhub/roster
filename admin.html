@@ -159,7 +159,7 @@ html body.ink-mode #status.status.not-connected{
     let sha = null;
     let cleanSnapshot = '';
     let dirty = false;
-    let archivePending = null;
+    const archivePending = new Map();
     const $ = id => document.getElementById(id);
     const key = 'cctv_roster_admin';
 
@@ -199,10 +199,12 @@ html body.ink-mode #status.status.not-connected{
       const oldKey = oldDays[0]?.isoDate?.slice(0,7) || '';
       const newKey = value;
       if(oldKey && newKey && oldKey!==newKey){
-        archivePending = {
-          key: oldKey,
-          data: JSON.parse(JSON.stringify(S))
-        };
+        if(!archivePending.has(oldKey)){
+          archivePending.set(oldKey, {
+            key: oldKey,
+            data: JSON.parse(JSON.stringify(S))
+          });
+        }
       }
 
       // Preserve shifts by actual ISO date, never by array index.
@@ -366,18 +368,64 @@ html body.ink-mode #status.status.not-connected{
     }
 
     $('month').onchange=e=>{S.month=e.target.value;$('monthHead').textContent=S.month;markDirty()};
-    $('clearChanges').onclick=()=>{if(!dirty)return;if(!confirm('সব অসম্পূর্ণ পরিবর্তন বাতিল করবেন?'))return;S=JSON.parse(cleanSnapshot);render();markDirty();toast('পরিবর্তন বাতিল হয়েছে')};
+    $('clearChanges').onclick=()=>{
+      if(!dirty)return;
+      if(!confirm('সব অসম্পূর্ণ পরিবর্তন বাতিল করবেন?'))return;
+      S=JSON.parse(cleanSnapshot);
+      archivePending.clear();
+      render();
+      setPicker();
+      markDirty();
+      toast('পরিবর্তন বাতিল হয়েছে');
+    };
     $('monthPicker').onchange = () => { syncMonth(); markDirty(); };
 
     $('addDay').onclick = () => {
-      S.days.push({ date: String(S.days.length + 1), weekday: 'নতুন দিন', isoDate: '' });
-      S.employees.forEach(emp => emp.shifts.push('OFF'));
-      markDirty(); render();
+      const monthKey = $('monthPicker').value || S.days.find(d => /^\d{4}-\d{2}-\d{2}$/.test(d?.isoDate || ''))?.isoDate.slice(0,7);
+      if(!/^\d{4}-(0[1-9]|1[0-2])$/.test(monthKey || '')){
+        toast('তারিখ যোগ করার আগে মাস ও সাল নির্বাচন করুন', true);
+        return;
+      }
+      const [year, month] = monthKey.split('-').map(Number);
+      const totalDays = new Date(Date.UTC(year, month, 0)).getUTCDate();
+      const existing = new Set(S.days.map(d => d?.isoDate).filter(Boolean));
+      let dayNumber = 0;
+      for(let day=1; day<=totalDays; day++){
+        const iso = year+'-'+String(month).padStart(2,'0')+'-'+String(day).padStart(2,'0');
+        if(!existing.has(iso)){ dayNumber=day; break; }
+      }
+      if(!dayNumber){
+        toast('এই মাসের সব তারিখ ইতোমধ্যে রোস্টারে আছে', true);
+        return;
+      }
+      const isoDate = year+'-'+String(month).padStart(2,'0')+'-'+String(dayNumber).padStart(2,'0');
+      const weekdays = ['রবিবার','সোমবার','মঙ্গলবার','বুধবার','বৃহস্পতিবার','শুক্রবার','শনিবার'];
+      const toBangla = n => String(n).replace(/[0-9]/g, d => '০১২৩৪৫৬৭৮৯'[Number(d)]);
+      const dateObj = new Date(Date.UTC(year, month-1, dayNumber));
+      const entry = { date: toBangla(dayNumber), weekday: weekdays[dateObj.getUTCDay()], isoDate };
+      const insertAt = S.days.findIndex(d => d?.isoDate && d.isoDate > isoDate);
+      const index = insertAt < 0 ? S.days.length : insertAt;
+      S.days.splice(index, 0, entry);
+      S.employees.forEach(emp => {
+        if(!Array.isArray(emp.shifts)) emp.shifts = [];
+        emp.shifts.splice(index, 0, 'OFF');
+      });
+      markDirty();
+      render();
+      toast(toBangla(dayNumber)+' তারিখ রোস্টারে যোগ হয়েছে');
     };
 
     $('addEmp').onclick = () => {
-      S.employees.push({ name: 'নতুন কর্মী', shifts: S.days.map(() => 'OFF') });
-      markDirty(); render();
+      let number = 1;
+      let name = 'নতুন কর্মী';
+      const existing = new Set(S.employees.map(emp => String(emp.name || '').trim().toLocaleLowerCase()));
+      while(existing.has(name.toLocaleLowerCase())){
+        number++;
+        name = 'নতুন কর্মী ' + number;
+      }
+      S.employees.push({ name, shifts: S.days.map(() => 'OFF') });
+      markDirty();
+      render();
     };
 
     $('download').onclick = () => {
@@ -388,22 +436,42 @@ html body.ink-mode #status.status.not-connected{
       a.click();
     };
 
+    function stableStringify(value){
+      if(Array.isArray(value)) return '['+value.map(stableStringify).join(',')+']';
+      if(value && typeof value==='object'){
+        return '{'+Object.keys(value).sort().map(key=>JSON.stringify(key)+':'+stableStringify(value[key])).join(',')+'}';
+      }
+      return JSON.stringify(value);
+    }
+
     async function archiveIfNeeded() {
-      if (!archivePending?.key || !archivePending?.data) return;
-      const r = await window.RosterAPI.request('/api/admin/archive', {
-        method: 'POST',
-        credentials: 'same-origin',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ month: archivePending.key, data: archivePending.data })
-      });
-      const result = await r.json().catch(() => ({}));
-      if (!r.ok) throw new Error(result.error || 'archive save failed');
-      archivePending = null;
+      for(const [month, pending] of archivePending){
+        if(!pending?.data) continue;
+        const r = await window.RosterAPI.request('/api/admin/archive', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          cache: 'no-store',
+          body: JSON.stringify({ month, data: pending.data })
+        });
+        const result = await r.json().catch(() => ({}));
+        if(r.status===409 && result.error==='ARCHIVE_EXISTS'){
+          const existingResponse = await window.RosterAPI.request('/api/archive?month='+encodeURIComponent(month), {cache:'no-store'});
+          const existing = await existingResponse.json().catch(() => null);
+          if(!existingResponse.ok || stableStringify(existing)!==stableStringify(pending.data)){
+            throw new Error('ARCHIVE_CONFLICT:'+month);
+          }
+        }else if(!r.ok){
+          throw new Error(result.error || 'ARCHIVE_SAVE_FAILED');
+        }
+        archivePending.delete(month);
+      }
     }
 
     $('save').onclick = async () => {
       S.month = $('month').value;
       S.updatedAt = new Date().toISOString();
+      const saveButton = $('save');
+      saveButton.disabled = true;
       try {
         await archiveIfNeeded();
         const r = await window.RosterAPI.request('/api/admin/save', {
@@ -417,11 +485,17 @@ html body.ink-mode #status.status.not-connected{
         cleanSnapshot = snapshot(); dirty = false; updateChangeUI();
         toast('রোস্টার নিরাপদ স্টোরেজে সংরক্ষিত');
       } catch (error) {
-        if (error.message === 'WRITE_CONFLICT' || error.message === 'SAVE_FAILED') {
+        if (error.message?.startsWith('ARCHIVE_CONFLICT:')) {
+          toast(error.message.split(':')[1]+' মাসের Archive-এ ভিন্ন ডেটা আছে। বর্তমান Save বন্ধ রাখা হয়েছে।', true);
+        } else if (error.message === 'WRITE_CONFLICT' || error.message === 'SAVE_FAILED') {
           toast('Save করা যায়নি। রোস্টার সংযোগ যাচাই করে আবার চেষ্টা করুন।', true);
+        } else if (error.message === 'INVALID_ROSTER') {
+          toast('রোস্টারের তারিখ, কর্মীর নাম, শিফট অথবা ডেটা কাঠামো যাচাই করুন।', true);
         } else {
           toast('Save করা যায়নি। Session বা server configuration পরীক্ষা করুন।', true);
         }
+      } finally {
+        saveButton.disabled = false;
       }
     };
 
@@ -431,7 +505,7 @@ html body.ink-mode #status.status.not-connected{
     };
 
     applyTheme();
-    load();
+    window.addEventListener('roster:authenticated', load, {once:true});
   </script>
 </body>
 </html>
