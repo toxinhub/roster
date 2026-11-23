@@ -132,7 +132,7 @@ function validRoster(data) {
     if (!day || typeof day !== "object" || Array.isArray(day)) return false;
     if (typeof day.date !== "string" || !day.date.trim() || day.date.length > 8) return false;
     if (typeof day.weekday !== "string" || !day.weekday.trim() || day.weekday.length > 24) return false;
-    if (typeof day.isoDate !== "string" || !/^\\d{4}-\\d{2}-\\d{2}$/.test(day.isoDate)) return false;
+    if (typeof day.isoDate !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(day.isoDate)) return false;
     const parsed = new Date(day.isoDate + "T00:00:00.000Z");
     if (!Number.isFinite(parsed.getTime()) || parsed.toISOString().slice(0, 10) !== day.isoDate) return false;
     if (dates.has(day.isoDate) || (previousDate && day.isoDate <= previousDate)) return false;
