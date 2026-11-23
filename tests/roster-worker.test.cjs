@@ -137,3 +137,18 @@ test("frontend JavaScript files and inline scripts parse", () => {
     });
   }
 });
+
+test("archive snapshot comparison ignores object key order but preserves array order", () => {
+  const adminHtml = fs.readFileSync(new URL("../admin.html", "file://" + __filename), "utf8");
+  const start = adminHtml.indexOf("function stableStringify");
+  const end = adminHtml.indexOf("async function archiveIfNeeded", start);
+  assert.ok(start >= 0 && end > start, "stableStringify helper must exist in admin editor");
+  const context = {};
+  vm.runInNewContext(adminHtml.slice(start, end) + "\nthis.stableStringify = stableStringify;", context);
+  const stableStringify = context.stableStringify;
+  assert.equal(
+    stableStringify({ b: 1, a: { d: 2, c: 3 } }),
+    stableStringify({ a: { c: 3, d: 2 }, b: 1 })
+  );
+  assert.notEqual(stableStringify([1, 2]), stableStringify([2, 1]));
+});
