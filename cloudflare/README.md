@@ -22,7 +22,7 @@ Pages Preview and Production currently share the upstream Worker and KV namespac
 The audit branch changes the frontend API base so each Cloudflare Pages deployment uses its own same-origin Pages Functions proxy. GitHub Pages continues to use the Production Pages API.
 
 - The Pages proxy rejects Admin Save and Archive writes from Preview hostnames and Preview origins.
-- The proposed Worker source adds a second production-origin check for Admin writes. That Worker change is **not active** until the deployed Worker script is updated.
+- The deployed Worker now adds a second production-origin check for Admin writes. Its code-only update preserved the existing secret bindings and KV binding.
 - Preview can read authenticated roster data through the shared Worker. Do not use Preview for Admin changes.
 - The current deployed Worker allowlist still includes an older Preview origin. Avoid Admin operations from that legacy Preview URL until the Worker update and origin cleanup are complete.
 
