@@ -109,7 +109,8 @@ async function clearFailedAttempts(request, env) {
   await env.ROSTER_DATA.delete(await attemptKey(request));
 }
 function validIsoDate(value) {
-  if (typeof value !== "string" || !/^\\d{4}-\\d{2}-\\d{2}$/.test(value)) return false;
+  if (typeof value !== "string" || value.length !== 10 || value[4] !== "-" || value[7] !== "-" ||
+      ![...value].every((char, index) => index === 4 || index === 7 || (char >= "0" && char <= "9"))) return false;
   const date = new Date(value + "T00:00:00.000Z");
   return Number.isFinite(date.getTime()) && date.toISOString().slice(0, 10) === value;
 }
