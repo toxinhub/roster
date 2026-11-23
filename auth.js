@@ -214,6 +214,7 @@
           });
           actions.appendChild(button);
         }
+        window.dispatchEvent(new Event("roster:authenticated"));
         return;
       }
       showLogin(required === "admin" && data.role === "site" ? "Admin password প্রয়োজন।" : "");
