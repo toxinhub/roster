@@ -108,10 +108,37 @@ async function recordFailedAttempt(request, env) {
 async function clearFailedAttempts(request, env) {
   await env.ROSTER_DATA.delete(await attemptKey(request));
 }
+function validIsoDate(value) {
+  if (typeof value !== "string" || !/^\\d{4}-\\d{2}-\\d{2}$/.test(value)) return false;
+  const date = new Date(value + "T00:00:00.000Z");
+  return Number.isFinite(date.getTime()) && date.toISOString().slice(0, 10) === value;
+}
 function validRoster(data) {
-  return data && typeof data === "object" && !Array.isArray(data) &&
-    typeof data.month === "string" && Array.isArray(data.days) && Array.isArray(data.employees) &&
-    data.employees.every(e => e && typeof e.name === "string" && Array.isArray(e.shifts));
+  if (!data || typeof data !== "object" || Array.isArray(data)) return false;
+  if (typeof data.month !== "string" || !data.month.trim() || data.month.length > 80) return false;
+  if (!Array.isArray(data.days) || data.days.length < 1 || data.days.length > 31) return false;
+  if (!Array.isArray(data.employees) || data.employees.length > 100) return false;
+  if (!data.shiftTypes || typeof data.shiftTypes !== "object" || Array.isArray(data.shiftTypes)) return false;
+
+  const shiftCodes = new Set(Object.keys(data.shiftTypes));
+  if (!shiftCodes.size || [...shiftCodes].some(code => !/^[A-Z0-9_-]{1,12}$/.test(code))) return false;
+
+  const dates = new Set();
+  for (const day of data.days) {
+    if (!day || typeof day !== "object" || !validIsoDate(day.isoDate)) return false;
+    if (typeof day.date !== "string" || !day.date.trim() || day.date.length > 20) return false;
+    if (typeof day.weekday !== "string" || !day.weekday.trim() || day.weekday.length > 30) return false;
+    if (dates.has(day.isoDate)) return false;
+    dates.add(day.isoDate);
+  }
+
+  for (const employee of data.employees) {
+    if (!employee || typeof employee !== "object") return false;
+    if (typeof employee.name !== "string" || !employee.name.trim() || employee.name.length > 100) return false;
+    if (!Array.isArray(employee.shifts) || employee.shifts.length !== data.days.length) return false;
+    if (!employee.shifts.every(code => typeof code === "string" && shiftCodes.has(code))) return false;
+  }
+  return true;
 }
 async function handler(request, env) {
   const url = new URL(request.url);
