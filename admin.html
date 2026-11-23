@@ -510,6 +510,18 @@ html body.ink-mode #status.status.not-connected{
     };
 
     applyTheme();
+    const apiBaseHost = (() => {
+      try { return new URL(window.ROSTER_API_BASE || window.location.origin).hostname; }
+      catch { return window.location.hostname; }
+    })();
+    if(apiBaseHost !== 'roster-bps.pages.dev'){
+      $('save').disabled = true;
+      $('save').textContent = 'Preview · Read only';
+      const notice = document.createElement('p');
+      notice.className = 'muted';
+      notice.textContent = 'Preview mode: Production roster data is read-only here. Save changes from the production site.';
+      $('save').parentElement.before(notice);
+    }
     window.addEventListener('roster:authenticated', load, {once:true});
   </script>
 </body>
