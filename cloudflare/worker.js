@@ -172,7 +172,7 @@ async function handler(request, env) {
     if (!await canAttempt(request, env)) return json({ error: "TOO_MANY_ATTEMPTS" }, 429, { "Retry-After": "900" });
     let body;
     try { body = await request.json(); } catch { return json({ error: "INVALID_JSON" }, 400); }
-    if (typeof body.password !== "string" || body.password.length < 1 || body.password.length > 256) return json({ error: "INVALID_PASSWORD" }, 400);
+    if (!body || typeof body !== "object" || Array.isArray(body) || typeof body.password !== "string" || body.password.length < 1 || body.password.length > 256) return json({ error: "INVALID_PASSWORD" }, 400);
     if (env.SITE_PASSWORD === env.ADMIN_PASSWORD) return json({ error: "PASSWORDS_MUST_DIFFER" }, 503);
     const supplied = await digest(body.password);
     const isAdmin = constantEqual(supplied, await digest(env.ADMIN_PASSWORD));
@@ -213,7 +213,7 @@ async function handler(request, env) {
     if (!await requireRole(request, env, "admin")) return json({ error: "ADMIN_AUTH_REQUIRED" }, 401);
     let body;
     try { body = await request.json(); } catch { return json({ error: "INVALID_JSON" }, 400); }
-    if (!validRoster(body.data)) return json({ error: "INVALID_ROSTER" }, 400);
+    if (!body || typeof body !== "object" || Array.isArray(body) || !validRoster(body.data)) return json({ error: "INVALID_ROSTER" }, 400);
     await env.ROSTER_DATA.put("schedule", JSON.stringify(body.data));
     return json({ ok: true, updatedAt: body.data.updatedAt || null });
   }
@@ -221,7 +221,7 @@ async function handler(request, env) {
     if (!await requireRole(request, env, "admin")) return json({ error: "ADMIN_AUTH_REQUIRED" }, 401);
     let body;
     try { body = await request.json(); } catch { return json({ error: "INVALID_JSON" }, 400); }
-    if (!/^\d{4}-(0[1-9]|1[0-2])$/.test(body.month || "") || !validRoster(body.data)) return json({ error: "INVALID_ARCHIVE" }, 400);
+    if (!body || typeof body !== "object" || Array.isArray(body) || !/^\d{4}-(0[1-9]|1[0-2])$/.test(body.month || "") || !validRoster(body.data)) return json({ error: "INVALID_ARCHIVE" }, 400);
     const key = "archive:" + body.month;
     if (await env.ROSTER_DATA.get(key)) return json({ error: "ARCHIVE_EXISTS" }, 409);
     await env.ROSTER_DATA.put(key, JSON.stringify(body.data));
