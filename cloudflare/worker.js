@@ -238,7 +238,7 @@ async function handler(request, env) {
     if (!body || typeof body !== "object" || Array.isArray(body) ||
         !/^\d{4}-(0[1-9]|1[0-2])$/.test(body.month || "") ||
         !validRoster(body.data) ||
-        !body.data.days.every(day => day.isoDate.slice(0, 7) === body.month)) {
+        body.data.days[0].isoDate.slice(0, 7) !== body.month) {
       return json({ error: "INVALID_ARCHIVE" }, 400);
     }
     const key = "archive:" + body.month;
