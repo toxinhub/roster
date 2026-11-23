@@ -1,0 +1,119 @@
+const test = require("node:test");
+const assert = require("node:assert/strict");
+const fs = require("node:fs");
+const vm = require("node:vm");
+
+const workerSource = fs.readFileSync(new URL("../cloudflare/worker.js", "file://" + __filename), "utf8");
+
+function loadValidator() {
+  const start = workerSource.indexOf("function validRoster");
+  const end = workerSource.indexOf("async function handler", start);
+  assert.ok(start >= 0 && end > start, "validRoster function must exist in Worker source");
+  const context = {};
+  vm.runInNewContext(workerSource.slice(start, end) + "\nthis.validRoster = validRoster;", context);
+  return context.validRoster;
+}
+
+function loadJsonReader() {
+  const start = workerSource.indexOf("async function readJson");
+  const end = workerSource.indexOf("function jsonBodyError", start);
+  assert.ok(start >= 0 && end > start, "readJson helper must exist in Worker source");
+  const context = { encoder: new TextEncoder() };
+  vm.runInNewContext(workerSource.slice(start, end) + "\nthis.readJson = readJson;", context);
+  return context.readJson;
+}
+
+function roster(overrides = {}) {
+  return {
+    month: "নভেম্বর ২০২৬",
+    days: [{ date: "১", weekday: "রবিবার", isoDate: "2026-11-01" }],
+    employees: [{ name: "কর্মী A", shifts: ["A"] }],
+    shiftTypes: {
+      A: { label: "সকাল", note: "", color: "#123456" },
+      B: { label: "বিকেল", note: "", color: "#234567" },
+      C: { label: "রাত", note: "", color: "#345678" },
+      OFF: { label: "ছুটি", note: "", color: "#456789" },
+      L: { label: "ছুটি", note: "", color: "#567890" }
+    },
+    ...overrides
+  };
+}
+
+const validRoster = loadValidator();
+
+test("accepts a valid roster", () => {
+  assert.equal(validRoster(roster()), true);
+});
+
+test("rejects impossible calendar dates", () => {
+  assert.equal(validRoster(roster({ days: [{ date: "৩০", weekday: "সোমবার", isoDate: "2026-02-30" }] })), false);
+});
+
+test("rejects a weekday that does not match the ISO date", () => {
+  assert.equal(validRoster(roster({ days: [{ date: "১", weekday: "সোমবার", isoDate: "2026-11-01" }] })), false);
+});
+
+test("rejects duplicate or unsorted dates", () => {
+  const days = [
+    { date: "২", weekday: "সোমবার", isoDate: "2026-11-02" },
+    { date: "১", weekday: "রবিবার", isoDate: "2026-11-01" }
+  ];
+  assert.equal(validRoster(roster({ days, employees: [{ name: "কর্মী A", shifts: ["A", "B"] }] })), false);
+});
+
+test("rejects duplicate employee names ignoring case and whitespace", () => {
+  const employees = [
+    { name: "কর্মী A", shifts: ["A"] },
+    { name: " কর্মী A ", shifts: ["B"] }
+  ];
+  assert.equal(validRoster(roster({ employees })), false);
+});
+
+test("rejects mismatched shift-array lengths", () => {
+  assert.equal(validRoster(roster({ employees: [{ name: "কর্মী A", shifts: [] }] })), false);
+});
+
+test("rejects unsupported shift codes and malformed colors", () => {
+  assert.equal(validRoster(roster({ employees: [{ name: "কর্মী A", shifts: ["X"] }] })), false);
+  const shiftTypes = { ...roster().shiftTypes, A: { label: "সকাল", note: "", color: "red" } };
+  assert.equal(validRoster(roster({ shiftTypes })), false);
+});
+
+test("rejects rosters with more than 31 days", () => {
+  const days = Array.from({ length: 32 }, (_, index) => {
+    const date = new Date(Date.UTC(2026, 10, index + 1));
+    const numeric = String(date.getUTCDate()).replace(/[0-9]/g, d => "০১২৩৪৫৬৭৮৯"[Number(d)]);
+    const weekday = ["রবিবার", "সোমবার", "মঙ্গলবার", "বুধবার", "বৃহস্পতিবার", "শুক্রবার", "শনিবার"][date.getUTCDay()];
+    return { date: numeric, weekday, isoDate: date.toISOString().slice(0, 10) };
+  });
+  assert.equal(validRoster(roster({ days, employees: [{ name: "কর্মী A", shifts: Array(32).fill("OFF") }] })), false);
+});
+
+test("rejects a visible date label that differs from the ISO date", () => {
+  assert.equal(validRoster(roster({ days: [{ date: "২", weekday: "রবিবার", isoDate: "2026-11-01" }] })), false);
+});
+
+const readJson = loadJsonReader();
+function request(body, declaredLength = Buffer.byteLength(body)) {
+  return {
+    headers: { get: name => name === "Content-Length" ? String(declaredLength) : null },
+    text: async () => body
+  };
+}
+
+test("parses valid JSON request bodies", async () => {
+  assert.deepEqual(await readJson(request('{"ok":true}')), { ok: true });
+});
+
+test("rejects malformed JSON request bodies", async () => {
+  await assert.rejects(readJson(request("{")), /INVALID_JSON/);
+});
+
+test("rejects oversized declared and actual request bodies", async () => {
+  await assert.rejects(readJson(request("{}", 999), 100), /BODY_TOO_LARGE/);
+  await assert.rejects(readJson(request("x".repeat(300), 0), 100), /BODY_TOO_LARGE/);
+});
+
+test("enforces the smaller login request limit", async () => {
+  await assert.rejects(readJson(request("x".repeat(4097)), 4096), /BODY_TOO_LARGE/);
+});
