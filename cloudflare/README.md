@@ -7,7 +7,7 @@ This is a **Preview-only** setup. It does not deploy itself and does not change 
 ## Preview write protection
 
 - Pages preview URLs use their own same-origin API proxy; GitHub Pages continues to use the Production Pages API.
-- Preview deployments may read the authenticated roster through the shared upstream Worker, but Admin Save and Archive writes are blocked in both the Pages proxy and Worker.
+- Preview deployments may read the authenticated roster through the shared upstream Worker. The Pages proxy blocks Admin Save and Archive writes; the proposed Worker-level write guard is covered by CI but is not active until the Worker is redeployed.
 - The Worker defaults Admin write origins to `https://toxinhub.github.io` and `https://roster-bps.pages.dev`. If a legitimate Production domain changes, update `ADMIN_WRITE_ORIGINS` deliberately.
 - Do not test Save or Archive from a Preview deployment. The UI is read-only there, and the API independently rejects Preview-origin writes.
 
