@@ -1,27 +1,61 @@
 # CCTV · PJL — Duty Roster
 
-> **Security preview only.** This branch is being prepared for a shared-password login with Cloudflare Workers and private KV. The live GitHub Pages site and `main` branch have not been changed. Do not merge or use this branch as Production yet.
+A responsive duty-roster website for the CCTV · PJL team, designed for mobile and desktop.
 
-Setup and test instructions: [Cloudflare Preview guide](cloudflare/README.md). Security caveats: [SECURITY-PREVIEW.md](SECURITY-PREVIEW.md).
+**Live site:** https://roster-bps.pages.dev/
 
-## What this preview is intended to do
+> **Deployment warning:** The connected Cloudflare Pages project currently uses `security/cloudflare-preview` as its Production branch, despite the branch name. Treat merges to that branch as Production deployments.
 
-- Require a shared site password to view the roster.
-- Require a separate Admin password to edit it.
-- Keep roster and archive JSON in a private Cloudflare KV namespace, not in the static frontend.
-- Use an eight-hour signed session token stored in the current browser tab's session storage.
-- Route reads and writes through the Cloudflare Worker API.
+## Features
 
-## Important limitations
+- Shared site-password access for roster viewers.
+- Separate Admin password and eight-hour signed sessions.
+- Private Cloudflare KV storage for the current roster and archives.
+- Dhaka-time duty status and monthly navigation.
+- Admin editing, change review, archive creation, and JSON export.
+- Preview deployments use their own Pages API proxy and are read-only for Admin writes.
 
-- The Worker has not been deployed and this branch has not passed end-to-end tests.
-- The current public GitHub Pages deployment and Git history may still expose roster data.
-- The existing `github.io` URL can be preserved by continuing to host the frontend on GitHub Pages and pointing it to the authenticated Cloudflare Worker API. The roster JSON must be removed from the public deployment; old Git history still needs a separate privacy review.
-- Do not put passwords, tokens, or session secrets in this repository or send them in chat.
-- Do not merge this branch, change Production hosting, or remove Production files without explicit approval.
+## Shift reference
 
-## Preview links
+| Code | Time / meaning |
+| --- | --- |
+| **A** | 06:00–14:00 |
+| **B** | 14:00–22:00 |
+| **C** | 22:00–06:00 |
+| **OFF** | Scheduled day off |
+| **L** | Leave |
 
-- [Cloudflare Worker source](cloudflare/worker.js)
-- [Worker configuration](cloudflare/wrangler.toml)
-- [Setup and test checklist](cloudflare/README.md)
+Times use the Dhaka time zone.
+
+## Using the site
+
+1. Open the [live roster](https://roster-bps.pages.dev/).
+2. Enter the shared site password.
+3. Navigate to the month you want to view.
+4. Authorized administrators can use the separate Admin interface to update the roster.
+
+If you do not have the required access, contact the roster administrator.
+
+## Project structure
+
+| File / directory | Purpose |
+| --- | --- |
+| `index.html` | Public roster interface |
+| `admin.html` | Admin interface |
+| `style.css`, `landscape.css` | Responsive presentation |
+| `api-client.js`, `api-config.js`, `auth.js` | Frontend API and authentication |
+| `functions/api/` | Cloudflare Pages API proxy |
+| `cloudflare/worker.js` | Worker API source |
+| `cloudflare/worker.test.mjs` | Worker regression tests |
+
+## Security and deployment notes
+
+- Production secrets remain in Cloudflare Worker secret bindings; never commit them.
+- The Pages Preview and Production environments currently share the upstream Worker/KV. Preview Admin Save and Archive writes are blocked in the Pages proxy and Worker.
+- Changes to `cloudflare/worker.js` are source changes only; the deployed Worker script must be updated separately after review.
+- The obsolete public `schedule.js` snapshot was removed from `main`. Older backup branches and Git history may still contain historical roster copies; those require a separate, explicitly approved cleanup.
+- KV stale-edit checks reduce accidental overwrites, but truly simultaneous writes still require an atomic coordinator such as a Durable Object.
+
+## Verification
+
+The Worker regression suite runs with `node --test cloudflare/worker.test.mjs`. The current audit branch's CI run passed all 10 tests.
