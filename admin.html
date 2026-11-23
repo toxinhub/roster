@@ -370,7 +370,7 @@ html body.ink-mode #status.status.not-connected{
     }
 
     $('month').onchange=e=>{S.month=e.target.value;$('monthHead').textContent=S.month;markDirty()};
-    $('clearChanges').onclick=()=>{if(!dirty)return;if(!confirm('সব অসম্পূর্ণ পরিবর্তন বাতিল করবেন?'))return;S=JSON.parse(cleanSnapshot);render();markDirty();toast('পরিবর্তন বাতিল হয়েছে')};
+    $('clearChanges').onclick=()=>{if(!dirty)return;if(!confirm('সব অসম্পূর্ণ পরিবর্তন বাতিল করবেন?'))return;S=JSON.parse(cleanSnapshot);archivePending.clear();render();markDirty();toast('পরিবর্তন বাতিল হয়েছে')};
     $('monthPicker').onchange = () => { syncMonth(); markDirty(); };
 
     $('addDay').onclick = () => {
