@@ -225,6 +225,24 @@ async function handler(request, env) {
     let body;
     try { body = await readJson(request, 262144); } catch (error) { return jsonBodyError(error); }
     if (!body || typeof body !== "object" || Array.isArray(body) || !validRoster(body.data)) return json({ error: "INVALID_ROSTER" }, 400);
+    if (Object.prototype.hasOwnProperty.call(body, "expectedUpdatedAt")) {
+      if (body.expectedUpdatedAt !== null && typeof body.expectedUpdatedAt !== "string") {
+        return json({ error: "INVALID_REVISION" }, 400);
+      }
+      const currentRaw = await env.ROSTER_DATA.get("schedule");
+      let currentUpdatedAt = null;
+      if (currentRaw) {
+        try {
+          const current = JSON.parse(currentRaw);
+          currentUpdatedAt = current.updatedAt || null;
+        } catch {
+          return json({ error: "ROSTER_INVALID" }, 503);
+        }
+      }
+      if (currentUpdatedAt !== body.expectedUpdatedAt) {
+        return json({ error: "WRITE_CONFLICT" }, 409);
+      }
+    }
     await env.ROSTER_DATA.put("schedule", JSON.stringify(body.data));
     return json({ ok: true, updatedAt: body.data.updatedAt || null });
   }
