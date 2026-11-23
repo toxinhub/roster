@@ -360,7 +360,13 @@ html body.ink-mode #status.status.not-connected{
           render();
           return;
         }
-        const baseIso = day?.isoDate || $('monthPicker').value + '-01';
+        const selectedMonth = $('monthPicker').value;
+        const baseIso = day?.isoDate || (selectedMonth ? selectedMonth + '-01' : '');
+        if (baseIso.length !== 10) {
+          toast('তারিখ পরিবর্তনের আগে মাস ও সাল নির্বাচন করুন।', true);
+          render();
+          return;
+        }
         const yearMonth = baseIso.slice(0, 7);
         const isoDate = yearMonth + '-' + String(dayNumber).padStart(2, '0');
         const dateObject = new Date(isoDate + 'T00:00:00.000Z');
