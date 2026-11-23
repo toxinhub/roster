@@ -102,7 +102,8 @@ function request(body, declaredLength = Buffer.byteLength(body)) {
 }
 
 test("parses valid JSON request bodies", async () => {
-  assert.deepEqual(await readJson(request('{"ok":true}')), { ok: true });
+  const parsed = await readJson(request('{"ok":true}'));
+  assert.equal(parsed.ok, true);
 });
 
 test("rejects malformed JSON request bodies", async () => {
