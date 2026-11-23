@@ -108,6 +108,28 @@ test("invalid ISO dates and shift arrays are rejected", async () => {
   assert.equal(response.status, 400);
 });
 
+test("displayed date and weekday must match the ISO date", async () => {
+  const env = makeEnv();
+  const token = await login(env, env.ADMIN_PASSWORD);
+
+  const wrongDate = makeRoster();
+  wrongDate.days[0].date = "২৯";
+  let response = await call(env, "/api/admin/save", {
+    method: "POST", token,
+    body: { data: wrongDate, expectedUpdatedAt: makeRoster().updatedAt },
+  });
+  assert.equal(response.status, 400);
+  assert.equal((await response.json()).error, "INVALID_ROSTER");
+
+  const wrongWeekday = makeRoster();
+  wrongWeekday.days[1].weekday = "বুধবার";
+  response = await call(env, "/api/admin/save", {
+    method: "POST", token,
+    body: { data: wrongWeekday, expectedUpdatedAt: makeRoster().updatedAt },
+  });
+  assert.equal(response.status, 400);
+});
+
 test("stale Admin edits are rejected after a newer save", async () => {
   const env = makeEnv();
   const token = await login(env, env.ADMIN_PASSWORD);
@@ -169,8 +191,8 @@ test("archive key must match the first roster date", async () => {
   const env = makeEnv();
   const token = await login(env, env.ADMIN_PASSWORD);
   const wrongMonth = makeRoster();
-  wrongMonth.days[0].isoDate = "2026-10-01";
-  wrongMonth.days[1].isoDate = "2026-10-02";
+  wrongMonth.days[0] = { date: "১", weekday: "বৃহস্পতিবার", isoDate: "2026-10-01" };
+  wrongMonth.days[1] = { date: "২", weekday: "শুক্রবার", isoDate: "2026-10-02" };
   const response = await call(env, "/api/admin/archive", {
     method: "POST", token,
     body: { month: "2026-09", data: wrongMonth },
