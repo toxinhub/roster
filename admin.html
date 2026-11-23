@@ -368,7 +368,16 @@ html body.ink-mode #status.status.not-connected{
     }
 
     $('month').onchange=e=>{S.month=e.target.value;$('monthHead').textContent=S.month;markDirty()};
-    $('clearChanges').onclick=()=>{if(!dirty)return;if(!confirm('সব অসম্পূর্ণ পরিবর্তন বাতিল করবেন?'))return;S=JSON.parse(cleanSnapshot);render();markDirty();toast('পরিবর্তন বাতিল হয়েছে')};
+    $('clearChanges').onclick=()=>{
+      if(!dirty)return;
+      if(!confirm('সব অসম্পূর্ণ পরিবর্তন বাতিল করবেন?'))return;
+      S=JSON.parse(cleanSnapshot);
+      archivePending.clear();
+      render();
+      setPicker();
+      markDirty();
+      toast('পরিবর্তন বাতিল হয়েছে');
+    };
     $('monthPicker').onchange = () => { syncMonth(); markDirty(); };
 
     $('addDay').onclick = () => {
@@ -407,8 +416,16 @@ html body.ink-mode #status.status.not-connected{
     };
 
     $('addEmp').onclick = () => {
-      S.employees.push({ name: 'নতুন কর্মী', shifts: S.days.map(() => 'OFF') });
-      markDirty(); render();
+      let number = 1;
+      let name = 'নতুন কর্মী';
+      const existing = new Set(S.employees.map(emp => String(emp.name || '').trim().toLocaleLowerCase()));
+      while(existing.has(name.toLocaleLowerCase())){
+        number++;
+        name = 'নতুন কর্মী ' + number;
+      }
+      S.employees.push({ name, shifts: S.days.map(() => 'OFF') });
+      markDirty();
+      render();
     };
 
     $('download').onclick = () => {
@@ -472,6 +489,8 @@ html body.ink-mode #status.status.not-connected{
           toast(error.message.split(':')[1]+' মাসের Archive-এ ভিন্ন ডেটা আছে। বর্তমান Save বন্ধ রাখা হয়েছে।', true);
         } else if (error.message === 'WRITE_CONFLICT' || error.message === 'SAVE_FAILED') {
           toast('Save করা যায়নি। রোস্টার সংযোগ যাচাই করে আবার চেষ্টা করুন।', true);
+        } else if (error.message === 'INVALID_ROSTER') {
+          toast('রোস্টারের তারিখ, কর্মীর নাম, শিফট অথবা ডেটা কাঠামো যাচাই করুন।', true);
         } else {
           toast('Save করা যায়নি। Session বা server configuration পরীক্ষা করুন।', true);
         }
