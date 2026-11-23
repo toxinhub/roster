@@ -418,6 +418,10 @@ html body.ink-mode #status.status.not-connected{
     $('monthPicker').onchange = () => { syncMonth(); markDirty(); };
 
     $('addDay').onclick = () => {
+      if (S.days.length >= 31) {
+        toast('একটি মাসের রোস্টারে সর্বোচ্চ ৩১টি তারিখ রাখা যাবে।', true);
+        return;
+      }
       const lastIso = [...S.days].reverse().find(d => {
         const value = d?.isoDate || '';
         return value.length === 10 && value[4] === '-' && value[7] === '-' &&
