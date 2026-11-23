@@ -142,6 +142,10 @@ function validRoster(data) {
     if (typeof day.isoDate !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(day.isoDate)) return false;
     const parsed = new Date(day.isoDate + "T00:00:00.000Z");
     if (!Number.isFinite(parsed.getTime()) || parsed.toISOString().slice(0, 10) !== day.isoDate) return false;
+    const numericDate = Number(day.date.replace(/[০-৯]/g, digit => String("০১২৩৪৫৬৭৮৯".indexOf(digit))));
+    const weekdays = ["রবিবার", "সোমবার", "মঙ্গলবার", "বুধবার", "বৃহস্পতিবার", "শুক্রবার", "শনিবার"];
+    if (!Number.isInteger(numericDate) || numericDate !== parsed.getUTCDate()) return false;
+    if (day.weekday !== weekdays[parsed.getUTCDay()]) return false;
     if (dates.has(day.isoDate) || (previousDate && day.isoDate <= previousDate)) return false;
     dates.add(day.isoDate);
     previousDate = day.isoDate;
