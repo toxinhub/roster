@@ -13,10 +13,12 @@ KV binding:
 - Variable name: `ROSTER_DATA`
 - Current namespace: `roster-data-preview`
 
-Allowed origins must include:
+Allowed origins (`ALLOWED_ORIGINS`) control which frontend origins may authenticate and read roster data:
 - `https://toxinhub.github.io`
-- `https://dc30fdd7.roster-bps.pages.dev`
 - `https://roster-bps.pages.dev`
+- Add a branch preview origin only when read-only preview testing is needed; preview origins are not automatically trusted.
+
+Write origins (`ADMIN_WRITE_ORIGINS`) are checked separately for Admin save/archive requests. The Worker defaults this list to the two production origins above. **Do not add Pages preview domains to `ADMIN_WRITE_ORIGINS`**, because previews share the production KV namespace and must remain read-only.
 
 ## Authenticated API
 
