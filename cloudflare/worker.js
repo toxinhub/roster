@@ -235,7 +235,12 @@ async function handler(request, env) {
     if (!await requireRole(request, env, "admin")) return json({ error: "ADMIN_AUTH_REQUIRED" }, 401);
     let body;
     try { body = await request.json(); } catch { return json({ error: "INVALID_JSON" }, 400); }
-    if (!/^\d{4}-(0[1-9]|1[0-2])$/.test(body.month || "") || !validRoster(body.data)) return json({ error: "INVALID_ARCHIVE" }, 400);
+    if (!body || typeof body !== "object" || Array.isArray(body) ||
+        !/^\d{4}-(0[1-9]|1[0-2])$/.test(body.month || "") ||
+        !validRoster(body.data) ||
+        !body.data.days.every(day => day.isoDate.slice(0, 7) === body.month)) {
+      return json({ error: "INVALID_ARCHIVE" }, 400);
+    }
     const key = "archive:" + body.month;
     if (await env.ROSTER_DATA.get(key)) return json({ error: "ARCHIVE_EXISTS" }, 409);
     await env.ROSTER_DATA.put(key, JSON.stringify(body.data));
