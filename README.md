@@ -51,7 +51,7 @@ If you do not have the required access, contact the roster administrator.
 ## Security and deployment notes
 
 - Production secrets remain in Cloudflare Worker secret bindings; never commit them.
-- The Pages Preview and Production environments currently share the upstream Worker/KV. Preview Admin Save and Archive writes are blocked in the Pages proxy. The proposed Worker update adds a second guard and is pending separate deployment.
+- The Pages Preview and Production environments currently share the upstream Worker/KV. Preview Admin Save and Archive writes are blocked in the Pages proxy and by the deployed Worker-level production-origin guard. The audit Pages source is still in a draft PR.
 - Changes to `cloudflare/worker.js` are source changes only; the deployed Worker script must be updated separately after review.
 - The obsolete public `schedule.js` snapshot was removed from `main`. Older backup branches and Git history may still contain historical roster copies; those require a separate, explicitly approved cleanup.
 - KV stale-edit checks reduce accidental overwrites, but truly simultaneous writes still require an atomic coordinator such as a Durable Object.
