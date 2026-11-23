@@ -64,6 +64,7 @@
 
 <script>
 let DATA=null;
+let PREVIOUS_MONTH_DATA=null;
 let VIEW_MODE='current';
 let CURRENT_MONTH_KEY='';
 const $=id=>document.getElementById(id);
@@ -158,6 +159,19 @@ async function load(){
   if (!auth?.authenticated) return;
   try{
     await fetchSchedule('/api/roster','current');
+    const previousKey = previousMonthKey(CURRENT_MONTH_KEY);
+    if (previousKey) {
+      try {
+        const response = await window.RosterAPI.request('/api/archive?month=' + encodeURIComponent(previousKey));
+        if (response.ok) {
+          const previous = await response.json();
+          if ((previous.days?.[0]?.isoDate || '').slice(0,7) === previousKey) {
+            PREVIOUS_MONTH_DATA = previous;
+            render();
+          }
+        }
+      } catch {}
+    }
   }catch{
     toast('রোস্টার লোড করা যায়নি',true);
   }
@@ -248,7 +262,7 @@ function render(){
   };
   const nowMs=toUtcMs(liveDate,liveMinutes);
 
-  const rows=people.map(p=>{
+  const rows=people.map((p,personIndex)=>{
     const cells=days.map((d,di)=>{
       const code=p.shifts?.[di]||'—';
       const type=types[code]||{};
@@ -268,6 +282,32 @@ function render(){
     for(let i=0;i<days.length;i++){
       const code=p.shifts?.[i];
       if(['A','B','C'].includes(code)) assigned.push(occurrence(i,code));
+    }
+
+    // The first day of a month can still be covered by the previous
+    // month's final C shift (22:00–06:00). Use the saved prior archive
+    // when available so the overnight duty is not incorrectly shown as OFF.
+    if (todayIndex === 0 && PREVIOUS_MONTH_DATA?.days?.length) {
+      const yesterday = addDays(liveDate, -1);
+      const previousDayIndex = PREVIOUS_MONTH_DATA.days.findIndex(day => day.isoDate === yesterday);
+      const previousEmployees = PREVIOUS_MONTH_DATA.employees || [];
+      const indexedEmployee = previousEmployees[personIndex];
+      const sameName = previousEmployees.filter(employee => employee?.name === p.name);
+      const previousEmployee = indexedEmployee?.name === p.name
+        ? indexedEmployee
+        : (sameName.length === 1 ? sameName[0] : null);
+      const previousCode = previousEmployee?.shifts?.[previousDayIndex];
+      if (previousDayIndex >= 0 && previousCode === 'C') {
+        const startMs = toUtcMs(yesterday, shiftStartMinutes.C);
+        assigned.unshift({
+          index: -1,
+          code: 'C',
+          date: yesterday,
+          startMs,
+          endMs: startMs + 8 * 60 * 60000,
+          endDate: liveDate
+        });
+      }
     }
 
     let active=null;
