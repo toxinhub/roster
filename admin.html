@@ -344,7 +344,43 @@ html body.ink-mode #status.status.not-connected{
 
       $('editor').innerHTML = '<thead>' + h + '</thead><tbody>' + b + '</tbody>';
 
-      $('editor').querySelectorAll('[data-day]').forEach(x => x.onchange = e => { S.days[+e.target.dataset.day].date = e.target.value; markDirty(); });
+      $('editor').querySelectorAll('[data-day]').forEach(x => x.onchange = e => {
+        const index = +e.target.dataset.day;
+        const day = S.days[index];
+        const entered = String(e.target.value || '').trim();
+        const digits = entered.replace(/[০-৯]/g, digit => '0123456789'['০১২৩৪৫৬৭৮৯'.indexOf(digit)]);
+        if (!digits || digits.length > 2 || [...digits].some(char => char < '0' || char > '9')) {
+          toast('তারিখ ১ থেকে ৩১-এর মধ্যে লিখুন।', true);
+          render();
+          return;
+        }
+        const dayNumber = Number(digits);
+        if (dayNumber < 1 || dayNumber > 31) {
+          toast('তারিখ ১ থেকে ৩১-এর মধ্যে লিখুন।', true);
+          render();
+          return;
+        }
+        const baseIso = day?.isoDate || $('monthPicker').value + '-01';
+        const yearMonth = baseIso.slice(0, 7);
+        const isoDate = yearMonth + '-' + String(dayNumber).padStart(2, '0');
+        const dateObject = new Date(isoDate + 'T00:00:00.000Z');
+        if (!Number.isFinite(dateObject.getTime()) || dateObject.toISOString().slice(0, 10) !== isoDate) {
+          toast('এই মাসে এমন কোনো তারিখ নেই।', true);
+          render();
+          return;
+        }
+        if (S.days.some((item, itemIndex) => itemIndex !== index && item.isoDate === isoDate)) {
+          toast('এই তারিখটি রোস্টারে আগে থেকেই আছে।', true);
+          render();
+          return;
+        }
+        const weekdays = ['রবিবার','সোমবার','মঙ্গলবার','বুধবার','বৃহস্পতিবার','শুক্রবার','শনিবার'];
+        day.date = entered;
+        day.isoDate = isoDate;
+        day.weekday = weekdays[dateObject.getUTCDay()];
+        markDirty();
+        render();
+      });
       $('editor').querySelectorAll('[data-wd]').forEach(x => x.onchange = e => { S.days[+e.target.dataset.wd].weekday = e.target.value; markDirty(); });
       $('editor').querySelectorAll('[data-name]').forEach(x => x.onchange = e => { S.employees[+e.target.dataset.name].name = e.target.value; markDirty(); });
       $('editor').querySelectorAll('[data-rmday]').forEach(x => x.onclick = e => {
