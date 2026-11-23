@@ -501,6 +501,8 @@ html body.ink-mode #status.status.not-connected{
 (async function(){
   const shell=document.querySelector('.page-shell');
   if(!shell || !window.RosterAPI) return;
+  const auth = await window.RosterAuthReady();
+  if (!auth?.authenticated || auth.role !== 'admin') return;
   try {
     const check=await window.RosterAPI.request('/api/archive?month=2026-09',{cache:'no-store'});
     if(check.ok || check.status!==404) return;
