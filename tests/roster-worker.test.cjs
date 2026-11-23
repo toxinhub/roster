@@ -118,3 +118,22 @@ test("rejects oversized declared and actual request bodies", async () => {
 test("enforces the smaller login request limit", async () => {
   await assert.rejects(readJson(request("x".repeat(4097)), 4096), /BODY_TOO_LARGE/);
 });
+
+test("frontend JavaScript files and inline scripts parse", () => {
+  const authSource = fs.readFileSync(new URL("../auth.js", "file://" + __filename), "utf8");
+  assert.doesNotThrow(() => new vm.Script(authSource, { filename: "auth.js" }));
+
+  for (const file of ["index.html", "admin.html"]) {
+    const html = fs.readFileSync(new URL("../" + file, "file://" + __filename), "utf8");
+    const inlineScripts = [...html.matchAll(/<script\\b[^>]*>([\\s\\S]*?)<\\/script>/gi)]
+      .map(match => match[1])
+      .filter(source => source.trim());
+    assert.ok(inlineScripts.length > 0, file + " should contain inline scripts");
+    inlineScripts.forEach((source, index) => {
+      assert.doesNotThrow(
+        () => new vm.Script(source, { filename: file + ":inline-" + (index + 1) }),
+        file + " inline script " + (index + 1) + " should parse"
+      );
+    });
+  }
+});
