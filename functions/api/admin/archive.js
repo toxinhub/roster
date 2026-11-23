@@ -30,7 +30,7 @@ export async function onRequest({ request }) {
   }
   if (!["GET", "HEAD", "POST"].includes(request.method)) return fail("METHOD_NOT_ALLOWED", 405, origin);
   const incoming = new URL(request.url);
-  if (incoming.hostname !== "roster-bps.pages.dev") return fail("PREVIEW_READ_ONLY", 403, origin);
+  if (incoming.hostname !== "roster-bps.pages.dev" || origin === "https://dc30fdd7.roster-bps.pages.dev" || origin === "https://audit-fix-production-roster.roster-bps.pages.dev") return fail("PREVIEW_READ_ONLY", 403, origin);
   const target = new URL(incoming.pathname + incoming.search, UPSTREAM);
   try {
     const forwarded = new Request(target.toString(), request);
