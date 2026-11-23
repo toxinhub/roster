@@ -480,13 +480,21 @@ html body.ink-mode #status.status.not-connected{
       a.click();
     };
 
+    function stableStringify(value) {
+      if (Array.isArray(value)) return '[' + value.map(stableStringify).join(',') + ']';
+      if (value && typeof value === 'object') {
+        return '{' + Object.keys(value).sort().map(key => JSON.stringify(key) + ':' + stableStringify(value[key])).join(',') + '}';
+      }
+      return JSON.stringify(value);
+    }
+
     async function archiveIfNeeded() {
       for (const [month, data] of [...archivePending.entries()]) {
         const archiveUrl = '/api/archive?month=' + encodeURIComponent(month);
         const existingResponse = await window.RosterAPI.request(archiveUrl, { cache: 'no-store' });
         if (existingResponse.ok) {
           const existing = await existingResponse.json().catch(() => null);
-          if (JSON.stringify(existing) !== JSON.stringify(data)) {
+          if (stableStringify(existing) !== stableStringify(data)) {
             throw new Error('ARCHIVE_EXISTS');
           }
           archivePending.delete(month);
@@ -508,7 +516,7 @@ html body.ink-mode #status.status.not-connected{
           if (r.status === 409 || result.error === 'ARCHIVE_EXISTS') {
             const verify = await window.RosterAPI.request(archiveUrl, { cache: 'no-store' });
             const saved = verify.ok ? await verify.json().catch(() => null) : null;
-            if (JSON.stringify(saved) !== JSON.stringify(data)) {
+            if (stableStringify(saved) !== stableStringify(data)) {
               throw new Error('ARCHIVE_EXISTS');
             }
           } else {
