@@ -125,7 +125,7 @@ test("frontend JavaScript files and inline scripts parse", () => {
 
   for (const file of ["index.html", "admin.html"]) {
     const html = fs.readFileSync(new URL("../" + file, "file://" + __filename), "utf8");
-    const inlineScripts = [...html.matchAll(/<script\\b[^>]*>([\\s\\S]*?)<\\/script>/gi)]
+    const inlineScripts = [...html.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/gi)]
       .map(match => match[1])
       .filter(source => source.trim());
     assert.ok(inlineScripts.length > 0, file + " should contain inline scripts");
