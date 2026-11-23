@@ -24,7 +24,7 @@ The audit branch changes the frontend API base so each Cloudflare Pages deployme
 - The Pages proxy rejects Admin Save and Archive writes from Preview hostnames and Preview origins.
 - The deployed Worker now adds a second production-origin check for Admin writes. Its code-only update preserved the existing secret bindings and KV binding.
 - Preview can read authenticated roster data through the shared Worker. Do not use Preview for Admin changes.
-- The current deployed Worker allowlist still includes an older Preview origin. Avoid Admin operations from that legacy Preview URL until the Worker update and origin cleanup are complete.
+- The Worker allowlist still includes an older Preview origin for read/login compatibility, but the deployed Worker-level Admin write guard rejects writes from it. Treat that legacy URL as read-only.
 
 ## Worker configuration
 
