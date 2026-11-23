@@ -483,8 +483,10 @@ html body.ink-mode #status.status.not-connected{
           toast('এই মাসের archive-এ ভিন্ন ডেটা আছে। সেটি যাচাই না করে Save বন্ধ রাখা হয়েছে।', true);
         } else if (error.message === 'ARCHIVE_CHECK_FAILED') {
           toast('Archive যাচাই করা যায়নি। সংযোগ ঠিক করে আবার চেষ্টা করুন।', true);
-        } else if (error.message === 'WRITE_CONFLICT' || error.message === 'SAVE_FAILED') {
-          toast('Save করা যায়নি। রোস্টার সংযোগ যাচাই করে আবার চেষ্টা করুন।', true);
+        } else if (error.message === 'WRITE_CONFLICT') {
+          toast('অন্য Admin সেশন থেকে রোস্টার বদলেছে। আপনার পরিবর্তন JSON Download করে বর্তমান রোস্টার reload করুন।', true);
+        } else if (error.message === 'SAVE_FAILED') {
+          toast('Save করা যায়নি। সংযোগ যাচাই করে আবার চেষ্টা করুন।', true);
         } else {
           toast('Save করা যায়নি। Session বা server configuration পরীক্ষা করুন।', true);
         }
