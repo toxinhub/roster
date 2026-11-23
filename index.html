@@ -494,7 +494,7 @@ $('currentMonth').onclick=async()=>{
   }
 };
 
-load();
+window.addEventListener('roster:authenticated', load, {once:true});
 // Recalculate live duty status as shift boundaries are crossed.
 let rosterScrolling=false,rosterScrollTimer=0;
 const rosterEl=$('roster');
