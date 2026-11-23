@@ -117,7 +117,7 @@ function validIsoDate(value) {
 function validRoster(data) {
   if (!data || typeof data !== "object" || Array.isArray(data)) return false;
   if (typeof data.month !== "string" || !data.month.trim() || data.month.length > 80) return false;
-  if (!Array.isArray(data.days) || data.days.length < 1 || data.days.length > 31) return false;
+  if (!Array.isArray(data.days) || data.days.length < 1 || data.days.length > 62) return false;
   if (!Array.isArray(data.employees) || data.employees.length > 100) return false;
   if (!data.shiftTypes || typeof data.shiftTypes !== "object" || Array.isArray(data.shiftTypes)) return false;
 
