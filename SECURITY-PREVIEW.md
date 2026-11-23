@@ -11,7 +11,7 @@ The connected Cloudflare Pages project currently sets `security/cloudflare-previ
 - The Worker uses a Cloudflare KV namespace for the current roster, archives, sessions, and best-effort login throttling.
 - The Pages Preview and Production deployments currently share the same upstream Worker and KV namespace.
 - The audit branch routes Pages deployments through their own same-origin API proxy. Preview Admin Save and Archive writes are blocked in the Pages proxy and in the proposed Worker source.
-- The Worker source changes in this audit branch are not active on the deployed Worker until its script content is updated separately.
+- The reviewed Worker source was deployed to the existing `empty-block-84d1` script on 23 November 2026 using the content-only endpoint. Existing secret bindings and the KV binding were preserved.
 
 ## Verification completed
 
