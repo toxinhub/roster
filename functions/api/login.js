@@ -3,6 +3,7 @@ const ALLOWED_ORIGINS = new Set([
   "https://toxinhub.github.io",
   "https://roster-bps.pages.dev",
   "https://dc30fdd7.roster-bps.pages.dev",
+  "https://audit-fix-production-roster.roster-bps.pages.dev",
 ]);
 function cors(origin) {
   if (!ALLOWED_ORIGINS.has(origin)) return {};
@@ -35,7 +36,7 @@ export async function onRequest({ request }) {
     const forwardedHeaders = new Headers(forwarded.headers);
     // Same-origin GET requests may omit Origin. Supply the Pages origin so
     // the upstream Worker can apply its normal allowlist consistently.
-    if (!forwardedHeaders.has("Origin")) forwardedHeaders.set("Origin", incoming.origin);
+    forwardedHeaders.set("Origin", "https://roster-bps.pages.dev");
     const upstreamResponse = await fetch(new Request(forwarded, { headers: forwardedHeaders }));
     const headers = new Headers(upstreamResponse.headers);
     headers.set("Cache-Control", "no-store, private");
