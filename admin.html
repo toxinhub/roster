@@ -128,7 +128,7 @@ html body.ink-mode #status.status.not-connected{
         </div>
 
         <div class="form-grid">
-          <label>রোস্টারের শিরোনাম<input id="month"></label>
+          <label>রোস্টারের শিরোনাম<input id="month" maxlength="80"></label>
           <label>মাস ও সাল<input id="monthPicker" type="month"></label>
         </div>
 
@@ -327,7 +327,7 @@ html body.ink-mode #status.status.not-connected{
       const h = '<tr><th>কর্মী</th>' + S.days.map((d, i) => `
         <th>
           <input value="${esc(d.date)}" data-day="${i}">
-          <small><input value="${esc(d.weekday)}" data-wd="${i}"></small>
+          <small><input value="${esc(d.weekday)}" data-wd="${i}" readonly title="তারিখ অনুযায়ী স্বয়ংক্রিয়"></small>
           <button class="remove" data-rmday="${i}">বাদ</button>
         </th>
       `).join('') + '</tr>';
@@ -335,7 +335,7 @@ html body.ink-mode #status.status.not-connected{
       const b = S.employees.map((e, ei) => `
         <tr>
           <th>
-            <input value="${esc(e.name)}" data-name="${ei}">
+            <input value="${esc(e.name)}" data-name="${ei}" maxlength="80">
             <button class="remove" data-rmemp="${ei}">বাদ</button>
           </th>
           ${e.shifts.map((c, di) => `<td><button class="edit" data-ei="${ei}" data-di="${di}">${esc(c)}</button></td>`).join('')}
@@ -380,6 +380,12 @@ html body.ink-mode #status.status.not-connected{
           render();
           return;
         }
+        if ((index > 0 && isoDate <= S.days[index - 1].isoDate) ||
+            (index < S.days.length - 1 && isoDate >= S.days[index + 1].isoDate)) {
+          toast('তারিখগুলো ধারাবাহিক ক্রমে রাখতে হবে।', true);
+          render();
+          return;
+        }
         const weekdays = ['রবিবার','সোমবার','মঙ্গলবার','বুধবার','বৃহস্পতিবার','শুক্রবার','শনিবার'];
         day.date = entered;
         day.isoDate = isoDate;
@@ -387,7 +393,7 @@ html body.ink-mode #status.status.not-connected{
         markDirty();
         render();
       });
-      $('editor').querySelectorAll('[data-wd]').forEach(x => x.onchange = e => { S.days[+e.target.dataset.wd].weekday = e.target.value; markDirty(); });
+      // Weekday is derived from ISO date and is intentionally read-only.
       $('editor').querySelectorAll('[data-name]').forEach(x => x.onchange = e => { S.employees[+e.target.dataset.name].name = e.target.value; markDirty(); });
       $('editor').querySelectorAll('[data-rmday]').forEach(x => x.onclick = e => {
         const i = +e.target.dataset.rmday;
@@ -455,7 +461,14 @@ html body.ink-mode #status.status.not-connected{
     };
 
     $('addEmp').onclick = () => {
-      S.employees.push({ name: 'নতুন কর্মী', shifts: S.days.map(() => 'OFF') });
+      let suffix = 1;
+      let name = 'নতুন কর্মী';
+      const existing = new Set(S.employees.map(emp => String(emp.name || '').trim().toLocaleLowerCase()));
+      while (existing.has(name.toLocaleLowerCase())) {
+        suffix++;
+        name = 'নতুন কর্মী ' + suffix;
+      }
+      S.employees.push({ name, shifts: S.days.map(() => 'OFF') });
       markDirty(); render();
     };
 
@@ -508,6 +521,24 @@ html body.ink-mode #status.status.not-connected{
 
     $('save').onclick = async () => {
       S.month = $('month').value;
+      const names = S.employees.map(emp => String(emp.name || '').trim());
+      const normalizedNames = names.map(name => name.toLocaleLowerCase());
+      if (!S.month.trim() || S.month.length > 80) {
+        toast('রোস্টারের শিরোনাম ১–৮০ অক্ষরের মধ্যে হতে হবে।', true);
+        return;
+      }
+      if (S.days.length < 1 || S.days.length > 31) {
+        toast('রোস্টারে ১ থেকে ৩১টি তারিখ থাকতে হবে।', true);
+        return;
+      }
+      if (names.some(name => !name || name.length > 80)) {
+        toast('প্রতিটি কর্মীর নাম ১–৮০ অক্ষরের মধ্যে হতে হবে।', true);
+        return;
+      }
+      if (new Set(normalizedNames).size !== normalizedNames.length) {
+        toast('প্রতিটি কর্মীর নাম আলাদা হতে হবে।', true);
+        return;
+      }
       S.updatedAt = new Date().toISOString();
       try {
         await archiveIfNeeded();
