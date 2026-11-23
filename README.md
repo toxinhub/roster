@@ -1,16 +1,20 @@
 # CCTV · PJL — Duty Roster
 
-A responsive duty-roster website for the CCTV · PJL team, designed for quick access on mobile and desktop.
+A responsive monthly duty-roster application for the CCTV · PJL team.
 
-**Live site:** https://toxinhub.github.io/roster/
+## Live sites
 
-## Features
+- **Cloudflare Pages Production:** https://roster-bps.pages.dev/
+- **GitHub Pages site:** https://toxinhub.github.io/roster/
 
-- View the current roster and navigate between available months.
-- See duty status using the Dhaka time zone.
-- Use the roster on mobile phones, tablets, and desktop screens.
-- Manage roster entries through a separate admin interface.
-- Review changes before saving and download a JSON copy when needed.
+Both frontends use the same authenticated Cloudflare Worker API and private KV roster data.
+
+## Access
+
+- Viewers need the shared site password.
+- Administrators use a separate Admin password.
+- Sessions expire after eight hours.
+- The roster and monthly archives are stored in Cloudflare KV, not in public static JSON files.
 
 ## Shift reference
 
@@ -24,32 +28,26 @@ A responsive duty-roster website for the CCTV · PJL team, designed for quick ac
 
 Times use the Dhaka time zone.
 
-## Using the site
-
-1. Open the [live roster](https://toxinhub.github.io/roster/).
-2. Enter the site password when prompted.
-3. Navigate to the month you want to view.
-4. For roster updates, use the authorized admin interface and save changes after reviewing them.
-
-If you do not have the required access, contact the roster administrator.
-
 ## Project structure
 
 | File / directory | Purpose |
 | --- | --- |
-| `index.html` | Main roster interface |
-| `admin.html` | Admin interface |
-| `style.css`, `landscape.css` | Responsive presentation and layout |
-| `api-client.js`, `api-config.js`, `auth.js` | Frontend API and access-control integration |
-| `cloudflare/worker.js` | Server-side API implementation |
+| `index.html` | Public roster interface |
+| `admin.html` | Admin editor |
+| `style.css`, `landscape.css` | Responsive styling |
+| `api-config.js`, `api-client.js`, `auth.js` | API and authentication |
+| `cloudflare/worker.js` | Deployed Worker source |
+| `cloudflare/worker.test.mjs` | Worker regression tests |
+| `functions/api/` | Cloudflare Pages API proxy (Production branch) |
 
-## Security
+## Branch and deployment notes
 
-- Do not commit passwords, API tokens, session secrets, or other credentials.
-- Keep production secrets in the appropriate hosting-platform secret settings.
-- Restrict administrative access to authorized users.
-- Review repository files and deployment settings before making the repository public.
+- GitHub Pages uses `main`.
+- Cloudflare Pages currently uses `security/cloudflare-preview` as its Production branch, despite the branch name.
+- The Worker is deployed separately from the static frontend. Do not overwrite its secret bindings or KV binding when updating its code.
+- Pages Preview and Production share the upstream Worker/KV. Preview Admin writes are blocked; use Production for authorized changes.
+- The Worker regression suite runs with `node --test cloudflare/worker.test.mjs`.
 
-## Maintenance
+## Security note
 
-Keep this README aligned with the deployed site. Document user-facing features and setup guidance here; keep private operational notes, environment details, migration status, and secret configuration values out of the public README.
+The obsolete public `schedule.js` snapshot was removed from the current `main` branch. Historical roster snapshots still exist in public backup branches and Git history. Do not assume those older copies are private.
