@@ -7,6 +7,17 @@ function json(body, status = 200, headers = {}) {
     headers: { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store, private", ...headers }
   });
 }
+async function readJson(request, maxBytes = 262144) {
+  const declaredLength = Number(request.headers.get("Content-Length") || 0);
+  if (declaredLength > maxBytes) throw new Error("BODY_TOO_LARGE");
+  const raw = await request.text();
+  if (encoder.encode(raw).byteLength > maxBytes) throw new Error("BODY_TOO_LARGE");
+  try { return JSON.parse(raw); } catch { throw new Error("INVALID_JSON"); }
+}
+function jsonBodyError(error) {
+  const tooLarge = error?.message === "BODY_TOO_LARGE";
+  return json({ error: tooLarge ? "BODY_TOO_LARGE" : "INVALID_JSON" }, tooLarge ? 413 : 400);
+}
 function b64url(bytes) {
   let binary = "";
   for (const b of bytes) binary += String.fromCharCode(b);
@@ -171,7 +182,7 @@ async function handler(request, env) {
   if (path === "/api/login" && request.method === "POST") {
     if (!await canAttempt(request, env)) return json({ error: "TOO_MANY_ATTEMPTS" }, 429, { "Retry-After": "900" });
     let body;
-    try { body = await request.json(); } catch { return json({ error: "INVALID_JSON" }, 400); }
+    try { body = await readJson(request, 4096); } catch (error) { return jsonBodyError(error); }
     if (!body || typeof body !== "object" || Array.isArray(body) || typeof body.password !== "string" || body.password.length < 1 || body.password.length > 256) return json({ error: "INVALID_PASSWORD" }, 400);
     if (env.SITE_PASSWORD === env.ADMIN_PASSWORD) return json({ error: "PASSWORDS_MUST_DIFFER" }, 503);
     const supplied = await digest(body.password);
@@ -212,7 +223,7 @@ async function handler(request, env) {
   if (path === "/api/admin/save" && request.method === "POST") {
     if (!await requireRole(request, env, "admin")) return json({ error: "ADMIN_AUTH_REQUIRED" }, 401);
     let body;
-    try { body = await request.json(); } catch { return json({ error: "INVALID_JSON" }, 400); }
+    try { body = await readJson(request, 262144); } catch (error) { return jsonBodyError(error); }
     if (!body || typeof body !== "object" || Array.isArray(body) || !validRoster(body.data)) return json({ error: "INVALID_ROSTER" }, 400);
     await env.ROSTER_DATA.put("schedule", JSON.stringify(body.data));
     return json({ ok: true, updatedAt: body.data.updatedAt || null });
@@ -220,7 +231,7 @@ async function handler(request, env) {
   if (path === "/api/admin/archive" && request.method === "POST") {
     if (!await requireRole(request, env, "admin")) return json({ error: "ADMIN_AUTH_REQUIRED" }, 401);
     let body;
-    try { body = await request.json(); } catch { return json({ error: "INVALID_JSON" }, 400); }
+    try { body = await readJson(request, 262144); } catch (error) { return jsonBodyError(error); }
     if (!body || typeof body !== "object" || Array.isArray(body) || !/^\d{4}-(0[1-9]|1[0-2])$/.test(body.month || "") || !validRoster(body.data)) return json({ error: "INVALID_ARCHIVE" }, 400);
     const key = "archive:" + body.month;
     if (await env.ROSTER_DATA.get(key)) return json({ error: "ARCHIVE_EXISTS" }, 409);
