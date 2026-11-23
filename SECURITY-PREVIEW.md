@@ -1,6 +1,8 @@
 # Security Preview — Cloudflare Workers Free
 
-**Preview-only.** The `main` branch and current GitHub Pages site have not been changed.
+**Deployment warning:** The connected Cloudflare Pages project currently sets `security/cloudflare-preview` as its `production_branch`. Despite the name below, that branch is serving as the Pages Production source. Do not merge this audit branch into it until the preview checks and deployment plan are reviewed.
+
+The `main` branch received a narrow security cleanup: the obsolete public `schedule.js` roster snapshot was removed. The existing site and API configuration were not otherwise changed.
 
 - Preview branch: `security/cloudflare-preview`
 - Worker: `cloudflare/worker.js`
