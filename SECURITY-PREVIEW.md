@@ -28,7 +28,7 @@ The connected Cloudflare Pages project currently sets `security/cloudflare-previ
 - Public backup branches and Git history still contain historical roster snapshots. A representative public backup branch serves old `schedule.js`, `schedule.json`, and `archive/2026-09.json` files through raw GitHub URLs. This audit has not deleted backup branches or rewritten Git history.
 - KV stale-edit checks detect sequential stale saves, but KV does not provide atomic compare-and-swap. Truly simultaneous Admin writes still require a Durable Object or transactional storage.
 - KV-backed login throttling is also best-effort under concurrent requests.
-- The deployed Worker still needs the reviewed source update before the new schema validation and Worker-level Preview write restriction become active.
+- The deployed Worker now enforces the new schema validation, stale-edit check, and production-only Admin write origin policy. The Pages source changes remain in the unmerged draft PR.
 
 ## Release sequence
 
