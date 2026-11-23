@@ -4,6 +4,9 @@ on:
   pull_request:
     paths:
       - "cloudflare/worker.js"
+      - "auth.js"
+      - "index.html"
+      - "admin.html"
       - "tests/**"
       - ".github/workflows/roster-tests.yml"
   push:
