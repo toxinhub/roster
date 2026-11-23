@@ -381,7 +381,10 @@ function render(){
     // Keep every future day in the timeline. Shift change = first future
     // work shift whose code differs from today's/current work shift.
     // OFF is independently reported and is never skipped for its own date.
-    for(let i=Math.max(todayIndex+1,0);i<days.length;i++){
+    for(let i=0;i<days.length;i++){
+      // Never label a past date as the next upcoming OFF/Leave day,
+      // including when the current roster does not contain today's date.
+      if(!days[i]?.isoDate || days[i].isoDate<=liveDate) continue;
       const code=shifts[i]||'OFF';
 
       if(!nextOff && (code==='OFF'||code==='L')){
