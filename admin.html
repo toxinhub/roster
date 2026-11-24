@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#0e2c2d">
+  <meta name="description" content="CCTV duty roster administration panel">
   <script src="api-config.js"></script>
   <script src="api-client.js"></script>
   <script src="auth.js?v=20261012-glass-login-2"></script>
@@ -86,7 +87,7 @@ html body.ink-mode #status.status.not-connected{
   border-color:#C58A82 !important;
 }
 </style></head>
-<body data-required-role="admin">
+<body class="admin-page" data-required-role="admin">
   <div class="app">
     <header class="topbar">
       <div class="brand" aria-label="রোস্টার এডমিন">
@@ -97,14 +98,14 @@ html body.ink-mode #status.status.not-connected{
         </div>
       </div>
       <div class="top-actions">
-        <button class="icon-btn" id="theme" aria-label="থিম পরিবর্তন" title="Ink Mode">☀</button>
+        <button class="icon-btn" id="theme" type="button" aria-label="থিম পরিবর্তন" title="Ink Mode">☾</button>
         <a class="back" href="index.html">লাইভ রোস্টার</a>
       </div>
     </header>
 
     <main class="page-shell">
       <section class="admin-note">
-        <b>নিরাপত্তা:</b> Save করলে রোস্টার private Cloudflare KV storage-এ সংরক্ষিত হবে। এই Preview-তে GitHub-এর মাধ্যমে সরাসরি কোনো পরিবর্তন করা হয় না।
+        <b>নিরাপত্তা:</b> Save করলে রোস্টার private Cloudflare KV storage-এ সংরক্ষিত হবে। Admin পরিবর্তনগুলো Worker API দিয়ে যাচাই ও সংরক্ষণ করা হয়।
       </section>
 
       <section class="panel">
@@ -122,8 +123,8 @@ html body.ink-mode #status.status.not-connected{
             <h2 id="monthHead">রোস্টার সম্পাদনা</h2>
           </div>
           <div class="actions">
-            <button id="addDay">+ তারিখ</button>
-            <button id="addEmp">+ কর্মী</button>
+            <button id="addDay" type="button">+ তারিখ</button>
+            <button id="addEmp" type="button">+ কর্মী</button>
           </div>
         </div>
 
@@ -135,7 +136,7 @@ html body.ink-mode #status.status.not-connected{
         <p class="muted">মাস ও সাল নির্বাচন করলে শিরোনাম স্বয়ংক্রিয়ভাবে আপডেট হবে। নিচের টেবিল থেকে প্রতিটি তারিখ ও দিন পরিবর্তন করুন।</p>
 
         <div class="grid-scroll">
-          <table id="editor"></table>
+          <table id="editor" aria-label="ডিউটি রোস্টার সম্পাদনা"></table>
         </div>
 
         <div class="editor-meta"><span id="changeStatus" class="change-status clean">● কোনো পরিবর্তন নেই</span><button id="clearChanges" class="quiet" type="button" disabled>পরিবর্তন বাতিল</button></div><div id="changeSummary" class="change-summary" hidden></div>
@@ -152,36 +153,24 @@ html body.ink-mode #status.status.not-connected{
     </footer>
   </div>
 
-  <div id="toast" class="toast"></div>
+  <div id="toast" class="toast" role="status" aria-live="polite" aria-atomic="true"></div>
 
   <script>
     let S = null;
-    let sha = null;
     let cleanSnapshot = '';
     let dirty = false;
+    let saving = false;
     const archivePending = new Map();
     const $ = id => document.getElementById(id);
-    const key = 'cctv_roster_admin';
 
     const esc = s => String(s ?? '').replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
 
-    function toast(message, error = false) {
-      const t = $('toast');
-      t.textContent = message;
-      t.className = 'toast show' + (error ? ' err' : '');
-      setTimeout(() => t.className = 'toast', 3500);
+    let toastTimer=0;
+    function toast(message,error=false){const t=$('toast');t.textContent=message;t.className='toast show'+(error?' err':'');clearTimeout(toastTimer);toastTimer=setTimeout(()=>{t.className='toast';},3500);}
+    function applyTheme(){let inkMode=false;try{inkMode=localStorage.getItem('roster-display-mode')==='ink';}catch{}
+      document.body.classList.toggle('ink-mode',inkMode);$('theme').textContent=inkMode?'☀':'☾';
+      $('theme').setAttribute('aria-label',inkMode?'লাইট মোডে যান':'ইঙ্ক মোডে যান');$('theme').setAttribute('title',inkMode?'Light Mode':'Ink Mode');$('theme').setAttribute('aria-pressed',String(inkMode));
     }
-
-    function applyTheme() {
-      const inkMode = localStorage.getItem('roster-display-mode') === 'ink';
-      document.body.classList.toggle('ink-mode', inkMode);
-      $('theme').textContent = inkMode ? '☀' : '☀';
-      $('theme').setAttribute('aria-label', inkMode ? 'লাইট মোড' : 'ইঙ্ক মোড');
-      $('theme').setAttribute('title', inkMode ? 'Light Mode' : 'Ink Mode');
-      $('theme').setAttribute('aria-label', inkMode ? 'লাইট মোড' : 'ইঙ্ক মোড');
-      $('theme').setAttribute('title', inkMode ? 'Light Mode' : 'Ink Mode');
-    }
-
     function syncMonth() {
       const value = $('monthPicker').value;
       if (!value || !S) return;
@@ -321,93 +310,35 @@ html body.ink-mode #status.status.not-connected{
     function updateChangeUI(){const el=$('changeStatus'),summary=$('changeSummary');if(!el||!summary)return;const changes=diffChanges();el.textContent=dirty?`● ${changes.length||1}টি পরিবর্তন করা হয়েছে`:'● কোনো পরিবর্তন নেই';el.className='change-status '+(dirty?'dirty':'clean');$('clearChanges').disabled=!dirty;if(!dirty){summary.hidden=true;summary.innerHTML='';return}summary.hidden=false;summary.innerHTML='<strong>Save করার আগে পরিবর্তনগুলো:</strong><ul>'+changes.slice(0,12).map(x=>'<li>'+esc(x)+'</li>').join('')+(changes.length>12?'<li>আরও '+(changes.length-12)+'টি পরিবর্তন…</li>':'')+'</ul>'}
 
     function render() {
-      $('monthHead').textContent = S.month || 'রোস্টার সম্পাদনা';
-      $('month').value = S.month || '';
-
-      const h = '<tr><th>কর্মী</th>' + S.days.map((d, i) => `
-        <th>
-          <input value="${esc(d.date)}" data-day="${i}">
-          <small><input value="${esc(d.weekday)}" data-wd="${i}" readonly title="তারিখ অনুযায়ী স্বয়ংক্রিয়"></small>
-          <button class="remove" data-rmday="${i}">বাদ</button>
-        </th>
-      `).join('') + '</tr>';
-
-      const b = S.employees.map((e, ei) => `
-        <tr>
-          <th>
-            <input value="${esc(e.name)}" data-name="${ei}" maxlength="80">
-            <button class="remove" data-rmemp="${ei}">বাদ</button>
-          </th>
-          ${e.shifts.map((c, di) => `<td><button class="edit" data-ei="${ei}" data-di="${di}">${esc(c)}</button></td>`).join('')}
-        </tr>
-      `).join('');
-
-      $('editor').innerHTML = '<thead>' + h + '</thead><tbody>' + b + '</tbody>';
-
-      $('editor').querySelectorAll('[data-day]').forEach(x => x.onchange = e => {
-        const index = +e.target.dataset.day;
-        const day = S.days[index];
-        const entered = String(e.target.value || '').trim();
-        const digits = entered.replace(/[০-৯]/g, digit => '0123456789'['০১২৩৪৫৬৭৮৯'.indexOf(digit)]);
-        if (!digits || digits.length > 2 || [...digits].some(char => char < '0' || char > '9')) {
-          toast('তারিখ ১ থেকে ৩১-এর মধ্যে লিখুন।', true);
-          render();
-          return;
-        }
-        const dayNumber = Number(digits);
-        if (dayNumber < 1 || dayNumber > 31) {
-          toast('তারিখ ১ থেকে ৩১-এর মধ্যে লিখুন।', true);
-          render();
-          return;
-        }
-        const selectedMonth = $('monthPicker').value;
-        const baseIso = day?.isoDate || (selectedMonth ? selectedMonth + '-01' : '');
-        if (baseIso.length !== 10) {
-          toast('তারিখ পরিবর্তনের আগে মাস ও সাল নির্বাচন করুন।', true);
-          render();
-          return;
-        }
-        const yearMonth = baseIso.slice(0, 7);
-        const isoDate = yearMonth + '-' + String(dayNumber).padStart(2, '0');
-        const dateObject = new Date(isoDate + 'T00:00:00.000Z');
-        if (!Number.isFinite(dateObject.getTime()) || dateObject.toISOString().slice(0, 10) !== isoDate) {
-          toast('এই মাসে এমন কোনো তারিখ নেই।', true);
-          render();
-          return;
-        }
-        if (S.days.some((item, itemIndex) => itemIndex !== index && item.isoDate === isoDate)) {
-          toast('এই তারিখটি রোস্টারে আগে থেকেই আছে।', true);
-          render();
-          return;
-        }
-        if ((index > 0 && isoDate <= S.days[index - 1].isoDate) ||
-            (index < S.days.length - 1 && isoDate >= S.days[index + 1].isoDate)) {
-          toast('তারিখগুলো ধারাবাহিক ক্রমে রাখতে হবে।', true);
-          render();
-          return;
-        }
-        const weekdays = ['রবিবার','সোমবার','মঙ্গলবার','বুধবার','বৃহস্পতিবার','শুক্রবার','শনিবার'];
-        day.date = entered;
-        day.isoDate = isoDate;
-        day.weekday = weekdays[dateObject.getUTCDay()];
-        markDirty();
-        render();
-      });
-      // Weekday is derived from ISO date and is intentionally read-only.
-      $('editor').querySelectorAll('[data-name]').forEach(x => x.onchange = e => { S.employees[+e.target.dataset.name].name = e.target.value; markDirty(); });
-      $('editor').querySelectorAll('[data-rmday]').forEach(x => x.onclick = e => {
-        const i = +e.target.dataset.rmday;
-        S.days.splice(i, 1);
-        S.employees.forEach(emp => emp.shifts.splice(i, 1));
-        markDirty(); render();
-      });
-      $('editor').querySelectorAll('[data-rmemp]').forEach(x => x.onclick = e => {
-        S.employees.splice(+e.target.dataset.rmemp, 1);
-        markDirty(); render();
-      });
-      $('editor').querySelectorAll('.edit').forEach(x => x.onclick = () => pick(x));
+      $('monthHead').textContent = S.month || 'রোস্টার সম্পাদনা'; $('month').value = S.month || '';
+      const h = '<tr><th scope="col">কর্মী</th>' + S.days.map((d,i) => '<th scope="col"><input aria-label="তারিখ '+(i+1)+'" value="'+esc(d.date)+'" data-day="'+i+'"><small><input aria-label="সপ্তাহের দিন '+(i+1)+'" value="'+esc(d.weekday)+'" data-wd="'+i+'" readonly title="তারিখ অনুযায়ী স্বয়ংক্রিয়"></small><button class="remove" type="button" data-rmday="'+i+'" aria-label="তারিখ '+esc(d.date)+' বাদ দিন">বাদ</button></th>').join('') + '</tr>';
+      const b = S.employees.map((emp,ei) => '<tr><th scope="row"><input aria-label="কর্মী '+(ei+1)+'-এর নাম" value="'+esc(emp.name)+'" data-name="'+ei+'" maxlength="80"><button class="remove" type="button" data-rmemp="'+ei+'" aria-label="'+esc(emp.name)+'-কে বাদ দিন">বাদ</button></th>' + emp.shifts.map((shift,di) => '<td><button type="button" class="edit" data-ei="'+ei+'" data-di="'+di+'" aria-label="'+esc(emp.name)+': '+esc(S.days[di]?.date||di+1)+' তারিখের শিফট '+esc(shift)+'">'+esc(shift)+'</button></td>').join('') + '</tr>').join('');
+      $('editor').innerHTML = '<thead>'+h+'</thead><tbody>'+b+'</tbody>';
     }
-
+    // One delegated listener pair replaces per-cell handlers on large rosters.
+    $('editor').addEventListener('change', e => {
+      const dayInput=e.target.closest('[data-day]');
+      if(dayInput){
+        const index=Number(dayInput.dataset.day),day=S.days[index],entered=String(dayInput.value||'').trim();
+        const digits=entered.replace(/[০-৯]/g,digit=>'0123456789'['০১২৩৪৫৬৭৮৯'.indexOf(digit)]);
+        if(!digits||digits.length>2||!/^\d+$/.test(digits)){toast('তারিখ ১ থেকে ৩১-এর মধ্যে লিখুন।',true);render();return;}
+        const dayNumber=Number(digits);if(dayNumber<1||dayNumber>31){toast('তারিখ ১ থেকে ৩১-এর মধ্যে লিখুন।',true);render();return;}
+        const selectedMonth=$('monthPicker').value,baseIso=day?.isoDate||(selectedMonth?selectedMonth+'-01':'');
+        if(baseIso.length!==10){toast('তারিখ পরিবর্তনের আগে মাস ও সাল নির্বাচন করুন।',true);render();return;}
+        const yearMonth=baseIso.slice(0,7),isoDate=yearMonth+'-'+String(dayNumber).padStart(2,'0'),dateObject=new Date(isoDate+'T00:00:00.000Z');
+        if(!Number.isFinite(dateObject.getTime())||dateObject.toISOString().slice(0,10)!==isoDate){toast('এই মাসে এমন কোনো তারিখ নেই।',true);render();return;}
+        if(S.days.some((item,itemIndex)=>itemIndex!==index&&item.isoDate===isoDate)){toast('এই তারিখটি রোস্টারে আগে থেকেই আছে।',true);render();return;}
+        if((index>0&&isoDate<=S.days[index-1].isoDate)||(index<S.days.length-1&&isoDate>=S.days[index+1].isoDate)){toast('তারিখগুলো ধারাবাহিক ক্রমে রাখতে হবে।',true);render();return;}
+        const weekdays=['রবিবার','সোমবার','মঙ্গলবার','বুধবার','বৃহস্পতিবার','শুক্রবার','শনিবার'];day.date=entered;day.isoDate=isoDate;day.weekday=weekdays[dateObject.getUTCDay()];markDirty();render();return;
+      }
+      const nameInput=e.target.closest('[data-name]');if(nameInput){S.employees[Number(nameInput.dataset.name)].name=nameInput.value;markDirty();}
+    });
+    $('editor').addEventListener('click',e=>{
+      const button=e.target.closest('button');if(!button||!e.currentTarget.contains(button))return;
+      if(button.hasAttribute('data-rmday')){const i=Number(button.dataset.rmday);S.days.splice(i,1);S.employees.forEach(emp=>emp.shifts.splice(i,1));markDirty();render();return;}
+      if(button.hasAttribute('data-rmemp')){S.employees.splice(Number(button.dataset.rmemp),1);markDirty();render();return;}
+      if(button.classList.contains('edit'))pick(button);
+    });
     function closePicker(){ document.querySelector('.picker')?.remove(); document.removeEventListener('pointerdown',outsidePicker); }
     function outsidePicker(e){ const p=document.querySelector('.picker'); if(p && !p.contains(e.target) && !e.target.closest('.edit')) closePicker(); }
     function pick(btn){
@@ -421,7 +352,7 @@ html body.ink-mode #status.status.not-connected{
 
     $('month').onchange=e=>{S.month=e.target.value;$('monthHead').textContent=S.month;markDirty()};
     $('clearChanges').onclick=()=>{if(!dirty)return;if(!confirm('সব অসম্পূর্ণ পরিবর্তন বাতিল করবেন?'))return;S=JSON.parse(cleanSnapshot);archivePending.clear();render();markDirty();toast('পরিবর্তন বাতিল হয়েছে')};
-    $('monthPicker').onchange = () => { syncMonth(); markDirty(); };
+    $('monthPicker').onchange = syncMonth;
 
     $('addDay').onclick = () => {
       if (S.days.length >= 31) {
@@ -487,6 +418,7 @@ html body.ink-mode #status.status.not-connected{
       a.href = URL.createObjectURL(new Blob([JSON.stringify(S, null, 2)], { type: 'application/json' }));
       a.download = 'schedule.json';
       a.click();
+      setTimeout(() => URL.revokeObjectURL(a.href), 1000);
     };
 
     function stableStringify(value) {
@@ -537,69 +469,36 @@ html body.ink-mode #status.status.not-connected{
     }
 
     $('save').onclick = async () => {
-      S.month = $('month').value;
-      const names = S.employees.map(emp => String(emp.name || '').trim());
-      const normalizedNames = names.map(name => name.toLocaleLowerCase());
-      if (!S.month.trim() || S.month.length > 80) {
-        toast('রোস্টারের শিরোনাম ১–৮০ অক্ষরের মধ্যে হতে হবে।', true);
-        return;
-      }
-      if (S.days.length < 1 || S.days.length > 31) {
-        toast('রোস্টারে ১ থেকে ৩১টি তারিখ থাকতে হবে।', true);
-        return;
-      }
-      const rosterMonth = S.days[0]?.isoDate?.slice(0, 7);
-      if (!rosterMonth || S.days.some(day => !/^\\d{4}-\\d{2}-\\d{2}$/.test(day.isoDate || '') || day.isoDate.slice(0, 7) !== rosterMonth)) {
-        toast('সব তারিখ একই মাসের হতে হবে।', true);
-        return;
-      }
-      if (S.employees.length > 100) {
-        toast('একটি রোস্টারে সর্বোচ্চ ১০০ জন কর্মী রাখা যাবে।', true);
-        return;
-      }
-      if (names.some(name => !name || name.length > 80)) {
-        toast('প্রতিটি কর্মীর নাম ১–৮০ অক্ষরের মধ্যে হতে হবে।', true);
-        return;
-      }
-      if (new Set(normalizedNames).size !== normalizedNames.length) {
-        toast('প্রতিটি কর্মীর নাম আলাদা হতে হবে।', true);
-        return;
-      }
-      S.updatedAt = new Date().toISOString();
-      try {
+      if(saving||!S)return;S.month=$('month').value.trim();
+      const names=S.employees.map(emp=>String(emp.name||'').trim()),normalizedNames=names.map(name=>name.toLocaleLowerCase());
+      if(!S.month||S.month.length>80){toast('রোস্টারের শিরোনাম ১–৮০ অক্ষরের মধ্যে হতে হবে।',true);return;}
+      if(!Array.isArray(S.days)||S.days.length<1||S.days.length>31){toast('রোস্টারে ১ থেকে ৩১টি তারিখ থাকতে হবে।',true);return;}
+      if(S.employees.length>100){toast('একটি রোস্টারে সর্বোচ্চ ১০০ জন কর্মী রাখা যাবে।',true);return;}
+      if(names.some(name=>!name||name.length>80)){toast('প্রতিটি কর্মীর নাম ১–৮০ অক্ষরের মধ্যে হতে হবে।',true);return;}
+      if(new Set(normalizedNames).size!==normalizedNames.length){toast('প্রতিটি কর্মীর নাম আলাদা হতে হবে।',true);return;}
+      const rosterMonth=S.days[0]?.isoDate?.slice(0,7),seenDates=new Set();let previousDate='';
+      const invalidDates=!rosterMonth||S.days.some(day=>{const iso=String(day?.isoDate||'');
+        if(!/^\d{4}-\d{2}-\d{2}$/.test(iso)||iso.slice(0,7)!==rosterMonth||seenDates.has(iso)||(previousDate&&iso<=previousDate))return true;
+        const parsed=new Date(iso+'T00:00:00.000Z');if(!Number.isFinite(parsed.getTime())||parsed.toISOString().slice(0,10)!==iso)return true;
+        seenDates.add(iso);previousDate=iso;return false;});
+      if(invalidDates){toast('তারিখগুলো যাচাই করুন: একই মাসের বৈধ ও ধারাবাহিক ISO তারিখ হতে হবে।',true);return;}
+      const allowedShifts=new Set(Object.keys(S.shiftTypes||{}));
+      if(S.employees.some(emp=>!Array.isArray(emp.shifts)||emp.shifts.length!==S.days.length||emp.shifts.some(code=>!allowedShifts.has(code)))){toast('এক বা একাধিক কর্মীর Shift ডেটা অসম্পূর্ণ বা অবৈধ।',true);return;}
+      saving=true;const saveButton=$('save');saveButton.disabled=true;saveButton.textContent='সংরক্ষণ হচ্ছে…';S.updatedAt=new Date().toISOString();
+      try{
         await archiveIfNeeded();
-        const r = await window.RosterAPI.request('/api/admin/save', {
-          method: 'POST',
-          credentials: 'same-origin',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            data: S,
-            expectedUpdatedAt: cleanSnapshot ? (JSON.parse(cleanSnapshot).updatedAt || null) : null
-          })
-        });
-        const result = await r.json().catch(() => ({}));
-        if (!r.ok) throw new Error(result.error || 'save failed');
-        cleanSnapshot = snapshot(); dirty = false; updateChangeUI();
-        toast('রোস্টার নিরাপদ স্টোরেজে সংরক্ষিত');
-      } catch (error) {
-        if (error.message === 'ARCHIVE_EXISTS') {
-          toast('এই মাসের archive-এ ভিন্ন ডেটা আছে। সেটি যাচাই না করে Save বন্ধ রাখা হয়েছে।', true);
-        } else if (error.message === 'ARCHIVE_CHECK_FAILED') {
-          toast('Archive যাচাই করা যায়নি। সংযোগ ঠিক করে আবার চেষ্টা করুন।', true);
-        } else if (error.message === 'WRITE_CONFLICT') {
-          toast('অন্য Admin সেশন থেকে রোস্টার বদলেছে। আপনার পরিবর্তন JSON Download করে বর্তমান রোস্টার reload করুন।', true);
-        } else if (error.message === 'SAVE_FAILED') {
-          toast('Save করা যায়নি। সংযোগ যাচাই করে আবার চেষ্টা করুন।', true);
-        } else {
-          toast('Save করা যায়নি। Session বা server configuration পরীক্ষা করুন।', true);
-        }
-      }
+        const r=await window.RosterAPI.request('/api/admin/save',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify({data:S,expectedUpdatedAt:cleanSnapshot?(JSON.parse(cleanSnapshot).updatedAt||null):null})});
+        const result=await r.json().catch(()=>({}));if(!r.ok)throw new Error(result.error||'save failed');
+        cleanSnapshot=snapshot();dirty=false;updateChangeUI();toast('রোস্টার নিরাপদ স্টোরেজে সংরক্ষিত');
+      }catch(error){
+        if(error.message==='ARCHIVE_EXISTS')toast('এই মাসের archive-এ ভিন্ন ডেটা আছে। সেটি যাচাই না করে Save বন্ধ রাখা হয়েছে।',true);
+        else if(error.message==='ARCHIVE_CHECK_FAILED')toast('Archive যাচাই করা যায়নি। সংযোগ ঠিক করে আবার চেষ্টা করুন।',true);
+        else if(error.message==='WRITE_CONFLICT')toast('অন্য Admin সেশন থেকে রোস্টার বদলেছে। আপনার পরিবর্তন JSON Download করে বর্তমান রোস্টার reload করুন।',true);
+        else if(error.message==='SAVE_FAILED')toast('Save করা যায়নি। সংযোগ যাচাই করে আবার চেষ্টা করুন।',true);
+        else toast('Save করা যায়নি। Session বা server configuration পরীক্ষা করুন।',true);
+      }finally{saving=false;saveButton.disabled=false;saveButton.textContent='✓ নিরাপদে Save';}
     };
-
-    $('theme').onclick = () => {
-      localStorage.setItem('roster-display-mode', document.body.classList.contains('ink-mode') ? 'light' : 'ink');
-      applyTheme();
-    };
+    $('theme').onclick = () => { try{localStorage.setItem('roster-display-mode',document.body.classList.contains('ink-mode')?'light':'ink');}catch{} applyTheme(); };
 
     applyTheme();
     load();
