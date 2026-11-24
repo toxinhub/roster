@@ -790,6 +790,205 @@ html body.admin-page.ink-mode .security-panel{
   background:linear-gradient(115deg,#2B3B46 0%,#354B57 100%)!important;
 }
 
+
+/* MAIN SITE INK MODE — shared warm charcoal palette and theme interaction */
+html body.admin-page{
+  transition:background-color .28s ease,color .28s ease;
+}
+html body.admin-page.ink-mode{
+  --adm-bg:#4B4641;
+  --adm-surface:#625C56;
+  --adm-soft:#59534D;
+  --adm-line:#7A726A;
+  --adm-ink:#FFF6EF;
+  --adm-muted:#D8CBC1;
+  --adm-accent:#C97B70;
+  --adm-shadow:0 12px 32px rgba(40,28,23,.20);
+  background:#4B4641!important;
+  background-image:none!important;
+  color:#FFF6EF!important;
+}
+html body.admin-page.ink-mode .app,
+html body.admin-page.ink-mode main.page-shell{
+  background:transparent!important;
+  color:#FFF6EF!important;
+}
+html body.admin-page.ink-mode .topbar{
+  background:#59534D!important;
+  color:#FFF8F2!important;
+  border-bottom:1px solid #7A726A!important;
+  box-shadow:0 5px 18px rgba(40,28,23,.22)!important;
+}
+html body.admin-page.ink-mode .brand strong,
+html body.admin-page.ink-mode .topbar .brand strong{
+  color:#FFF8F2!important;
+}
+html body.admin-page.ink-mode .brand small,
+html body.admin-page.ink-mode .topbar .brand small{
+  color:#D8CBC1!important;
+}
+html body.admin-page.ink-mode .brand-icon,
+html body.admin-page.ink-mode .icon-btn,
+html body.admin-page.ink-mode .back,
+html body.admin-page.ink-mode .admin-link{
+  background:#6B645D!important;
+  color:#F8EEE7!important;
+  border-color:#80776F!important;
+  box-shadow:none!important;
+}
+html body.admin-page.ink-mode .brand-icon{
+  color:#F3C5B8!important;
+}
+html body.admin-page.ink-mode .panel,
+html body.admin-page.ink-mode .grid-scroll,
+html body.admin-page.ink-mode .picker,
+html body.admin-page.ink-mode .picker-popover{
+  background:#625C56!important;
+  color:#FFF6EF!important;
+  border-color:#7D756D!important;
+  box-shadow:0 12px 30px rgba(40,28,23,.18)!important;
+}
+html body.admin-page.ink-mode .admin-note,
+html body.admin-page.ink-mode .editor-meta,
+html body.admin-page.ink-mode .change-summary{
+  background:#59534D!important;
+  color:#D8CBC1!important;
+  border-color:#7A726A!important;
+}
+html body.admin-page.ink-mode .security-panel{
+  background:linear-gradient(115deg,#625C56 0%,#59534D 100%)!important;
+}
+html body.admin-page.ink-mode .section-head h2,
+html body.admin-page.ink-mode .panel,
+html body.admin-page.ink-mode .grid-scroll th,
+html body.admin-page.ink-mode .grid-scroll td,
+html body.admin-page.ink-mode footer,
+html body.admin-page.ink-mode footer a{
+  color:#FFF6EF!important;
+  text-shadow:none!important;
+}
+html body.admin-page.ink-mode .eyebrow,
+html body.admin-page.ink-mode .muted,
+html body.admin-page.ink-mode .quiet,
+html body.admin-page.ink-mode .form-grid label,
+html body.admin-page.ink-mode .brand small,
+html body.admin-page.ink-mode .change-summary{
+  color:#D8CBC1!important;
+}
+html body.admin-page.ink-mode input,
+html body.admin-page.ink-mode select,
+html body.admin-page.ink-mode textarea,
+html body.admin-page.ink-mode #editor thead th input,
+html body.admin-page.ink-mode #editor tbody th input{
+  background:#59534D!important;
+  color:#FFF6EF!important;
+  border-color:#8E837A!important;
+  caret-color:#F3B5A8;
+}
+html body.admin-page.ink-mode input::placeholder,
+html body.admin-page.ink-mode textarea::placeholder{
+  color:#D8CBC1!important;
+  opacity:1!important;
+}
+html body.admin-page.ink-mode .grid-scroll th{
+  background:#59534D!important;
+  color:#FFF6EF!important;
+}
+html body.admin-page.ink-mode .back,
+html body.admin-page.ink-mode .icon-btn,
+html body.admin-page.ink-mode .actions button,
+html body.admin-page.ink-mode .form-row button:not(.primary),
+html body.admin-page.ink-mode .view-switch button,
+html body.admin-page.ink-mode .week-nav button,
+html body.admin-page.ink-mode #editor .edit:not(.shift-a):not(.shift-b):not(.shift-c):not(.shift-off):not(.shift-l){
+  background:#6B645D!important;
+  border-color:#80776F!important;
+  color:#F8EEE7!important;
+}
+html body.admin-page.ink-mode .view-switch button[aria-pressed="true"]{
+  background:#8A625B!important;
+  border-color:#C97B70!important;
+  color:#FFF8F2!important;
+}
+html body.admin-page.ink-mode #save,
+html body.admin-page.ink-mode .primary{
+  background:#C97B70!important;
+  border-color:#D99589!important;
+  color:#FFFFFF!important;
+  box-shadow:0 3px 12px rgba(201,123,112,.20)!important;
+}
+html body.admin-page.ink-mode #status.status{
+  background:#4F6253!important;
+  border-color:#819B83!important;
+  color:#EAF5E8!important;
+}
+html body.admin-page.ink-mode .change-status.clean{color:#C7E4C5!important}
+html body.admin-page.ink-mode .change-status.dirty{color:#FFD2A8!important}
+html body.admin-page.ink-mode .remove{color:#F2B0B5!important}
+html body.admin-page.ink-mode .picker-scrim{
+  background:rgba(40,28,23,.52)!important;
+}
+html body.admin-page.ink-mode #toast{
+  background:#6B645D!important;
+  border:1px solid #80776F!important;
+  color:#FFF6EF!important;
+  box-shadow:0 8px 24px rgba(40,28,23,.24)!important;
+}
+html body.admin-page.ink-mode button:focus-visible,
+html body.admin-page.ink-mode input:focus-visible,
+html body.admin-page.ink-mode select:focus-visible,
+html body.admin-page.ink-mode textarea:focus-visible{
+  outline:2px solid #E5A69A!important;
+  outline-offset:2px!important;
+}
+html body.admin-page.ink-mode .grid-scroll{
+  scrollbar-color:#8E837A #59534D!important;
+}
+html body.admin-page.ink-mode .topbar,
+html body.admin-page.ink-mode .panel,
+html body.admin-page.ink-mode .admin-note,
+html body.admin-page.ink-mode .grid-scroll,
+html body.admin-page.ink-mode input,
+html body.admin-page.ink-mode select,
+html body.admin-page.ink-mode textarea,
+html body.admin-page.ink-mode button{
+  transition:background-color .24s ease,border-color .24s ease,color .24s ease,box-shadow .24s ease;
+}
+html body.admin-page #theme{
+  position:relative;
+  overflow:visible;
+  transition:transform .12s ease,box-shadow .12s ease,background-color .24s ease,color .24s ease;
+}
+html body.admin-page #theme.theme-clicked{
+  transform:scale(1.06);
+  box-shadow:0 0 0 1px rgba(201,123,112,.10),0 0 15px rgba(201,123,112,.18),0 4px 12px rgba(70,48,40,.10);
+}
+html body.admin-page #theme.theme-clicked::before{
+  content:"";
+  position:absolute;
+  inset:-5px;
+  border:1px solid rgba(201,123,112,.30);
+  border-radius:7px;
+  animation:adminThemeRipple .62s ease-out both;
+  pointer-events:none;
+}
+@keyframes adminThemeRipple{
+  0%{opacity:.75;transform:scale(.72)}
+  100%{opacity:0;transform:scale(1.72)}
+}
+@media(hover:hover) and (pointer:fine){
+  html body.admin-page.ink-mode .panel:hover{
+    border-color:#92857C!important;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  html body.admin-page,
+  html body.admin-page *{
+    transition-duration:.01ms!important;
+    animation-duration:.01ms!important;
+  }
+}
+
 </style></head>
 <body class="admin-page" data-required-role="admin">
   <div class="app">
@@ -1277,7 +1476,15 @@ html body.admin-page.ink-mode .security-panel{
         else toast('Save করা যায়নি। Session বা server configuration পরীক্ষা করুন।',true);
       }finally{saving=false;saveButton.disabled=false;saveButton.textContent='✓ নিরাপদে Save';}
     };
-    $('theme').onclick = () => { try{localStorage.setItem('roster-display-mode',document.body.classList.contains('ink-mode')?'light':'ink');}catch{} applyTheme(); };
+    $('theme').onclick = () => {
+      const button=$('theme');
+      button.classList.remove('theme-clicked');
+      void button.offsetWidth;
+      button.classList.add('theme-clicked');
+      setTimeout(()=>button.classList.remove('theme-clicked'),620);
+      try{localStorage.setItem('roster-display-mode',document.body.classList.contains('ink-mode')?'light':'ink');}catch{}
+      applyTheme();
+    };
 
     applyTheme();
     load();
