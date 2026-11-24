@@ -37,3 +37,10 @@ test("admin layout uses balanced sizing without stale sidebar offsets", () => {
   assert.match(html, /@media\(max-width:600px\)[\s\S]*?page-shell\{width:calc\(100% - 20px\)/);
   assert.match(html, /#editor\{min-width:680px\}/);
 });
+
+test("roster editor keeps date creation but does not expose employee creation", () => {
+  assert.match(html, /<button id="addDay">\+ তারিখ<\/button>/);
+  assert.doesNotMatch(html, /id="addEmp"|\$\(['"]addEmp['"]\)|S\.employees\.push\(/);
+  assert.match(html, /function render\(\)/);
+  assert.match(html, /S\.employees\.map\(/);
+});
