@@ -165,9 +165,20 @@ test("archive snapshot comparison ignores object key order but preserves array o
 test("Pages API proxy preserves preview origin and restricts methods", () => {
   const proxy = fs.readFileSync(new URL("../functions/api/[[path]].js", "file://" + __filename), "utf8");
   assert.doesNotThrow(() => new vm.Script(proxy.replace("export async function", "async function")));
-  assert.match(proxy, /headers\.set\("Origin", incoming\.origin\)/);
+  assert.match(proxy, /headers\.set\("Origin", READ_ONLY_PREVIEW_ORIGIN\)/);
+  assert.match(proxy, /browserOrigin !== incoming\.origin/);
+  assert.match(proxy, /responseHeaders\.set\("Access-Control-Allow-Origin", incoming\.origin\)/);
   assert.match(proxy, /ALLOWED_METHODS/);
-  assert.doesNotMatch(proxy, /roster-bps\.pages\.dev/);
+  assert.match(proxy, /PREVIEW_HOST/);
+  assert.match(proxy, /ADMIN_WRITE_ORIGINS/);
+});
+
+test("malformed login requests are rejected before consuming a rate-limit attempt", () => {
+  const start = workerSource.indexOf('if (path === "/api/login"');
+  const end = workerSource.indexOf('if (path === "/api/session"', start);
+  const login = workerSource.slice(start, end);
+  assert.ok(login.indexOf("readJson") < login.indexOf("consumeLoginAttempt"));
+  assert.ok(login.indexOf("INVALID_PASSWORD") < login.indexOf("consumeLoginAttempt"));
 });
 
 test("all authenticated API routes pass the coordinator-backed store", () => {
