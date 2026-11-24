@@ -85,6 +85,57 @@ html body.ink-mode #status.status.not-connected{
   background:#F7E5E2 !important;
   border-color:#C58A82 !important;
 }
+
+/* Admin Operations Dashboard — Phase 1 foundation */
+:root{--adm-deep:#102D30;--adm-teal:#193B3D;--adm-ivory:#F2E9D8;--adm-gold:#D8B77A;--adm-green:#75B89A;--adm-coral:#D77B78}
+body[data-required-role="admin"]{background:linear-gradient(145deg,#edf3f2,#f5f1e9 65%,#e8eeeb)}
+body[data-required-role="admin"] .topbar{margin-left:232px}body[data-required-role="admin"] .page-shell{max-width:none;margin-left:250px;padding:24px clamp(16px,3vw,38px)}
+body[data-required-role="admin"] .page-shell>.panel,body[data-required-role="admin"] .page-shell>.admin-note{max-width:none}
+.admin-sidebar{position:fixed;z-index:5;left:0;top:0;bottom:0;width:232px;padding:22px 16px;background:var(--adm-deep);color:#e8f0eb;display:flex;flex-direction:column;gap:24px;box-shadow:8px 0 26px rgba(16,45,48,.08)}
+.admin-sidebar-brand{display:flex;align-items:center;gap:11px;padding:8px 5px 16px;border-bottom:1px solid rgba(255,255,255,.12)}
+.admin-sidebar-brand .mark{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:var(--adm-gold);color:var(--adm-deep);font-size:18px;font-weight:900}
+.admin-sidebar-brand strong{display:block;font-size:14px}.admin-sidebar-brand small{display:block;color:#a8c1ba;font-size:10px;margin-top:3px}
+.admin-nav-label{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:#8ea9a1;font-weight:900;padding:0 9px}
+.admin-nav{display:grid;gap:5px}.admin-nav a{display:flex;align-items:center;gap:10px;padding:10px 11px;border-radius:10px;color:#c7d8d2;font-size:12px;font-weight:700;transition:background .15s,color .15s}.admin-nav a:hover,.admin-nav a.active{background:rgba(216,183,122,.14);color:#f2d7a6}.admin-nav a span{width:20px;text-align:center;font-size:15px}
+.admin-sidebar-bottom{margin-top:auto;border-top:1px solid rgba(255,255,255,.12);padding:13px 7px;color:#91aaa2;font-size:10px;line-height:1.6}
+.admin-overview{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:0 0 16px}
+.admin-kpi{background:#fff;border:1px solid #dce7e3;border-radius:15px;padding:15px 16px;box-shadow:0 5px 18px rgba(16,45,48,.045);min-height:98px}
+.admin-kpi .kpi-label{font-size:10px;color:#73847f;font-weight:800;display:flex;align-items:center;gap:7px}.admin-kpi .kpi-label i{width:7px;height:7px;border-radius:50%;background:var(--adm-green)}
+.admin-kpi strong{display:block;margin-top:9px;font-size:25px;line-height:1;color:var(--adm-deep);font-weight:900}.admin-kpi small{display:block;margin-top:6px;font-size:9px;color:#8a9893}
+body[data-required-role="admin"] .panel{border-radius:15px;border-color:#dce6e2;box-shadow:0 5px 18px rgba(16,45,48,.045)}
+body[data-required-role="admin"] .section-head h2{color:var(--adm-deep)}
+body[data-required-role="admin"] .primary{background:var(--adm-deep);border-color:var(--adm-deep);color:white}
+body[data-required-role="admin"] .primary:hover{background:var(--adm-teal)}
+body[data-required-role="admin"] input:focus-visible,body[data-required-role="admin"] button:focus-visible,body[data-required-role="admin"] a:focus-visible{outline:3px solid #c7a66d;outline-offset:2px}
+@media(max-width:1000px){body[data-required-role="admin"] .topbar{margin-left:194px}body[data-required-role="admin"] .page-shell{margin-left:208px}.admin-sidebar{width:194px}.admin-overview{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:700px){.admin-sidebar{position:sticky;top:0;bottom:auto;width:100%;height:auto;padding:8px 10px;background:var(--adm-deep);display:block}.admin-sidebar-brand{display:none}.admin-nav-label,.admin-sidebar-bottom{display:none}.admin-nav{display:flex;overflow-x:auto;gap:5px}.admin-nav a{white-space:nowrap;padding:9px 10px;font-size:11px}.admin-nav a span{font-size:13px;width:auto}body[data-required-role="admin"] .topbar{margin-left:0}body[data-required-role="admin"] .page-shell{margin:0;padding:14px 10px}.admin-overview{gap:8px}.admin-kpi{padding:12px;min-height:85px}.admin-kpi strong{font-size:22px}}
+@media(max-width:420px){.admin-overview{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* Phase 2 — roster editing ergonomics */
+/* Phase 2 compact toolbar */
+.roster-tools{grid-template-columns:minmax(160px,1.4fr) minmax(110px,.8fr) minmax(100px,.7fr) minmax(130px,.9fr) auto}
+@media(max-width:900px){.roster-tools{grid-template-columns:1fr 1fr}.roster-tools label:first-child{grid-column:1/-1}.roster-tools button{grid-column:1/-1}}
+@media(max-width:700px){.roster-tools{grid-template-columns:1fr 1fr}.roster-tools label:first-child{grid-column:1/-1}.roster-tools label:nth-child(4){grid-column:1/-1}.roster-tools button{grid-column:1/-1}}
+
+.roster-tools{display:grid;grid-template-columns:minmax(150px,1.4fr) minmax(120px,.8fr) minmax(105px,.7fr) minmax(130px,.9fr) auto;gap:9px;align-items:end;margin:14px 0}
+.roster-tools label{display:grid;gap:5px;color:var(--muted);font-size:10px;font-weight:800}
+.roster-tools input,.roster-tools select{min-height:40px;padding:8px 10px;border:1px solid var(--line-strong);border-radius:9px;background:var(--panel-soft);color:var(--ink);min-width:0}
+.roster-tools button{min-height:40px;padding:8px 13px;border-radius:9px;border:1px solid var(--adm-deep);background:var(--adm-deep);color:white;font-size:11px;font-weight:800;cursor:pointer}
+.grid-scroll{max-height: min(68vh,760px);overscroll-behavior:contain}
+#editor{border-collapse:separate;border-spacing:0}
+#editor thead th{position:sticky;top:0;z-index:3;background:var(--panel-soft);box-shadow:0 1px 0 var(--line)}
+#editor th:first-child{position:sticky;left:0;z-index:4;min-width:150px;background:var(--panel-soft);box-shadow:1px 0 0 var(--line)}
+#editor tbody th:first-child{background:var(--panel);z-index:2}
+#editor thead th:first-child{z-index:5}
+#editor tbody tr:hover td{background:color-mix(in srgb,var(--adm-green) 10%,var(--panel))}
+#editor tbody tr[hidden]{display:none}
+#editor .edit{min-width:44px;min-height:38px}
+.roster-result-count{font-size:10px;color:var(--muted);margin:-5px 0 9px}
+@media(max-width:700px){.roster-tools{grid-template-columns:1fr 1fr}.roster-tools label:first-child{grid-column:1/-1}.roster-tools button{grid-column:1/-1}.grid-scroll{max-height:65vh}#editor th:first-child{min-width:112px}#editor tbody th:first-child input{max-width:100px}}
+@media(prefers-reduced-motion:reduce){.admin-nav a{transition:none}}
+
+.archive-controls{display:flex;align-items:end;flex-wrap:wrap;gap:9px}.archive-controls label{display:grid;gap:5px;min-width:180px;color:var(--muted);font-size:10px;font-weight:800}.archive-controls input{min-height:40px;padding:8px 10px;border:1px solid var(--line-strong);border-radius:9px;background:var(--panel-soft);color:var(--ink)}.archive-preview{margin-top:12px;padding:13px;border:1px solid var(--line);border-radius:11px;background:var(--panel-soft);color:var(--ink);font-size:12px;line-height:1.65}.archive-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:10px}.archive-stat{padding:10px;border:1px solid var(--line);border-radius:9px;background:var(--panel)}.archive-stat strong{display:block;font-size:18px;color:var(--ink)}.archive-stat small{font-size:9px;color:var(--muted)}.archive-preview .archive-shifts{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}.archive-shifts span{padding:5px 8px;border:1px solid var(--line);border-radius:7px;font-size:10px;font-weight:800}
+@media(max-width:600px){.archive-controls{display:grid;grid-template-columns:1fr 1fr}.archive-controls label{grid-column:1/-1}.archive-controls button{width:100%}.archive-stats{grid-template-columns:repeat(3,minmax(0,1fr))}}
 </style></head>
 <body data-required-role="admin">
   <div class="app">
@@ -102,8 +153,9 @@ html body.ink-mode #status.status.not-connected{
       </div>
     </header>
 
-    <main class="page-shell">
-      <section class="admin-note">
+    <aside class="admin-sidebar" aria-label="Admin navigation"><div class="admin-sidebar-brand"><span class="mark">▦</span><div><strong>Roster Control</strong><small>Operations Dashboard</small></div></div><div class="admin-nav-label">Workspace</div><nav class="admin-nav"><a class="active" href="#overview"><span>⌂</span> Overview</a><a href="#security"><span>◈</span> Security</a><a href="#roster-editor"><span>▤</span> Roster Editor</a><a href="#archive-history"><span>◷</span> Archive</a><a href="#tools"><span>⇧</span> Tools & Export</a></nav><div class="admin-sidebar-bottom">CCTV • PJL<br>Protected admin workspace</div></aside>
+  <main class="page-shell">
+      <section class="admin-note" id="security">
         <b>নিরাপত্তা:</b> Save করলে রোস্টার private Cloudflare KV storage-এ সংরক্ষিত হবে। এই Preview-তে GitHub-এর মাধ্যমে সরাসরি কোনো পরিবর্তন করা হয় না।
       </section>
 
@@ -115,7 +167,8 @@ html body.ink-mode #status.status.not-connected{
         <p class="muted">এই প্যানেলে আলাদা Admin password প্রয়োজন। সেশন যাচাই ও রোস্টার সংরক্ষণ Worker API-এর মাধ্যমে হয়। Session মেয়াদ ৮ ঘণ্টা।</p>
       </section>
 
-      <section class="panel">
+      <section class="admin-overview" id="overview" aria-label="Roster overview"><article class="admin-kpi"><span class="kpi-label"><i></i> কর্মী সংখ্যা</span><strong id="kpiEmployees">—</strong><small>বর্তমান রোস্টারে</small></article><article class="admin-kpi"><span class="kpi-label"><i></i> মোট তারিখ</span><strong id="kpiDays">—</strong><small>সম্পাদনাযোগ্য দিন</small></article><article class="admin-kpi"><span class="kpi-label"><i></i> A শিফট</span><strong id="kpiA">—</strong><small>মোট বরাদ্দ</small></article><article class="admin-kpi"><span class="kpi-label"><i></i> B / C শিফট</span><strong id="kpiBC">—</strong><small>সম্মিলিত বরাদ্দ</small></article></section>
+      <section class="panel" id="roster-editor">
         <div class="section-head">
           <div>
             <span class="eyebrow">EDITOR</span>
@@ -134,15 +187,37 @@ html body.ink-mode #status.status.not-connected{
 
         <p class="muted">মাস ও সাল নির্বাচন করলে শিরোনাম স্বয়ংক্রিয়ভাবে আপডেট হবে। নিচের টেবিল থেকে প্রতিটি তারিখ ও দিন পরিবর্তন করুন।</p>
 
+        <div class="roster-tools" aria-label="Roster filters and bulk editing">
+          <label>কর্মী খুঁজুন<input id="employeeSearch" type="search" placeholder="নাম লিখুন…" autocomplete="off"></label>
+          <label>Shift Filter<select id="shiftFilter"><option value="ALL">সব Shift</option><option value="A">A Shift</option><option value="B">B Shift</option><option value="C">C Shift</option><option value="OFF">OFF</option><option value="L">Leave</option></select></label>
+          <label>তারিখ<select id="bulkDate"></select></label>
+          <label>নতুন Shift<select id="bulkShift"><option value="">Shift নির্বাচন</option></select></label>
+          <button type="button" id="bulkApply">প্রয়োগ</button>
+        </div>
+        <p class="roster-result-count" id="rosterResultCount" aria-live="polite"></p>
         <div class="grid-scroll">
           <table id="editor"></table>
         </div>
 
         <div class="editor-meta"><span id="changeStatus" class="change-status clean">● কোনো পরিবর্তন নেই</span><button id="clearChanges" class="quiet" type="button" disabled>পরিবর্তন বাতিল</button></div><div id="changeSummary" class="change-summary" hidden></div>
-        <div class="form-row">
+        <div class="form-row" id="tools">
           <button class="primary" id="save">✓ নিরাপদে Save</button>
           <button id="download">JSON Download</button>
         </div>
+      </section>
+
+      <section class="panel" id="archive-history">
+        <div class="section-head">
+          <div><span class="eyebrow">HISTORY</span><h2>Archive & History</h2></div>
+          <span class="muted">Read-only</span>
+        </div>
+        <p class="muted">আগের মাসের সংরক্ষিত রোস্টার নিরাপদে দেখুন ও JSON হিসেবে ডাউনলোড করুন। এখানে কোনো Archive পরিবর্তন করা হবে না।</p>
+        <div class="form-row archive-controls">
+          <label>মাস নির্বাচন<input id="archiveMonth" type="month"></label>
+          <button class="primary" id="loadArchive" type="button">Archive দেখুন</button>
+          <button id="downloadArchive" type="button" disabled>JSON Download</button>
+        </div>
+        <div id="archivePreview" class="archive-preview" role="status" aria-live="polite">একটি মাস নির্বাচন করে Archive দেখুন।</div>
       </section>
     </main>
 
@@ -240,6 +315,7 @@ html body.ink-mode #status.status.not-connected{
       $('month').value = monthName;
       $('monthHead').textContent = monthName;
       render();
+      updateOverview();
       markDirty();
       toast(oldDays.length === daysInMonth
         ? 'মাস ও সাল অনুযায়ী তারিখ আপডেট হয়েছে'
@@ -267,6 +343,7 @@ html body.ink-mode #status.status.not-connected{
         $('month').value = S.month || '';
         $('monthHead').textContent = S.month || 'রোস্টার সম্পাদনা';
         render();
+        updateOverview();
         setPicker();
         cleanSnapshot=snapshot(); dirty=false; updateChangeUI();
       } catch {
@@ -274,6 +351,7 @@ html body.ink-mode #status.status.not-connected{
       }
     }
 
+    function updateOverview(){if(!S)return;const employees=S.employees||[],days=S.days||[];const count=code=>employees.reduce((sum,emp)=>sum+(emp.shifts||[]).filter(x=>x===code).length,0);$("kpiEmployees").textContent=employees.length;$("kpiDays").textContent=days.length;$("kpiA").textContent=count("A");$("kpiBC").textContent=count("B")+" / "+count("C");}
     function snapshot(){return JSON.stringify(S);}
     function diffChanges(){
       if(!cleanSnapshot)return [];
@@ -335,7 +413,7 @@ html body.ink-mode #status.status.not-connected{
       const b = S.employees.map((e, ei) => `
         <tr>
           <th>
-            <input value="${esc(e.name)}" data-name="${ei}" maxlength="80">
+            <input value="${esc(e.name)}" data-name="${ei}" maxlength="80" aria-label="কর্মীর নাম: ${esc(e.name)}">
             <button class="remove" data-rmemp="${ei}">বাদ</button>
           </th>
           ${e.shifts.map((c, di) => `<td><button class="edit" data-ei="${ei}" data-di="${di}">${esc(c)}</button></td>`).join('')}
@@ -343,6 +421,15 @@ html body.ink-mode #status.status.not-connected{
       `).join('');
 
       $('editor').innerHTML = '<thead>' + h + '</thead><tbody>' + b + '</tbody>';
+      const bulkDate = $('bulkDate');
+      const previousDate = bulkDate.value;
+      bulkDate.innerHTML = S.days.map((d,i) => '<option value="'+i+'">'+esc(d.date)+' · '+esc(d.weekday)+'</option>').join('');
+      if (S.days.length) bulkDate.value = S.days.some((d,i)=>String(i)===previousDate) ? previousDate : '0';
+      const bulkShift = $('bulkShift');
+      const previousShift = bulkShift.value;
+      bulkShift.innerHTML = '<option value="">Shift নির্বাচন</option>'+Object.entries(S.shiftTypes||{}).map(([code,v])=>'<option value="'+esc(code)+'">'+esc(code)+' — '+esc(v.label)+'</option>').join('');
+      if (Object.prototype.hasOwnProperty.call(S.shiftTypes||{},previousShift)) bulkShift.value=previousShift;
+      applyRosterFilters();
 
       $('editor').querySelectorAll('[data-day]').forEach(x => x.onchange = e => {
         const index = +e.target.dataset.day;
@@ -394,26 +481,83 @@ html body.ink-mode #status.status.not-connected{
         render();
       });
       // Weekday is derived from ISO date and is intentionally read-only.
-      $('editor').querySelectorAll('[data-name]').forEach(x => x.onchange = e => { S.employees[+e.target.dataset.name].name = e.target.value; markDirty(); });
+      $('editor').querySelectorAll('[data-name]').forEach(x => x.onchange = e => {
+        const index=Number(e.target.dataset.name);
+        const employee=S.employees[index];
+        if(!employee)return;
+        const value=String(e.target.value||'').trim();
+        const duplicate=S.employees.some((other,i)=>i!==index&&String(other.name||'').trim().toLocaleLowerCase()===value.toLocaleLowerCase());
+        if(!value||value.length>80||duplicate){
+          e.target.value=employee.name;
+          toast(!value?'কর্মীর নাম খালি রাখা যাবে না।':duplicate?'একই নামে একাধিক কর্মী রাখা যাবে না।':'কর্মীর নাম সর্বোচ্চ ৮০ অক্ষরের হতে হবে।',true);
+          return;
+        }
+        employee.name=value;
+        e.target.value=value;
+        markDirty();
+        applyRosterFilters();
+      });
       $('editor').querySelectorAll('[data-rmday]').forEach(x => x.onclick = e => {
         const i = +e.target.dataset.rmday;
         S.days.splice(i, 1);
         S.employees.forEach(emp => emp.shifts.splice(i, 1));
-        markDirty(); render();
+        markDirty(); render(); updateOverview();
       });
       $('editor').querySelectorAll('[data-rmemp]').forEach(x => x.onclick = e => {
-        S.employees.splice(+e.target.dataset.rmemp, 1);
-        markDirty(); render();
+        const index=+e.target.dataset.rmemp;
+        const employee=S.employees[index];
+        if(!employee)return;
+        if(!confirm('কর্মী "'+employee.name+'"-কে বর্তমান রোস্টার থেকে বাদ দেবেন? পূর্বের archive অপরিবর্তিত থাকবে।'))return;
+        S.employees.splice(index, 1);
+        markDirty(); render(); updateOverview();
       });
-      $('editor').querySelectorAll('.edit').forEach(x => x.onclick = () => pick(x));
+      $('editor').querySelectorAll('.edit').forEach(x => {
+        x.onclick = () => pick(x);
+        x.onkeydown = e => {
+          const moves={ArrowLeft:[0,-1],ArrowRight:[0,1],ArrowUp:[-1,0],ArrowDown:[1,0]};
+          const move=moves[e.key]; if(!move)return;
+          e.preventDefault();
+          const nextEmployee=Number(x.dataset.ei)+move[0],nextDay=Number(x.dataset.di)+move[1];
+          if(nextEmployee<0||nextEmployee>=S.employees.length||nextDay<0||nextDay>=S.days.length)return;
+          const target=$('editor').querySelector('.edit[data-ei="'+nextEmployee+'"][data-di="'+nextDay+'"]');
+          target?.focus();
+        };
+      });
     }
+
+    function applyRosterFilters(){
+      if(!S)return;
+      const query=String($('employeeSearch')?.value||'').trim().toLocaleLowerCase();
+      const shift=$('shiftFilter')?.value||'ALL';
+      let shown=0;
+      $('editor').querySelectorAll('tbody tr').forEach((row,ei)=>{
+        const emp=S.employees[ei];
+        const name=String(emp?.name||'').toLocaleLowerCase();
+        const matchesName=!query||name.includes(query);
+        const matchesShift=shift==='ALL'||(emp?.shifts||[]).includes(shift);
+        row.hidden=!(matchesName&&matchesShift);
+        if(!row.hidden)shown++;
+      });
+      $('rosterResultCount').textContent=shown+' / '+(S.employees||[]).length+' জন কর্মী দেখানো হচ্ছে';
+    }
+    $('employeeSearch').addEventListener('input',applyRosterFilters);
+    $('shiftFilter').addEventListener('change',applyRosterFilters);
+    $('bulkApply').addEventListener('click',()=>{
+      const dayIndex=Number($('bulkDate').value);
+      if(!Number.isInteger(dayIndex)||!S.days[dayIndex]){toast('আগে একটি তারিখ নির্বাচন করুন।',true);return;}
+      const normalized=$('bulkShift').value;
+      if(!Object.prototype.hasOwnProperty.call(S.shiftTypes||{},normalized)){toast('নতুন Shift নির্বাচন করুন।',true);return;}
+      if(!confirm(S.days[dayIndex].date+' তারিখে '+S.employees.length+' জন কর্মীর Shift '+normalized+' করবেন?'))return;
+      S.employees.forEach(emp=>{emp.shifts[dayIndex]=normalized;});
+      markDirty();render();updateOverview();toast('Bulk shift update হয়েছে। Save করতে ভুলবেন না।');
+    });
 
     function closePicker(){ document.querySelector('.picker')?.remove(); document.removeEventListener('pointerdown',outsidePicker); }
     function outsidePicker(e){ const p=document.querySelector('.picker'); if(p && !p.contains(e.target) && !e.target.closest('.edit')) closePicker(); }
     function pick(btn){
       closePicker(); const p=document.createElement('div'); p.className='picker';
       const ei=+btn.dataset.ei, di=+btn.dataset.di, current=S.employees[ei].shifts[di];
-      Object.entries(S.shiftTypes).forEach(([code,v])=>{ const b=document.createElement('button'); b.type='button'; b.className='shift-option shift-'+code.toLowerCase()+(code===current?' selected':''); b.innerHTML='<strong>'+esc(code)+'</strong><small>'+esc(v.label)+'</small>'; b.onclick=()=>{ if(S.employees[ei].shifts[di]!==code){S.employees[ei].shifts[di]=code;markDirty();} closePicker();render(); }; p.appendChild(b); });
+      Object.entries(S.shiftTypes).forEach(([code,v])=>{ const b=document.createElement('button'); b.type='button'; b.className='shift-option shift-'+code.toLowerCase()+(code===current?' selected':''); b.innerHTML='<strong>'+esc(code)+'</strong><small>'+esc(v.label)+'</small>'; b.onclick=()=>{ if(S.employees[ei].shifts[di]!==code){S.employees[ei].shifts[di]=code;markDirty();} closePicker();render();updateOverview(); }; p.appendChild(b); });
       document.body.appendChild(p); const r=btn.getBoundingClientRect();
       if(innerWidth<=600){p.style.left='10px';p.style.right='10px';p.style.bottom='12px';} else {p.style.left=Math.max(10,Math.min(r.left,innerWidth-292))+'px';p.style.top=Math.min(r.bottom+6,innerHeight-120)+'px';}
       requestAnimationFrame(()=>document.addEventListener('pointerdown',outsidePicker));
@@ -462,7 +606,7 @@ html body.ink-mode #status.status.not-connected{
         isoDate
       });
       S.employees.forEach(emp => emp.shifts.push('OFF'));
-      markDirty(); render();
+      markDirty(); render(); updateOverview();
     };
 
     $('addEmp').onclick = () => {
@@ -478,7 +622,7 @@ html body.ink-mode #status.status.not-connected{
         name = 'নতুন কর্মী ' + suffix;
       }
       S.employees.push({ name, shifts: S.days.map(() => 'OFF') });
-      markDirty(); render();
+      markDirty(); render(); updateOverview();
     };
 
     $('download').onclick = () => {
@@ -600,6 +744,39 @@ html body.ink-mode #status.status.not-connected{
       localStorage.setItem('roster-display-mode', document.body.classList.contains('ink-mode') ? 'light' : 'ink');
       applyTheme();
     };
+
+    let currentArchive = null;
+    $('loadArchive').addEventListener('click', async () => {
+      const month=$('archiveMonth').value;
+      if(!/^\d{4}-\d{2}$/.test(month)){toast('Archive দেখার জন্য মাস নির্বাচন করুন।',true);return;}
+      const button=$('loadArchive');
+      button.disabled=true;button.textContent='লোড হচ্ছে…';
+      $('downloadArchive').disabled=true;currentArchive=null;
+      $('archivePreview').textContent='নিরাপদ Archive লোড হচ্ছে…';
+      try{
+        const response=await window.RosterAPI.request('/api/archive?month='+encodeURIComponent(month),{cache:'no-store'});
+        const data=await response.json().catch(()=>null);
+        if(!response.ok)throw new Error(response.status===404?'এই মাসের Archive পাওয়া যায়নি।':'Archive লোড করা যায়নি।');
+        if(!data||!Array.isArray(data.days)||!Array.isArray(data.employees))throw new Error('Archive ডেটার গঠন সঠিক নয়।');
+        currentArchive={month,data};
+        const counts={};for(const emp of data.employees){for(const code of (Array.isArray(emp.shifts)?emp.shifts:[]))counts[code]=(counts[code]||0)+1;}
+        const preview=$('archivePreview');preview.replaceChildren();
+        const title=document.createElement('strong');title.textContent=(data.month||month)+' · সংরক্ষিত Archive';preview.appendChild(title);
+        const stats=document.createElement('div');stats.className='archive-stats';
+        [['কর্মী',data.employees.length],['তারিখ',data.days.length],['মোট বরাদ্দ',Object.values(counts).reduce((a,b)=>a+b,0)]].forEach(([label,value])=>{const card=document.createElement('div');card.className='archive-stat';const strong=document.createElement('strong');strong.textContent=value;const small=document.createElement('small');small.textContent=label;card.append(strong,small);stats.appendChild(card);});
+        preview.appendChild(stats);
+        const shifts=document.createElement('div');shifts.className='archive-shifts';
+        Object.entries(counts).sort(([a],[b])=>a.localeCompare(b)).forEach(([code,count])=>{const item=document.createElement('span');item.textContent=code+': '+count;shifts.appendChild(item);});
+        preview.appendChild(shifts);
+        $('downloadArchive').disabled=false;
+      }catch(error){$('archivePreview').textContent=error.message||'Archive লোড করা যায়নি।';}
+      finally{button.disabled=false;button.textContent='Archive দেখুন';}
+    });
+    $('downloadArchive').addEventListener('click',()=>{
+      if(!currentArchive)return;
+      const blob=new Blob([JSON.stringify(currentArchive.data,null,2)],{type:'application/json'});
+      const url=URL.createObjectURL(blob);const link=document.createElement('a');link.href=url;link.download='archive-'+currentArchive.month+'.json';link.click();URL.revokeObjectURL(url);
+    });
 
     applyTheme();
     load();
