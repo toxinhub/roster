@@ -332,7 +332,7 @@ async function handler(request, env) {
     return session ? json({ authenticated: true, role: session.role, expiresAt: session.exp }) : json({ authenticated: false }, 401);
   }
   if (path === "/api/logout" && request.method === "POST") {
-    const session = await getSession(request, env);
+    const session = await getSession(request, env, store);
     if (!session) return json({ error: "AUTH_REQUIRED" }, 401);
     const remaining = Math.max(1, session.exp - Math.floor(Date.now() / 1000));
     await store.put("revoked:" + session.jti, "1", { expirationTtl: remaining });
@@ -345,7 +345,7 @@ async function handler(request, env) {
     try { return json(JSON.parse(raw)); } catch { return json({ error: "ROSTER_INVALID" }, 503); }
   }
   if (path === "/api/archive" && request.method === "GET") {
-    if (!await requireRole(request, env, "site")) return json({ error: "AUTH_REQUIRED" }, 401);
+    if (!await requireRole(request, env, store, "site")) return json({ error: "AUTH_REQUIRED" }, 401);
     const month = url.searchParams.get("month") || "";
     if (!/^\d{4}-(0[1-9]|1[0-2])$/.test(month)) return json({ error: "INVALID_MONTH" }, 400);
     const raw = await store.get("archive:" + month);
@@ -378,7 +378,7 @@ async function handler(request, env) {
     return json({ ok: true, updatedAt: body.data.updatedAt || null });
   }
   if (path === "/api/admin/archive" && request.method === "POST") {
-    if (!await requireRole(request, env, "admin")) return json({ error: "ADMIN_AUTH_REQUIRED" }, 401);
+    if (!await requireRole(request, env, store, "admin")) return json({ error: "ADMIN_AUTH_REQUIRED" }, 401);
     if (!adminWriteOrigins(env).includes(requestOrigin)) return json({ error: "PREVIEW_READ_ONLY" }, 403);
     let body;
     try { body = await readJson(request, 262144); } catch (error) { return jsonBodyError(error); }
