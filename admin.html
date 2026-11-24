@@ -748,7 +748,7 @@ body[data-required-role="admin"] input:focus-visible,body[data-required-role="ad
     let currentArchive = null;
     $('loadArchive').addEventListener('click', async () => {
       const month=$('archiveMonth').value;
-      if(!/^\\d{4}-\\d{2}$/.test(month)){toast('Archive দেখার জন্য মাস নির্বাচন করুন।',true);return;}
+      if(!/^\d{4}-\d{2}$/.test(month)){toast('Archive দেখার জন্য মাস নির্বাচন করুন।',true);return;}
       const button=$('loadArchive');
       button.disabled=true;button.textContent='লোড হচ্ছে…';
       $('downloadArchive').disabled=true;currentArchive=null;
