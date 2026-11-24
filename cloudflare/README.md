@@ -61,10 +61,12 @@ If `ROSTER_COORDINATOR` is missing while `REQUIRE_COORDINATOR=true`, authenticat
 - [x] Runtime `/api/status` checked in production: `configured=true` and all 10 configuration checks passed, including the existing secrets' presence, KV/Coordinator bindings, coordinator-required mode, and allowed origin.
 - [x] Post-deployment KV snapshot created in a separate namespace `roster-production-backup-2026-11-24`; all three keys (`schedule`, `archive:2026-09`, `archive:2026-10`) copied and verified with matching SHA-256 hashes.
 - [x] Production unauthenticated API smoke checks passed: `/api/session` returned `authenticated:false`; `/api/roster` and `/api/archive` returned `AUTH_REQUIRED` without a session.
-- [ ] Authenticated Admin save/archive/restore/stale-tab tests remain pending because they require an authorized Admin browser session. The backup is in the same Cloudflare account (not an off-site backup); preserve it until the rollout is fully verified.
-- [ ] PR #3 remains open/draft; Pages production branch remains `security/cloudflare-preview`.
+- [x] User-confirmed production Admin Save and stale-tab conflict checks completed successfully.
+- [ ] Archive create/duplicate protection, Restore, logout revocation, site-role write denial, and Preview read-only checks still need explicit verification. Preserve the same-account backup until these are complete.
+- [x] PR #3 merged into `main` as `aabb43ba01aed659c20b9d0e42bf9d60449c3f97`.
+- [x] Cloudflare Pages production branch changed from `security/cloudflare-preview` to `main`; verify the new production deployment below.
 
-The deployment was additive: it created the Durable Object namespace and changed Worker code/bindings, but did not copy, delete, or rewrite roster/archive values in KV. Do not treat the configuration checks above as a substitute for the pending runtime and authenticated tests.
+The Worker deployment was additive: it created the Durable Object namespace and changed Worker code/bindings, but did not copy, delete, or rewrite roster/archive values in KV. The backup is in the same Cloudflare account, not an off-site backup.
 
 ## Safe production cutover runbook
 
@@ -81,7 +83,7 @@ Do these steps in order. Do not change the Pages production branch before the Wo
 
 ### 2. Deploy the Worker first
 
-From the repository checkout on branch `fix/roster-data-integrity`:
+From the repository checkout on branch `main` (after the merge):
 
 ```sh
 cd cloudflare
@@ -129,12 +131,11 @@ Do not test by overwriting real schedules or archives. Use a safe test change an
 
 ### 5. Publish the Pages frontend
 
-The current Cloudflare Pages project production branch is `security/cloudflare-preview`, not `main`. Merging PR #3 into `main` alone will therefore not publish it.
+Cloudflare Pages production branch is now `main` and PR #3 has been merged. The branch change and merge do not by themselves prove the latest production build has finished.
 
-Only after steps 1–4 pass:
-- [ ] Merge PR #3 into `main`.
-- [ ] Change the Pages production branch from `security/cloudflare-preview` to `main` in the Cloudflare Pages project settings.
-- [ ] Wait for the production Pages deployment to complete.
+- [x] Merge PR #3 into `main`.
+- [x] Change the Pages production branch to `main`.
+- [ ] Wait for the new production Pages deployment to complete.
 - [ ] Verify the production site loads and its `/api/status` request reaches the Worker through the Pages proxy.
 - [ ] Verify site login, roster read, Admin login, save, archive, and logout once more on the production domain.
 
