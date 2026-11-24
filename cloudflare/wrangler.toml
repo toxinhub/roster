@@ -1,0 +1,20 @@
+name = "empty-block-84d1"
+main = "worker.js"
+compatibility_date = "2026-10-12"
+
+[[kv_namespaces]]
+binding = "ROSTER_DATA"
+id = "d05b5d5e62a84dcd9b5b5363120f6cbe"
+
+[[durable_objects.bindings]]
+name = "ROSTER_COORDINATOR"
+class_name = "RosterCoordinator"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["RosterCoordinator"]
+
+[vars]
+ALLOWED_ORIGINS = "https://toxinhub.github.io,https://roster-bps.pages.dev,https://dc30fdd7.roster-bps.pages.dev,https://fix-roster-data-integrity.roster-bps.pages.dev"
+ADMIN_WRITE_ORIGINS = "https://toxinhub.github.io,https://roster-bps.pages.dev"
+REQUIRE_COORDINATOR = "true"

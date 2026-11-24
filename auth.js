@@ -129,6 +129,17 @@
 `;
   document.head.appendChild(style);
 
+  window.RosterAuthReady = function () {
+    if (window.__ROSTER_AUTH_STATE) return Promise.resolve(window.__ROSTER_AUTH_STATE);
+    return new Promise(resolve => {
+      window.addEventListener("roster:auth-ready", event => resolve(event.detail), { once: true });
+    });
+  };
+  function announceAuth(state) {
+    window.__ROSTER_AUTH_STATE = state;
+    window.dispatchEvent(new CustomEvent("roster:auth-ready", { detail: state }));
+  }
+
   function showLogin(message) {
     document.documentElement.classList.add("auth-pending");
     document.querySelector(".roster-auth-layer")?.remove();
@@ -214,16 +225,19 @@
           });
           actions.appendChild(button);
         }
+        announceAuth({ authenticated: true, role: data.role });
         return;
       }
       showLogin(required === "admin" && data.role === "site" ? "Admin password প্রয়োজন।" : "");
+      announceAuth({ authenticated: false, role: null });
     } catch (error) {
       const reason = String(error?.message || "").trim();
       showLogin(
         reason === "API_URL_NOT_CONFIGURED"
-          ? "API ঠিকানা লোড হয়নি। If you see a connection security error, try using a VPN."
-          : "Authentication server-এ সংযোগ ব্যর্থ" + (reason ? " (" + reason + ")" : " (Network/CORS error)") + "। If you see a connection security error, try using a VPN."
+          ? "API ঠিকানা লোড হয়নি। পেজ refresh করে API configuration পরীক্ষা করুন।"
+          : "Authentication server-এ সংযোগ ব্যর্থ" + (reason ? " (" + reason + ")" : " (Network/CORS error)") + "। Internet connection, API URL ও allowed-origin configuration পরীক্ষা করুন।"
       );
+      announceAuth({ authenticated: false, role: null });
     }
   }
 

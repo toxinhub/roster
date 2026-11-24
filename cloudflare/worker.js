@@ -1,11 +1,96 @@
+import { DurableObject } from "cloudflare:workers";
+
 const SESSION_SECONDS = 8 * 60 * 60;
 const encoder = new TextEncoder();
+
+// One coordinator represents the single shared CCTV roster. All compound
+// writes are serialized here; Workers KV remains the durable data store.
+export class RosterCoordinator extends DurableObject {
+  constructor(ctx, env) {
+    super(ctx, env);
+    this.rosterData = env.ROSTER_DATA;
+    this.queue = Promise.resolve();
+  }
+
+  runExclusive(operation) {
+    const current = this.queue.then(operation, operation);
+    this.queue = current.then(() => undefined, () => undefined);
+    return current;
+  }
+
+  getValue(key) {
+    return this.runExclusive(() => this.rosterData.get(key));
+  }
+
+  putValue(key, value, expirationTtl) {
+    return this.runExclusive(async () => {
+      const options = Number.isInteger(expirationTtl) && expirationTtl > 0
+        ? { expirationTtl }
+        : undefined;
+      await this.rosterData.put(key, value, options);
+      return true;
+    });
+  }
+
+  deleteValue(key) {
+    return this.runExclusive(() => this.rosterData.delete(key));
+  }
+
+  consumeLoginAttempt(key, now) {
+    return this.runExclusive(async () => {
+      let item;
+      try { item = JSON.parse(await this.rosterData.get(key) || "null"); } catch {}
+      if (!item || !Number.isFinite(item.start) || now - item.start > 15 * 60 * 1000) {
+        item = { count: 0, start: now };
+      }
+      if (item.count >= 8) return false;
+      item.count++;
+      await this.rosterData.put(key, JSON.stringify(item), { expirationTtl: 900 });
+      return true;
+    });
+  }
+
+  saveSchedule(dataJson, enforceVersion, expectedUpdatedAt) {
+    return this.runExclusive(async () => {
+      if (enforceVersion) {
+        const currentRaw = await this.rosterData.get("schedule");
+        let currentUpdatedAt = null;
+        try { currentUpdatedAt = currentRaw ? (JSON.parse(currentRaw).updatedAt ?? null) : null; }
+        catch { return { ok: false, error: "ROSTER_INVALID" }; }
+        if (expectedUpdatedAt !== currentUpdatedAt) return { ok: false, error: "WRITE_CONFLICT" };
+      }
+      await this.rosterData.put("schedule", dataJson);
+      return { ok: true };
+    });
+  }
+
+  createArchive(month, dataJson) {
+    return this.runExclusive(async () => {
+      const key = "archive:" + month;
+      if (await this.rosterData.get(key)) return { ok: false, error: "ARCHIVE_EXISTS" };
+      await this.rosterData.put(key, dataJson);
+      return { ok: true };
+    });
+  }
+}
+
 
 function json(body, status = 200, headers = {}) {
   return new Response(JSON.stringify(body), {
     status,
     headers: { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store, private", ...headers }
   });
+}
+async function readJson(request, maxBytes = 262144) {
+  const declaredLength = Number(request.headers.get("Content-Length") || 0);
+  if (declaredLength > maxBytes) throw new Error("BODY_TOO_LARGE");
+  const raw = await request.text();
+  if (encoder.encode(raw).byteLength > maxBytes) throw new Error("BODY_TOO_LARGE");
+  try { return JSON.parse(raw); } catch { throw new Error("INVALID_JSON"); }
+}
+function jsonBodyError(error) {
+  const tooLarge = error?.message === "BODY_TOO_LARGE";
+  return json({ error: tooLarge ? "BODY_TOO_LARGE" : "INVALID_JSON" }, tooLarge ? 413 : 400);
 }
 function b64url(bytes) {
   let binary = "";
@@ -34,6 +119,13 @@ function allowedOrigins(env) {
   return String(env.ALLOWED_ORIGINS || "https://toxinhub.github.io")
     .split(",").map(s => s.trim()).filter(Boolean);
 }
+
+function adminWriteOrigins(env) {
+  // Preview deployments share the upstream Worker in this project. Only the
+  // two production frontend origins may write to the live KV namespace.
+  return String(env.ADMIN_WRITE_ORIGINS || "https://toxinhub.github.io,https://roster-bps.pages.dev")
+    .split(",").map(s => s.trim()).filter(Boolean);
+}
 function corsHeaders(request, env) {
   const origin = request.headers.get("Origin") || "";
   const allowed = allowedOrigins(env);
@@ -52,15 +144,39 @@ function withCors(response, cors) {
   return new Response(response.body, { status: response.status, statusText: response.statusText, headers });
 }
 function requireConfig(env) {
+  const coordinatorRequired = String(env.REQUIRE_COORDINATOR || "").toLowerCase() === "true";
   return Boolean(env.SITE_PASSWORD && env.ADMIN_PASSWORD && env.SITE_PASSWORD !== env.ADMIN_PASSWORD &&
-    env.SESSION_SECRET && env.SESSION_SECRET.length >= 32 && env.ROSTER_DATA);
+    env.SESSION_SECRET && env.SESSION_SECRET.length >= 32 && env.ROSTER_DATA &&
+    (!coordinatorRequired || env.ROSTER_COORDINATOR));
+}
+
+function dataStore(env) {
+  if (env.ROSTER_COORDINATOR) {
+    const stub = env.ROSTER_COORDINATOR.getByName("cctv-roster-primary");
+    return {
+      get: key => stub.getValue(key),
+      put: (key, value, options) => stub.putValue(key, value, options?.expirationTtl),
+      delete: key => stub.deleteValue(key),
+      consumeLoginAttempt: (key, now) => stub.consumeLoginAttempt(key, now),
+      saveSchedule: (data, enforceVersion, expected) => stub.saveSchedule(data, enforceVersion, expected),
+      createArchive: (month, data) => stub.createArchive(month, data)
+    };
+  }
+  return {
+    get: key => env.ROSTER_DATA.get(key),
+    put: (key, value, options) => env.ROSTER_DATA.put(key, value, options),
+    delete: key => env.ROSTER_DATA.delete(key),
+    consumeLoginAttempt: null,
+    saveSchedule: null,
+    createArchive: null
+  };
 }
 async function makeToken(role, env) {
   const now = Math.floor(Date.now() / 1000);
   const payload = b64url(encoder.encode(JSON.stringify({ role, iat: now, exp: now + SESSION_SECONDS, jti: crypto.randomUUID() })));
   return payload + "." + b64url(await hmac(payload, env.SESSION_SECRET));
 }
-async function getSession(request, env) {
+async function getSession(request, env, store) {
   try {
     const header = request.headers.get("Authorization") || "";
     if (!header.startsWith("Bearer ")) return null;
@@ -71,12 +187,12 @@ async function getSession(request, env) {
     const session = JSON.parse(new TextDecoder().decode(unb64url(payload)));
     const now = Math.floor(Date.now() / 1000);
     if (!["site", "admin"].includes(session.role) || !Number.isInteger(session.exp) || session.exp <= now || session.iat > now + 60 || typeof session.jti !== "string") return null;
-    if (await env.ROSTER_DATA.get("revoked:" + session.jti)) return null;
+    if (await store.get("revoked:" + session.jti)) return null;
     return session;
   } catch { return null; }
 }
-async function requireRole(request, env, role = "site") {
-  const session = await getSession(request, env);
+async function requireRole(request, env, store, role = "site") {
+  const session = await getSession(request, env, store);
   if (!session || (role === "admin" && session.role !== "admin")) return null;
   return session;
 }
@@ -109,9 +225,55 @@ async function clearFailedAttempts(request, env) {
   await env.ROSTER_DATA.delete(await attemptKey(request));
 }
 function validRoster(data) {
-  return data && typeof data === "object" && !Array.isArray(data) &&
-    typeof data.month === "string" && Array.isArray(data.days) && Array.isArray(data.employees) &&
-    data.employees.every(e => e && typeof e.name === "string" && Array.isArray(e.shifts));
+  if (!data || typeof data !== "object" || Array.isArray(data)) return false;
+  if (typeof data.month !== "string" || !data.month.trim() || data.month.length > 80) return false;
+  if (!Array.isArray(data.days) || data.days.length < 1 || data.days.length > 31) return false;
+  if (!Array.isArray(data.employees) || data.employees.length > 100) return false;
+  if (!data.shiftTypes || typeof data.shiftTypes !== "object" || Array.isArray(data.shiftTypes)) return false;
+
+  const allowedCodes = new Set(["A", "B", "C", "OFF", "L"]);
+  for (const required of ["A", "B", "C", "OFF"]) {
+    if (!Object.prototype.hasOwnProperty.call(data.shiftTypes, required)) return false;
+  }
+  for (const [code, type] of Object.entries(data.shiftTypes)) {
+    if (!allowedCodes.has(code) || !type || typeof type !== "object" || Array.isArray(type)) return false;
+    if (typeof type.label !== "string" || !type.label.trim() || type.label.length > 40) return false;
+    if (type.note != null && (typeof type.note !== "string" || type.note.length > 120)) return false;
+    if (typeof type.color !== "string" || !/^#[0-9a-fA-F]{6}$/.test(type.color)) return false;
+  }
+
+  const dates = new Set();
+  let previousDate = "";
+  for (const day of data.days) {
+    if (!day || typeof day !== "object" || Array.isArray(day)) return false;
+    if (typeof day.date !== "string" || !day.date.trim() || day.date.length > 8) return false;
+    if (typeof day.weekday !== "string" || !day.weekday.trim() || day.weekday.length > 24) return false;
+    if (typeof day.isoDate !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(day.isoDate)) return false;
+    const parsed = new Date(day.isoDate + "T00:00:00.000Z");
+    if (!Number.isFinite(parsed.getTime()) || parsed.toISOString().slice(0, 10) !== day.isoDate) return false;
+    const numericDate = Number(day.date.replace(/[০-৯]/g, digit => String("০১২৩৪৫৬৭৮৯".indexOf(digit))));
+    const weekdays = ["রবিবার", "সোমবার", "মঙ্গলবার", "বুধবার", "বৃহস্পতিবার", "শুক্রবার", "শনিবার"];
+    if (!Number.isInteger(numericDate) || numericDate !== parsed.getUTCDate()) return false;
+    if (day.weekday !== weekdays[parsed.getUTCDay()]) return false;
+    if (dates.size && day.isoDate.slice(0, 7) !== previousDate.slice(0, 7)) return false;
+    if (dates.has(day.isoDate) || (previousDate && day.isoDate <= previousDate)) return false;
+    dates.add(day.isoDate);
+    previousDate = day.isoDate;
+  }
+
+  const names = new Set();
+  for (const employee of data.employees) {
+    if (!employee || typeof employee !== "object" || Array.isArray(employee)) return false;
+    if (typeof employee.name !== "string" || !employee.name.trim() || employee.name.length > 80) return false;
+    const normalizedName = employee.name.trim().toLocaleLowerCase();
+    if (names.has(normalizedName)) return false;
+    names.add(normalizedName);
+    if (!Array.isArray(employee.shifts) || employee.shifts.length !== data.days.length) return false;
+    if (!employee.shifts.every(code => typeof code === "string" && allowedCodes.has(code))) return false;
+  }
+
+  if (data.updatedAt != null && (typeof data.updatedAt !== "string" || data.updatedAt.length > 100)) return false;
+  return true;
 }
 async function handler(request, env) {
   const url = new URL(request.url);
@@ -134,69 +296,107 @@ async function handler(request, env) {
         siteAndAdminPasswordsDiffer: Boolean(env.SITE_PASSWORD && env.ADMIN_PASSWORD && env.SITE_PASSWORD !== env.ADMIN_PASSWORD),
         sessionSecretLengthAtLeast32: Boolean(env.SESSION_SECRET && env.SESSION_SECRET.length >= 32),
         dataBindingPresent: Boolean(env.ROSTER_DATA),
+        coordinatorBindingPresent: Boolean(env.ROSTER_COORDINATOR),
+        strongCoordinationEnabled: Boolean(env.ROSTER_COORDINATOR),
+        coordinatorRequired: String(env.REQUIRE_COORDINATOR || "").toLowerCase() === "true",
         originAllowed: true
       }
     });
   }
   if (!requireConfig(env)) return json({ error: "AUTH_NOT_CONFIGURED" }, 503);
+  const store = dataStore(env);
 
   if (path === "/api/login" && request.method === "POST") {
-    if (!await canAttempt(request, env)) return json({ error: "TOO_MANY_ATTEMPTS" }, 429, { "Retry-After": "900" });
     let body;
-    try { body = await request.json(); } catch { return json({ error: "INVALID_JSON" }, 400); }
+    try { body = await readJson(request, 4096); } catch (error) { return jsonBodyError(error); }
+    if (!body || typeof body !== "object" || Array.isArray(body)) return json({ error: "INVALID_JSON" }, 400);
     if (typeof body.password !== "string" || body.password.length < 1 || body.password.length > 256) return json({ error: "INVALID_PASSWORD" }, 400);
+    const loginKey = await attemptKey(request);
+    const allowed = store.consumeLoginAttempt
+      ? await store.consumeLoginAttempt(loginKey, Date.now())
+      : await canAttempt(request, env);
+    if (!allowed) return json({ error: "TOO_MANY_ATTEMPTS" }, 429, { "Retry-After": "900" });
     if (env.SITE_PASSWORD === env.ADMIN_PASSWORD) return json({ error: "PASSWORDS_MUST_DIFFER" }, 503);
     const supplied = await digest(body.password);
     const isAdmin = constantEqual(supplied, await digest(env.ADMIN_PASSWORD));
     const isSite = constantEqual(supplied, await digest(env.SITE_PASSWORD));
     if (!isAdmin && !isSite) {
-      await recordFailedAttempt(request, env);
+      if (!store.consumeLoginAttempt) await recordFailedAttempt(request, env);
       return json({ error: "INVALID_CREDENTIALS" }, 401);
     }
-    await clearFailedAttempts(request, env);
+    if (store.consumeLoginAttempt) await store.delete(loginKey);
+    else await clearFailedAttempts(request, env);
     return json({ ok: true, role: isAdmin ? "admin" : "site", token: await makeToken(isAdmin ? "admin" : "site", env), expiresIn: SESSION_SECONDS });
   }
   if (path === "/api/session" && request.method === "GET") {
-    const session = await getSession(request, env);
+    const session = await getSession(request, env, store);
     return session ? json({ authenticated: true, role: session.role, expiresAt: session.exp }) : json({ authenticated: false }, 401);
   }
   if (path === "/api/logout" && request.method === "POST") {
-    const session = await getSession(request, env);
+    const session = await getSession(request, env, store);
     if (!session) return json({ error: "AUTH_REQUIRED" }, 401);
     const remaining = Math.max(1, session.exp - Math.floor(Date.now() / 1000));
-    await env.ROSTER_DATA.put("revoked:" + session.jti, "1", { expirationTtl: remaining });
+    await store.put("revoked:" + session.jti, "1", { expirationTtl: remaining });
     return json({ ok: true });
   }
   if (path === "/api/roster" && request.method === "GET") {
-    if (!await requireRole(request, env, "site")) return json({ error: "AUTH_REQUIRED" }, 401);
-    const raw = await env.ROSTER_DATA.get("schedule");
+    if (!await requireRole(request, env, store, "site")) return json({ error: "AUTH_REQUIRED" }, 401);
+    const raw = await store.get("schedule");
     if (!raw) return json({ error: "ROSTER_NOT_SEEDED" }, 503);
     try { return json(JSON.parse(raw)); } catch { return json({ error: "ROSTER_INVALID" }, 503); }
   }
   if (path === "/api/archive" && request.method === "GET") {
-    if (!await requireRole(request, env, "site")) return json({ error: "AUTH_REQUIRED" }, 401);
+    if (!await requireRole(request, env, store, "site")) return json({ error: "AUTH_REQUIRED" }, 401);
     const month = url.searchParams.get("month") || "";
     if (!/^\d{4}-(0[1-9]|1[0-2])$/.test(month)) return json({ error: "INVALID_MONTH" }, 400);
-    const raw = await env.ROSTER_DATA.get("archive:" + month);
+    const raw = await store.get("archive:" + month);
     if (!raw) return json({ error: "NOT_FOUND" }, 404);
     try { return json(JSON.parse(raw)); } catch { return json({ error: "ARCHIVE_INVALID" }, 503); }
   }
   if (path === "/api/admin/save" && request.method === "POST") {
-    if (!await requireRole(request, env, "admin")) return json({ error: "ADMIN_AUTH_REQUIRED" }, 401);
+    if (!await requireRole(request, env, store, "admin")) return json({ error: "ADMIN_AUTH_REQUIRED" }, 401);
+    if (!adminWriteOrigins(env).includes(requestOrigin)) return json({ error: "PREVIEW_READ_ONLY" }, 403);
     let body;
-    try { body = await request.json(); } catch { return json({ error: "INVALID_JSON" }, 400); }
-    if (!validRoster(body.data)) return json({ error: "INVALID_ROSTER" }, 400);
-    await env.ROSTER_DATA.put("schedule", JSON.stringify(body.data));
+    try { body = await readJson(request, 262144); } catch (error) { return jsonBodyError(error); }
+    if (!body || typeof body !== "object" || Array.isArray(body) || !validRoster(body.data)) return json({ error: "INVALID_ROSTER" }, 400);
+    const enforceVersion = Object.prototype.hasOwnProperty.call(body, "expectedUpdatedAt");
+    if (enforceVersion && body.expectedUpdatedAt !== null && typeof body.expectedUpdatedAt !== "string") {
+      return json({ error: "INVALID_VERSION" }, 400);
+    }
+    if (store.saveSchedule) {
+      const saved = await store.saveSchedule(JSON.stringify(body.data), enforceVersion, body.expectedUpdatedAt);
+      if (!saved.ok) return json({ error: saved.error }, saved.error === "WRITE_CONFLICT" ? 409 : 503);
+    } else {
+      if (enforceVersion) {
+        const currentRaw = await store.get("schedule");
+        let currentUpdatedAt = null;
+        try { currentUpdatedAt = currentRaw ? (JSON.parse(currentRaw).updatedAt ?? null) : null; }
+        catch { return json({ error: "ROSTER_INVALID" }, 503); }
+        if (body.expectedUpdatedAt !== currentUpdatedAt) return json({ error: "WRITE_CONFLICT" }, 409);
+      }
+      await store.put("schedule", JSON.stringify(body.data));
+    }
     return json({ ok: true, updatedAt: body.data.updatedAt || null });
   }
   if (path === "/api/admin/archive" && request.method === "POST") {
-    if (!await requireRole(request, env, "admin")) return json({ error: "ADMIN_AUTH_REQUIRED" }, 401);
+    if (!await requireRole(request, env, store, "admin")) return json({ error: "ADMIN_AUTH_REQUIRED" }, 401);
+    if (!adminWriteOrigins(env).includes(requestOrigin)) return json({ error: "PREVIEW_READ_ONLY" }, 403);
     let body;
-    try { body = await request.json(); } catch { return json({ error: "INVALID_JSON" }, 400); }
-    if (!/^\d{4}-(0[1-9]|1[0-2])$/.test(body.month || "") || !validRoster(body.data)) return json({ error: "INVALID_ARCHIVE" }, 400);
-    const key = "archive:" + body.month;
-    if (await env.ROSTER_DATA.get(key)) return json({ error: "ARCHIVE_EXISTS" }, 409);
-    await env.ROSTER_DATA.put(key, JSON.stringify(body.data));
+    try { body = await readJson(request, 262144); } catch (error) { return jsonBodyError(error); }
+    if (!body || typeof body !== "object" || Array.isArray(body) ||
+        !/^\d{4}-(0[1-9]|1[0-2])$/.test(body.month || "") ||
+        !validRoster(body.data) ||
+        body.data.days[0].isoDate.slice(0, 7) !== body.month) {
+      return json({ error: "INVALID_ARCHIVE" }, 400);
+    }
+    if (store.createArchive) {
+      const archived = await store.createArchive(body.month, JSON.stringify(body.data));
+      if (!archived.ok) return json({ error: archived.error }, 409);
+    } else {
+      const key = "archive:" + body.month;
+      if (await store.get(key)) return json({ error: "ARCHIVE_EXISTS" }, 409);
+      await store.put(key, JSON.stringify(body.data));
+    }
     return json({ ok: true, month: body.month });
   }
   return json({ error: "NOT_FOUND" }, 404);
