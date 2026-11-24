@@ -39,8 +39,9 @@ body.admin-page .grid-scroll{max-height:min(66vh,720px);overflow:auto;border:1px
 body.admin-page #editor{width:max-content;min-width:100%;table-layout:fixed;border-collapse:separate;border-spacing:0;font-family:inherit;font-size:12px;line-height:1.25}
 body.admin-page #editor th,body.admin-page #editor td{padding:5px 3px;border-bottom:1px solid var(--adm-line);border-right:1px solid var(--adm-line);text-align:center;background:var(--adm-surface)}
 body.admin-page #editor thead th{position:sticky;top:0;z-index:3;background:var(--adm-soft);box-shadow:0 1px 0 var(--adm-line)}
-body.admin-page #editor thead th:first-child,body.admin-page #editor tbody th{position:sticky;left:0;z-index:4;width:116px;min-width:116px;max-width:116px;background:var(--adm-soft);text-align:left}
-body.admin-page #editor thead th:first-child{z-index:6}
+/* Employee-name column scrolls normally; only the date header stays vertically sticky. */
+body.admin-page #editor thead th:first-child{position:sticky;top:0;z-index:3;width:116px;min-width:116px;max-width:116px;background:var(--adm-soft);text-align:left}
+body.admin-page #editor tbody th{position:static;left:auto;z-index:auto;width:116px;min-width:116px;max-width:116px;background:var(--adm-surface);text-align:left}
 body.admin-page #editor thead th:not(:first-child),body.admin-page #editor tbody td{width:58px;min-width:58px;max-width:58px}
 body.admin-page #editor thead th input,body.admin-page #editor thead th small input{display:block;width:100%;min-width:0;box-sizing:border-box;margin:0 auto 3px;padding:3px 2px;border:1px solid var(--adm-line);border-radius:5px;background:var(--adm-surface);color:var(--adm-ink);font:500 11px/1.2 inherit;text-align:center}
 body.admin-page #editor thead th small input{font-size:9px;font-weight:400}
