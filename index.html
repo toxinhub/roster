@@ -10,7 +10,7 @@
 <meta name="description" content="CCTV - PJL duty roster">
 <title>Duty Roster • CCTV - PJL</title>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
-<link rel="stylesheet" href="style.css?v=20261124-legend-two-rows-1">
+<link rel="stylesheet" href="style.css?v=20261124-today-duty-indicator-1">
 </head>
 <body data-required-role="site">
 <div class="app">
@@ -254,12 +254,23 @@ function render(){
 
   const dhakaHour=Number(dhakaClockFormatter.formatToParts(new Date()).find(p=>p.type==='hour')?.value||0);
   const activeShift=dhakaHour>=6&&dhakaHour<14?'A':dhakaHour>=14&&dhakaHour<22?'B':'C';
+  const todayRosterIndex=days.findIndex(d=>d.isoDate===now);
+  const todayShiftStates=['A','B','C'].map(code=>
+    todayRosterIndex>=0 && people.some(person=>person.shifts?.[todayRosterIndex]===code)
+  );
+  const todayShiftPattern=todayShiftStates.map(active=>active?'■':'□').join('');
+  const todayShiftLabel=todayRosterIndex>=0
+    ? 'আজকের শিফট A, B, C: '+todayShiftStates.map((active,i)=>['A','B','C'][i]+' '+(active?'ডিউটি আছে':'ডিউটি নেই')).join(', ')
+    : 'আজকের তারিখের তথ্য এই ভিউতে নেই';
   $('legend').innerHTML=Object.entries(types).map(([k,v])=>{
     const note=(v.note||'').replace(/–/g,' - ');
     const active=k===activeShift?' active-shift':'';
     const tone=' shift-'+String(k).toLowerCase();
     return '<span class="'+(active+tone).trim()+'"><i style="--c:'+esc(v.color||'#64748b')+'"></i><b>'+esc(k)+'</b><small><strong class="legend-dash">·</strong>'+esc(note)+'</small></span>';
-  }).join('');
+  }).join('')+
+  '<div class="today-duty-indicator" role="img" aria-label="'+esc(todayShiftLabel)+'" title="'+esc(todayShiftLabel)+'"'+(todayRosterIndex<0?' hidden':'')+'>'+
+    todayShiftStates.map(active=>'<i class="'+(active?'is-covered':'is-empty')+'">'+(active?'■':'□')+'</i>').join('')+
+  '</div>';
 
   const head=days.map(d=>{
     const isToday=d.isoDate===now;
