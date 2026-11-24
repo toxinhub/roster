@@ -7280,3 +7280,43 @@ html body .legend .today-duty-indicator i.is-empty{
     font-size:12px!important;
   }
 }
+
+
+/* Final legend readability pass — larger labels and unmistakable black duty marks. */
+@media(min-width:901px){
+  html body .legend b{font-size:11px!important;line-height:1.1!important;}
+  html body .legend small{font-size:9px!important;line-height:1.1!important;}
+}
+@media(max-width:900px){
+  html body .legend b{font-size:10px!important;line-height:1.1!important;}
+  html body .legend small{font-size:8px!important;line-height:1.1!important;}
+  html body .legend span{
+    min-height:26px!important;
+    height:26px!important;
+  }
+}
+html body .legend .today-duty-indicator{
+  display:inline-flex!important;
+  visibility:visible!important;
+  opacity:1!important;
+  color:#000!important;
+  font-size:16px!important;
+  font-weight:900!important;
+  gap:4px!important;
+}
+html body .legend .today-duty-indicator i,
+html body .legend .today-duty-indicator i.is-covered,
+html body .legend .today-duty-indicator i.is-empty{
+  color:#000!important;
+  font-size:16px!important;
+  font-weight:900!important;
+  line-height:1!important;
+}
+@media(max-width:900px){
+  html body .legend .today-duty-indicator,
+  html body .legend .today-duty-indicator i,
+  html body .legend .today-duty-indicator i.is-covered,
+  html body .legend .today-duty-indicator i.is-empty{
+    font-size:14px!important;
+  }
+}
