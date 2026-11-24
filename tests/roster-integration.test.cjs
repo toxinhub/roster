@@ -166,6 +166,26 @@ test("admin save accepts the current version and rejects a stale second writer",
   assert.deepEqual(JSON.parse(await kv.get("schedule")), first);
 });
 
+test("admin cannot overwrite a month after it has been archived", async () => {
+  const { env, kv } = makeEnv();
+  const token = await login(env, "admin-test-password");
+  const archived = sampleRoster();
+  await kv.put("archive:2026-11", JSON.stringify(archived));
+
+  const attempted = sampleRoster({
+    month: "নভেম্বর ২০২৬ — edited",
+    updatedAt: "2026-11-24T13:00:00.000Z"
+  });
+  const response = await call(env, "/api/admin/save", {
+    method: "POST",
+    token,
+    body: { data: attempted, expectedUpdatedAt: null }
+  });
+  assert.equal(response.status, 409);
+  assert.equal((await response.json()).error, "MONTH_ARCHIVED");
+  assert.equal(await kv.get("schedule"), null);
+});
+
 test("archive index lists only saved month keys in newest-first order and requires a session", async () => {
   const { env, kv } = makeEnv();
   const denied = await call(env, "/api/archives");
