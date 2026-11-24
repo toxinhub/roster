@@ -7253,3 +7253,30 @@ html body .legend .today-duty-indicator i.is-empty{
     font-size:10px!important;
   }
 }
+
+
+/* Today's legend duty marks — solid black and slightly larger. */
+html body .legend .today-duty-indicator{
+  color:#000000!important;
+  font-size:14px!important;
+  font-weight:950!important;
+  gap:4px!important;
+}
+html body .legend .today-duty-indicator i,
+html body .legend .today-duty-indicator i.is-covered,
+html body .legend .today-duty-indicator i.is-empty{
+  color:#000000!important;
+  font-size:14px!important;
+  font-weight:950!important;
+}
+@media(max-width:900px){
+  html body .legend .today-duty-indicator{
+    font-size:12px!important;
+    gap:3px!important;
+  }
+  html body .legend .today-duty-indicator i,
+  html body .legend .today-duty-indicator i.is-covered,
+  html body .legend .today-duty-indicator i.is-empty{
+    font-size:12px!important;
+  }
+}
