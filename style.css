@@ -5707,62 +5707,81 @@ html body.ink-mode .day-head.is-today em{
   color:#F5F2E8 !important;
 }
 
-/* Admin Ink Mode: no white text against paper */
-html body.ink-mode .topbar,
-html body.ink-mode .brand,
-html body.ink-mode .brand strong,
-html body.ink-mode .brand small,
-html body.ink-mode .back,
-html body.ink-mode .icon-btn,
-html body.ink-mode .eyebrow,
-html body.ink-mode .section-head,
-html body.ink-mode .section-head h2,
-html body.ink-mode .admin-note,
-html body.ink-mode .admin-note b,
-html body.ink-mode .admin-note code,
-html body.ink-mode .panel,
-html body.ink-mode .panel *,
-html body.ink-mode .form-grid label,
-html body.ink-mode .form-row label,
-html body.ink-mode .muted,
-html body.ink-mode .change-status,
-html body.ink-mode .quiet,
-html body.ink-mode .change-summary,
-html body.ink-mode .change-summary *,
-html body.ink-mode .grid-scroll th,
-html body.ink-mode .grid-scroll td,
-html body.ink-mode footer,
-html body.ink-mode footer *{
-  color:#252420 !important;
-  text-shadow:none !important;
+/* Admin Ink Mode — scoped dark surfaces and readable foregrounds.
+   Keep this override limited to the admin page; public roster theme is independent. */
+html body.admin-page.ink-mode .topbar,
+html body.admin-page.ink-mode .panel,
+html body.admin-page.ink-mode .admin-note,
+html body.admin-page.ink-mode .grid-scroll{
+  color:var(--adm-ink,#edf2f3)!important;
 }
-html body.ink-mode .brand-icon{
-  color:#252420 !important;
+html body.admin-page.ink-mode .topbar{
+  background:color-mix(in srgb,var(--adm-surface,#20282e) 94%,transparent)!important;
+  border-color:var(--adm-line,#37434a)!important;
 }
-html body.ink-mode input,
-html body.ink-mode input::placeholder{
-  color:#252420 !important;
+html body.admin-page.ink-mode .brand strong,
+html body.admin-page.ink-mode .section-head,
+html body.admin-page.ink-mode .section-head h2,
+html body.admin-page.ink-mode .panel,
+html body.admin-page.ink-mode .panel *,
+html body.admin-page.ink-mode .admin-note,
+html body.admin-page.ink-mode .admin-note b,
+html body.admin-page.ink-mode .grid-scroll th,
+html body.admin-page.ink-mode .grid-scroll td,
+html body.admin-page.ink-mode footer,
+html body.admin-page.ink-mode footer *{
+  color:var(--adm-ink,#edf2f3)!important;
+  text-shadow:none!important;
 }
-html body.ink-mode .primary,
-html body.ink-mode .primary *{
-  background:#252420 !important;
-  color:#F5F2E8 !important;
+html body.admin-page.ink-mode .brand small,
+html body.admin-page.ink-mode .eyebrow,
+html body.admin-page.ink-mode .muted,
+html body.admin-page.ink-mode .form-grid label,
+html body.admin-page.ink-mode .form-row label,
+html body.admin-page.ink-mode .quiet,
+html body.admin-page.ink-mode .change-summary{
+  color:var(--adm-muted,#a8b5bb)!important;
 }
-html body.ink-mode .actions button,
-html body.ink-mode .form-row button,
-html body.ink-mode .edit,
-html body.ink-mode .edit *{
-  background:#ECE9DE !important;
-  color:#252420 !important;
+html body.admin-page.ink-mode .brand-icon{
+  background:var(--adm-soft,#283239)!important;
+  border-color:var(--adm-line,#37434a)!important;
+  color:var(--adm-accent,#83c9b3)!important;
 }
-html body.ink-mode .status{
-  color:#4A4842 !important;
+html body.admin-page.ink-mode .back,
+html body.admin-page.ink-mode .icon-btn{
+  background:var(--adm-soft,#283239)!important;
+  border-color:var(--adm-line,#37434a)!important;
+  color:var(--adm-ink,#edf2f3)!important;
 }
-html body.ink-mode .change-status.dirty{
-  color:#6B4A18 !important;
+html body.admin-page.ink-mode input,
+html body.admin-page.ink-mode input::placeholder{
+  background:var(--adm-soft,#283239)!important;
+  border-color:var(--adm-line,#37434a)!important;
+  color:var(--adm-ink,#edf2f3)!important;
 }
-html body.ink-mode .remove{
-  color:#6F2424 !important;
+html body.admin-page.ink-mode .actions button,
+html body.admin-page.ink-mode .form-row button{
+  background:var(--adm-soft,#283239)!important;
+  border-color:var(--adm-line,#37434a)!important;
+  color:var(--adm-ink,#edf2f3)!important;
+}
+html body.admin-page.ink-mode .primary{
+  background:var(--adm-accent,#83c9b3)!important;
+  border-color:var(--adm-accent,#83c9b3)!important;
+  color:#14251f!important;
+}
+html body.admin-page.ink-mode .primary *,
+html body.admin-page.ink-mode #save{
+  color:#14251f!important;
+}
+html body.admin-page.ink-mode .status{
+  color:var(--adm-ink,#edf2f3)!important;
+}
+html body.admin-page.ink-mode .change-status.dirty{
+  color:#efbd70!important;
+}
+html body.admin-page.ink-mode .remove{
+  color:#F0A0A0!important;
 }
 
 
