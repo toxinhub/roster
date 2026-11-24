@@ -471,7 +471,7 @@ body[data-required-role="admin"] .archive-stat strong{font-size:16px}
 
       const weekdayNames = ['রবিবার','সোমবার','মঙ্গলবার','বুধবার','বৃহস্পতিবার','শুক্রবার','শনিবার'];
       const h = '<tr><th>কর্মী</th>' + S.days.map((d, i) => {
-        const isoDate = /^\\d{4}-\\d{2}-\\d{2}$/.test(d.isoDate || '') ? d.isoDate : '';
+        const isoDate = /^\d{4}-\d{2}-\d{2}$/.test(d.isoDate || '') ? d.isoDate : '';
         const dateValue = d.date || (isoDate ? String(Number(isoDate.slice(8, 10))) : '');
         const parsedDate = isoDate ? new Date(isoDate + 'T00:00:00.000Z') : null;
         const weekdayValue = d.weekday || (parsedDate && !Number.isNaN(parsedDate.getTime()) ? weekdayNames[parsedDate.getUTCDay()] : '');
