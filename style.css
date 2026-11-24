@@ -7194,3 +7194,62 @@ html body.ink-mode .legend span.active-shift{
   html body .legend b{font-size:8.5px!important;line-height:1!important;}
   html body .legend small{font-size:6.5px!important;line-height:1!important;white-space:nowrap!important;}
 }
+
+
+/* Today's three-shift coverage — placed in the unused right slot of the legend. */
+html body .legend{
+  position:relative;
+}
+html body .legend .today-duty-indicator{
+  display:inline-flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:3px;
+  margin-left:auto;
+  padding:0 2px;
+  white-space:nowrap;
+  color:#332F2C;
+  font-size:12px;
+  line-height:1;
+  font-weight:900;
+}
+html body .legend .today-duty-indicator[hidden]{
+  display:none!important;
+}
+html body .legend .today-duty-indicator i{
+  display:inline-block!important;
+  width:auto!important;
+  height:auto!important;
+  min-width:0!important;
+  min-height:0!important;
+  flex:0 0 auto!important;
+  margin:0!important;
+  padding:0!important;
+  border:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  border-radius:0!important;
+  font-style:normal!important;
+  font-size:12px!important;
+  line-height:1!important;
+}
+html body .legend .today-duty-indicator i.is-covered{
+  color:#3F6650!important;
+}
+html body .legend .today-duty-indicator i.is-empty{
+  color:#8C827A!important;
+}
+@media(max-width:900px){
+  html body .legend .today-duty-indicator{
+    grid-column:3!important;
+    grid-row:2!important;
+    justify-self:end!important;
+    align-self:center!important;
+    margin:0!important;
+    padding:0 3px!important;
+    gap:2px!important;
+  }
+  html body .legend .today-duty-indicator i{
+    font-size:10px!important;
+  }
+}
