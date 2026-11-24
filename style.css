@@ -7406,3 +7406,44 @@ html body .legend .today-duty-indicator i:nth-child(3){animation-delay:.56s;}
     opacity:1!important;
   }
 }
+
+
+/* RESPONSIVE SKELETON GEOMETRY — match the live roster at each breakpoint. */
+@media (min-width:521px) and (max-width:900px){
+  #roster:empty{min-height:300px}
+  #roster:empty::before{
+    background:
+      linear-gradient(var(--line-strong),var(--line-strong)) 14px 14px/54px 11px no-repeat,
+      linear-gradient(var(--line),var(--line)) 14px 34px/72px 7px no-repeat,
+      repeating-linear-gradient(to bottom,transparent 0 67px,var(--line) 67px 68px) 0 0/100% 68px repeat-y,
+      linear-gradient(var(--line),var(--line)) 111px 0/1px 100% no-repeat,
+      repeating-linear-gradient(to right,transparent 0 103px,var(--line) 103px 104px) 112px 0/calc(100% - 112px) 100% repeat-x;
+  }
+  html body.ink-mode #roster:empty::before{
+    background:
+      linear-gradient(#AAA69D,#AAA69D) 14px 14px/54px 11px no-repeat,
+      linear-gradient(#C1BEB5,#C1BEB5) 14px 34px/72px 7px no-repeat,
+      repeating-linear-gradient(to bottom,transparent 0 67px,#C1BEB5 67px 68px) 0 0/100% 68px repeat-y,
+      linear-gradient(#C1BEB5,#C1BEB5) 111px 0/1px 100% no-repeat,
+      repeating-linear-gradient(to right,transparent 0 103px,#C1BEB5 103px 104px) 112px 0/calc(100% - 112px) 100% repeat-x;
+  }
+}
+@media(max-width:520px){
+  #roster:empty{min-height:270px}
+  #roster:empty::before{
+    background:
+      linear-gradient(var(--line-strong),var(--line-strong)) 10px 12px/42px 9px no-repeat,
+      linear-gradient(var(--line),var(--line)) 10px 29px/58px 6px no-repeat,
+      repeating-linear-gradient(to bottom,transparent 0 63px,var(--line) 63px 64px) 0 0/100% 64px repeat-y,
+      linear-gradient(var(--line),var(--line)) 87px 0/1px 100% no-repeat,
+      repeating-linear-gradient(to right,transparent 0 77px,var(--line) 77px 78px) 88px 0/calc(100% - 88px) 100% repeat-x;
+  }
+  html body.ink-mode #roster:empty::before{
+    background:
+      linear-gradient(#AAA69D,#AAA69D) 10px 12px/42px 9px no-repeat,
+      linear-gradient(#C1BEB5,#C1BEB5) 10px 29px/58px 6px no-repeat,
+      repeating-linear-gradient(to bottom,transparent 0 63px,#C1BEB5 63px 64px) 0 0/100% 64px repeat-y,
+      linear-gradient(#C1BEB5,#C1BEB5) 87px 0/1px 100% no-repeat,
+      repeating-linear-gradient(to right,transparent 0 77px,#C1BEB5 77px 78px) 88px 0/calc(100% - 88px) 100% repeat-x;
+  }
+}
