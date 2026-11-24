@@ -727,6 +727,69 @@ body.admin-page.ink-mode .grid-scroll{
   body.admin-page.ink-mode *::after{transition-duration:0.01ms!important;}
 }
 
+
+/* Final cascade isolation: public-page Ink rules must not repaint the admin UI. */
+html body.admin-page.ink-mode{
+  background:#151b20!important;
+  color:#F2F6F7!important;
+  background-image:none!important;
+}
+html body.admin-page.ink-mode .app,
+html body.admin-page.ink-mode main.page-shell{
+  background:#151b20!important;
+  color:#F2F6F7!important;
+}
+html body.admin-page.ink-mode .topbar{
+  background:#2B3B46!important;
+  color:#F2F6F7!important;
+  border-bottom:1px solid #5B707C!important;
+  box-shadow:0 4px 16px rgba(23,43,54,.20)!important;
+  backdrop-filter:blur(12px)!important;
+  -webkit-backdrop-filter:blur(12px)!important;
+}
+html body.admin-page.ink-mode .topbar .brand > div strong,
+html body.admin-page.ink-mode .topbar .brand strong{
+  color:#F2F6F7!important;
+}
+html body.admin-page.ink-mode .topbar .brand > div small{
+  color:#C2CFD4!important;
+}
+html body.admin-page.ink-mode .icon-btn#theme,
+html body.admin-page.ink-mode .topbar .icon-btn,
+html body.admin-page.ink-mode .back,
+html body.admin-page.ink-mode .admin-link{
+  background:#405762!important;
+  color:#F2F6F7!important;
+  border:1px solid #6A818D!important;
+  border-radius:8px!important;
+  box-shadow:none!important;
+}
+html body.admin-page.ink-mode .icon-btn#theme{
+  color:#A9E8D4!important;
+}
+html body.admin-page.ink-mode .panel,
+html body.admin-page.ink-mode .admin-note,
+html body.admin-page.ink-mode .grid-scroll,
+html body.admin-page.ink-mode .picker{
+  background-color:#2B3B46!important;
+  color:#F2F6F7!important;
+  border-color:#5B707C!important;
+}
+html body.admin-page.ink-mode .panel *,
+html body.admin-page.ink-mode .admin-note *,
+html body.admin-page.ink-mode footer,
+html body.admin-page.ink-mode footer *{
+  text-shadow:none!important;
+}
+html body.admin-page.ink-mode .brand-icon{
+  background:#405762!important;
+  color:#A9E8D4!important;
+  border-color:#6A818D!important;
+}
+html body.admin-page.ink-mode .security-panel{
+  background:linear-gradient(115deg,#2B3B46 0%,#354B57 100%)!important;
+}
+
 </style></head>
 <body class="admin-page" data-required-role="admin">
   <div class="app">
