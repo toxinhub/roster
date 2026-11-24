@@ -206,6 +206,12 @@ body[data-required-role="admin"] .archive-stat strong{font-size:16px}
 }
 @media(prefers-reduced-motion:reduce){body[data-required-role="admin"] *{scroll-behavior:auto!important;transition:none!important}}
 
+
+/* Archive calendar headings: keep date and weekday clearly visible */
+.archive-table th.archive-day-heading{min-width:58px;padding:6px 5px;white-space:normal;vertical-align:middle}
+.archive-day-heading .archive-day-date{display:block;font-size:11px;font-weight:900;line-height:1.2;color:var(--ink)}
+.archive-day-heading .archive-day-weekday{display:block;margin-top:3px;font-size:9px;font-weight:700;line-height:1.2;color:var(--muted)}
+@media(max-width:600px){.archive-table th.archive-day-heading{min-width:52px;padding:5px 3px}.archive-day-heading .archive-day-date{font-size:10px}.archive-day-heading .archive-day-weekday{font-size:8px}}
 </style></head>
 <body data-required-role="admin">
   <div class="app">
@@ -918,7 +924,20 @@ body[data-required-role="admin"] .archive-stat strong{font-size:16px}
         headerRow.appendChild(employeeHeading);
         for (const day of data.days) {
           const heading = document.createElement('th');
-          heading.textContent = day.date + ' · ' + day.weekday;
+          heading.className = 'archive-day-heading';
+          const dateLabel = document.createElement('span');
+          dateLabel.className = 'archive-day-date';
+          dateLabel.textContent = day.date || (day.isoDate ? String(Number(day.isoDate.slice(8, 10))) : '—');
+          const weekdayLabel = document.createElement('small');
+          weekdayLabel.className = 'archive-day-weekday';
+          const weekdayNames = ['রবিবার','সোমবার','মঙ্গলবার','বুধবার','বৃহস্পতিবার','শুক্রবার','শনিবার'];
+          const parsedDate = /^\\d{4}-\\d{2}-\\d{2}$/.test(day.isoDate || '')
+            ? new Date(day.isoDate + 'T00:00:00Z')
+            : null;
+          weekdayLabel.textContent = day.weekday || (parsedDate && !Number.isNaN(parsedDate.getTime())
+            ? weekdayNames[parsedDate.getUTCDay()]
+            : '—');
+          heading.append(dateLabel, weekdayLabel);
           headerRow.appendChild(heading);
         }
         thead.appendChild(headerRow);
