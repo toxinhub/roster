@@ -1137,7 +1137,7 @@ html body.admin-page.ink-mode #editor .edit.shift-l,html body.admin-page.ink-mod
 /* ADMIN EDITOR SKELETON — mirrors the real employee/date/shift table. */
 body.admin-page .grid-scroll{position:relative}
 body.admin-page .grid-scroll.is-loading{
-  min-height:min(66vh,440px);
+  min-height:min(58vh,380px);
   overflow:hidden;
   background:var(--adm-surface);
 }
@@ -1147,8 +1147,8 @@ body.admin-page .editor-skeleton{
   inset:0 auto auto 0;
   z-index:2;
   display:none;
-  grid-template-columns:142px repeat(31,76px);
-  grid-template-rows:72px repeat(6,60px);
+  grid-template-columns:116px repeat(31,58px);
+  grid-template-rows:72px repeat(6,48px);
   width:max-content;
   min-width:100%;
   overflow:hidden;
@@ -1215,12 +1215,12 @@ body.admin-page.ink-mode .editor-skeleton::after{
   background-image:linear-gradient(105deg,transparent 34%,rgba(255,248,242,.16) 50%,transparent 66%);
 }
 @media(max-width:700px){
-  body.admin-page .grid-scroll.is-loading{min-height:min(58vh,420px)}
+  body.admin-page .grid-scroll.is-loading{min-height:min(52vh,360px)}
   body.admin-page .editor-skeleton{
-    grid-template-columns:126px repeat(31,70px);
-    grid-template-rows:68px repeat(6,56px);
+    grid-template-columns:116px repeat(31,58px);
+    grid-template-rows:72px repeat(6,48px);
   }
-  body.admin-page .admin-skeleton-shift{width:46px;height:32px}
+  body.admin-page .admin-skeleton-shift{width:42px;height:30px}
   body.admin-page .admin-skeleton-name{max-width:92px}
 }
 @media(prefers-reduced-motion:reduce){
