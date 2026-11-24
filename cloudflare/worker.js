@@ -67,17 +67,41 @@ export class RosterCoordinator extends DurableObject {
     });
   }
 
+  async updateArchiveIndex(month) {
+    const storage = this.ctx?.storage;
+    if (!storage) return;
+    let indexed = await storage.get("archive-month-index");
+    if (!Array.isArray(indexed)) indexed = await listArchiveMonths(this.rosterData);
+    const months = [...new Set([...indexed, month])].sort((a, b) => b.localeCompare(a));
+    await storage.put("archive-month-index", months);
+  }
+
   createArchive(month, dataJson) {
     return this.runExclusive(async () => {
       const key = "archive:" + month;
-      if (await this.rosterData.get(key)) return { ok: false, error: "ARCHIVE_EXISTS" };
+      if (await this.rosterData.get(key)) {
+        await this.updateArchiveIndex(month);
+        return { ok: false, error: "ARCHIVE_EXISTS" };
+      }
       await this.rosterData.put(key, dataJson);
+      await this.updateArchiveIndex(month);
       return { ok: true };
     });
   }
 
   listArchives() {
-    return this.runExclusive(() => listArchiveMonths(this.rosterData));
+    return this.runExclusive(async () => {
+      const storage = this.ctx?.storage;
+      const indexed = storage ? await storage.get("archive-month-index") : [];
+      const discovered = await listArchiveMonths(this.rosterData);
+      const months = [...new Set([...(Array.isArray(indexed) ? indexed : []), ...discovered])]
+        .filter(month => /^\d{4}-(0[1-9]|1[0-2])$/.test(month))
+        .sort((a, b) => b.localeCompare(a));
+      if (storage && (!Array.isArray(indexed) || months.length !== indexed.length)) {
+        await storage.put("archive-month-index", months);
+      }
+      return months;
+    });
   }
 }
 
