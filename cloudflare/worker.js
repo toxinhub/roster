@@ -50,8 +50,11 @@ export class RosterCoordinator extends DurableObject {
     });
   }
 
-  saveSchedule(dataJson, enforceVersion, expectedUpdatedAt) {
+  saveSchedule(dataJson, enforceVersion, expectedUpdatedAt, targetMonth) {
     return this.runExclusive(async () => {
+      if (targetMonth && await this.rosterData.get("archive:" + targetMonth)) {
+        return { ok: false, error: "MONTH_ARCHIVED" };
+      }
       if (enforceVersion) {
         const currentRaw = await this.rosterData.get("schedule");
         let currentUpdatedAt = null;
@@ -64,14 +67,59 @@ export class RosterCoordinator extends DurableObject {
     });
   }
 
+  async updateArchiveIndex(month) {
+    const storage = this.ctx?.storage;
+    if (!storage) return;
+    let indexed = await storage.get("archive-month-index");
+    if (!Array.isArray(indexed)) indexed = await listArchiveMonths(this.rosterData);
+    const months = [...new Set([...indexed, month])].sort((a, b) => b.localeCompare(a));
+    await storage.put("archive-month-index", months);
+  }
+
   createArchive(month, dataJson) {
     return this.runExclusive(async () => {
       const key = "archive:" + month;
-      if (await this.rosterData.get(key)) return { ok: false, error: "ARCHIVE_EXISTS" };
+      if (await this.rosterData.get(key)) {
+        await this.updateArchiveIndex(month);
+        return { ok: false, error: "ARCHIVE_EXISTS" };
+      }
       await this.rosterData.put(key, dataJson);
+      await this.updateArchiveIndex(month);
       return { ok: true };
     });
   }
+
+  listArchives() {
+    return this.runExclusive(async () => {
+      const storage = this.ctx?.storage;
+      const indexed = storage ? await storage.get("archive-month-index") : [];
+      const discovered = await listArchiveMonths(this.rosterData);
+      const months = [...new Set([...(Array.isArray(indexed) ? indexed : []), ...discovered])]
+        .filter(month => /^\d{4}-(0[1-9]|1[0-2])$/.test(month))
+        .sort((a, b) => b.localeCompare(a));
+      if (storage && (!Array.isArray(indexed) || months.length !== indexed.length)) {
+        await storage.put("archive-month-index", months);
+      }
+      return months;
+    });
+  }
+}
+
+async function listArchiveMonths(kv) {
+  const months = new Set();
+  let cursor;
+  do {
+    const options = { prefix: "archive:", limit: 1000 };
+    if (cursor) options.cursor = cursor;
+    const page = await kv.list(options);
+    for (const item of page.keys || []) {
+      const match = /^archive:(\d{4}-(?:0[1-9]|1[0-2]))$/.exec(item.name || "");
+      if (match) months.add(match[1]);
+    }
+    cursor = page.list_complete ? null : page.cursor;
+    if (!page.list_complete && !cursor) throw new Error("ARCHIVE_LIST_INCOMPLETE");
+  } while (cursor);
+  return [...months].sort((a, b) => b.localeCompare(a));
 }
 
 
@@ -158,8 +206,9 @@ function dataStore(env) {
       put: (key, value, options) => stub.putValue(key, value, options?.expirationTtl),
       delete: key => stub.deleteValue(key),
       consumeLoginAttempt: (key, now) => stub.consumeLoginAttempt(key, now),
-      saveSchedule: (data, enforceVersion, expected) => stub.saveSchedule(data, enforceVersion, expected),
-      createArchive: (month, data) => stub.createArchive(month, data)
+      saveSchedule: (data, enforceVersion, expected, targetMonth) => stub.saveSchedule(data, enforceVersion, expected, targetMonth),
+      createArchive: (month, data) => stub.createArchive(month, data),
+      listArchives: () => stub.listArchives()
     };
   }
   return {
@@ -168,7 +217,8 @@ function dataStore(env) {
     delete: key => env.ROSTER_DATA.delete(key),
     consumeLoginAttempt: null,
     saveSchedule: null,
-    createArchive: null
+    createArchive: null,
+    listArchives: () => listArchiveMonths(env.ROSTER_DATA)
   };
 }
 async function makeToken(role, env) {
@@ -345,6 +395,10 @@ async function handler(request, env) {
     if (!raw) return json({ error: "ROSTER_NOT_SEEDED" }, 503);
     try { return json(JSON.parse(raw)); } catch { return json({ error: "ROSTER_INVALID" }, 503); }
   }
+  if (path === "/api/archives" && request.method === "GET") {
+    if (!await requireRole(request, env, store, "site")) return json({ error: "AUTH_REQUIRED" }, 401);
+    return json({ months: await store.listArchives() });
+  }
   if (path === "/api/archive" && request.method === "GET") {
     if (!await requireRole(request, env, store, "site")) return json({ error: "AUTH_REQUIRED" }, 401);
     const month = url.searchParams.get("month") || "";
@@ -363,10 +417,12 @@ async function handler(request, env) {
     if (enforceVersion && body.expectedUpdatedAt !== null && typeof body.expectedUpdatedAt !== "string") {
       return json({ error: "INVALID_VERSION" }, 400);
     }
+    const targetMonth = body.data.days[0].isoDate.slice(0, 7);
     if (store.saveSchedule) {
-      const saved = await store.saveSchedule(JSON.stringify(body.data), enforceVersion, body.expectedUpdatedAt);
-      if (!saved.ok) return json({ error: saved.error }, saved.error === "WRITE_CONFLICT" ? 409 : 503);
+      const saved = await store.saveSchedule(JSON.stringify(body.data), enforceVersion, body.expectedUpdatedAt, targetMonth);
+      if (!saved.ok) return json({ error: saved.error }, saved.error === "WRITE_CONFLICT" || saved.error === "MONTH_ARCHIVED" ? 409 : 503);
     } else {
+      if (await store.get("archive:" + targetMonth)) return json({ error: "MONTH_ARCHIVED" }, 409);
       if (enforceVersion) {
         const currentRaw = await store.get("schedule");
         let currentUpdatedAt = null;

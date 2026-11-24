@@ -6,7 +6,9 @@ const { webcrypto } = require("node:crypto");
 
 const source = fs.readFileSync(new URL("../cloudflare/worker.js", "file://" + __filename), "utf8");
 const context = {
-  BaseDurableObject: class {},
+  BaseDurableObject: class {
+    constructor(ctx, env) { this.ctx = ctx; this.env = env; }
+  },
   TextEncoder,
   TextDecoder,
   Response,
@@ -38,18 +40,32 @@ class MemoryKV {
   async get(key) { return this.values.has(key) ? this.values.get(key) : null; }
   async put(key, value) { this.values.set(key, String(value)); }
   async delete(key) { this.values.delete(key); }
+  async list(options = {}) {
+    const keys = [...this.values.keys()]
+      .filter(key => key.startsWith(options.prefix || ""))
+      .sort()
+      .map(name => ({ name }));
+    return { keys, list_complete: true, cursor: undefined };
+  }
+}
+
+class MemoryDOStorage {
+  constructor() { this.values = new Map(); }
+  async get(key) { return this.values.get(key); }
+  async put(key, value) { this.values.set(key, value); }
 }
 
 function makeEnv() {
   const kv = new MemoryKV();
-  const coordinator = new Coordinator({}, { ROSTER_DATA: kv });
+  const coordinator = new Coordinator({ storage: new MemoryDOStorage() }, { ROSTER_DATA: kv });
   const stub = {
     getValue: coordinator.getValue.bind(coordinator),
     putValue: coordinator.putValue.bind(coordinator),
     deleteValue: coordinator.deleteValue.bind(coordinator),
     consumeLoginAttempt: coordinator.consumeLoginAttempt.bind(coordinator),
     saveSchedule: coordinator.saveSchedule.bind(coordinator),
-    createArchive: coordinator.createArchive.bind(coordinator)
+    createArchive: coordinator.createArchive.bind(coordinator),
+    listArchives: coordinator.listArchives.bind(coordinator)
   };
   return {
     kv,
@@ -158,6 +174,42 @@ test("admin save accepts the current version and rejects a stale second writer",
   assert.deepEqual(JSON.parse(await kv.get("schedule")), first);
 });
 
+test("admin cannot overwrite a month after it has been archived", async () => {
+  const { env, kv } = makeEnv();
+  const token = await login(env, "admin-test-password");
+  const archived = sampleRoster();
+  await kv.put("archive:2026-11", JSON.stringify(archived));
+
+  const attempted = sampleRoster({
+    month: "নভেম্বর ২০২৬ — edited",
+    updatedAt: "2026-11-24T13:00:00.000Z"
+  });
+  const response = await call(env, "/api/admin/save", {
+    method: "POST",
+    token,
+    body: { data: attempted, expectedUpdatedAt: null }
+  });
+  assert.equal(response.status, 409);
+  assert.equal((await response.json()).error, "MONTH_ARCHIVED");
+  assert.equal(await kv.get("schedule"), null);
+});
+
+test("archive index lists only saved month keys in newest-first order and requires a session", async () => {
+  const { env, kv } = makeEnv();
+  const denied = await call(env, "/api/archives");
+  assert.equal(denied.status, 401);
+
+  await kv.put("archive:2026-09", JSON.stringify(sampleRoster()));
+  await kv.put("archive:2026-11", JSON.stringify(sampleRoster()));
+  await kv.put("archive:invalid", "{}");
+  await kv.put("schedule", JSON.stringify(sampleRoster()));
+
+  const token = await login(env, "site-test-password");
+  const response = await call(env, "/api/archives", { token });
+  assert.equal(response.status, 200);
+  assert.deepEqual((await response.json()).months, ["2026-11", "2026-09"]);
+});
+
 test("archive creation is idempotently protected and the saved archive is readable", async () => {
   const { env } = makeEnv();
   const token = await login(env, "admin-test-password");
@@ -173,6 +225,10 @@ test("archive creation is idempotently protected and the saved archive is readab
   const read = await call(env, "/api/archive?month=2026-11", { token });
   assert.equal(read.status, 200);
   assert.deepEqual(await read.json(), data);
+
+  const history = await call(env, "/api/archives", { token });
+  assert.equal(history.status, 200);
+  assert.deepEqual((await history.json()).months, ["2026-11"]);
 });
 
 test("logout revokes the issued session token immediately", async () => {

@@ -162,6 +162,23 @@ test("Admin prevents cross-month day additions and more than 100 employees", () 
   assert.match(adminHtml, /সব তারিখ একই মাসের হতে হবে/);
 });
 
+test("Worker exposes a session-protected archive index and archive key filter", () => {
+  assert.ok(workerSource.includes('path === "/api/archives"'));
+  assert.ok(workerSource.includes("listArchiveMonths"));
+  assert.ok(workerSource.includes("MONTH_ARCHIVED"));
+});
+
+test("Admin Archive History lists saved months and does not accept arbitrary month input", () => {
+  const adminHtml = fs.readFileSync(new URL("../admin.html", "file://" + __filename), "utf8");
+  assert.match(adminHtml, /id="archiveMonth" aria-label="সংরক্ষিত Archive মাস"/);
+  assert.match(adminHtml, /\/api\/archives/);
+  assert.match(adminHtml, /refreshArchiveList\(false\)/);
+  assert.match(adminHtml, /মোট ডিউটি/);
+  assert.match(adminHtml, /archiveRequestId/);
+  assert.match(adminHtml, /archive-table-wrap/);
+  assert.match(adminHtml, /এই মাসটি Archive-এ সংরক্ষিত/);
+});
+
 test("archive snapshot comparison ignores object key order but preserves array order", () => {
   const adminHtml = fs.readFileSync(new URL("../admin.html", "file://" + __filename), "utf8");
   const start = adminHtml.indexOf("function stableStringify");
@@ -224,4 +241,5 @@ test("Admin month switching maps each employee's shifts by the matching row inde
   const syncMonth = adminHtml.slice(start, end);
   assert.match(syncMonth, /oldEmployees\.forEach\(\(emp,\s*ei\)\s*=>/);
   assert.match(syncMonth, /oldShiftByDate\[ei\]/);
+  assert.match(syncMonth, /archivePending\.delete\(newKey\)/);
 });
