@@ -1198,8 +1198,21 @@ body.admin-page .editor-skeleton::after{
   from{background-position:110% 0}
   to{background-position:-110% 0}
 }
+body.admin-page.ink-mode .editor-skeleton{background:#706861!important}
+body.admin-page.ink-mode .editor-skeleton-cell{
+  background:#706861!important;
+  border-color:#7D756D!important;
+}
+body.admin-page.ink-mode .editor-skeleton-cell.is-head{background:#665F58!important}
+body.admin-page.ink-mode .admin-skeleton-mark,
+body.admin-page.ink-mode .admin-skeleton-date,
+body.admin-page.ink-mode .admin-skeleton-weekday,
+body.admin-page.ink-mode .admin-skeleton-name,
+body.admin-page.ink-mode .admin-skeleton-shift{
+  background:rgba(255,248,242,.24)!important;
+}
 body.admin-page.ink-mode .editor-skeleton::after{
-  background-image:linear-gradient(105deg,transparent 34%,rgba(255,255,255,.12) 50%,transparent 66%);
+  background-image:linear-gradient(105deg,transparent 34%,rgba(255,248,242,.16) 50%,transparent 66%);
 }
 @media(max-width:700px){
   body.admin-page .grid-scroll.is-loading{min-height:min(58vh,420px)}
