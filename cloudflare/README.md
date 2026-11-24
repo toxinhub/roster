@@ -58,9 +58,10 @@ If `ROSTER_COORDINATOR` is missing while `REQUIRE_COORDINATOR=true`, authenticat
 - [x] `REQUIRE_COORDINATOR=true` and production-only `ADMIN_WRITE_ORIGINS` verified in live Worker settings.
 - [x] Existing `ROSTER_DATA` KV namespace ID verified unchanged.
 - [x] Existing secret bindings `SITE_PASSWORD`, `ADMIN_PASSWORD`, and `SESSION_SECRET` verified present after deployment; secret values were neither read nor changed.
-- [ ] Runtime `/api/status` HTTP smoke check remains pending; this session's web/runtime access could not reach the Worker URL.
+- [x] Runtime `/api/status` checked in production: `configured=true` and all 10 configuration checks passed, including the existing secrets' presence, KV/Coordinator bindings, coordinator-required mode, and allowed origin.
 - [x] Post-deployment KV snapshot created in a separate namespace `roster-production-backup-2026-11-24`; all three keys (`schedule`, `archive:2026-09`, `archive:2026-10`) copied and verified with matching SHA-256 hashes.
-- [ ] Authenticated Admin write tests remain pending. The backup is in the same Cloudflare account (not an off-site backup); preserve it until the rollout is fully verified.
+- [x] Production unauthenticated API smoke checks passed: `/api/session` returned `authenticated:false`; `/api/roster` and `/api/archive` returned `AUTH_REQUIRED` without a session.
+- [ ] Authenticated Admin save/archive/restore/stale-tab tests remain pending because they require an authorized Admin browser session. The backup is in the same Cloudflare account (not an off-site backup); preserve it until the rollout is fully verified.
 - [ ] PR #3 remains open/draft; Pages production branch remains `security/cloudflare-preview`.
 
 The deployment was additive: it created the Durable Object namespace and changed Worker code/bindings, but did not copy, delete, or rewrite roster/archive values in KV. Do not treat the configuration checks above as a substitute for the pending runtime and authenticated tests.
@@ -71,7 +72,7 @@ Do these steps in order. Do not change the Pages production branch before the Wo
 
 ### 1. Pre-deployment checks
 
-- [ ] Confirm PR #3 is the intended release and all required GitHub Actions checks are green.
+- [x] Confirm PR #3 is the intended release and all required GitHub Actions checks are green; latest PR-head run for `5fd35bf` completed successfully, including Node tests and Wrangler dry-run.
 - [ ] Confirm the deployment identity is authenticated to the correct Cloudflare account and has the required Worker, Durable Object, and KV permissions.
 - [ ] Confirm the existing `ROSTER_DATA` namespace ID in `wrangler.toml` matches the live binding.
 - [ ] Confirm the existing three Worker secrets are still configured: `SITE_PASSWORD`, `ADMIN_PASSWORD`, and `SESSION_SECRET`. Verify presence only; never print or copy secret values.
