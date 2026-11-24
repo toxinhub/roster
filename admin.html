@@ -1427,6 +1427,7 @@ body.admin-page.ink-mode .editor-skeleton::after{
       const auth = await window.RosterAuthReady();
       if (!auth?.authenticated || auth.role !== 'admin') return;
       setEditorLoading(true);
+      const loadingStartedAt=performance.now();
       try {
         const r = await window.RosterAPI.request('/api/roster?v=' + Date.now(), { cache: 'no-store' });
         if (!r.ok) throw new Error('roster load failed');
@@ -1439,6 +1440,9 @@ body.admin-page.ink-mode .editor-skeleton::after{
       } catch {
         toast('নিরাপদ সার্ভার থেকে রোস্টার লোড হয়নি', true);
       } finally {
+        // Avoid a one-frame flash when the API responds from a warm cache.
+        const remaining=420-(performance.now()-loadingStartedAt);
+        if(remaining>0) await new Promise(resolve=>setTimeout(resolve,remaining));
         setEditorLoading(false);
       }
     }
