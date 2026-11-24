@@ -255,6 +255,24 @@ body.admin-page .editor-panel>p.muted{margin:0 0 6px!important;font-size:9px!imp
  body.admin-page .editor-panel .view-switch button,body.admin-page .editor-panel .week-nav button{min-height:26px;padding:3px 7px}
  body.admin-page .editor-panel>p.muted{font-size:8px!important;line-height:1.25!important}
 }
+
+/* Balance the camera marker with the enlarged date and shift controls. */
+body.admin-page #editor thead th:first-child{
+  text-align:center!important;
+  vertical-align:middle!important;
+  padding:8px 4px!important;
+  font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif!important;
+  font-size:28px!important;
+  font-weight:400!important;
+  line-height:1.2!important;
+}
+@media(max-width:700px){
+  body.admin-page #editor thead th:first-child{
+    font-size:26px!important;
+    padding:7px 3px!important;
+  }
+}
+
 </style></head>
 <body class="admin-page" data-required-role="admin">
   <div class="app">
