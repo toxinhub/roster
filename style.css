@@ -7091,3 +7091,28 @@ html body.ink-mode .board{
     box-shadow:none!important;
   }
 }
+
+
+/* Active shift legend: all shift labels remain visually identical. */
+html body .legend span.active-shift{
+  transform:none!important;
+  filter:none!important;
+  background:transparent!important;
+  border:0!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+  outline:0!important;
+}
+html body .legend span.active-shift::after{
+  display:none!important;
+  content:none!important;
+}
+html body .legend span.active-shift i{
+  box-shadow:none!important;
+}
+html body.ink-mode .legend span.active-shift{
+  background:#ECE9DE!important;
+  border:1px solid #B9B6AC!important;
+  color:#252420!important;
+  box-shadow:none!important;
+}
