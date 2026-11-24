@@ -58,7 +58,8 @@ If `ROSTER_COORDINATOR` is missing while `REQUIRE_COORDINATOR=true`, authenticat
 - [x] `REQUIRE_COORDINATOR=true` and production-only `ADMIN_WRITE_ORIGINS` verified in live Worker settings.
 - [x] Existing `ROSTER_DATA` KV namespace ID verified unchanged.
 - [x] Existing secret bindings `SITE_PASSWORD`, `ADMIN_PASSWORD`, and `SESSION_SECRET` verified present after deployment; secret values were neither read nor changed.
-- [ ] Runtime `/api/status` HTTP smoke check and authenticated Admin save/archive/conflict tests remain pending.
+- [ ] Runtime `/api/status` HTTP smoke check remains pending.
+- [ ] Export/backup the current roster and archive values before any authenticated Admin write tests. No pre-deployment export was made; the Worker deployment itself did not write to the KV data.
 - [ ] PR #3 remains open/draft; Pages production branch remains `security/cloudflare-preview`.
 
 The deployment was additive: it created the Durable Object namespace and changed Worker code/bindings, but did not copy, delete, or rewrite roster/archive values in KV. Do not treat the configuration checks above as a substitute for the pending runtime and authenticated tests.
@@ -74,7 +75,7 @@ Do these steps in order. Do not change the Pages production branch before the Wo
 - [ ] Confirm the existing `ROSTER_DATA` namespace ID in `wrangler.toml` matches the live binding.
 - [ ] Confirm the existing three Worker secrets are still configured: `SITE_PASSWORD`, `ADMIN_PASSWORD`, and `SESSION_SECRET`. Verify presence only; never print or copy secret values.
 - [ ] Confirm `ADMIN_WRITE_ORIGINS` contains only the production frontend origins.
-- [ ] Take a separate backup/export of the existing roster and archive data before deployment. Do not delete, rename, or replace the KV namespace.
+- [ ] Before any authenticated Admin write tests, take a separate backup/export of the existing roster and archive data. Do not delete, rename, or replace the KV namespace.
 
 ### 2. Deploy the Worker first
 
