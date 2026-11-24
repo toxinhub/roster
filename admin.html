@@ -114,7 +114,7 @@ body[data-required-role="admin"] .topbar{margin:0}body[data-required-role="admin
 @media(max-width:700px){.roster-tools{grid-template-columns:1fr 1fr}.roster-tools label:first-child{grid-column:1/-1}.roster-tools button{grid-column:1/-1}.grid-scroll{max-height:65vh}#editor th:first-child{min-width:112px}#editor tbody th:first-child input{max-width:100px}}
 @media(prefers-reduced-motion:reduce){.admin-nav a{transition:none}}
 
-.archive-controls{display:flex;align-items:end;flex-wrap:wrap;gap:9px}.archive-controls label{display:grid;gap:5px;min-width:180px;color:var(--muted);font-size:10px;font-weight:800}.archive-controls input,.archive-controls select{min-height:40px;padding:8px 10px;border:1px solid var(--line-strong);border-radius:9px;background:var(--panel-soft);color:var(--ink)}.archive-preview{margin-top:12px;padding:13px;border:1px solid var(--line);border-radius:11px;background:var(--panel-soft);color:var(--ink);font-size:12px;line-height:1.65}.archive-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:10px}.archive-stat{padding:10px;border:1px solid var(--line);border-radius:9px;background:var(--panel)}.archive-stat strong{display:block;font-size:18px;color:var(--ink)}.archive-stat small{font-size:9px;color:var(--muted)}.archive-preview .archive-shifts{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}.archive-shifts span{padding:5px 8px;border:1px solid var(--line);border-radius:7px;font-size:10px;font-weight:800}
+.archive-controls{display:flex;align-items:end;flex-wrap:wrap;gap:9px}.archive-controls label{display:grid;gap:5px;min-width:180px;color:var(--muted);font-size:10px;font-weight:800}.archive-controls input,.archive-controls select{min-height:40px;padding:8px 10px;border:1px solid var(--line-strong);border-radius:9px;background:var(--panel-soft);color:var(--ink)}.archive-preview{margin-top:12px;padding:13px;border:1px solid var(--line);border-radius:11px;background:var(--panel-soft);color:var(--ink);font-size:12px;line-height:1.65}.archive-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:10px}.archive-stat{padding:10px;border:1px solid var(--line);border-radius:9px;background:var(--panel)}.archive-stat strong{display:block;font-size:18px;color:var(--ink)}.archive-stat small{font-size:9px;color:var(--muted)}.archive-preview .archive-shifts{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}.archive-shifts span{padding:5px 8px;border:1px solid var(--line);border-radius:7px;font-size:10px;font-weight:800}.archive-table-wrap{margin-top:12px;max-height:min(55vh,520px);overflow:auto;border:1px solid var(--line);border-radius:9px}.archive-table{width:100%;min-width:max-content;border-collapse:separate;border-spacing:0;font-size:10px}.archive-table th,.archive-table td{padding:7px 8px;text-align:center;white-space:nowrap;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}.archive-table thead th{position:sticky;top:0;z-index:2;background:var(--panel-soft)}.archive-table th:first-child{position:sticky;left:0;z-index:3;min-width:120px;text-align:left;background:var(--panel)}.archive-table thead th:first-child{z-index:4;background:var(--panel-soft)}.archive-shift-code{display:inline-block;min-width:22px;padding:3px 5px;border-radius:5px;font-weight:900;background:var(--panel-soft);color:var(--ink)}.archive-shift-code.shift-a{background:#f5e3c4;color:#784b13}.archive-shift-code.shift-b{background:#f2ddd3;color:#7a2f18}.archive-shift-code.shift-c{background:#dce8ed;color:#273e47}.archive-shift-code.shift-off{background:#e8e6df;color:#5f5533}.archive-shift-code.shift-l{background:#f4dce2;color:#8b1e34}body.ink-mode .archive-table tbody th{background:var(--panel)}body.ink-mode .archive-table tbody td{background:var(--panel-soft)}
 @media(max-width:600px){.archive-controls{display:grid;grid-template-columns:1fr 1fr}.archive-controls label{grid-column:1/-1}.archive-controls button{width:100%}.archive-stats{grid-template-columns:repeat(3,minmax(0,1fr))}}
 
 /* Minimal admin layout — balanced desktop and mobile sizing */
@@ -319,19 +319,22 @@ body[data-required-role="admin"] .archive-stat strong{font-size:16px}
       const oldDays = Array.isArray(S.days) ? S.days : [];
       const oldEmployees = Array.isArray(S.employees) ? S.employees : [];
 
-      // When changing the editor to another month, keep an untouched snapshot
-      // of the month that is about to leave the live schedule. It will be
-      // written to archive/ only when Save is pressed.
+      // Keep the latest unsaved snapshot whenever leaving a month.
+      // Returning to a pending month restores its actual edits instead of
+      // generating a blank roster or trapping the editor on the new month.
       const oldKey = oldDays[0]?.isoDate?.slice(0,7) || '';
       const newKey = value;
       if (oldKey && newKey && oldKey !== newKey) {
+        archivePending.set(oldKey, JSON.parse(JSON.stringify(S)));
         if (archivePending.has(newKey)) {
-          $('monthPicker').value = oldKey;
-          toast('এই মাসের অসম্পূর্ণ পরিবর্তন আগে Save করুন।', true);
+          S = JSON.parse(JSON.stringify(archivePending.get(newKey)));
+          archivePending.delete(newKey);
+          $('month').value = S.month || '';
+          $('monthHead').textContent = S.month || 'রোস্টার সম্পাদনা';
+          render();
+          markDirty();
+          toast('অসম্পূর্ণ মাসের রোস্টারে ফিরে এসেছেন।');
           return;
-        }
-        if (!archivePending.has(oldKey)) {
-          archivePending.set(oldKey, JSON.parse(JSON.stringify(S)));
         }
       }
 
@@ -616,7 +619,31 @@ body[data-required-role="admin"] .archive-stat strong{font-size:16px}
 
     $('month').onchange=e=>{S.month=e.target.value;$('monthHead').textContent=S.month;markDirty()};
     $('clearChanges').onclick=()=>{if(!dirty)return;if(!confirm('সব অসম্পূর্ণ পরিবর্তন বাতিল করবেন?'))return;S=JSON.parse(cleanSnapshot);archivePending.clear();render();markDirty();toast('পরিবর্তন বাতিল হয়েছে')};
-    $('monthPicker').onchange = () => { syncMonth(); markDirty(); };
+    let monthSwitchRequestId = 0;
+    $('monthPicker').onchange = async () => {
+      const requestId = ++monthSwitchRequestId;
+      const selectedMonth = $('monthPicker').value;
+      const currentMonth = S?.days?.[0]?.isoDate?.slice(0, 7) || '';
+      if (selectedMonth && selectedMonth !== currentMonth) {
+        try {
+          const response = await window.RosterAPI.request('/api/archive?month=' + encodeURIComponent(selectedMonth), { cache: 'no-store' });
+          if (requestId !== monthSwitchRequestId) return;
+          if (response.ok) {
+            $('monthPicker').value = currentMonth;
+            toast('এই মাসটি Archive-এ সংরক্ষিত। পুরোনো মাসটি Read-only।', true);
+            return;
+          }
+          if (response.status !== 404) throw new Error('ARCHIVE_CHECK_FAILED');
+        } catch {
+          if (requestId !== monthSwitchRequestId) return;
+          $('monthPicker').value = currentMonth;
+          toast('মাস পরিবর্তনের আগে Archive যাচাই করা যায়নি।', true);
+          return;
+        }
+      }
+      if (requestId !== monthSwitchRequestId) return;
+      syncMonth();
+    };
 
     $('addDay').onclick = () => {
       if (S.days.length >= 31) {
@@ -762,6 +789,11 @@ body[data-required-role="admin"] .archive-stat strong{font-size:16px}
       }
       S.updatedAt = new Date().toISOString();
       try {
+        const targetMonth = S.days[0]?.isoDate?.slice(0, 7);
+        if (!targetMonth) throw new Error('INVALID_ROSTER');
+        const archiveCheck = await window.RosterAPI.request('/api/archive?month=' + encodeURIComponent(targetMonth), { cache: 'no-store' });
+        if (archiveCheck.ok) throw new Error('MONTH_ARCHIVED');
+        if (archiveCheck.status !== 404) throw new Error('ARCHIVE_CHECK_FAILED');
         await archiveIfNeeded();
         const r = await window.RosterAPI.request('/api/admin/save', {
           method: 'POST',
@@ -778,7 +810,9 @@ body[data-required-role="admin"] .archive-stat strong{font-size:16px}
         await refreshArchiveList(true);
         toast('রোস্টার নিরাপদ স্টোরেজে সংরক্ষিত');
       } catch (error) {
-        if (error.message === 'ARCHIVE_EXISTS') {
+        if (error.message === 'MONTH_ARCHIVED') {
+          toast('এই মাসটি আগে থেকেই Archive-এ সংরক্ষিত। পুরোনো মাসে নতুন করে Save করা যাবে না।', true);
+        } else if (error.message === 'ARCHIVE_EXISTS') {
           toast('এই মাসের archive-এ ভিন্ন ডেটা আছে। সেটি যাচাই না করে Save বন্ধ রাখা হয়েছে।', true);
         } else if (error.message === 'ARCHIVE_CHECK_FAILED') {
           toast('Archive যাচাই করা যায়নি। সংযোগ ঠিক করে আবার চেষ্টা করুন।', true);
@@ -872,6 +906,43 @@ body[data-required-role="admin"] .archive-stat strong{font-size:16px}
           shifts.appendChild(item);
         });
         preview.appendChild(shifts);
+
+        const tableWrap = document.createElement('div');
+        tableWrap.className = 'archive-table-wrap';
+        const table = document.createElement('table');
+        table.className = 'archive-table';
+        const thead = document.createElement('thead');
+        const headerRow = document.createElement('tr');
+        const employeeHeading = document.createElement('th');
+        employeeHeading.textContent = 'কর্মী';
+        headerRow.appendChild(employeeHeading);
+        for (const day of data.days) {
+          const heading = document.createElement('th');
+          heading.textContent = day.date + ' · ' + day.weekday;
+          headerRow.appendChild(heading);
+        }
+        thead.appendChild(headerRow);
+        table.appendChild(thead);
+        const tbody = document.createElement('tbody');
+        for (const employee of data.employees) {
+          const row = document.createElement('tr');
+          const name = document.createElement('th');
+          name.scope = 'row';
+          name.textContent = employee.name || '—';
+          row.appendChild(name);
+          for (const code of employee.shifts) {
+            const cell = document.createElement('td');
+            const badge = document.createElement('span');
+            badge.className = 'archive-shift-code shift-' + code.toLowerCase();
+            badge.textContent = code;
+            cell.appendChild(badge);
+            row.appendChild(cell);
+          }
+          tbody.appendChild(row);
+        }
+        table.appendChild(tbody);
+        tableWrap.appendChild(table);
+        preview.appendChild(tableWrap);
         download.disabled = false;
       } catch (error) {
         if (requestId !== archiveRequestId) return;
