@@ -232,7 +232,7 @@ html body.ink-mode #status.status.not-connected{
         };
       });
 
-      oldEmployees.forEach(emp => {
+      oldEmployees.forEach((emp, ei) => {
         const byDate = oldShiftByDate[ei] || new Map();
         emp.shifts = S.days.map(d => byDate.get(d.isoDate) || 'OFF');
       });
