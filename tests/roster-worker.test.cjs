@@ -160,3 +160,12 @@ test("Pages API proxy preserves preview origin and restricts methods", () => {
   assert.match(proxy, /ALLOWED_METHODS/);
   assert.doesNotMatch(proxy, /roster-bps\.pages\.dev/);
 });
+
+test("all authenticated API routes pass the coordinator-backed store", () => {
+  assert.doesNotMatch(workerSource, /getSession\(request, env\);/);
+  assert.doesNotMatch(workerSource, /requireRole\(request, env, ["'](?:site|admin)["']\)/);
+  assert.match(workerSource, /store\.saveSchedule\(/);
+  assert.match(workerSource, /store\.createArchive\(/);
+  assert.match(workerSource, /store\.consumeLoginAttempt\(/);
+  assert.match(workerSource, /REQUIRE_COORDINATOR/);
+});
