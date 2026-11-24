@@ -64,7 +64,7 @@ If `ROSTER_COORDINATOR` is missing while `REQUIRE_COORDINATOR=true`, authenticat
 - [x] User-confirmed production Admin Save and stale-tab conflict checks completed successfully.
 - [ ] Archive create/duplicate protection, Restore, logout revocation, site-role write denial, and Preview read-only checks still need explicit verification. Preserve the same-account backup until these are complete.
 - [x] PR #3 merged into `main` as `aabb43ba01aed659c20b9d0e42bf9d60449c3f97`.
-- [x] Cloudflare Pages production branch changed from `security/cloudflare-preview` to `main`; verify the new production deployment below.
+- [x] Cloudflare Pages production branch changed from `security/cloudflare-preview` to `main`; the first production deployment from `main` completed successfully.
 
 The Worker deployment was additive: it created the Durable Object namespace and changed Worker code/bindings, but did not copy, delete, or rewrite roster/archive values in KV. The backup is in the same Cloudflare account, not an off-site backup.
 
@@ -135,8 +135,8 @@ Cloudflare Pages production branch is now `main` and PR #3 has been merged. The 
 
 - [x] Merge PR #3 into `main`.
 - [x] Change the Pages production branch to `main`.
-- [ ] Wait for the new production Pages deployment to complete.
-- [ ] Verify the production site loads and its `/api/status` request reaches the Worker through the Pages proxy.
+- [x] New production Pages deployment completed successfully: `6cf0d320-2287-437f-a684-4ee406a05613` from `main` commit `80734f46df18942d4f57cc60356a07a9713e161e`.
+- [ ] Re-run live HTTP checks of `/api/status`, `/api/session`, `/api/roster`, and `/api/archive` after this cutover; the deployment control plane reports success, but an external HTTP verification could not be completed in this session.
 - [ ] Verify site login, roster read, Admin login, save, archive, and logout once more on the production domain.
 
 If the production Pages deployment fails, restore the previous production branch setting and investigate. Do not roll back the Worker by deleting the Durable Object migration or changing the KV namespace.
