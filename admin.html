@@ -455,10 +455,25 @@ body[data-required-role="admin"] input:focus-visible,body[data-required-role="ad
         markDirty(); render(); updateOverview();
       });
       $('editor').querySelectorAll('[data-rmemp]').forEach(x => x.onclick = e => {
-        S.employees.splice(+e.target.dataset.rmemp, 1);
+        const index=+e.target.dataset.rmemp;
+        const employee=S.employees[index];
+        if(!employee)return;
+        if(!confirm('কর্মী "'+employee.name+'"-কে বর্তমান রোস্টার থেকে বাদ দেবেন? পূর্বের archive অপরিবর্তিত থাকবে।'))return;
+        S.employees.splice(index, 1);
         markDirty(); render(); updateOverview();
       });
-      $('editor').querySelectorAll('.edit').forEach(x => x.onclick = () => pick(x));
+      $('editor').querySelectorAll('.edit').forEach(x => {
+        x.onclick = () => pick(x);
+        x.onkeydown = e => {
+          const moves={ArrowLeft:[0,-1],ArrowRight:[0,1],ArrowUp:[-1,0],ArrowDown:[1,0]};
+          const move=moves[e.key]; if(!move)return;
+          e.preventDefault();
+          const nextEmployee=Number(x.dataset.ei)+move[0],nextDay=Number(x.dataset.di)+move[1];
+          if(nextEmployee<0||nextEmployee>=S.employees.length||nextDay<0||nextDay>=S.days.length)return;
+          const target=$('editor').querySelector('.edit[data-ei="'+nextEmployee+'"][data-di="'+nextDay+'"]');
+          target?.focus();
+        };
+      });
     }
 
     function applyRosterFilters(){
