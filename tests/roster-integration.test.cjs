@@ -47,9 +47,15 @@ class MemoryKV {
   }
 }
 
+class MemoryDOStorage {
+  constructor() { this.values = new Map(); }
+  async get(key) { return this.values.get(key); }
+  async put(key, value) { this.values.set(key, value); }
+}
+
 function makeEnv() {
   const kv = new MemoryKV();
-  const coordinator = new Coordinator({}, { ROSTER_DATA: kv });
+  const coordinator = new Coordinator({ storage: new MemoryDOStorage() }, { ROSTER_DATA: kv });
   const stub = {
     getValue: coordinator.getValue.bind(coordinator),
     putValue: coordinator.putValue.bind(coordinator),
@@ -217,6 +223,10 @@ test("archive creation is idempotently protected and the saved archive is readab
   const read = await call(env, "/api/archive?month=2026-11", { token });
   assert.equal(read.status, 200);
   assert.deepEqual(await read.json(), data);
+
+  const history = await call(env, "/api/archives", { token });
+  assert.equal(history.status, 200);
+  assert.deepEqual((await history.json()).months, ["2026-11"]);
 });
 
 test("logout revokes the issued session token immediately", async () => {
