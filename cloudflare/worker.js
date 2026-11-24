@@ -50,8 +50,11 @@ export class RosterCoordinator extends DurableObject {
     });
   }
 
-  saveSchedule(dataJson, enforceVersion, expectedUpdatedAt) {
+  saveSchedule(dataJson, enforceVersion, expectedUpdatedAt, targetMonth) {
     return this.runExclusive(async () => {
+      if (targetMonth && await this.rosterData.get("archive:" + targetMonth)) {
+        return { ok: false, error: "MONTH_ARCHIVED" };
+      }
       if (enforceVersion) {
         const currentRaw = await this.rosterData.get("schedule");
         let currentUpdatedAt = null;
@@ -179,7 +182,7 @@ function dataStore(env) {
       put: (key, value, options) => stub.putValue(key, value, options?.expirationTtl),
       delete: key => stub.deleteValue(key),
       consumeLoginAttempt: (key, now) => stub.consumeLoginAttempt(key, now),
-      saveSchedule: (data, enforceVersion, expected) => stub.saveSchedule(data, enforceVersion, expected),
+      saveSchedule: (data, enforceVersion, expected, targetMonth) => stub.saveSchedule(data, enforceVersion, expected, targetMonth),
       createArchive: (month, data) => stub.createArchive(month, data),
       listArchives: () => stub.listArchives()
     };
@@ -390,10 +393,12 @@ async function handler(request, env) {
     if (enforceVersion && body.expectedUpdatedAt !== null && typeof body.expectedUpdatedAt !== "string") {
       return json({ error: "INVALID_VERSION" }, 400);
     }
+    const targetMonth = body.data.days[0].isoDate.slice(0, 7);
     if (store.saveSchedule) {
-      const saved = await store.saveSchedule(JSON.stringify(body.data), enforceVersion, body.expectedUpdatedAt);
-      if (!saved.ok) return json({ error: saved.error }, saved.error === "WRITE_CONFLICT" ? 409 : 503);
+      const saved = await store.saveSchedule(JSON.stringify(body.data), enforceVersion, body.expectedUpdatedAt, targetMonth);
+      if (!saved.ok) return json({ error: saved.error }, saved.error === "WRITE_CONFLICT" || saved.error === "MONTH_ARCHIVED" ? 409 : 503);
     } else {
+      if (await store.get("archive:" + targetMonth)) return json({ error: "MONTH_ARCHIVED" }, 409);
       if (enforceVersion) {
         const currentRaw = await store.get("schedule");
         let currentUpdatedAt = null;
