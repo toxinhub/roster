@@ -207,14 +207,6 @@ body[data-required-role="admin"] .archive-stat strong{font-size:16px}
 @media(prefers-reduced-motion:reduce){body[data-required-role="admin"] *{scroll-behavior:auto!important;transition:none!important}}
 
 
-
-/* EDITOR DATE + WEEKDAY — always visible above the remove-day action */
-#editor thead th.editor-day-heading{min-width:76px!important;padding:7px 5px!important;vertical-align:top!important}
-#editor thead th.editor-day-heading .editor-day-date,
-#editor thead th.editor-day-heading .editor-day-weekday{display:block!important;box-sizing:border-box!important;width:100%!important;min-width:64px!important;height:30px!important;min-height:30px!important;margin:0 auto 4px!important;padding:4px 5px!important;border:1px solid var(--line-strong)!important;border-radius:6px!important;background:var(--panel)!important;color:var(--ink)!important;-webkit-text-fill-color:var(--ink)!important;text-align:center!important;font-size:11px!important;font-weight:800!important;line-height:1.2!important;opacity:1!important;visibility:visible!important}
-#editor thead th.editor-day-heading .editor-day-weekday{background:var(--panel-soft)!important;color:var(--muted)!important;-webkit-text-fill-color:var(--muted)!important;font-size:9px!important;font-weight:700!important}
-#editor thead th.editor-day-heading .remove{margin:4px auto 0!important}
-
 /* Archive calendar headings: keep date and weekday clearly visible */
 .archive-table th.archive-day-heading{min-width:58px;padding:6px 5px;white-space:normal;vertical-align:middle}
 .archive-day-heading .archive-day-date{display:block;font-size:11px;font-weight:900;line-height:1.2;color:var(--ink)}
@@ -469,19 +461,13 @@ body[data-required-role="admin"] .archive-stat strong{font-size:16px}
       $('monthHead').textContent = S.month || 'রোস্টার সম্পাদনা';
       $('month').value = S.month || '';
 
-      const weekdayNames = ['রবিবার','সোমবার','মঙ্গলবার','বুধবার','বৃহস্পতিবার','শুক্রবার','শনিবার'];
-      const h = '<tr><th>কর্মী</th>' + S.days.map((d, i) => {
-        const isoDate = /^\d{4}-\d{2}-\d{2}$/.test(d.isoDate || '') ? d.isoDate : '';
-        const dateValue = d.date || (isoDate ? String(Number(isoDate.slice(8, 10))) : '');
-        const parsedDate = isoDate ? new Date(isoDate + 'T00:00:00.000Z') : null;
-        const weekdayValue = d.weekday || (parsedDate && !Number.isNaN(parsedDate.getTime()) ? weekdayNames[parsedDate.getUTCDay()] : '');
-        return `
-        <th class="editor-day-heading">
-          <input class="editor-day-date" type="text" inputmode="numeric" value="${esc(dateValue)}" data-day="${i}" aria-label="তারিখ">
-          <input class="editor-day-weekday" type="text" value="${esc(weekdayValue)}" data-wd="${i}" readonly aria-label="বার" title="তারিখ অনুযায়ী স্বয়ংক্রিয়">
+      const h = '<tr><th>কর্মী</th>' + S.days.map((d, i) => `
+        <th>
+          <input value="${esc(d.date)}" data-day="${i}">
+          <small><input value="${esc(d.weekday)}" data-wd="${i}" readonly title="তারিখ অনুযায়ী স্বয়ংক্রিয়"></small>
           <button class="remove" data-rmday="${i}">বাদ</button>
         </th>
-      `;}).join('') + '</tr>';
+      `).join('') + '</tr>';
 
       const b = S.employees.map((e, ei) => `
         <tr>
