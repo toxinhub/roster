@@ -15,9 +15,11 @@ on:
     branches: [main]
     paths:
       - "cloudflare/worker.js"
+      - "cloudflare/wrangler.toml"
       - "auth.js"
       - "index.html"
       - "admin.html"
+      - "functions/**"
       - "tests/**"
       - ".github/workflows/roster-tests.yml"
 
