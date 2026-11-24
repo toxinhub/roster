@@ -449,6 +449,11 @@ html body.ink-mode #status.status.not-connected{
         return;
       }
       const isoDate = nextDate.toISOString().slice(0, 10);
+      const rosterMonth = S.days[0]?.isoDate?.slice(0, 7) || $('monthPicker').value;
+      if (!rosterMonth || isoDate.slice(0, 7) !== rosterMonth) {
+        toast('নির্বাচিত মাসের বাইরে নতুন তারিখ যোগ করা যাবে না।', true);
+        return;
+      }
       const toBangla = n => String(n).replace(/[0-9]/g, d => '০১২৩৪৫৬৭৮৯'[Number(d)]);
       const weekdays = ['রবিবার','সোমবার','মঙ্গলবার','বুধবার','বৃহস্পতিবার','শুক্রবার','শনিবার'];
       S.days.push({
@@ -461,6 +466,10 @@ html body.ink-mode #status.status.not-connected{
     };
 
     $('addEmp').onclick = () => {
+      if (S.employees.length >= 100) {
+        toast('একটি রোস্টারে সর্বোচ্চ ১০০ জন কর্মী রাখা যাবে।', true);
+        return;
+      }
       let suffix = 1;
       let name = 'নতুন কর্মী';
       const existing = new Set(S.employees.map(emp => String(emp.name || '').trim().toLocaleLowerCase()));
@@ -537,6 +546,15 @@ html body.ink-mode #status.status.not-connected{
       }
       if (S.days.length < 1 || S.days.length > 31) {
         toast('রোস্টারে ১ থেকে ৩১টি তারিখ থাকতে হবে।', true);
+        return;
+      }
+      const rosterMonth = S.days[0]?.isoDate?.slice(0, 7);
+      if (!rosterMonth || S.days.some(day => !/^\\d{4}-\\d{2}-\\d{2}$/.test(day.isoDate || '') || day.isoDate.slice(0, 7) !== rosterMonth)) {
+        toast('সব তারিখ একই মাসের হতে হবে।', true);
+        return;
+      }
+      if (S.employees.length > 100) {
+        toast('একটি রোস্টারে সর্বোচ্চ ১০০ জন কর্মী রাখা যাবে।', true);
         return;
       }
       if (names.some(name => !name || name.length > 80)) {
