@@ -121,7 +121,7 @@ test("enforces the smaller login request limit", async () => {
 
 test("Worker module source parses after adapting Cloudflare built-ins for Node syntax checks", () => {
   const normalized = workerSource
-    .replace(/^import .*?;\\s*/s, "")
+    .replace(/^import .*?;\s*/s, "")
     .replace("export class RosterCoordinator", "class RosterCoordinator")
     .replace("extends DurableObject", "extends BaseDurableObject")
     .replace("export default", "const workerDefault =");
