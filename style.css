@@ -6829,3 +6829,212 @@ html body.ink-mode .month-history > span{
 .month-history > span{min-width:64px;font-size:13px;font-weight:700;line-height:22px;letter-spacing:0;}
 @media(max-width:900px){.month-history{gap:1px;}.month-history > span{min-width:0;width:auto;font-size:12px;font-weight:700;line-height:20px;}}
 html body.ink-mode .month-history > span{color:#3F3D38 !important;}
+
+
+/* Responsive polish — live board */
+@media(max-width:900px){
+  main{
+    padding-top:0!important;
+    padding-bottom:18px!important;
+  }
+  .board{
+    width:calc(100% - 16px)!important;
+    margin:0 8px!important;
+    border-radius:12px!important;
+    overflow:hidden;
+  }
+  .board-head{
+    padding:13px 12px!important;
+    gap:10px!important;
+  }
+  .legend{
+    display:grid!important;
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    grid-template-rows:repeat(2,minmax(30px,auto))!important;
+    width:100%!important;
+    gap:4px 8px!important;
+    margin:2px 0 0!important;
+    align-items:center!important;
+    justify-content:stretch!important;
+    overflow:visible!important;
+  }
+  .legend span,
+  .legend span.shift-a,
+  .legend span.shift-b,
+  .legend span.shift-c,
+  .legend span.shift-off,
+  .legend span.shift-l{
+    width:100%!important;
+    min-width:0!important;
+    min-height:30px!important;
+    height:auto!important;
+    padding:4px 5px!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    gap:4px!important;
+    border:1px solid #DED6CF!important;
+    border-radius:7px!important;
+    background:#F7F2ED!important;
+    box-shadow:none!important;
+    color:#332F2C!important;
+    overflow:visible!important;
+  }
+  .legend span:nth-child(4){grid-column:1!important;}
+  .legend span:nth-child(5){grid-column:2!important;}
+  .legend i{
+    width:8px!important;
+    height:8px!important;
+    min-width:8px!important;
+    min-height:8px!important;
+    flex:0 0 8px!important;
+  }
+  .legend b{
+    font-size:10px!important;
+    line-height:1.15!important;
+    font-weight:900!important;
+    color:#332F2C!important;
+  }
+  .legend small{
+    display:inline-flex!important;
+    align-items:center!important;
+    font-size:8px!important;
+    line-height:1.15!important;
+    color:#665E58!important;
+    white-space:nowrap!important;
+    overflow:visible!important;
+  }
+  .legend .legend-dash{font-size:8px!important;}
+  .legend span.active-shift{
+    border-color:#A99A90!important;
+    background:#EEE6DF!important;
+  }
+  .day-grid .person-head,
+  .person-row .person{
+    position:sticky!important;
+    left:0!important;
+    z-index:5!important;
+    background:#F2EFEC!important;
+    box-shadow:1px 0 0 rgba(91,82,74,.22)!important;
+  }
+  .day-grid .person-head{z-index:7!important;}
+  .person-row .person{z-index:4!important;}
+  .person-row .person strong{
+    max-width:100%;
+    overflow-wrap:anywhere;
+    line-height:1.25!important;
+  }
+  .roster-wrap{
+    overscroll-behavior-x:contain!important;
+    scroll-padding-inline:88px;
+    scrollbar-width:thin;
+  }
+  .today-jump{
+    min-height:36px!important;
+    height:36px!important;
+    padding:7px 12px!important;
+    font-size:12px!important;
+  }
+  .month-history{
+    gap:5px!important;
+    min-height:30px!important;
+  }
+  .month-history button{
+    width:30px!important;
+    height:30px!important;
+    min-height:30px!important;
+    font-size:16px!important;
+    line-height:26px!important;
+  }
+  .month-history > span{
+    font-size:12px!important;
+    line-height:30px!important;
+  }
+  .next-duty{
+    width:calc(100% - 16px)!important;
+    margin:5px 8px 0!important;
+  }
+  .next-duty-row{
+    min-height:70px!important;
+    padding:5px 3px!important;
+    row-gap:4px!important;
+  }
+  .next-duty-name{font-size:10px!important;}
+  .next-duty-item small{font-size:8px!important;}
+  .next-duty-item b{font-size:9px!important;}
+  .next-duty-item em,
+  .next-duty-change-item .next-duty-date,
+  .next-duty-off-item .next-duty-off{font-size:8px!important;}
+  .intro-meta > span{font-size:9px!important;}
+  #updated{font-size:10px!important;}
+  .topbar{
+    min-height:48px;
+    height:48px;
+    padding:0 12px;
+  }
+  .icon-btn#theme,
+  .admin-link{
+    min-height:36px!important;
+  }
+  .icon-btn#theme{width:36px!important;}
+  .admin-link{padding:0 10px!important;font-size:10px!important;}
+}
+@media(max-width:520px){
+  .board-head{padding:11px 10px!important;}
+  .legend{gap:3px 5px!important;}
+  .legend span,
+  .legend span.shift-a,
+  .legend span.shift-b,
+  .legend span.shift-c,
+  .legend span.shift-off,
+  .legend span.shift-l{
+    min-height:29px!important;
+    padding:3px 3px!important;
+    gap:3px!important;
+  }
+  .legend b{font-size:9px!important;}
+  .legend small{font-size:7.5px!important;}
+  .day-grid,.person-row{
+    grid-template-columns:88px minmax(546px,1fr)!important;
+    min-width:634px!important;
+  }
+  .person-row .person{padding:0 8px!important;}
+  .person-row .person strong{font-size:13px!important;}
+  .next-duty-row{min-height:72px!important;}
+  .next-duty-name{font-size:9px!important;}
+  .next-duty-item small{font-size:7.5px!important;}
+  .next-duty-item b{font-size:8.5px!important;}
+}
+html body.ink-mode .legend span,
+html body.ink-mode .legend span.shift-a,
+html body.ink-mode .legend span.shift-b,
+html body.ink-mode .legend span.shift-c,
+html body.ink-mode .legend span.shift-off,
+html body.ink-mode .legend span.shift-l{
+  background:#ECE9DE!important;
+  border:1px solid #B9B6AC!important;
+  color:#252420!important;
+  box-shadow:none!important;
+}
+html body.ink-mode .legend b,
+html body.ink-mode .legend small{color:#252420!important;}
+html body.ink-mode .legend span.active-shift{
+  background:#DDD9CE!important;
+  border-color:#85827A!important;
+}
+html body.ink-mode .day-grid .person-head,
+html body.ink-mode .person-row .person{
+  background:#ECE9DE!important;
+  box-shadow:1px 0 0 #B9B6AC!important;
+}
+html body.ink-mode .month-history button{
+  min-width:30px;
+  min-height:30px;
+}
+@media(prefers-reduced-motion:reduce){
+  html body .today-jump,
+  html body .month-history button{
+    scroll-behavior:auto!important;
+    transition:none!important;
+  }
+}
