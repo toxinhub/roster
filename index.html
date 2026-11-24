@@ -10,7 +10,7 @@
 <meta name="description" content="CCTV - PJL duty roster">
 <title>Duty Roster • CCTV - PJL</title>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
-<link rel="stylesheet" href="style.css?v=20261124-coverage-pulse-1">
+<link rel="stylesheet" href="style.css?v=20261124-coverage-sequential-2">
 </head>
 <body data-required-role="site">
 <div class="app">
@@ -269,7 +269,7 @@ function render(){
     return '<span class="'+(active+tone).trim()+'"><i style="--c:'+esc(v.color||'#64748b')+'"></i><b>'+esc(k)+'</b><small><strong class="legend-dash">·</strong>'+esc(note)+'</small></span>';
   }).join('')+
   '<div class="today-duty-indicator" role="img" aria-label="'+esc(todayShiftLabel)+'" title="'+esc(todayShiftLabel)+'"'+(todayRosterIndex<0?' hidden':'')+'>'+
-    todayShiftStates.map(active=>'<i class="'+(active?'is-covered':'is-empty')+'">'+(active?'■':'□')+'</i>').join('')+
+    todayShiftStates.map(active=>'<i class="'+(active?'is-covered':'is-empty')+'" aria-hidden="true"></i>').join('')+
   '</div>';
 
   const head=days.map(d=>{
