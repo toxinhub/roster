@@ -6,7 +6,9 @@ const { webcrypto } = require("node:crypto");
 
 const source = fs.readFileSync(new URL("../cloudflare/worker.js", "file://" + __filename), "utf8");
 const context = {
-  BaseDurableObject: class {},
+  BaseDurableObject: class {
+    constructor(ctx, env) { this.ctx = ctx; this.env = env; }
+  },
   TextEncoder,
   TextDecoder,
   Response,
