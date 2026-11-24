@@ -152,3 +152,11 @@ test("archive snapshot comparison ignores object key order but preserves array o
   );
   assert.notEqual(stableStringify([1, 2]), stableStringify([2, 1]));
 });
+
+test("Pages API proxy preserves preview origin and restricts methods", () => {
+  const proxy = fs.readFileSync(new URL("../functions/api/[[path]].js", "file://" + __filename), "utf8");
+  assert.doesNotThrow(() => new vm.Script(proxy.replace("export async function", "async function")));
+  assert.match(proxy, /headers\.set\("Origin", incoming\.origin\)/);
+  assert.match(proxy, /ALLOWED_METHODS/);
+  assert.doesNotMatch(proxy, /roster-bps\.pages\.dev/);
+});
