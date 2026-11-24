@@ -29,3 +29,10 @@ test("roster management controls are present and uniquely identified", () => {
   assert.match(html, /id="overview"/);
   assert.match(html, /id="archive-history"/);
 });
+
+test("desktop roster toolbar allocates one column per editor control", () => {
+  assert.match(
+    html,
+    /\.roster-tools\{display:grid;grid-template-columns:minmax\(150px,1\.4fr\) minmax\(120px,\.8fr\) minmax\(105px,\.7fr\) minmax\(130px,\.9fr\) auto;/
+  );
+});
