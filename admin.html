@@ -114,7 +114,7 @@ body[data-required-role="admin"] .topbar{margin:0}body[data-required-role="admin
 @media(max-width:700px){.roster-tools{grid-template-columns:1fr 1fr}.roster-tools label:first-child{grid-column:1/-1}.roster-tools button{grid-column:1/-1}.grid-scroll{max-height:65vh}#editor th:first-child{min-width:112px}#editor tbody th:first-child input{max-width:100px}}
 @media(prefers-reduced-motion:reduce){.admin-nav a{transition:none}}
 
-.archive-controls{display:flex;align-items:end;flex-wrap:wrap;gap:9px}.archive-controls label{display:grid;gap:5px;min-width:180px;color:var(--muted);font-size:10px;font-weight:800}.archive-controls input,.archive-controls select{min-height:40px;padding:8px 10px;border:1px solid var(--line-strong);border-radius:9px;background:var(--panel-soft);color:var(--ink)}.archive-preview{margin-top:12px;padding:13px;border:1px solid var(--line);border-radius:11px;background:var(--panel-soft);color:var(--ink);font-size:12px;line-height:1.65}.archive-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:10px}.archive-stat{padding:10px;border:1px solid var(--line);border-radius:9px;background:var(--panel)}.archive-stat strong{display:block;font-size:18px;color:var(--ink)}.archive-stat small{font-size:9px;color:var(--muted)}.archive-preview .archive-shifts{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}.archive-shifts span{padding:5px 8px;border:1px solid var(--line);border-radius:7px;font-size:10px;font-weight:800}.archive-table-wrap{margin-top:12px;max-height:min(55vh,520px);overflow:auto;border:1px solid var(--line);border-radius:9px}.archive-table{width:100%;min-width:max-content;border-collapse:separate;border-spacing:0;font-size:10px}.archive-table th,.archive-table td{padding:7px 8px;text-align:center;white-space:nowrap;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}.archive-table thead th{position:sticky;top:0;z-index:2;background:var(--panel-soft)}.archive-table th:first-child{position:sticky;left:0;z-index:3;min-width:120px;text-align:left;background:var(--panel)}.archive-table thead th:first-child{z-index:4;background:var(--panel-soft)}.archive-shift-code{display:inline-block;min-width:22px;padding:3px 5px;border-radius:5px;font-weight:900;background:var(--panel-soft);color:var(--ink)}.archive-shift-code.shift-a{background:#f5e3c4;color:#784b13}.archive-shift-code.shift-b{background:#f2ddd3;color:#7a2f18}.archive-shift-code.shift-c{background:#dce8ed;color:#273e47}.archive-shift-code.shift-off{background:#e8e6df;color:#5f5533}.archive-shift-code.shift-l{background:#f4dce2;color:#8b1e34}body.ink-mode .archive-table tbody th{background:var(--panel)}body.ink-mode .archive-table tbody td{background:var(--panel-soft)}
+.archive-controls{display:flex;align-items:end;flex-wrap:wrap;gap:9px}.archive-controls label{display:grid;gap:5px;min-width:180px;color:var(--muted);font-size:10px;font-weight:800}.archive-controls input{min-height:40px;padding:8px 10px;border:1px solid var(--line-strong);border-radius:9px;background:var(--panel-soft);color:var(--ink)}.archive-preview{margin-top:12px;padding:13px;border:1px solid var(--line);border-radius:11px;background:var(--panel-soft);color:var(--ink);font-size:12px;line-height:1.65}.archive-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:10px}.archive-stat{padding:10px;border:1px solid var(--line);border-radius:9px;background:var(--panel)}.archive-stat strong{display:block;font-size:18px;color:var(--ink)}.archive-stat small{font-size:9px;color:var(--muted)}.archive-preview .archive-shifts{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}.archive-shifts span{padding:5px 8px;border:1px solid var(--line);border-radius:7px;font-size:10px;font-weight:800}
 @media(max-width:600px){.archive-controls{display:grid;grid-template-columns:1fr 1fr}.archive-controls label{grid-column:1/-1}.archive-controls button{width:100%}.archive-stats{grid-template-columns:repeat(3,minmax(0,1fr))}}
 
 /* Minimal admin layout — balanced desktop and mobile sizing */
@@ -268,11 +268,11 @@ body[data-required-role="admin"] .archive-stat strong{font-size:16px}
           <span class="muted">Read-only</span>
         </div>
         <div class="form-row archive-controls">
-          <label>সংরক্ষিত মাস<select id="archiveMonth" aria-label="সংরক্ষিত Archive মাস"><option value="">Archive তালিকা লোড হচ্ছে…</option></select></label>
-          <button id="refreshArchives" type="button">তালিকা রিফ্রেশ</button>
+          <label>মাস নির্বাচন<input id="archiveMonth" type="month"></label>
+          <button class="primary" id="loadArchive" type="button">Archive দেখুন</button>
           <button id="downloadArchive" type="button" disabled>JSON Download</button>
         </div>
-        <div id="archivePreview" class="archive-preview" role="status" aria-live="polite">সংরক্ষিত Archive খোঁজা হচ্ছে…</div>
+        <div id="archivePreview" class="archive-preview" role="status" aria-live="polite">একটি মাস নির্বাচন করে Archive দেখুন।</div>
       </section>
     </main>
 
@@ -319,22 +319,19 @@ body[data-required-role="admin"] .archive-stat strong{font-size:16px}
       const oldDays = Array.isArray(S.days) ? S.days : [];
       const oldEmployees = Array.isArray(S.employees) ? S.employees : [];
 
-      // Keep the latest unsaved snapshot whenever leaving a month.
-      // Returning to a pending month restores its actual edits instead of
-      // generating a blank roster or trapping the editor on the new month.
+      // When changing the editor to another month, keep an untouched snapshot
+      // of the month that is about to leave the live schedule. It will be
+      // written to archive/ only when Save is pressed.
       const oldKey = oldDays[0]?.isoDate?.slice(0,7) || '';
       const newKey = value;
       if (oldKey && newKey && oldKey !== newKey) {
-        archivePending.set(oldKey, JSON.parse(JSON.stringify(S)));
         if (archivePending.has(newKey)) {
-          S = JSON.parse(JSON.stringify(archivePending.get(newKey)));
-          archivePending.delete(newKey);
-          $('month').value = S.month || '';
-          $('monthHead').textContent = S.month || 'রোস্টার সম্পাদনা';
-          render();
-          markDirty();
-          toast('অসম্পূর্ণ মাসের রোস্টারে ফিরে এসেছেন।');
+          $('monthPicker').value = oldKey;
+          toast('এই মাসের অসম্পূর্ণ পরিবর্তন আগে Save করুন।', true);
           return;
+        }
+        if (!archivePending.has(oldKey)) {
+          archivePending.set(oldKey, JSON.parse(JSON.stringify(S)));
         }
       }
 
@@ -403,7 +400,6 @@ body[data-required-role="admin"] .archive-stat strong{font-size:16px}
       } catch {
         toast('নিরাপদ সার্ভার থেকে রোস্টার লোড হয়নি', true);
       }
-      await refreshArchiveList(false);
     }
 
     function snapshot(){return JSON.stringify(S);}
@@ -619,31 +615,7 @@ body[data-required-role="admin"] .archive-stat strong{font-size:16px}
 
     $('month').onchange=e=>{S.month=e.target.value;$('monthHead').textContent=S.month;markDirty()};
     $('clearChanges').onclick=()=>{if(!dirty)return;if(!confirm('সব অসম্পূর্ণ পরিবর্তন বাতিল করবেন?'))return;S=JSON.parse(cleanSnapshot);archivePending.clear();render();markDirty();toast('পরিবর্তন বাতিল হয়েছে')};
-    let monthSwitchRequestId = 0;
-    $('monthPicker').onchange = async () => {
-      const requestId = ++monthSwitchRequestId;
-      const selectedMonth = $('monthPicker').value;
-      const currentMonth = S?.days?.[0]?.isoDate?.slice(0, 7) || '';
-      if (selectedMonth && selectedMonth !== currentMonth) {
-        try {
-          const response = await window.RosterAPI.request('/api/archive?month=' + encodeURIComponent(selectedMonth), { cache: 'no-store' });
-          if (requestId !== monthSwitchRequestId) return;
-          if (response.ok) {
-            $('monthPicker').value = currentMonth;
-            toast('এই মাসটি Archive-এ সংরক্ষিত। পুরোনো মাসটি Read-only।', true);
-            return;
-          }
-          if (response.status !== 404) throw new Error('ARCHIVE_CHECK_FAILED');
-        } catch {
-          if (requestId !== monthSwitchRequestId) return;
-          $('monthPicker').value = currentMonth;
-          toast('মাস পরিবর্তনের আগে Archive যাচাই করা যায়নি।', true);
-          return;
-        }
-      }
-      if (requestId !== monthSwitchRequestId) return;
-      syncMonth();
-    };
+    $('monthPicker').onchange = () => { syncMonth(); markDirty(); };
 
     $('addDay').onclick = () => {
       if (S.days.length >= 31) {
@@ -789,11 +761,6 @@ body[data-required-role="admin"] .archive-stat strong{font-size:16px}
       }
       S.updatedAt = new Date().toISOString();
       try {
-        const targetMonth = S.days[0]?.isoDate?.slice(0, 7);
-        if (!targetMonth) throw new Error('INVALID_ROSTER');
-        const archiveCheck = await window.RosterAPI.request('/api/archive?month=' + encodeURIComponent(targetMonth), { cache: 'no-store' });
-        if (archiveCheck.ok) throw new Error('MONTH_ARCHIVED');
-        if (archiveCheck.status !== 404) throw new Error('ARCHIVE_CHECK_FAILED');
         await archiveIfNeeded();
         const r = await window.RosterAPI.request('/api/admin/save', {
           method: 'POST',
@@ -807,12 +774,9 @@ body[data-required-role="admin"] .archive-stat strong{font-size:16px}
         const result = await r.json().catch(() => ({}));
         if (!r.ok) throw new Error(result.error || 'save failed');
         cleanSnapshot = snapshot(); dirty = false; updateChangeUI();
-        await refreshArchiveList(true);
         toast('রোস্টার নিরাপদ স্টোরেজে সংরক্ষিত');
       } catch (error) {
-        if (error.message === 'MONTH_ARCHIVED') {
-          toast('এই মাসটি আগে থেকেই Archive-এ সংরক্ষিত। পুরোনো মাসে নতুন করে Save করা যাবে না।', true);
-        } else if (error.message === 'ARCHIVE_EXISTS') {
+        if (error.message === 'ARCHIVE_EXISTS') {
           toast('এই মাসের archive-এ ভিন্ন ডেটা আছে। সেটি যাচাই না করে Save বন্ধ রাখা হয়েছে।', true);
         } else if (error.message === 'ARCHIVE_CHECK_FAILED') {
           toast('Archive যাচাই করা যায়নি। সংযোগ ঠিক করে আবার চেষ্টা করুন।', true);
@@ -832,185 +796,36 @@ body[data-required-role="admin"] .archive-stat strong{font-size:16px}
     };
 
     let currentArchive = null;
-    let archiveRequestId = 0;
-
-    function validArchiveData(month, data) {
-      if (!data || typeof data !== 'object' || !Array.isArray(data.days) ||
-          !Array.isArray(data.employees) || !data.days.length || data.days.length > 31 ||
-          data.employees.length > 100) return false;
-      if (data.days[0]?.isoDate?.slice(0, 7) !== month) return false;
-      if (!data.days.every(day => day && day.isoDate?.slice(0, 7) === month)) return false;
-      return data.employees.every(emp => emp && Array.isArray(emp.shifts) &&
-        emp.shifts.length === data.days.length &&
-        emp.shifts.every(code => ['A', 'B', 'C', 'OFF', 'L'].includes(code)));
-    }
-
-    async function loadArchive(month) {
-      const requestId = ++archiveRequestId;
-      const download = $('downloadArchive');
-      const preview = $('archivePreview');
-      currentArchive = null;
-      download.disabled = true;
-      if (!month) {
-        preview.textContent = 'দেখার জন্য একটি সংরক্ষিত মাস নির্বাচন করুন।';
-        return;
-      }
-      preview.textContent = 'নিরাপদ Archive লোড হচ্ছে…';
-      try {
-        const response = await window.RosterAPI.request('/api/archive?month=' + encodeURIComponent(month), { cache: 'no-store' });
-        const data = await response.json().catch(() => null);
-        if (requestId !== archiveRequestId || $('archiveMonth').value !== month) return;
-        if (!response.ok) {
-          if (response.status === 404) throw new Error('এই Archive আর পাওয়া যাচ্ছে না। তালিকা রিফ্রেশ করুন।');
-          throw new Error('Archive লোড করা যায়নি।');
-        }
-        if (!validArchiveData(month, data)) throw new Error('Archive ডেটার গঠন বা মাসের তারিখ সঠিক নয়।');
-
-        currentArchive = { month, data };
-        const counts = {};
-        for (const employee of data.employees) {
-          for (const code of employee.shifts) counts[code] = (counts[code] || 0) + 1;
-        }
-        const totalDuty = (counts.A || 0) + (counts.B || 0) + (counts.C || 0);
-        preview.replaceChildren();
-
-        const title = document.createElement('strong');
-        title.textContent = (data.month || month) + ' · সংরক্ষিত Archive';
-        preview.appendChild(title);
-
-        const range = document.createElement('p');
-        range.textContent = data.days[0].isoDate + ' — ' + data.days[data.days.length - 1].isoDate;
-        range.style.margin = '4px 0 0';
-        range.style.color = 'var(--muted)';
-        preview.appendChild(range);
-
-        const stats = document.createElement('div');
-        stats.className = 'archive-stats';
-        [['কর্মী', data.employees.length], ['তারিখ', data.days.length], ['মোট ডিউটি', totalDuty]].forEach(([label, value]) => {
-          const card = document.createElement('div');
-          card.className = 'archive-stat';
-          const strong = document.createElement('strong');
-          strong.textContent = value;
-          const small = document.createElement('small');
-          small.textContent = label;
-          card.append(strong, small);
-          stats.appendChild(card);
-        });
+    $('loadArchive').addEventListener('click', async () => {
+      const month=$('archiveMonth').value;
+      if(!/^\d{4}-\d{2}$/.test(month)){toast('Archive দেখার জন্য মাস নির্বাচন করুন।',true);return;}
+      const button=$('loadArchive');
+      button.disabled=true;button.textContent='লোড হচ্ছে…';
+      $('downloadArchive').disabled=true;currentArchive=null;
+      $('archivePreview').textContent='নিরাপদ Archive লোড হচ্ছে…';
+      try{
+        const response=await window.RosterAPI.request('/api/archive?month='+encodeURIComponent(month),{cache:'no-store'});
+        const data=await response.json().catch(()=>null);
+        if(!response.ok)throw new Error(response.status===404?'এই মাসের Archive পাওয়া যায়নি।':'Archive লোড করা যায়নি।');
+        if(!data||!Array.isArray(data.days)||!Array.isArray(data.employees))throw new Error('Archive ডেটার গঠন সঠিক নয়।');
+        currentArchive={month,data};
+        const counts={};for(const emp of data.employees){for(const code of (Array.isArray(emp.shifts)?emp.shifts:[]))counts[code]=(counts[code]||0)+1;}
+        const preview=$('archivePreview');preview.replaceChildren();
+        const title=document.createElement('strong');title.textContent=(data.month||month)+' · সংরক্ষিত Archive';preview.appendChild(title);
+        const stats=document.createElement('div');stats.className='archive-stats';
+        [['কর্মী',data.employees.length],['তারিখ',data.days.length],['মোট বরাদ্দ',Object.values(counts).reduce((a,b)=>a+b,0)]].forEach(([label,value])=>{const card=document.createElement('div');card.className='archive-stat';const strong=document.createElement('strong');strong.textContent=value;const small=document.createElement('small');small.textContent=label;card.append(strong,small);stats.appendChild(card);});
         preview.appendChild(stats);
-
-        const shifts = document.createElement('div');
-        shifts.className = 'archive-shifts';
-        Object.entries(counts).sort(([a], [b]) => a.localeCompare(b)).forEach(([code, count]) => {
-          const item = document.createElement('span');
-          item.textContent = code + ': ' + count;
-          shifts.appendChild(item);
-        });
+        const shifts=document.createElement('div');shifts.className='archive-shifts';
+        Object.entries(counts).sort(([a],[b])=>a.localeCompare(b)).forEach(([code,count])=>{const item=document.createElement('span');item.textContent=code+': '+count;shifts.appendChild(item);});
         preview.appendChild(shifts);
-
-        const tableWrap = document.createElement('div');
-        tableWrap.className = 'archive-table-wrap';
-        const table = document.createElement('table');
-        table.className = 'archive-table';
-        const thead = document.createElement('thead');
-        const headerRow = document.createElement('tr');
-        const employeeHeading = document.createElement('th');
-        employeeHeading.textContent = 'কর্মী';
-        headerRow.appendChild(employeeHeading);
-        for (const day of data.days) {
-          const heading = document.createElement('th');
-          heading.textContent = day.date + ' · ' + day.weekday;
-          headerRow.appendChild(heading);
-        }
-        thead.appendChild(headerRow);
-        table.appendChild(thead);
-        const tbody = document.createElement('tbody');
-        for (const employee of data.employees) {
-          const row = document.createElement('tr');
-          const name = document.createElement('th');
-          name.scope = 'row';
-          name.textContent = employee.name || '—';
-          row.appendChild(name);
-          for (const code of employee.shifts) {
-            const cell = document.createElement('td');
-            const badge = document.createElement('span');
-            badge.className = 'archive-shift-code shift-' + code.toLowerCase();
-            badge.textContent = code;
-            cell.appendChild(badge);
-            row.appendChild(cell);
-          }
-          tbody.appendChild(row);
-        }
-        table.appendChild(tbody);
-        tableWrap.appendChild(table);
-        preview.appendChild(tableWrap);
-        download.disabled = false;
-      } catch (error) {
-        if (requestId !== archiveRequestId) return;
-        preview.textContent = error.message || 'Archive লোড করা যায়নি।';
-      }
-    }
-
-    async function refreshArchiveList(preserveSelection = true) {
-      const select = $('archiveMonth');
-      const button = $('refreshArchives');
-      const previous = preserveSelection ? select.value : '';
-      button.disabled = true;
-      button.textContent = 'লোড হচ্ছে…';
-      try {
-        const response = await window.RosterAPI.request('/api/archives?refresh=' + Date.now(), { cache: 'no-store' });
-        const payload = await response.json().catch(() => null);
-        if (!response.ok || !payload || !Array.isArray(payload.months)) throw new Error('Archive তালিকা আনা যায়নি।');
-        const months = [...new Set(payload.months.filter(month => /^\d{4}-(0[1-9]|1[0-2])$/.test(month)))].sort((a, b) => b.localeCompare(a));
-        select.replaceChildren();
-        const placeholder = document.createElement('option');
-        placeholder.value = '';
-        placeholder.textContent = months.length ? 'মাস নির্বাচন করুন' : 'কোনো Archive নেই';
-        select.appendChild(placeholder);
-        for (const month of months) {
-          const [year, monthNumber] = month.split('-').map(Number);
-          const label = new Intl.DateTimeFormat('bn-BD', { month: 'long', year: 'numeric' })
-            .format(new Date(Date.UTC(year, monthNumber - 1, 1)));
-          const option = document.createElement('option');
-          option.value = month;
-          option.textContent = label + ' · ' + month;
-          select.appendChild(option);
-        }
-        const selected = months.includes(previous) ? previous : (months[0] || '');
-        select.value = selected;
-        if (selected) await loadArchive(selected);
-        else {
-          archiveRequestId++;
-          currentArchive = null;
-          $('downloadArchive').disabled = true;
-          $('archivePreview').textContent = 'এখনো কোনো মাসের Archive সংরক্ষিত নেই।';
-        }
-      } catch (error) {
-        archiveRequestId++;
-        currentArchive = null;
-        $('downloadArchive').disabled = true;
-        $('archivePreview').textContent = error.message || 'Archive তালিকা আনা যায়নি।';
-        select.replaceChildren();
-        const option = document.createElement('option');
-        option.value = '';
-        option.textContent = 'তালিকা পাওয়া যায়নি';
-        select.appendChild(option);
-      } finally {
-        button.disabled = false;
-        button.textContent = 'তালিকা রিফ্রেশ';
-      }
-    }
-
-    $('archiveMonth').addEventListener('change', () => loadArchive($('archiveMonth').value));
-    $('refreshArchives').addEventListener('click', () => refreshArchiveList(true));
-    $('downloadArchive').addEventListener('click', () => {
-      if (!currentArchive) return;
-      const blob = new Blob([JSON.stringify(currentArchive.data, null, 2)], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = 'archive-' + currentArchive.month + '.json';
-      link.click();
-      setTimeout(() => URL.revokeObjectURL(url), 1000);
+        $('downloadArchive').disabled=false;
+      }catch(error){$('archivePreview').textContent=error.message||'Archive লোড করা যায়নি।';}
+      finally{button.disabled=false;button.textContent='Archive দেখুন';}
+    });
+    $('downloadArchive').addEventListener('click',()=>{
+      if(!currentArchive)return;
+      const blob=new Blob([JSON.stringify(currentArchive.data,null,2)],{type:'application/json'});
+      const url=URL.createObjectURL(blob);const link=document.createElement('a');link.href=url;link.download='archive-'+currentArchive.month+'.json';link.click();URL.revokeObjectURL(url);
     });
 
     applyTheme();
