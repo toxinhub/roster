@@ -205,6 +205,24 @@ body.admin-page .page-shell > .panel:first-of-type .muted{margin:4px 0 0;font-si
  body.admin-page .page-shell > .panel:first-of-type .muted{font-size:8px;line-height:1.3}
 }
 
+
+/* Balanced compact security strip: one heading row and one detail row. */
+body.admin-page .security-panel{padding:8px 12px!important;margin:0 0 8px!important;border-radius:10px}
+body.admin-page .security-panel .section-head{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:10px!important;margin:0!important}
+body.admin-page .security-panel .section-head>div{display:flex;align-items:baseline;gap:7px;min-width:0}
+body.admin-page .security-panel .eyebrow{font-size:8px;line-height:1;letter-spacing:.1em;white-space:nowrap}
+body.admin-page .security-panel .section-head h2{margin:0!important;font-size:13px!important;line-height:1.2;white-space:nowrap}
+body.admin-page .security-panel #status{flex:0 0 auto;white-space:nowrap;padding:3px 7px!important;font-size:8px!important;line-height:1.2}
+body.admin-page .security-panel .muted{margin:5px 0 0!important;font-size:9px!important;line-height:1.3!important}
+@media(max-width:520px){
+ body.admin-page .security-panel{padding:7px 9px!important}
+ body.admin-page .security-panel .section-head{gap:6px!important}
+ body.admin-page .security-panel .section-head>div{gap:5px}
+ body.admin-page .security-panel .section-head h2{font-size:12px!important}
+ body.admin-page .security-panel #status{padding:3px 5px!important;font-size:7px!important}
+ body.admin-page .security-panel .muted{margin-top:4px!important;font-size:8px!important;line-height:1.25!important}
+}
+
 </style></head>
 <body class="admin-page" data-required-role="admin">
   <div class="app">
@@ -227,7 +245,7 @@ body.admin-page .page-shell > .panel:first-of-type .muted{margin:4px 0 0;font-si
         <b>নিরাপত্তা:</b> Save করলে রোস্টার private Cloudflare KV storage-এ সংরক্ষিত হবে। Admin পরিবর্তনগুলো Worker API দিয়ে যাচাই ও সংরক্ষণ করা হয়।
       </section>
 
-      <section class="panel">
+      <section class="panel security-panel">
         <div class="section-head">
           <div><span class="eyebrow">SECURITY</span><h2>নিরাপদ Admin সংযোগ</h2></div>
           <span id="status" class="status connected">Admin access যাচাইকৃত</span>
