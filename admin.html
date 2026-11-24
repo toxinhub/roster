@@ -585,6 +585,148 @@ body.admin-page.ink-mode .picker .shift-option.shift-c.selected{
   box-shadow:inset 0 1px 0 rgba(205,225,255,.1),0 0 0 4px rgba(154,187,234,.17)!important;
 }
 
+
+/* DARK MODE CONTRAST PASS — admin only.
+   Keep the existing page canvas unchanged; replace near-black UI surfaces,
+   soften borders/shadows, and preserve the established shift-color system. */
+body.admin-page.ink-mode{
+  --adm-bg:#151b20;
+  --adm-surface:#2B3B46;
+  --adm-soft:#354B57;
+  --adm-line:#5B707C;
+  --adm-ink:#F2F6F7;
+  --adm-muted:#C2CFD4;
+  --adm-accent:#9ADCC7;
+  --adm-shadow:0 9px 26px rgba(23,43,54,.22);
+  color:var(--adm-ink);
+}
+body.admin-page.ink-mode .topbar{
+  background:rgba(43,59,70,.97)!important;
+  border-bottom-color:#5B707C!important;
+  box-shadow:0 4px 16px rgba(23,43,54,.20)!important;
+}
+body.admin-page.ink-mode .panel,
+body.admin-page.ink-mode .grid-scroll{
+  background:#2B3B46!important;
+  border-color:#5B707C!important;
+  box-shadow:0 8px 22px rgba(23,43,54,.18)!important;
+}
+body.admin-page.ink-mode .admin-note,
+body.admin-page.ink-mode .editor-meta,
+body.admin-page.ink-mode .change-summary{
+  background:#354B57!important;
+  border-color:#5B707C!important;
+}
+body.admin-page.ink-mode .security-panel{
+  background:linear-gradient(115deg,#2B3B46 0%,#354B57 100%)!important;
+}
+body.admin-page.ink-mode .brand strong,
+body.admin-page.ink-mode .section-head h2,
+body.admin-page.ink-mode .panel,
+body.admin-page.ink-mode .grid-scroll th,
+body.admin-page.ink-mode .grid-scroll td,
+body.admin-page.ink-mode footer,
+body.admin-page.ink-mode footer a{
+  color:#F2F6F7!important;
+  text-shadow:none!important;
+}
+body.admin-page.ink-mode .brand small,
+body.admin-page.ink-mode .eyebrow,
+body.admin-page.ink-mode .muted,
+body.admin-page.ink-mode .form-grid label,
+body.admin-page.ink-mode .quiet,
+body.admin-page.ink-mode .change-summary{
+  color:#C2CFD4!important;
+}
+body.admin-page.ink-mode input,
+body.admin-page.ink-mode select,
+body.admin-page.ink-mode textarea,
+body.admin-page.ink-mode #editor thead th input,
+body.admin-page.ink-mode #editor tbody th input{
+  background:#354B57!important;
+  border-color:#607783!important;
+  color:#F2F6F7!important;
+  caret-color:#9ADCC7;
+}
+body.admin-page.ink-mode input::placeholder,
+body.admin-page.ink-mode textarea::placeholder{
+  color:#C2CFD4!important;
+  opacity:1!important;
+}
+body.admin-page.ink-mode .back,
+body.admin-page.ink-mode .icon-btn,
+body.admin-page.ink-mode .actions button,
+body.admin-page.ink-mode .form-row button:not(.primary),
+body.admin-page.ink-mode .view-switch button,
+body.admin-page.ink-mode .week-nav button,
+body.admin-page.ink-mode #editor .edit:not(.shift-a):not(.shift-b):not(.shift-c):not(.shift-off):not(.shift-l){
+  background:#405762!important;
+  border-color:#6A818D!important;
+  color:#F2F6F7!important;
+}
+body.admin-page.ink-mode .view-switch button[aria-pressed="true"]{
+  background:#547E78!important;
+  border-color:#8BCBB7!important;
+  color:#FFFFFF!important;
+}
+body.admin-page.ink-mode .brand-icon{
+  background:#405762!important;
+  border-color:#6A818D!important;
+  color:#A9E8D4!important;
+}
+body.admin-page.ink-mode #save,
+body.admin-page.ink-mode .primary{
+  background:#9ADCC7!important;
+  border-color:#9ADCC7!important;
+  color:#193B34!important;
+  box-shadow:0 3px 10px rgba(68,139,117,.18)!important;
+}
+body.admin-page.ink-mode #status.status{
+  background:#355B50!important;
+  border-color:#6FAE98!important;
+  color:#E1F7EE!important;
+}
+body.admin-page.ink-mode .change-status.clean{color:#A9E4C7!important;}
+body.admin-page.ink-mode .change-status.dirty{color:#FFD18A!important;}
+body.admin-page.ink-mode .remove{color:#F2B0B5!important;}
+body.admin-page.ink-mode .picker,
+body.admin-page.ink-mode .picker-popover{
+  background:#2B3B46!important;
+  border-color:#607783!important;
+  color:#F2F6F7!important;
+  box-shadow:0 14px 34px rgba(23,43,54,.28)!important;
+}
+body.admin-page.ink-mode .picker-scrim{
+  background:rgba(25,46,57,.48)!important;
+}
+body.admin-page.ink-mode #toast{
+  background:#405762!important;
+  border:1px solid #6A818D!important;
+  color:#F2F6F7!important;
+  box-shadow:0 8px 24px rgba(23,43,54,.24)!important;
+}
+body.admin-page.ink-mode button:focus-visible,
+body.admin-page.ink-mode input:focus-visible,
+body.admin-page.ink-mode select:focus-visible,
+body.admin-page.ink-mode textarea:focus-visible{
+  outline:2px solid #A9E8D4!important;
+  outline-offset:2px!important;
+}
+body.admin-page.ink-mode .grid-scroll{
+  scrollbar-color:#718A95 #354B57!important;
+}
+@media(hover:hover) and (pointer:fine){
+  body.admin-page.ink-mode #editor tbody tr:hover th,
+  body.admin-page.ink-mode #editor tbody tr:hover td{
+    background:#3A505C!important;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  body.admin-page.ink-mode *,
+  body.admin-page.ink-mode *::before,
+  body.admin-page.ink-mode *::after{transition-duration:0.01ms!important;}
+}
+
 </style></head>
 <body class="admin-page" data-required-role="admin">
   <div class="app">
