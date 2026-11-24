@@ -32,3 +32,4 @@ jobs:
         with:
           node-version: 22
       - run: node --test tests/*.test.cjs
+      - run: npx --yes wrangler@4 deploy --dry-run --config cloudflare/wrangler.toml
