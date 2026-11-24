@@ -51,6 +51,18 @@ The roster is modeled as one coordination unit. Requests are routed through one 
 
 If `ROSTER_COORDINATOR` is missing while `REQUIRE_COORDINATOR=true`, authenticated API routes fail closed with `AUTH_NOT_CONFIGURED`; they do not silently fall back to KV-only writes. Keep `REQUIRE_COORDINATOR=true` in production.
 
+## Current rollout status (2026-11-24)
+
+- [x] Worker code from PR #3 deployed to `empty-block-84d1`.
+- [x] SQLite-backed `RosterCoordinator` namespace provisioned and bound.
+- [x] `REQUIRE_COORDINATOR=true` and production-only `ADMIN_WRITE_ORIGINS` verified in live Worker settings.
+- [x] Existing `ROSTER_DATA` KV namespace ID verified unchanged.
+- [x] Existing secret bindings `SITE_PASSWORD`, `ADMIN_PASSWORD`, and `SESSION_SECRET` verified present after deployment; secret values were neither read nor changed.
+- [ ] Runtime `/api/status` HTTP smoke check and authenticated Admin save/archive/conflict tests remain pending.
+- [ ] PR #3 remains open/draft; Pages production branch remains `security/cloudflare-preview`.
+
+The deployment was additive: it created the Durable Object namespace and changed Worker code/bindings, but did not copy, delete, or rewrite roster/archive values in KV. Do not treat the configuration checks above as a substitute for the pending runtime and authenticated tests.
+
 ## Safe production cutover runbook
 
 Do these steps in order. Do not change the Pages production branch before the Worker has passed the checks below.
@@ -75,7 +87,7 @@ npx --yes wrangler@4 deploy --config wrangler.toml
 
 Review the target account and deployment output before confirming. The deployment applies the additive `v1` Durable Object class migration and binds the existing KV namespace. It must not replace the existing secrets or KV data.
 
-Do not use a raw Worker script upload or an alternate deployment path that omits bindings or secrets.
+If deploying through the Cloudflare API instead of Wrangler, reproduce the complete reviewed metadata: all non-secret bindings, the exact existing KV namespace ID, the Durable Object binding and `v1` migration, and `keep_bindings: ["secret_text"]`. Cloudflare documents that secrets omitted from a deployment are preserved; still verify all three secret binding names immediately afterward. Never upload a partial binding set.
 
 ### 3. Verify Worker configuration
 
