@@ -112,6 +112,7 @@ html body[data-required-role="admin"] .legacy-admin-controls{display:none!import
     </main>
   </div>
   <div class="bar" id="bar"><span id="bt">০টি পরিবর্তন</span><button id="un" type="button">Undo</button><button id="rv" type="button">বাতিল</button><button class="s" id="sv" type="button">Save</button></div>
+  <div hidden><span id="monthHead"></span><span id="status"></span></div>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
   <script>
@@ -353,14 +354,14 @@ html body[data-required-role="admin"] .legacy-admin-controls{display:none!import
     $('brushTools').onclick=e=>{const button=e.target.closest('[data-brush]');if(!button)return;brush=button.dataset.brush;renderBrushTools();};
     $('editor').addEventListener('pointerdown',e=>{
       const cell=e.target.closest('.c');if(!cell)return;
-      e.preventDefault();painting=true;paintHistory.push(snapshot());applyPaint(cell);
+      e.preventDefault();painting=true;try{$('editor').setPointerCapture(e.pointerId)}catch{}paintHistory.push(snapshot());applyPaint(cell);
     });
     $('editor').addEventListener('pointermove',e=>{
       if(!painting)return;
       const cell=document.elementFromPoint(e.clientX,e.clientY)?.closest?.('.c');
       if(cell)applyPaint(cell);
     });
-    window.addEventListener('pointerup',()=>painting=false);
+    window.addEventListener('pointerup',()=>painting=false);window.addEventListener('pointercancel',()=>painting=false);
     $('vw').onclick=()=>{view='w';weekIndex=0;render()};
     $('vm').onclick=()=>{view='m';render()};
     $('pv').onclick=()=>{weekIndex=Math.max(0,weekIndex-1);render()};
