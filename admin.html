@@ -133,6 +133,9 @@ body[data-required-role="admin"] input:focus-visible,body[data-required-role="ad
 .roster-result-count{font-size:10px;color:var(--muted);margin:-5px 0 9px}
 @media(max-width:700px){.roster-tools{grid-template-columns:1fr 1fr}.roster-tools label:first-child{grid-column:1/-1}.roster-tools button{grid-column:1/-1}.grid-scroll{max-height:65vh}#editor th:first-child{min-width:112px}#editor tbody th:first-child input{max-width:100px}}
 @media(prefers-reduced-motion:reduce){.admin-nav a{transition:none}}
+
+.archive-controls{display:flex;align-items:end;flex-wrap:wrap;gap:9px}.archive-controls label{display:grid;gap:5px;min-width:180px;color:var(--muted);font-size:10px;font-weight:800}.archive-controls input{min-height:40px;padding:8px 10px;border:1px solid var(--line-strong);border-radius:9px;background:var(--panel-soft);color:var(--ink)}.archive-preview{margin-top:12px;padding:13px;border:1px solid var(--line);border-radius:11px;background:var(--panel-soft);color:var(--ink);font-size:12px;line-height:1.65}.archive-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:10px}.archive-stat{padding:10px;border:1px solid var(--line);border-radius:9px;background:var(--panel)}.archive-stat strong{display:block;font-size:18px;color:var(--ink)}.archive-stat small{font-size:9px;color:var(--muted)}.archive-preview .archive-shifts{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}.archive-shifts span{padding:5px 8px;border:1px solid var(--line);border-radius:7px;font-size:10px;font-weight:800}
+@media(max-width:600px){.archive-controls{display:grid;grid-template-columns:1fr 1fr}.archive-controls label{grid-column:1/-1}.archive-controls button{width:100%}.archive-stats{grid-template-columns:repeat(3,minmax(0,1fr))}}
 </style></head>
 <body data-required-role="admin">
   <div class="app">
@@ -150,7 +153,7 @@ body[data-required-role="admin"] input:focus-visible,body[data-required-role="ad
       </div>
     </header>
 
-    <aside class="admin-sidebar" aria-label="Admin navigation"><div class="admin-sidebar-brand"><span class="mark">▦</span><div><strong>Roster Control</strong><small>Operations Dashboard</small></div></div><div class="admin-nav-label">Workspace</div><nav class="admin-nav"><a class="active" href="#overview"><span>⌂</span> Overview</a><a href="#security"><span>◈</span> Security</a><a href="#roster-editor"><span>▤</span> Roster Editor</a><a href="#tools"><span>⇧</span> Tools & Export</a></nav><div class="admin-sidebar-bottom">CCTV • PJL<br>Protected admin workspace</div></aside>
+    <aside class="admin-sidebar" aria-label="Admin navigation"><div class="admin-sidebar-brand"><span class="mark">▦</span><div><strong>Roster Control</strong><small>Operations Dashboard</small></div></div><div class="admin-nav-label">Workspace</div><nav class="admin-nav"><a class="active" href="#overview"><span>⌂</span> Overview</a><a href="#security"><span>◈</span> Security</a><a href="#roster-editor"><span>▤</span> Roster Editor</a><a href="#archive-history"><span>◷</span> Archive</a><a href="#tools"><span>⇧</span> Tools & Export</a></nav><div class="admin-sidebar-bottom">CCTV • PJL<br>Protected admin workspace</div></aside>
   <main class="page-shell">
       <section class="admin-note" id="security">
         <b>নিরাপত্তা:</b> Save করলে রোস্টার private Cloudflare KV storage-এ সংরক্ষিত হবে। এই Preview-তে GitHub-এর মাধ্যমে সরাসরি কোনো পরিবর্তন করা হয় না।
@@ -201,6 +204,20 @@ body[data-required-role="admin"] input:focus-visible,body[data-required-role="ad
           <button class="primary" id="save">✓ নিরাপদে Save</button>
           <button id="download">JSON Download</button>
         </div>
+      </section>
+
+      <section class="panel" id="archive-history">
+        <div class="section-head">
+          <div><span class="eyebrow">HISTORY</span><h2>Archive & History</h2></div>
+          <span class="muted">Read-only</span>
+        </div>
+        <p class="muted">আগের মাসের সংরক্ষিত রোস্টার নিরাপদে দেখুন ও JSON হিসেবে ডাউনলোড করুন। এখানে কোনো Archive পরিবর্তন করা হবে না।</p>
+        <div class="form-row archive-controls">
+          <label>মাস নির্বাচন<input id="archiveMonth" type="month"></label>
+          <button class="primary" id="loadArchive" type="button">Archive দেখুন</button>
+          <button id="downloadArchive" type="button" disabled>JSON Download</button>
+        </div>
+        <div id="archivePreview" class="archive-preview" role="status" aria-live="polite">একটি মাস নির্বাচন করে Archive দেখুন।</div>
       </section>
     </main>
 
@@ -727,6 +744,39 @@ body[data-required-role="admin"] input:focus-visible,body[data-required-role="ad
       localStorage.setItem('roster-display-mode', document.body.classList.contains('ink-mode') ? 'light' : 'ink');
       applyTheme();
     };
+
+    let currentArchive = null;
+    $('loadArchive').addEventListener('click', async () => {
+      const month=$('archiveMonth').value;
+      if(!/^\\d{4}-\\d{2}$/.test(month)){toast('Archive দেখার জন্য মাস নির্বাচন করুন।',true);return;}
+      const button=$('loadArchive');
+      button.disabled=true;button.textContent='লোড হচ্ছে…';
+      $('downloadArchive').disabled=true;currentArchive=null;
+      $('archivePreview').textContent='নিরাপদ Archive লোড হচ্ছে…';
+      try{
+        const response=await window.RosterAPI.request('/api/archive?month='+encodeURIComponent(month),{cache:'no-store'});
+        const data=await response.json().catch(()=>null);
+        if(!response.ok)throw new Error(response.status===404?'এই মাসের Archive পাওয়া যায়নি।':'Archive লোড করা যায়নি।');
+        if(!data||!Array.isArray(data.days)||!Array.isArray(data.employees))throw new Error('Archive ডেটার গঠন সঠিক নয়।');
+        currentArchive={month,data};
+        const counts={};for(const emp of data.employees){for(const code of (Array.isArray(emp.shifts)?emp.shifts:[]))counts[code]=(counts[code]||0)+1;}
+        const preview=$('archivePreview');preview.replaceChildren();
+        const title=document.createElement('strong');title.textContent=(data.month||month)+' · সংরক্ষিত Archive';preview.appendChild(title);
+        const stats=document.createElement('div');stats.className='archive-stats';
+        [['কর্মী',data.employees.length],['তারিখ',data.days.length],['মোট বরাদ্দ',Object.values(counts).reduce((a,b)=>a+b,0)]].forEach(([label,value])=>{const card=document.createElement('div');card.className='archive-stat';const strong=document.createElement('strong');strong.textContent=value;const small=document.createElement('small');small.textContent=label;card.append(strong,small);stats.appendChild(card);});
+        preview.appendChild(stats);
+        const shifts=document.createElement('div');shifts.className='archive-shifts';
+        Object.entries(counts).sort(([a],[b])=>a.localeCompare(b)).forEach(([code,count])=>{const item=document.createElement('span');item.textContent=code+': '+count;shifts.appendChild(item);});
+        preview.appendChild(shifts);
+        $('downloadArchive').disabled=false;
+      }catch(error){$('archivePreview').textContent=error.message||'Archive লোড করা যায়নি।';}
+      finally{button.disabled=false;button.textContent='Archive দেখুন';}
+    });
+    $('downloadArchive').addEventListener('click',()=>{
+      if(!currentArchive)return;
+      const blob=new Blob([JSON.stringify(currentArchive.data,null,2)],{type:'application/json'});
+      const url=URL.createObjectURL(blob);const link=document.createElement('a');link.href=url;link.download='archive-'+currentArchive.month+'.json';link.click();URL.revokeObjectURL(url);
+    });
 
     applyTheme();
     load();
