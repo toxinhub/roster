@@ -8,6 +8,7 @@ const encoder = new TextEncoder();
 export class RosterCoordinator extends DurableObject {
   constructor(ctx, env) {
     super(ctx, env);
+    this.rosterData = env.ROSTER_DATA;
     this.queue = Promise.resolve();
   }
 
@@ -18,7 +19,7 @@ export class RosterCoordinator extends DurableObject {
   }
 
   getValue(key) {
-    return this.env.ROSTER_DATA.get(key);
+    return this.rosterData.get(key);
   }
 
   putValue(key, value, expirationTtl) {
@@ -26,25 +27,25 @@ export class RosterCoordinator extends DurableObject {
       const options = Number.isInteger(expirationTtl) && expirationTtl > 0
         ? { expirationTtl }
         : undefined;
-      await this.env.ROSTER_DATA.put(key, value, options);
+      await this.rosterData.put(key, value, options);
       return true;
     });
   }
 
   deleteValue(key) {
-    return this.runExclusive(() => this.env.ROSTER_DATA.delete(key));
+    return this.runExclusive(() => this.rosterData.delete(key));
   }
 
   consumeLoginAttempt(key, now) {
     return this.runExclusive(async () => {
       let item;
-      try { item = JSON.parse(await this.env.ROSTER_DATA.get(key) || "null"); } catch {}
+      try { item = JSON.parse(await this.rosterData.get(key) || "null"); } catch {}
       if (!item || !Number.isFinite(item.start) || now - item.start > 15 * 60 * 1000) {
         item = { count: 0, start: now };
       }
       if (item.count >= 8) return false;
       item.count++;
-      await this.env.ROSTER_DATA.put(key, JSON.stringify(item), { expirationTtl: 900 });
+      await this.rosterData.put(key, JSON.stringify(item), { expirationTtl: 900 });
       return true;
     });
   }
@@ -52,13 +53,13 @@ export class RosterCoordinator extends DurableObject {
   saveSchedule(dataJson, enforceVersion, expectedUpdatedAt) {
     return this.runExclusive(async () => {
       if (enforceVersion) {
-        const currentRaw = await this.env.ROSTER_DATA.get("schedule");
+        const currentRaw = await this.rosterData.get("schedule");
         let currentUpdatedAt = null;
         try { currentUpdatedAt = currentRaw ? (JSON.parse(currentRaw).updatedAt ?? null) : null; }
         catch { return { ok: false, error: "ROSTER_INVALID" }; }
         if (expectedUpdatedAt !== currentUpdatedAt) return { ok: false, error: "WRITE_CONFLICT" };
       }
-      await this.env.ROSTER_DATA.put("schedule", dataJson);
+      await this.rosterData.put("schedule", dataJson);
       return { ok: true };
     });
   }
@@ -66,8 +67,8 @@ export class RosterCoordinator extends DurableObject {
   createArchive(month, dataJson) {
     return this.runExclusive(async () => {
       const key = "archive:" + month;
-      if (await this.env.ROSTER_DATA.get(key)) return { ok: false, error: "ARCHIVE_EXISTS" };
-      await this.env.ROSTER_DATA.put(key, dataJson);
+      if (await this.rosterData.get(key)) return { ok: false, error: "ARCHIVE_EXISTS" };
+      await this.rosterData.put(key, dataJson);
       return { ok: true };
     });
   }
@@ -305,15 +306,15 @@ async function handler(request, env) {
   const store = dataStore(env);
 
   if (path === "/api/login" && request.method === "POST") {
+    let body;
+    try { body = await readJson(request, 4096); } catch (error) { return jsonBodyError(error); }
+    if (!body || typeof body !== "object" || Array.isArray(body)) return json({ error: "INVALID_JSON" }, 400);
+    if (typeof body.password !== "string" || body.password.length < 1 || body.password.length > 256) return json({ error: "INVALID_PASSWORD" }, 400);
     const loginKey = await attemptKey(request);
     const allowed = store.consumeLoginAttempt
       ? await store.consumeLoginAttempt(loginKey, Date.now())
       : await canAttempt(request, env);
     if (!allowed) return json({ error: "TOO_MANY_ATTEMPTS" }, 429, { "Retry-After": "900" });
-    let body;
-    try { body = await readJson(request, 4096); } catch (error) { return jsonBodyError(error); }
-    if (!body || typeof body !== "object" || Array.isArray(body)) return json({ error: "INVALID_JSON" }, 400);
-    if (typeof body.password !== "string" || body.password.length < 1 || body.password.length > 256) return json({ error: "INVALID_PASSWORD" }, 400);
     if (env.SITE_PASSWORD === env.ADMIN_PASSWORD) return json({ error: "PASSWORDS_MUST_DIFFER" }, 503);
     const supplied = await digest(body.password);
     const isAdmin = constantEqual(supplied, await digest(env.ADMIN_PASSWORD));
