@@ -19,7 +19,7 @@ export class RosterCoordinator extends DurableObject {
   }
 
   getValue(key) {
-    return this.rosterData.get(key);
+    return this.runExclusive(() => this.rosterData.get(key));
   }
 
   putValue(key, value, expirationTtl) {
@@ -255,6 +255,7 @@ function validRoster(data) {
     const weekdays = ["রবিবার", "সোমবার", "মঙ্গলবার", "বুধবার", "বৃহস্পতিবার", "শুক্রবার", "শনিবার"];
     if (!Number.isInteger(numericDate) || numericDate !== parsed.getUTCDate()) return false;
     if (day.weekday !== weekdays[parsed.getUTCDay()]) return false;
+    if (dates.size && day.isoDate.slice(0, 7) !== previousDate.slice(0, 7)) return false;
     if (dates.has(day.isoDate) || (previousDate && day.isoDate <= previousDate)) return false;
     dates.add(day.isoDate);
     previousDate = day.isoDate;
