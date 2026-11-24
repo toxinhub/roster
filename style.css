@@ -7056,3 +7056,19 @@ html body.ink-mode .board{
     line-height:32px!important;
   }
 }
+
+
+/* MOBILE ROSTER — scroll the entire grid horizontally as one surface */
+@media (max-width:900px){
+  .day-grid .person-head,
+  .person-row .person{
+    position:static!important;
+    left:auto!important;
+    z-index:auto!important;
+    box-shadow:none!important;
+  }
+  html body.ink-mode .day-grid .person-head,
+  html body.ink-mode .person-row .person{
+    box-shadow:none!important;
+  }
+}
