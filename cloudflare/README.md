@@ -69,3 +69,9 @@ The first SQLite-backed class migration is additive (`v1`) and does not delete t
 `ALLOWED_ORIGINS` may include the stable read-only Pages preview origin. `ADMIN_WRITE_ORIGINS` must remain limited to production frontends. Preview deployments must never be granted Admin write access to the shared KV namespace.
 
 Wrangler configuration contains no password or session-secret values. Existing Worker secrets must remain configured in Cloudflare.
+
+## Pages API proxy and preview behavior
+
+The Pages project uses a same-origin `/api/*` proxy in `functions/api/[[path]].js`. Production forwards the browser origin unchanged. The named branch preview maps to the already-allowlisted legacy preview origin `dc30fdd7.roster-bps.pages.dev` for authentication and read-only API testing; the upstream Worker still denies writes because this origin is not in `ADMIN_WRITE_ORIGINS`. The proxy rejects cross-origin callers to that preview host and returns the preview's own CORS origin only for same-origin requests.
+
+The current Cloudflare Pages project is configured to deploy production from `security/cloudflare-preview`, not `main`. Merging changes into `main` alone will not publish them to the production Pages site. Change the Pages production branch only after the Worker coordinator has been deployed and the production cutover checklist is complete.
