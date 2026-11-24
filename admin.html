@@ -89,7 +89,7 @@ html body.ink-mode #status.status.not-connected{
 /* Admin Operations Dashboard — Phase 1 foundation */
 :root{--adm-deep:#102D30;--adm-teal:#193B3D;--adm-ivory:#F2E9D8;--adm-gold:#D8B77A;--adm-green:#75B89A;--adm-coral:#D77B78}
 body[data-required-role="admin"]{background:linear-gradient(145deg,#edf3f2,#f5f1e9 65%,#e8eeeb)}
-body[data-required-role="admin"] .page-shell{max-width:none;margin-left:250px;padding:24px clamp(16px,3vw,38px)}
+body[data-required-role="admin"] .topbar{margin-left:232px}body[data-required-role="admin"] .page-shell{max-width:none;margin-left:250px;padding:24px clamp(16px,3vw,38px)}
 body[data-required-role="admin"] .page-shell>.panel,body[data-required-role="admin"] .page-shell>.admin-note{max-width:none}
 .admin-sidebar{position:fixed;z-index:5;left:0;top:0;bottom:0;width:232px;padding:22px 16px;background:var(--adm-deep);color:#e8f0eb;display:flex;flex-direction:column;gap:24px;box-shadow:8px 0 26px rgba(16,45,48,.08)}
 .admin-sidebar-brand{display:flex;align-items:center;gap:11px;padding:8px 5px 16px;border-bottom:1px solid rgba(255,255,255,.12)}
@@ -107,8 +107,8 @@ body[data-required-role="admin"] .section-head h2{color:var(--adm-deep)}
 body[data-required-role="admin"] .primary{background:var(--adm-deep);border-color:var(--adm-deep);color:white}
 body[data-required-role="admin"] .primary:hover{background:var(--adm-teal)}
 body[data-required-role="admin"] input:focus-visible,body[data-required-role="admin"] button:focus-visible,body[data-required-role="admin"] a:focus-visible{outline:3px solid #c7a66d;outline-offset:2px}
-@media(max-width:1000px){body[data-required-role="admin"] .page-shell{margin-left:208px}.admin-sidebar{width:194px}.admin-overview{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:700px){.admin-sidebar{position:sticky;top:0;bottom:auto;width:100%;height:auto;padding:8px 10px;background:var(--adm-deep);display:block}.admin-sidebar-brand{display:none}.admin-nav-label,.admin-sidebar-bottom{display:none}.admin-nav{display:flex;overflow-x:auto;gap:5px}.admin-nav a{white-space:nowrap;padding:9px 10px;font-size:11px}.admin-nav a span{font-size:13px;width:auto}body[data-required-role="admin"] .page-shell{margin:0;padding:14px 10px}.admin-overview{gap:8px}.admin-kpi{padding:12px;min-height:85px}.admin-kpi strong{font-size:22px}}
+@media(max-width:1000px){body[data-required-role="admin"] .topbar{margin-left:194px}body[data-required-role="admin"] .page-shell{margin-left:208px}.admin-sidebar{width:194px}.admin-overview{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:700px){.admin-sidebar{position:sticky;top:0;bottom:auto;width:100%;height:auto;padding:8px 10px;background:var(--adm-deep);display:block}.admin-sidebar-brand{display:none}.admin-nav-label,.admin-sidebar-bottom{display:none}.admin-nav{display:flex;overflow-x:auto;gap:5px}.admin-nav a{white-space:nowrap;padding:9px 10px;font-size:11px}.admin-nav a span{font-size:13px;width:auto}body[data-required-role="admin"] .topbar{margin-left:0}body[data-required-role="admin"] .page-shell{margin:0;padding:14px 10px}.admin-overview{gap:8px}.admin-kpi{padding:12px;min-height:85px}.admin-kpi strong{font-size:22px}}
 @media(max-width:420px){.admin-overview{grid-template-columns:repeat(2,minmax(0,1fr))}}
 </style></head>
 <body data-required-role="admin">
@@ -429,7 +429,7 @@ body[data-required-role="admin"] input:focus-visible,body[data-required-role="ad
         const i = +e.target.dataset.rmday;
         S.days.splice(i, 1);
         S.employees.forEach(emp => emp.shifts.splice(i, 1));
-        markDirty(); render();
+        markDirty(); render(); updateOverview();
       });
       $('editor').querySelectorAll('[data-rmemp]').forEach(x => x.onclick = e => {
         S.employees.splice(+e.target.dataset.rmemp, 1);
@@ -443,7 +443,7 @@ body[data-required-role="admin"] input:focus-visible,body[data-required-role="ad
     function pick(btn){
       closePicker(); const p=document.createElement('div'); p.className='picker';
       const ei=+btn.dataset.ei, di=+btn.dataset.di, current=S.employees[ei].shifts[di];
-      Object.entries(S.shiftTypes).forEach(([code,v])=>{ const b=document.createElement('button'); b.type='button'; b.className='shift-option shift-'+code.toLowerCase()+(code===current?' selected':''); b.innerHTML='<strong>'+esc(code)+'</strong><small>'+esc(v.label)+'</small>'; b.onclick=()=>{ if(S.employees[ei].shifts[di]!==code){S.employees[ei].shifts[di]=code;markDirty();} closePicker();render(); }; p.appendChild(b); });
+      Object.entries(S.shiftTypes).forEach(([code,v])=>{ const b=document.createElement('button'); b.type='button'; b.className='shift-option shift-'+code.toLowerCase()+(code===current?' selected':''); b.innerHTML='<strong>'+esc(code)+'</strong><small>'+esc(v.label)+'</small>'; b.onclick=()=>{ if(S.employees[ei].shifts[di]!==code){S.employees[ei].shifts[di]=code;markDirty();} closePicker();render();updateOverview(); }; p.appendChild(b); });
       document.body.appendChild(p); const r=btn.getBoundingClientRect();
       if(innerWidth<=600){p.style.left='10px';p.style.right='10px';p.style.bottom='12px';} else {p.style.left=Math.max(10,Math.min(r.left,innerWidth-292))+'px';p.style.top=Math.min(r.bottom+6,innerHeight-120)+'px';}
       requestAnimationFrame(()=>document.addEventListener('pointerdown',outsidePicker));
