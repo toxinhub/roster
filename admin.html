@@ -239,6 +239,7 @@ body[data-required-role="admin"] .archive-stat strong{font-size:16px}
           </div>
           <div class="actions">
             <button id="addDay">+ তারিখ</button>
+            <button id="addEmp">+ কর্মী</button>
           </div>
         </div>
 
@@ -689,6 +690,22 @@ body[data-required-role="admin"] .archive-stat strong{font-size:16px}
         isoDate
       });
       S.employees.forEach(emp => emp.shifts.push('OFF'));
+      markDirty(); render(); 
+    };
+
+    $('addEmp').onclick = () => {
+      if (S.employees.length >= 100) {
+        toast('একটি রোস্টারে সর্বোচ্চ ১০০ জন কর্মী রাখা যাবে।', true);
+        return;
+      }
+      let suffix = 1;
+      let name = 'নতুন কর্মী';
+      const existing = new Set(S.employees.map(emp => String(emp.name || '').trim().toLocaleLowerCase()));
+      while (existing.has(name.toLocaleLowerCase())) {
+        suffix++;
+        name = 'নতুন কর্মী ' + suffix;
+      }
+      S.employees.push({ name, shifts: S.days.map(() => 'OFF') });
       markDirty(); render(); 
     };
 
