@@ -7037,3 +7037,22 @@ html body.ink-mode .month-history button{
     transition:none!important;
   }
 }
+
+
+/* Final geometry correction — keep the live board rounded on both themes */
+html body:not(.ink-mode) .board,
+html body.ink-mode .board{
+  border-radius:12px!important;
+}
+@media(max-width:900px){
+  .today-jump{
+    min-height:38px!important;
+    height:38px!important;
+  }
+  .month-history button{
+    width:36px!important;
+    height:36px!important;
+    min-height:36px!important;
+    line-height:32px!important;
+  }
+}
