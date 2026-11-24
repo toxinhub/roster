@@ -7323,7 +7323,8 @@ html body .legend .today-duty-indicator i.is-empty{
 
 
 
-/* Today's Shift Coverage Indicator — sequential fill + state transition. */
+
+/* Today's Shift Coverage Indicator — opacity-only sequence; no scaling or glow. */
 html body .legend .today-duty-indicator i{
   box-sizing:border-box!important;
   display:inline-block!important;
@@ -7341,25 +7342,19 @@ html body .legend .today-duty-indicator i{
   font-size:0!important;
   line-height:0!important;
   opacity:1;
-  transform:scale(1);
-  transform-origin:center;
-  transition:background-color .42s ease, border-color .42s ease, transform .42s ease, opacity .42s ease;
-  animation:coverageOutlineReveal 2.8s ease-in-out infinite;
+  transform:none!important;
+  transition:background-color .42s ease, border-color .42s ease, opacity .35s ease;
 }
 html body .legend .today-duty-indicator i.is-covered{
   background:#000!important;
   border-color:#000!important;
-  animation:coverageFillReveal 2.8s ease-in-out infinite;
+  animation:coverageFade 2.8s ease-in-out infinite;
 }
 html body .legend .today-duty-indicator i:nth-child(2){animation-delay:.16s;}
 html body .legend .today-duty-indicator i:nth-child(3){animation-delay:.32s;}
-@keyframes coverageFillReveal{
-  0%,100%{transform:scale(1);opacity:1;}
-  45%{transform:scale(1.13);opacity:.78;}
-}
-@keyframes coverageOutlineReveal{
-  0%,100%{transform:scale(1);opacity:.78;}
-  45%{transform:scale(1.08);opacity:1;}
+@keyframes coverageFade{
+  0%,100%{opacity:1;}
+  45%{opacity:.76;}
 }
 @media(max-width:900px){
   html body .legend .today-duty-indicator i{
