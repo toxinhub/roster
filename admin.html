@@ -396,7 +396,7 @@ body[data-required-role="admin"] input:focus-visible,body[data-required-role="ad
       const b = S.employees.map((e, ei) => `
         <tr>
           <th>
-            <input value="${esc(e.name)}" data-name="${ei}" maxlength="80">
+            <input value="${esc(e.name)}" data-name="${ei}" maxlength="80" aria-label="কর্মীর নাম: ${esc(e.name)}">
             <button class="remove" data-rmemp="${ei}">বাদ</button>
           </th>
           ${e.shifts.map((c, di) => `<td><button class="edit" data-ei="${ei}" data-di="${di}">${esc(c)}</button></td>`).join('')}
@@ -464,7 +464,22 @@ body[data-required-role="admin"] input:focus-visible,body[data-required-role="ad
         render();
       });
       // Weekday is derived from ISO date and is intentionally read-only.
-      $('editor').querySelectorAll('[data-name]').forEach(x => x.onchange = e => { S.employees[+e.target.dataset.name].name = e.target.value; markDirty(); });
+      $('editor').querySelectorAll('[data-name]').forEach(x => x.onchange = e => {
+        const index=Number(e.target.dataset.name);
+        const employee=S.employees[index];
+        if(!employee)return;
+        const value=String(e.target.value||'').trim();
+        const duplicate=S.employees.some((other,i)=>i!==index&&String(other.name||'').trim().toLocaleLowerCase()===value.toLocaleLowerCase());
+        if(!value||value.length>80||duplicate){
+          e.target.value=employee.name;
+          toast(!value?'কর্মীর নাম খালি রাখা যাবে না।':duplicate?'একই নামে একাধিক কর্মী রাখা যাবে না।':'কর্মীর নাম সর্বোচ্চ ৮০ অক্ষরের হতে হবে।',true);
+          return;
+        }
+        employee.name=value;
+        e.target.value=value;
+        markDirty();
+        applyRosterFilters();
+      });
       $('editor').querySelectorAll('[data-rmday]').forEach(x => x.onclick = e => {
         const i = +e.target.dataset.rmday;
         S.days.splice(i, 1);
