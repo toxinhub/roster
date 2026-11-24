@@ -259,63 +259,6 @@ html body[data-required-role="admin"] button:focus-visible{outline:2px solid var
  html body[data-required-role="admin"] .bar button{touch-action:manipulation}
 }
 
-
-/* Modern / clean / minimal admin refinement */
-:root{
-  --bg:#ffffff;--sf:#f8fafc;--tx:#17212b;--mu:#64748b;--bd:#e2e8f0;
-  --ac:#0f766e;--A:#2563eb;--B:#059669;--C:#d97706;--bad:#dc2626;
-  --Ab:#eff6ff;--Bb:#ecfdf5;--Cb:#fffbeb;
-}
-html body[data-required-role="admin"]{
-  --page-max:1120px;--cell-w:52px;--cell-h:52px;
-  padding:26px 24px calc(112px + env(safe-area-inset-bottom,0px))!important;
-  background:var(--bg)!important;color:var(--tx)!important;
-}
-html body[data-required-role="admin"].ink-mode{
-  --bg:#111827;--sf:#182231;--tx:#e5edf5;--mu:#9aa9bb;--bd:#334155;
-  --ac:#5eead4;--A:#93c5fd;--B:#6ee7b7;--C:#fcd34d;--bad:#f87171;
-  --Ab:#1e3a5f;--Bb:#123c32;--Cb:#493713;
-}
-html body[data-required-role="admin"] .app{width:min(100%,var(--page-max))}
-html body[data-required-role="admin"] .topbar{margin-bottom:22px;min-height:48px}
-html body[data-required-role="admin"] .brand strong{font-size:21px;font-weight:650;letter-spacing:-.25px}
-html body[data-required-role="admin"] .seg{background:var(--sf);border-color:var(--bd);border-radius:10px}
-html body[data-required-role="admin"] .seg button.on,
-html body[data-required-role="admin"] .b.on{background:var(--ac)!important;border-color:var(--ac)!important;color:#fff!important}
-html body[data-required-role="admin"] .roster-head{margin-bottom:14px}
-html body[data-required-role="admin"] .roster-nav{margin-bottom:14px}
-html body[data-required-role="admin"] .nav button,
-html body[data-required-role="admin"] #addDay,
-html body[data-required-role="admin"] .b{border-color:var(--bd)!important;border-radius:9px}
-html body[data-required-role="admin"] .tw{border:1px solid var(--bd);border-radius:12px;overflow-x:auto;overscroll-behavior-x:contain}
-html body[data-required-role="admin"] #editor{width:max-content;min-width:100%;table-layout:fixed}
-html body[data-required-role="admin"] #editor .nm{
-  position:static!important;left:auto!important;z-index:auto!important;
-  box-shadow:none!important;background:var(--sf)!important;
-  width:132px;min-width:132px;max-width:132px;padding:0 12px;
-  white-space:nowrap;font-size:13px;
-}
-html body[data-required-role="admin"] #editor thead .nm{position:static!important;z-index:auto!important}
-html body[data-required-role="admin"] #editor thead th{background:var(--sf)!important}
-html body[data-required-role="admin"] #editor .c{font-variant-numeric:tabular-nums}
-html body[data-required-role="admin"] .bar{box-shadow:0 8px 28px rgba(15,23,42,.16)}
-html body[data-required-role="admin"] button{transition:background-color .14s,border-color .14s,color .14s,transform .12s}
-html body[data-required-role="admin"] button:focus-visible{outline:2px solid var(--ac)!important;outline-offset:2px}
-@media(max-width:600px){
-  html body[data-required-role="admin"]{--cell-w:42px;--cell-h:45px;padding:15px 10px calc(100px + env(safe-area-inset-bottom,0px))!important}
-  html body[data-required-role="admin"] .topbar{margin-bottom:16px}
-  html body[data-required-role="admin"] .brand strong{font-size:17px}
-  html body[data-required-role="admin"] #editor .nm{width:96px;min-width:96px;max-width:96px;padding:0 8px;font-size:12px}
-  html body[data-required-role="admin"] .tw{border-radius:10px}
-}
-@media(max-width:390px){
-  html body[data-required-role="admin"]{--cell-w:39px;--cell-h:43px;padding-left:8px!important;padding-right:8px!important}
-  html body[data-required-role="admin"] #editor .nm{width:88px;min-width:88px;max-width:88px;font-size:11px}
-}
-@media(prefers-reduced-motion:reduce){
-  html body[data-required-role="admin"] button{transition:none!important}
-}
-
 </style></head>
 <body data-required-role="admin">
   <div class="app admin-app">
