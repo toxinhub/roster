@@ -10,7 +10,7 @@
 <meta name="description" content="CCTV - PJL duty roster">
 <title>Duty Roster • CCTV - PJL</title>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
-<link rel="stylesheet" href="style.css?v=20260925-ink-balance-2">
+<link rel="stylesheet" href="style.css?v=20261124-responsive-polish-1">
 </head>
 <body data-required-role="site">
 <div class="app">
@@ -542,7 +542,9 @@ $('todayJump').onclick=()=>{
     const desired=Math.max(0,targetCenter-(wrap.clientWidth/2));
     const start=wrap.scrollLeft;
     const distance=desired-start;
-    const duration=Math.min(900,Math.max(500,Math.abs(distance)*0.75));
+    const reduceMotion=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const duration=reduceMotion?0:Math.min(420,Math.max(180,Math.abs(distance)*0.45));
+    if(duration===0){wrap.scrollLeft=desired;target.classList.add('today-jump-focus');setTimeout(()=>target.classList.remove('today-jump-focus'),700);return;}
     const startTime=performance.now();
     const ease=t=>1-Math.pow(1-t,3);
     const animate=now=>{
