@@ -119,6 +119,15 @@ test("enforces the smaller login request limit", async () => {
   await assert.rejects(readJson(request("x".repeat(4097)), 4096), /BODY_TOO_LARGE/);
 });
 
+test("Worker module source parses after adapting Cloudflare built-ins for Node syntax checks", () => {
+  const normalized = workerSource
+    .replace(/^import .*?;\\s*/s, "")
+    .replace("export class RosterCoordinator", "class RosterCoordinator")
+    .replace("extends DurableObject", "extends BaseDurableObject")
+    .replace("export default", "const workerDefault =");
+  assert.doesNotThrow(() => new vm.Script(normalized, { filename: "cloudflare/worker.js" }));
+});
+
 test("frontend JavaScript files and inline scripts parse", () => {
   const authSource = fs.readFileSync(new URL("../auth.js", "file://" + __filename), "utf8");
   assert.doesNotThrow(() => new vm.Script(authSource, { filename: "auth.js" }));
