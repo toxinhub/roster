@@ -81,64 +81,6 @@ html body[data-required-role="admin"] .toast{position:fixed;z-index:1100;left:50
 html body[data-required-role="admin"] .toast.show{opacity:1}
 html body[data-required-role="admin"] .legacy-admin-controls{display:none!important}
 @media(max-width:560px){html body[data-required-role="admin"]{padding:18px 10px calc(100px + env(safe-area-inset-bottom,0px))!important}html body[data-required-role="admin"] .brand strong{font-size:19px}html body[data-required-role="admin"] .roster-head{margin-bottom:16px}html body[data-required-role="admin"] .b{height:38px;padding:0 12px}html body[data-required-role="admin"] .b small{display:none}html body[data-required-role="admin"] #editor .c{height:46px;font-size:16px}html body[data-required-role="admin"] #editor .nm{min-width:82px;font-size:13px;padding-left:7px}html body[data-required-role="admin"] #editor .c{min-width:42px;width:42px}html body[data-required-role="admin"] #editor thead th{min-width:42px}html body[data-required-role="admin"] .bar{gap:2px;padding:7px 7px 7px 12px;font-size:12px}html body[data-required-role="admin"] .bar button{padding:0 10px;font-size:12px}}
-
-/* Admin polish: consistent scale, restrained surfaces, and responsive spacing */
-html body[data-required-role="admin"]{--page-max:920px;--cell-w:48px;--cell-h:50px;padding:30px 20px calc(112px + env(safe-area-inset-bottom,0px))!important;background:var(--bg)!important}
-html body[data-required-role="admin"] .app{width:min(100%,var(--page-max))}
-html body[data-required-role="admin"] .topbar{margin-bottom:24px}
-html body[data-required-role="admin"] .brand strong{font-size:21px;line-height:1.35;letter-spacing:-.2px}
-html body[data-required-role="admin"] .seg{padding:3px;gap:2px;border-radius:11px}
-html body[data-required-role="admin"] .seg button{min-height:34px;padding:7px 15px;font-size:13px}
-html body[data-required-role="admin"] .roster-nav{margin-bottom:14px}
-html body[data-required-role="admin"] .nav{gap:8px;font-size:15px}
-html body[data-required-role="admin"] .nav button{width:36px;height:36px;font-size:19px;transition:background .15s,border-color .15s}
-html body[data-required-role="admin"] .nav span{min-width:150px;font-size:14px;font-variant-numeric:tabular-nums}
-html body[data-required-role="admin"] #addDay{min-height:36px;font-size:13px;transition:background .15s,border-color .15s}
-html body[data-required-role="admin"] .tools{gap:7px;margin-bottom:16px}
-html body[data-required-role="admin"] .b{height:38px;padding:0 13px;font-size:14px;border-radius:9px;transition:background .15s,border-color .15s,transform .12s}
-html body[data-required-role="admin"] .b:active,html body[data-required-role="admin"] .nav button:active,html body[data-required-role="admin"] #addDay:active{transform:scale(.97)}
-html body[data-required-role="admin"] .tw{border:1px solid var(--bd);border-radius:11px;background:var(--bg);padding:0;scrollbar-width:thin;scrollbar-color:var(--mu) transparent}
-html body[data-required-role="admin"] #editor{border:0;min-width:100%;background:transparent!important}
-html body[data-required-role="admin"] #editor th,html body[data-required-role="admin"] #editor td{border-right:1px solid color-mix(in srgb,var(--bd) 78%,transparent);border-bottom:1px solid color-mix(in srgb,var(--bd) 78%,transparent)}
-html body[data-required-role="admin"] #editor tr:last-child th,html body[data-required-role="admin"] #editor tr:last-child td{border-bottom:0}
-html body[data-required-role="admin"] #editor th:last-child,html body[data-required-role="admin"] #editor td:last-child{border-right:0}
-html body[data-required-role="admin"] #editor thead th{height:43px;min-width:var(--cell-w);padding:5px 2px;font-size:11px}
-html body[data-required-role="admin"] #editor thead th b{font-size:15px;line-height:1.2}
-html body[data-required-role="admin"] #editor .nm{min-width:104px;width:104px;padding:0 10px;font-size:13px;box-shadow:1px 0 0 var(--bd)}
-html body[data-required-role="admin"] #editor .c{width:var(--cell-w);min-width:var(--cell-w);height:var(--cell-h);font-size:16px;user-select:none;-webkit-user-select:none;transition:filter .1s}
-html body[data-required-role="admin"] #editor .c:active{filter:brightness(.94)}
-html body[data-required-role="admin"] #editor .cv{height:28px;min-width:var(--cell-w)}
-html body[data-required-role="admin"] #editor .cv i{width:6px;height:6px;margin:0 1.5px}
-html body[data-required-role="admin"] .leg{gap:8px 16px;margin-top:12px;font-size:11.5px;line-height:1.6}
-html body[data-required-role="admin"] .bar{bottom:calc(16px + env(safe-area-inset-bottom,0px));padding:7px 7px 7px 15px;gap:5px;font-size:13px}
-html body[data-required-role="admin"] .bar button{height:36px;padding:0 14px;font-size:13px}
-html body[data-required-role="admin"] .bar button:disabled{opacity:.4}
-html body[data-required-role="admin"] .toast{bottom:calc(88px + env(safe-area-inset-bottom,0px));font-size:12px}
-html body[data-required-role="admin"] button:focus-visible{outline:2px solid var(--A)!important;outline-offset:2px}
-@media(max-width:600px){
- html body[data-required-role="admin"]{padding:17px 10px calc(98px + env(safe-area-inset-bottom,0px))!important;--cell-w:42px;--cell-h:45px}
- html body[data-required-role="admin"] .topbar{margin-bottom:19px;gap:8px}
- html body[data-required-role="admin"] .brand strong{font-size:18px}
- html body[data-required-role="admin"] .top-actions{gap:6px}
- html body[data-required-role="admin"] .seg button{min-height:32px;padding:6px 11px;font-size:12px}
- html body[data-required-role="admin"] .roster-nav{gap:8px;margin-bottom:12px}
- html body[data-required-role="admin"] .nav{gap:5px}
- html body[data-required-role="admin"] .nav button{width:32px;height:32px}
- html body[data-required-role="admin"] .nav span{min-width:0;font-size:12px}
- html body[data-required-role="admin"] #addDay{height:33px;min-height:33px;padding:0 9px;font-size:11px}
- html body[data-required-role="admin"] .tools{gap:6px;margin-bottom:12px}
- html body[data-required-role="admin"] .b{height:35px;padding:0 10px;font-size:13px}
- html body[data-required-role="admin"] #editor thead th{height:39px;font-size:10px}
- html body[data-required-role="admin"] #editor thead th b{font-size:14px}
- html body[data-required-role="admin"] #editor .nm{min-width:84px;width:84px;padding:0 7px;font-size:12px}
- html body[data-required-role="admin"] #editor .c{font-size:14px}
- html body[data-required-role="admin"] #editor .c.O,html body[data-required-role="admin"] #editor .c.L{font-size:11px}
- html body[data-required-role="admin"] .leg{font-size:10.5px;gap:5px 12px}
- html body[data-required-role="admin"] .bar{max-width:calc(100vw - 16px);padding:6px 6px 6px 10px;gap:2px;font-size:11px}
- html body[data-required-role="admin"] .bar button{height:33px;padding:0 9px;font-size:11px}
-}
-@media(prefers-reduced-motion:reduce){html body[data-required-role="admin"] *,html body[data-required-role="admin"] *:before,html body[data-required-role="admin"] *:after{transition:none!important;scroll-behavior:auto!important}}
-
 </style></head>
 <body data-required-role="admin">
   <div class="app admin-app">
@@ -404,34 +346,10 @@ html body[data-required-role="admin"] button:focus-visible{outline:2px solid var
       updateChangeUI();
     }
     function applyPaint(cell){
-      if(!cell||!cell.dataset||cell.dataset.ei===undefined)return false;
+      if(!cell||!cell.dataset||cell.dataset.ei===undefined)return;
       const ei=Number(cell.dataset.ei),di=Number(cell.dataset.di),emp=S.employees[ei];
-      if(!emp||!Number.isInteger(di)||di<0||di>=S.days.length)return false;
-      if(emp.shifts[di]===brush)return false;
-      emp.shifts[di]=brush;
-      cell.textContent=brush==='OFF'?'OFF':brush==='L'?'L':brush;
-      cell.className='c '+(brush==='OFF'?'O':brush==='L'?'L':brush)+(S.days[di].isoDate===localTodayISO()?' td':'');
-      const row=cell.parentElement;
-      if(row){
-        row.querySelectorAll('.c').forEach(node=>{
-          const index=Number(node.dataset.di);
-          const value=emp.shifts[index];
-          const invalid=value==='A'&&index>0&&emp.shifts[index-1]==='C';
-          node.classList.toggle('x',invalid);
-        });
-      }
-      dirty=true;
-      $('bar').style.display='flex';
-      $('bt').textContent='পরিবর্তন হয়েছে';
-      $('un').disabled=false;
-      $('changeStatus').textContent='পরিবর্তন হয়েছে';
-      $('changeStatus').className='change-status dirty';
-      $('clearChanges').disabled=false;
-      return true;
-    }
-    function localTodayISO(){
-      const now=new Date();
-      return now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0');
+      if(!emp||!Number.isInteger(di)||di<0||di>=S.days.length)return;
+      if(emp.shifts[di]!==brush){emp.shifts[di]=brush;markDirty();render();}
     }
     $('brushTools').onclick=e=>{const button=e.target.closest('[data-brush]');if(!button)return;brush=button.dataset.brush;renderBrushTools();};
     $('editor').addEventListener('pointerdown',e=>{
@@ -443,7 +361,7 @@ html body[data-required-role="admin"] button:focus-visible{outline:2px solid var
       const cell=document.elementFromPoint(e.clientX,e.clientY)?.closest?.('.c');
       if(cell)applyPaint(cell);
     });
-    const finishPainting=()=>{if(!painting)return;painting=false;render()};window.addEventListener('pointerup',finishPainting);window.addEventListener('pointercancel',finishPainting);
+    window.addEventListener('pointerup',()=>painting=false);window.addEventListener('pointercancel',()=>painting=false);
     $('vw').onclick=()=>{view='w';weekIndex=0;render()};
     $('vm').onclick=()=>{view='m';render()};
     $('pv').onclick=()=>{weekIndex=Math.max(0,weekIndex-1);render()};
