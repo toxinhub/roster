@@ -1,5 +1,78 @@
+import { DurableObject } from "cloudflare:workers";
+
 const SESSION_SECONDS = 8 * 60 * 60;
 const encoder = new TextEncoder();
+
+// One coordinator represents the single shared CCTV roster. All compound
+// writes are serialized here; Workers KV remains the durable data store.
+export class RosterCoordinator extends DurableObject {
+  constructor(ctx, env) {
+    super(ctx, env);
+    this.queue = Promise.resolve();
+  }
+
+  runExclusive(operation) {
+    const current = this.queue.then(operation, operation);
+    this.queue = current.then(() => undefined, () => undefined);
+    return current;
+  }
+
+  getValue(key) {
+    return this.env.ROSTER_DATA.get(key);
+  }
+
+  putValue(key, value, expirationTtl) {
+    return this.runExclusive(async () => {
+      const options = Number.isInteger(expirationTtl) && expirationTtl > 0
+        ? { expirationTtl }
+        : undefined;
+      await this.env.ROSTER_DATA.put(key, value, options);
+      return true;
+    });
+  }
+
+  deleteValue(key) {
+    return this.runExclusive(() => this.env.ROSTER_DATA.delete(key));
+  }
+
+  consumeLoginAttempt(key, now) {
+    return this.runExclusive(async () => {
+      let item;
+      try { item = JSON.parse(await this.env.ROSTER_DATA.get(key) || "null"); } catch {}
+      if (!item || !Number.isFinite(item.start) || now - item.start > 15 * 60 * 1000) {
+        item = { count: 0, start: now };
+      }
+      if (item.count >= 8) return false;
+      item.count++;
+      await this.env.ROSTER_DATA.put(key, JSON.stringify(item), { expirationTtl: 900 });
+      return true;
+    });
+  }
+
+  saveSchedule(dataJson, enforceVersion, expectedUpdatedAt) {
+    return this.runExclusive(async () => {
+      if (enforceVersion) {
+        const currentRaw = await this.env.ROSTER_DATA.get("schedule");
+        let currentUpdatedAt = null;
+        try { currentUpdatedAt = currentRaw ? (JSON.parse(currentRaw).updatedAt ?? null) : null; }
+        catch { return { ok: false, error: "ROSTER_INVALID" }; }
+        if (expectedUpdatedAt !== currentUpdatedAt) return { ok: false, error: "WRITE_CONFLICT" };
+      }
+      await this.env.ROSTER_DATA.put("schedule", dataJson);
+      return { ok: true };
+    });
+  }
+
+  createArchive(month, dataJson) {
+    return this.runExclusive(async () => {
+      const key = "archive:" + month;
+      if (await this.env.ROSTER_DATA.get(key)) return { ok: false, error: "ARCHIVE_EXISTS" };
+      await this.env.ROSTER_DATA.put(key, dataJson);
+      return { ok: true };
+    });
+  }
+}
+
 
 function json(body, status = 200, headers = {}) {
   return new Response(JSON.stringify(body), {
@@ -70,15 +143,39 @@ function withCors(response, cors) {
   return new Response(response.body, { status: response.status, statusText: response.statusText, headers });
 }
 function requireConfig(env) {
+  const coordinatorRequired = String(env.REQUIRE_COORDINATOR || "").toLowerCase() === "true";
   return Boolean(env.SITE_PASSWORD && env.ADMIN_PASSWORD && env.SITE_PASSWORD !== env.ADMIN_PASSWORD &&
-    env.SESSION_SECRET && env.SESSION_SECRET.length >= 32 && env.ROSTER_DATA);
+    env.SESSION_SECRET && env.SESSION_SECRET.length >= 32 && env.ROSTER_DATA &&
+    (!coordinatorRequired || env.ROSTER_COORDINATOR));
+}
+
+function dataStore(env) {
+  if (env.ROSTER_COORDINATOR) {
+    const stub = env.ROSTER_COORDINATOR.getByName("cctv-roster-primary");
+    return {
+      get: key => stub.getValue(key),
+      put: (key, value, options) => stub.putValue(key, value, options?.expirationTtl),
+      delete: key => stub.deleteValue(key),
+      consumeLoginAttempt: (key, now) => stub.consumeLoginAttempt(key, now),
+      saveSchedule: (data, enforceVersion, expected) => stub.saveSchedule(data, enforceVersion, expected),
+      createArchive: (month, data) => stub.createArchive(month, data)
+    };
+  }
+  return {
+    get: key => env.ROSTER_DATA.get(key),
+    put: (key, value, options) => env.ROSTER_DATA.put(key, value, options),
+    delete: key => env.ROSTER_DATA.delete(key),
+    consumeLoginAttempt: null,
+    saveSchedule: null,
+    createArchive: null
+  };
 }
 async function makeToken(role, env) {
   const now = Math.floor(Date.now() / 1000);
   const payload = b64url(encoder.encode(JSON.stringify({ role, iat: now, exp: now + SESSION_SECONDS, jti: crypto.randomUUID() })));
   return payload + "." + b64url(await hmac(payload, env.SESSION_SECRET));
 }
-async function getSession(request, env) {
+async function getSession(request, env, store) {
   try {
     const header = request.headers.get("Authorization") || "";
     if (!header.startsWith("Bearer ")) return null;
@@ -89,12 +186,12 @@ async function getSession(request, env) {
     const session = JSON.parse(new TextDecoder().decode(unb64url(payload)));
     const now = Math.floor(Date.now() / 1000);
     if (!["site", "admin"].includes(session.role) || !Number.isInteger(session.exp) || session.exp <= now || session.iat > now + 60 || typeof session.jti !== "string") return null;
-    if (await env.ROSTER_DATA.get("revoked:" + session.jti)) return null;
+    if (await store.get("revoked:" + session.jti)) return null;
     return session;
   } catch { return null; }
 }
-async function requireRole(request, env, role = "site") {
-  const session = await getSession(request, env);
+async function requireRole(request, env, store, role = "site") {
+  const session = await getSession(request, env, store);
   if (!session || (role === "admin" && session.role !== "admin")) return null;
   return session;
 }
@@ -197,14 +294,22 @@ async function handler(request, env) {
         siteAndAdminPasswordsDiffer: Boolean(env.SITE_PASSWORD && env.ADMIN_PASSWORD && env.SITE_PASSWORD !== env.ADMIN_PASSWORD),
         sessionSecretLengthAtLeast32: Boolean(env.SESSION_SECRET && env.SESSION_SECRET.length >= 32),
         dataBindingPresent: Boolean(env.ROSTER_DATA),
+        coordinatorBindingPresent: Boolean(env.ROSTER_COORDINATOR),
+        strongCoordinationEnabled: Boolean(env.ROSTER_COORDINATOR),
+        coordinatorRequired: String(env.REQUIRE_COORDINATOR || "").toLowerCase() === "true",
         originAllowed: true
       }
     });
   }
   if (!requireConfig(env)) return json({ error: "AUTH_NOT_CONFIGURED" }, 503);
+  const store = dataStore(env);
 
   if (path === "/api/login" && request.method === "POST") {
-    if (!await canAttempt(request, env)) return json({ error: "TOO_MANY_ATTEMPTS" }, 429, { "Retry-After": "900" });
+    const loginKey = await attemptKey(request);
+    const allowed = store.consumeLoginAttempt
+      ? await store.consumeLoginAttempt(loginKey, Date.now())
+      : await canAttempt(request, env);
+    if (!allowed) return json({ error: "TOO_MANY_ATTEMPTS" }, 429, { "Retry-After": "900" });
     let body;
     try { body = await readJson(request, 4096); } catch (error) { return jsonBodyError(error); }
     if (!body || typeof body !== "object" || Array.isArray(body)) return json({ error: "INVALID_JSON" }, 400);
@@ -214,26 +319,27 @@ async function handler(request, env) {
     const isAdmin = constantEqual(supplied, await digest(env.ADMIN_PASSWORD));
     const isSite = constantEqual(supplied, await digest(env.SITE_PASSWORD));
     if (!isAdmin && !isSite) {
-      await recordFailedAttempt(request, env);
+      if (!store.consumeLoginAttempt) await recordFailedAttempt(request, env);
       return json({ error: "INVALID_CREDENTIALS" }, 401);
     }
-    await clearFailedAttempts(request, env);
+    if (store.consumeLoginAttempt) await store.delete(loginKey);
+    else await clearFailedAttempts(request, env);
     return json({ ok: true, role: isAdmin ? "admin" : "site", token: await makeToken(isAdmin ? "admin" : "site", env), expiresIn: SESSION_SECONDS });
   }
   if (path === "/api/session" && request.method === "GET") {
-    const session = await getSession(request, env);
+    const session = await getSession(request, env, store);
     return session ? json({ authenticated: true, role: session.role, expiresAt: session.exp }) : json({ authenticated: false }, 401);
   }
   if (path === "/api/logout" && request.method === "POST") {
     const session = await getSession(request, env);
     if (!session) return json({ error: "AUTH_REQUIRED" }, 401);
     const remaining = Math.max(1, session.exp - Math.floor(Date.now() / 1000));
-    await env.ROSTER_DATA.put("revoked:" + session.jti, "1", { expirationTtl: remaining });
+    await store.put("revoked:" + session.jti, "1", { expirationTtl: remaining });
     return json({ ok: true });
   }
   if (path === "/api/roster" && request.method === "GET") {
-    if (!await requireRole(request, env, "site")) return json({ error: "AUTH_REQUIRED" }, 401);
-    const raw = await env.ROSTER_DATA.get("schedule");
+    if (!await requireRole(request, env, store, "site")) return json({ error: "AUTH_REQUIRED" }, 401);
+    const raw = await store.get("schedule");
     if (!raw) return json({ error: "ROSTER_NOT_SEEDED" }, 503);
     try { return json(JSON.parse(raw)); } catch { return json({ error: "ROSTER_INVALID" }, 503); }
   }
@@ -241,27 +347,33 @@ async function handler(request, env) {
     if (!await requireRole(request, env, "site")) return json({ error: "AUTH_REQUIRED" }, 401);
     const month = url.searchParams.get("month") || "";
     if (!/^\d{4}-(0[1-9]|1[0-2])$/.test(month)) return json({ error: "INVALID_MONTH" }, 400);
-    const raw = await env.ROSTER_DATA.get("archive:" + month);
+    const raw = await store.get("archive:" + month);
     if (!raw) return json({ error: "NOT_FOUND" }, 404);
     try { return json(JSON.parse(raw)); } catch { return json({ error: "ARCHIVE_INVALID" }, 503); }
   }
   if (path === "/api/admin/save" && request.method === "POST") {
-    if (!await requireRole(request, env, "admin")) return json({ error: "ADMIN_AUTH_REQUIRED" }, 401);
+    if (!await requireRole(request, env, store, "admin")) return json({ error: "ADMIN_AUTH_REQUIRED" }, 401);
     if (!adminWriteOrigins(env).includes(requestOrigin)) return json({ error: "PREVIEW_READ_ONLY" }, 403);
     let body;
     try { body = await readJson(request, 262144); } catch (error) { return jsonBodyError(error); }
     if (!body || typeof body !== "object" || Array.isArray(body) || !validRoster(body.data)) return json({ error: "INVALID_ROSTER" }, 400);
-    if (Object.prototype.hasOwnProperty.call(body, "expectedUpdatedAt")) {
-      if (body.expectedUpdatedAt !== null && typeof body.expectedUpdatedAt !== "string") {
-        return json({ error: "INVALID_VERSION" }, 400);
-      }
-      const currentRaw = await env.ROSTER_DATA.get("schedule");
-      let currentUpdatedAt = null;
-      try { currentUpdatedAt = currentRaw ? (JSON.parse(currentRaw).updatedAt ?? null) : null; }
-      catch { return json({ error: "ROSTER_INVALID" }, 503); }
-      if (body.expectedUpdatedAt !== currentUpdatedAt) return json({ error: "WRITE_CONFLICT" }, 409);
+    const enforceVersion = Object.prototype.hasOwnProperty.call(body, "expectedUpdatedAt");
+    if (enforceVersion && body.expectedUpdatedAt !== null && typeof body.expectedUpdatedAt !== "string") {
+      return json({ error: "INVALID_VERSION" }, 400);
     }
-    await env.ROSTER_DATA.put("schedule", JSON.stringify(body.data));
+    if (store.saveSchedule) {
+      const saved = await store.saveSchedule(JSON.stringify(body.data), enforceVersion, body.expectedUpdatedAt);
+      if (!saved.ok) return json({ error: saved.error }, saved.error === "WRITE_CONFLICT" ? 409 : 503);
+    } else {
+      if (enforceVersion) {
+        const currentRaw = await store.get("schedule");
+        let currentUpdatedAt = null;
+        try { currentUpdatedAt = currentRaw ? (JSON.parse(currentRaw).updatedAt ?? null) : null; }
+        catch { return json({ error: "ROSTER_INVALID" }, 503); }
+        if (body.expectedUpdatedAt !== currentUpdatedAt) return json({ error: "WRITE_CONFLICT" }, 409);
+      }
+      await store.put("schedule", JSON.stringify(body.data));
+    }
     return json({ ok: true, updatedAt: body.data.updatedAt || null });
   }
   if (path === "/api/admin/archive" && request.method === "POST") {
@@ -275,9 +387,14 @@ async function handler(request, env) {
         body.data.days[0].isoDate.slice(0, 7) !== body.month) {
       return json({ error: "INVALID_ARCHIVE" }, 400);
     }
-    const key = "archive:" + body.month;
-    if (await env.ROSTER_DATA.get(key)) return json({ error: "ARCHIVE_EXISTS" }, 409);
-    await env.ROSTER_DATA.put(key, JSON.stringify(body.data));
+    if (store.createArchive) {
+      const archived = await store.createArchive(body.month, JSON.stringify(body.data));
+      if (!archived.ok) return json({ error: archived.error }, 409);
+    } else {
+      const key = "archive:" + body.month;
+      if (await store.get(key)) return json({ error: "ARCHIVE_EXISTS" }, 409);
+      await store.put(key, JSON.stringify(body.data));
+    }
     return json({ ok: true, month: body.month });
   }
   return json({ error: "NOT_FOUND" }, 404);
