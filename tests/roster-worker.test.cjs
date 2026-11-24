@@ -214,3 +214,14 @@ test("all authenticated API routes pass the coordinator-backed store", () => {
   assert.match(workerSource, /store\.consumeLoginAttempt\(/);
   assert.match(workerSource, /REQUIRE_COORDINATOR/);
 });
+
+
+test("Admin month switching maps each employee's shifts by the matching row index", () => {
+  const adminHtml = fs.readFileSync(new URL("../admin.html", "file://" + __filename), "utf8");
+  const start = adminHtml.indexOf("function syncMonth()");
+  const end = adminHtml.indexOf("function setPicker()", start);
+  assert.ok(start >= 0 && end > start, "syncMonth function must exist");
+  const syncMonth = adminHtml.slice(start, end);
+  assert.match(syncMonth, /oldEmployees\.forEach\(\(emp,\s*ei\)\s*=>/);
+  assert.match(syncMonth, /oldShiftByDate\[ei\]/);
+});
