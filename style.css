@@ -7322,29 +7322,56 @@ html body .legend .today-duty-indicator i.is-empty{
 }
 
 
-/* Today's Shift Coverage Indicator — restrained pulse for covered shifts. */
+
+/* Today's Shift Coverage Indicator — sequential fill + state transition. */
 html body .legend .today-duty-indicator i{
+  box-sizing:border-box!important;
   display:inline-block!important;
+  width:11px!important;
+  height:11px!important;
+  min-width:11px!important;
+  min-height:11px!important;
+  flex:0 0 11px!important;
+  padding:0!important;
+  margin:0!important;
+  border:1.6px solid #000!important;
+  border-radius:1px!important;
+  background:transparent!important;
+  color:transparent!important;
+  font-size:0!important;
+  line-height:0!important;
+  opacity:1;
   transform:scale(1);
   transform-origin:center;
-  transition:transform .28s ease, opacity .28s ease;
+  transition:background-color .42s ease, border-color .42s ease, transform .42s ease, opacity .42s ease;
+  animation:coverageOutlineReveal 2.8s ease-in-out infinite;
 }
 html body .legend .today-duty-indicator i.is-covered{
-  animation:todayCoveragePulse 3.2s ease-in-out infinite;
+  background:#000!important;
+  border-color:#000!important;
+  animation:coverageFillReveal 2.8s ease-in-out infinite;
 }
-html body .legend .today-duty-indicator i.is-covered:nth-child(2){
-  animation-delay:.18s;
-}
-html body .legend .today-duty-indicator i.is-covered:nth-child(3){
-  animation-delay:.36s;
-}
-@keyframes todayCoveragePulse{
+html body .legend .today-duty-indicator i:nth-child(2){animation-delay:.16s;}
+html body .legend .today-duty-indicator i:nth-child(3){animation-delay:.32s;}
+@keyframes coverageFillReveal{
   0%,100%{transform:scale(1);opacity:1;}
-  50%{transform:scale(1.10);opacity:.82;}
+  45%{transform:scale(1.13);opacity:.78;}
+}
+@keyframes coverageOutlineReveal{
+  0%,100%{transform:scale(1);opacity:.78;}
+  45%{transform:scale(1.08);opacity:1;}
+}
+@media(max-width:900px){
+  html body .legend .today-duty-indicator i{
+    width:10px!important;height:10px!important;
+    min-width:10px!important;min-height:10px!important;flex-basis:10px!important;
+  }
 }
 @media(prefers-reduced-motion:reduce){
   html body .legend .today-duty-indicator i{
     animation:none!important;
     transition:none!important;
+    transform:none!important;
+    opacity:1!important;
   }
 }
