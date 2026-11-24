@@ -73,6 +73,14 @@ test("rejects mismatched shift-array lengths", () => {
   assert.equal(validRoster(roster({ employees: [{ name: "কর্মী A", shifts: [] }] })), false);
 });
 
+test("rejects a roster that crosses into a second calendar month", () => {
+  const days = [
+    { date: "৩০", weekday: "সোমবার", isoDate: "2026-11-30" },
+    { date: "১", weekday: "মঙ্গলবার", isoDate: "2026-12-01" }
+  ];
+  assert.equal(validRoster(roster({ days, employees: [{ name: "কর্মী A", shifts: ["A", "B"] }] })), false);
+});
+
 test("rejects unsupported shift codes and malformed colors", () => {
   assert.equal(validRoster(roster({ employees: [{ name: "কর্মী A", shifts: ["X"] }] })), false);
   const shiftTypes = { ...roster().shiftTypes, A: { label: "সকাল", note: "", color: "red" } };
@@ -145,6 +153,13 @@ test("frontend JavaScript files and inline scripts parse", () => {
       );
     });
   }
+});
+
+test("Admin prevents cross-month day additions and more than 100 employees", () => {
+  const adminHtml = fs.readFileSync(new URL("../admin.html", "file://" + __filename), "utf8");
+  assert.match(adminHtml, /নির্বাচিত মাসের বাইরে নতুন তারিখ যোগ করা যাবে না/);
+  assert.match(adminHtml, /S\.employees\.length >= 100/);
+  assert.match(adminHtml, /সব তারিখ একই মাসের হতে হবে/);
 });
 
 test("archive snapshot comparison ignores object key order but preserves array order", () => {
