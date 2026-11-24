@@ -7072,3 +7072,84 @@ html body.ink-mode .board{
     box-shadow:none!important;
   }
 }
+
+
+/* Night shift refinement — public roster C shift treatment. */
+html body .shift.shift-c{
+  position:relative;
+  overflow:hidden;
+  isolation:isolate;
+  background:linear-gradient(145deg,#EAF1FC 0%,#DCE8F8 58%,#D3E2F5 100%)!important;
+  color:#203C68!important;
+  border:1px solid #AFC5E8!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.82),inset 0 -2px 0 rgba(79,119,177,.08),0 3px 9px rgba(40,72,120,.11)!important;
+}
+html body .shift.shift-c::after{
+  content:"☾";
+  position:absolute;
+  top:3px;
+  right:6px;
+  z-index:1;
+  font-size:10px;
+  line-height:1;
+  font-weight:700;
+  color:#5376A8;
+  opacity:.82;
+  pointer-events:none;
+}
+html body .shift.shift-c b{
+  color:#203C68!important;
+  font-weight:850!important;
+  letter-spacing:.035em;
+  text-shadow:0 1px 0 rgba(255,255,255,.45);
+}
+html body .legend span.shift-c{
+  background:linear-gradient(110deg,#EAF1FC,#DCE8F8)!important;
+  border-color:#AFC5E8!important;
+  color:#203C68!important;
+}
+html body .legend span.shift-c i{
+  background:#6387BC!important;
+  box-shadow:0 0 0 2px rgba(99,135,188,.16);
+}
+html body .legend span.shift-c b,
+html body .legend span.shift-c small{
+  color:#29466F!important;
+}
+html body .legend span.shift-c.active-shift{
+  border-color:#6387BC!important;
+  box-shadow:0 0 0 2px rgba(99,135,188,.17),0 2px 8px rgba(43,73,117,.09)!important;
+}
+html body.ink-mode .shift.shift-c{
+  background:linear-gradient(145deg,#263A59 0%,#20334F 58%,#1B2C45 100%)!important;
+  color:#D8E8FF!important;
+  border-color:#49658E!important;
+  box-shadow:inset 0 1px 0 rgba(205,225,255,.09),inset 0 -2px 0 rgba(9,18,32,.22),0 3px 10px rgba(0,0,0,.22)!important;
+}
+html body.ink-mode .shift.shift-c::after{color:#A9C8F5;opacity:.95;}
+html body.ink-mode .shift.shift-c b{
+  color:#E0ECFF!important;
+  text-shadow:0 1px 3px rgba(0,0,0,.25);
+}
+html body.ink-mode .legend span.shift-c{
+  background:linear-gradient(110deg,#263A59,#20334F)!important;
+  border-color:#49658E!important;
+  color:#D8E8FF!important;
+}
+html body.ink-mode .legend span.shift-c i{
+  background:#9ABBEA!important;
+  box-shadow:0 0 0 2px rgba(154,187,234,.16);
+}
+html body.ink-mode .legend span.shift-c b,
+html body.ink-mode .legend span.shift-c small{color:#D8E8FF!important;}
+html body.ink-mode .legend span.shift-c.active-shift{
+  border-color:#9ABBEA!important;
+  box-shadow:0 0 0 2px rgba(154,187,234,.2),0 2px 9px rgba(0,0,0,.18)!important;
+}
+@media(max-width:520px){
+  html body .shift.shift-c::after{top:3px;right:4px;font-size:8px;}
+}
+@media(prefers-reduced-motion:reduce){
+  html body .shift.shift-c,
+  html body .legend span.shift-c{transition:none!important;animation:none!important;}
+}
