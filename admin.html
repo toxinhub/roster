@@ -323,6 +323,128 @@ body.admin-page footer {
   body.admin-page #status{font-size:8px !important;max-width:43%;}
 }
 
+
+/* SHIFT GRID + TYPOGRAPHY REFINEMENT — admin only */
+body.admin-page #editor{
+  width:max-content !important;
+  min-width:0 !important;
+  table-layout:fixed !important;
+  font-family:inherit !important;
+  font-size:12px !important;
+  line-height:1.25 !important;
+}
+body.admin-page #editor thead th:first-child,
+body.admin-page #editor tbody th{
+  width:116px !important;
+  min-width:116px !important;
+  max-width:116px !important;
+}
+body.admin-page #editor thead th:not(:first-child),
+body.admin-page #editor tbody td{
+  width:58px !important;
+  min-width:58px !important;
+  max-width:58px !important;
+  padding:4px 2px !important;
+  text-align:center !important;
+}
+body.admin-page #editor thead th input,
+body.admin-page #editor thead th small input{
+  display:block !important;
+  width:100% !important;
+  min-width:0 !important;
+  max-width:100% !important;
+  box-sizing:border-box !important;
+  margin:0 auto 3px !important;
+  padding:3px 2px !important;
+  font-family:inherit !important;
+  font-size:11px !important;
+  font-weight:500 !important;
+  line-height:1.2 !important;
+  text-align:center !important;
+}
+body.admin-page #editor thead th small input{
+  font-size:9px !important;
+  font-weight:400 !important;
+}
+body.admin-page #editor tbody th input{
+  width:100% !important;
+  min-width:0 !important;
+  box-sizing:border-box !important;
+  min-height:32px !important;
+  padding:5px 7px !important;
+  font-family:inherit !important;
+  font-size:12px !important;
+  font-weight:500 !important;
+  line-height:1.25 !important;
+}
+body.admin-page #editor .edit{
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  width:42px !important;
+  min-width:42px !important;
+  max-width:42px !important;
+  min-height:34px !important;
+  padding:4px 3px !important;
+  border-radius:8px !important;
+  font-family:inherit !important;
+  font-size:12px !important;
+  font-weight:500 !important;
+  line-height:1.15 !important;
+  letter-spacing:0 !important;
+  white-space:nowrap !important;
+}
+body.admin-page #editor .remove{
+  min-height:19px !important;
+  padding:1px 4px !important;
+  font-family:inherit !important;
+  font-size:10px !important;
+  font-weight:500 !important;
+  line-height:1.2 !important;
+}
+body.admin-page .picker{
+  font-family:inherit !important;
+}
+body.admin-page .picker .shift-option{
+  min-height:48px !important;
+  padding:5px 3px !important;
+  font-family:inherit !important;
+  line-height:1.15 !important;
+}
+body.admin-page .picker .shift-option strong{
+  font-family:inherit !important;
+  font-size:15px !important;
+  font-weight:600 !important;
+  line-height:1.1 !important;
+}
+body.admin-page .picker .shift-option small{
+  font-family:inherit !important;
+  font-size:9px !important;
+  font-weight:400 !important;
+  line-height:1.15 !important;
+}
+@media(max-width:700px){
+  body.admin-page #editor thead th:first-child,
+  body.admin-page #editor tbody th{
+    width:112px !important;
+    min-width:112px !important;
+    max-width:112px !important;
+  }
+  body.admin-page #editor thead th:not(:first-child),
+  body.admin-page #editor tbody td{
+    width:54px !important;
+    min-width:54px !important;
+    max-width:54px !important;
+  }
+  body.admin-page #editor .edit{
+    width:40px !important;
+    min-width:40px !important;
+    max-width:40px !important;
+    min-height:32px !important;
+    font-size:12px !important;
+  }
+}
+
 </style></head>
 <body class="admin-page" data-required-role="admin">
   <div class="app">
