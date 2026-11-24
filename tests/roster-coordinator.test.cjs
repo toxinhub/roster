@@ -80,3 +80,11 @@ test("serializes revocation and other key updates through the same queue", async
   assert.equal(await coordinator.getValue("revoked:two"), "1");
   assert.equal(kv.lastTtl, 120);
 });
+
+test("serializes reads behind an in-flight write", async () => {
+  const { coordinator } = makeCoordinator();
+  const write = coordinator.putValue("schedule", "latest");
+  const read = coordinator.getValue("schedule");
+  await write;
+  assert.equal(await read, "latest");
+});
