@@ -29,7 +29,7 @@ html body[data-required-role="admin"] .form-grid{display:none!important}
 html body[data-required-role="admin"] .legacy-admin-controls{display:none!important}
 html body[data-required-role="admin"] .roster-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:18px}
 html body[data-required-role="admin"] .seg{display:inline-flex;flex:0 0 auto;background:var(--sf);border:1px solid var(--bd);border-radius:10px;padding:3px}
-html body[data-required-role="admin"] .seg button{border:0!important;background:transparent!important;color:var(--mu)!important;font:600 14px inherit;font-family:inherit;padding:6px 14px;border-radius:8px;cursor:pointer;min-height:32px}
+html body[data-required-role="admin"] .seg button{border:0!important;background:transparent!important;color:var(--mu)!important;font:600 14px/1.2 'Hind Siliguri',system-ui,sans-serif;font-family:inherit;padding:6px 14px;border-radius:8px;cursor:pointer;min-height:32px}
 html body[data-required-role="admin"] .seg button.on{background:var(--ac)!important;color:var(--bg)!important}
 html body[data-required-role="admin"] .roster-nav{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:16px}
 html body[data-required-role="admin"] .nav{display:flex;align-items:center;gap:4px;font-weight:600;font-size:16px}
@@ -38,7 +38,7 @@ html body[data-required-role="admin"] .nav button:disabled{opacity:.3;cursor:def
 html body[data-required-role="admin"] .nav span{min-width:140px;text-align:center}
 html body[data-required-role="admin"] #addDay{height:36px;padding:0 12px;border:1px solid var(--bd)!important;border-radius:9px;background:var(--bg)!important;color:var(--tx)!important;font:600 13px inherit;font-family:inherit;cursor:pointer}
 html body[data-required-role="admin"] .tools{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
-html body[data-required-role="admin"] .b{height:40px;padding:0 14px;border-radius:10px;border:1px solid var(--bd)!important;background:var(--bg)!important;color:var(--tx)!important;font:600 15px inherit;font-family:inherit;cursor:pointer}
+html body[data-required-role="admin"] .b{height:40px;padding:0 14px;border-radius:10px;border:1px solid var(--bd)!important;background:var(--bg)!important;color:var(--tx)!important;font:600 15px/1.2 'Hind Siliguri',system-ui,sans-serif;font-family:inherit;cursor:pointer}
 html body[data-required-role="admin"] .b small{font-weight:400;color:var(--mu);margin-left:6px;font-size:12px}
 html body[data-required-role="admin"] .b.on{background:var(--ac)!important;color:var(--bg)!important;border-color:var(--ac)!important}
 html body[data-required-role="admin"] .b.on small{color:inherit;opacity:.75}
@@ -304,7 +304,7 @@ html body[data-required-role="admin"] .legacy-admin-controls{display:none!import
       const total=S.days.length;
       const start=view==='w'?Math.min(weekIndex*7,Math.max(0,total-1)):0;
       const end=view==='w'?Math.min(start+7,total):total;
-      const today=new Date().toISOString().slice(0,10);
+      const now=new Date();const today=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0');
       const first=S.days[start]?.isoDate||'';
       const last=S.days[end-1]?.isoDate||'';
       const formatDate=iso=>{if(!iso)return '';const p=iso.split('-');return toBn(Number(p[2]))};
@@ -409,7 +409,7 @@ html body[data-required-role="admin"] .legacy-admin-controls{display:none!import
     }
 
     $('month').onchange=e=>{S.month=e.target.value;$('monthHead').textContent=S.month;markDirty()};
-    $('clearChanges').onclick=()=>{if(!dirty)return;if(!confirm('সব অসম্পূর্ণ পরিবর্তন বাতিল করবেন?'))return;S=JSON.parse(cleanSnapshot);archivePending.clear();render();markDirty();toast('পরিবর্তন বাতিল হয়েছে')};
+    $('clearChanges').onclick=()=>{if(!dirty)return;if(!confirm('সব অসম্পূর্ণ পরিবর্তন বাতিল করবেন?'))return;S=JSON.parse(cleanSnapshot);archivePending.clear();paintHistory=[];render();markDirty();toast('পরিবর্তন বাতিল হয়েছে')};
     let monthSwitchRequestId = 0;
     $('monthPicker').onchange = async () => {
       const requestId = ++monthSwitchRequestId;
@@ -581,7 +581,7 @@ html body[data-required-role="admin"] .legacy-admin-controls{display:none!import
         });
         const result = await r.json().catch(() => ({}));
         if (!r.ok) throw new Error(result.error || 'save failed');
-        cleanSnapshot = snapshot(); dirty = false; updateChangeUI();
+        cleanSnapshot = snapshot(); dirty = false; paintHistory=[]; updateChangeUI();
         await refreshArchiveList(true);
         toast('রোস্টার নিরাপদ স্টোরেজে সংরক্ষিত');
       } catch (error) {
