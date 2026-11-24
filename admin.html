@@ -85,6 +85,31 @@ html body.ink-mode #status.status.not-connected{
   background:#F7E5E2 !important;
   border-color:#C58A82 !important;
 }
+
+/* Admin Operations Dashboard — Phase 1 foundation */
+:root{--adm-deep:#102D30;--adm-teal:#193B3D;--adm-ivory:#F2E9D8;--adm-gold:#D8B77A;--adm-green:#75B89A;--adm-coral:#D77B78}
+body[data-required-role="admin"]{background:linear-gradient(145deg,#edf3f2,#f5f1e9 65%,#e8eeeb)}
+body[data-required-role="admin"] .page-shell{max-width:none;margin-left:250px;padding:24px clamp(16px,3vw,38px)}
+body[data-required-role="admin"] .page-shell>.panel,body[data-required-role="admin"] .page-shell>.admin-note{max-width:none}
+.admin-sidebar{position:fixed;z-index:5;left:0;top:0;bottom:0;width:232px;padding:22px 16px;background:var(--adm-deep);color:#e8f0eb;display:flex;flex-direction:column;gap:24px;box-shadow:8px 0 26px rgba(16,45,48,.08)}
+.admin-sidebar-brand{display:flex;align-items:center;gap:11px;padding:8px 5px 16px;border-bottom:1px solid rgba(255,255,255,.12)}
+.admin-sidebar-brand .mark{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:var(--adm-gold);color:var(--adm-deep);font-size:18px;font-weight:900}
+.admin-sidebar-brand strong{display:block;font-size:14px}.admin-sidebar-brand small{display:block;color:#a8c1ba;font-size:10px;margin-top:3px}
+.admin-nav-label{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:#8ea9a1;font-weight:900;padding:0 9px}
+.admin-nav{display:grid;gap:5px}.admin-nav a{display:flex;align-items:center;gap:10px;padding:10px 11px;border-radius:10px;color:#c7d8d2;font-size:12px;font-weight:700;transition:background .15s,color .15s}.admin-nav a:hover,.admin-nav a.active{background:rgba(216,183,122,.14);color:#f2d7a6}.admin-nav a span{width:20px;text-align:center;font-size:15px}
+.admin-sidebar-bottom{margin-top:auto;border-top:1px solid rgba(255,255,255,.12);padding:13px 7px;color:#91aaa2;font-size:10px;line-height:1.6}
+.admin-overview{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:0 0 16px}
+.admin-kpi{background:#fff;border:1px solid #dce7e3;border-radius:15px;padding:15px 16px;box-shadow:0 5px 18px rgba(16,45,48,.045);min-height:98px}
+.admin-kpi .kpi-label{font-size:10px;color:#73847f;font-weight:800;display:flex;align-items:center;gap:7px}.admin-kpi .kpi-label i{width:7px;height:7px;border-radius:50%;background:var(--adm-green)}
+.admin-kpi strong{display:block;margin-top:9px;font-size:25px;line-height:1;color:var(--adm-deep);font-weight:900}.admin-kpi small{display:block;margin-top:6px;font-size:9px;color:#8a9893}
+body[data-required-role="admin"] .panel{border-radius:15px;border-color:#dce6e2;box-shadow:0 5px 18px rgba(16,45,48,.045)}
+body[data-required-role="admin"] .section-head h2{color:var(--adm-deep)}
+body[data-required-role="admin"] .primary{background:var(--adm-deep);border-color:var(--adm-deep);color:white}
+body[data-required-role="admin"] .primary:hover{background:var(--adm-teal)}
+body[data-required-role="admin"] input:focus-visible,body[data-required-role="admin"] button:focus-visible,body[data-required-role="admin"] a:focus-visible{outline:3px solid #c7a66d;outline-offset:2px}
+@media(max-width:1000px){body[data-required-role="admin"] .page-shell{margin-left:208px}.admin-sidebar{width:194px}.admin-overview{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:700px){.admin-sidebar{position:sticky;top:0;bottom:auto;width:100%;height:auto;padding:8px 10px;background:var(--adm-deep);display:block}.admin-sidebar-brand{display:none}.admin-nav-label,.admin-sidebar-bottom{display:none}.admin-nav{display:flex;overflow-x:auto;gap:5px}.admin-nav a{white-space:nowrap;padding:9px 10px;font-size:11px}.admin-nav a span{font-size:13px;width:auto}body[data-required-role="admin"] .page-shell{margin:0;padding:14px 10px}.admin-overview{gap:8px}.admin-kpi{padding:12px;min-height:85px}.admin-kpi strong{font-size:22px}}
+@media(max-width:420px){.admin-overview{grid-template-columns:repeat(2,minmax(0,1fr))}}
 </style></head>
 <body data-required-role="admin">
   <div class="app">
@@ -102,8 +127,9 @@ html body.ink-mode #status.status.not-connected{
       </div>
     </header>
 
-    <main class="page-shell">
-      <section class="admin-note">
+    <aside class="admin-sidebar" aria-label="Admin navigation"><div class="admin-sidebar-brand"><span class="mark">▦</span><div><strong>Roster Control</strong><small>Operations Dashboard</small></div></div><div class="admin-nav-label">Workspace</div><nav class="admin-nav"><a class="active" href="#overview"><span>⌂</span> Overview</a><a href="#security"><span>◈</span> Security</a><a href="#roster-editor"><span>▤</span> Roster Editor</a><a href="#tools"><span>⇧</span> Tools & Export</a></nav><div class="admin-sidebar-bottom">CCTV • PJL<br>Protected admin workspace</div></aside>
+  <main class="page-shell">
+      <section class="admin-note" id="security">
         <b>নিরাপত্তা:</b> Save করলে রোস্টার private Cloudflare KV storage-এ সংরক্ষিত হবে। এই Preview-তে GitHub-এর মাধ্যমে সরাসরি কোনো পরিবর্তন করা হয় না।
       </section>
 
@@ -115,7 +141,8 @@ html body.ink-mode #status.status.not-connected{
         <p class="muted">এই প্যানেলে আলাদা Admin password প্রয়োজন। সেশন যাচাই ও রোস্টার সংরক্ষণ Worker API-এর মাধ্যমে হয়। Session মেয়াদ ৮ ঘণ্টা।</p>
       </section>
 
-      <section class="panel">
+      <section class="admin-overview" id="overview" aria-label="Roster overview"><article class="admin-kpi"><span class="kpi-label"><i></i> কর্মী সংখ্যা</span><strong id="kpiEmployees">—</strong><small>বর্তমান রোস্টারে</small></article><article class="admin-kpi"><span class="kpi-label"><i></i> মোট তারিখ</span><strong id="kpiDays">—</strong><small>সম্পাদনাযোগ্য দিন</small></article><article class="admin-kpi"><span class="kpi-label"><i></i> A শিফট</span><strong id="kpiA">—</strong><small>মোট বরাদ্দ</small></article><article class="admin-kpi"><span class="kpi-label"><i></i> B / C শিফট</span><strong id="kpiBC">—</strong><small>সম্মিলিত বরাদ্দ</small></article></section>
+      <section class="panel" id="roster-editor">
         <div class="section-head">
           <div>
             <span class="eyebrow">EDITOR</span>
@@ -139,7 +166,7 @@ html body.ink-mode #status.status.not-connected{
         </div>
 
         <div class="editor-meta"><span id="changeStatus" class="change-status clean">● কোনো পরিবর্তন নেই</span><button id="clearChanges" class="quiet" type="button" disabled>পরিবর্তন বাতিল</button></div><div id="changeSummary" class="change-summary" hidden></div>
-        <div class="form-row">
+        <div class="form-row" id="tools">
           <button class="primary" id="save">✓ নিরাপদে Save</button>
           <button id="download">JSON Download</button>
         </div>
@@ -240,6 +267,7 @@ html body.ink-mode #status.status.not-connected{
       $('month').value = monthName;
       $('monthHead').textContent = monthName;
       render();
+      updateOverview();
       markDirty();
       toast(oldDays.length === daysInMonth
         ? 'মাস ও সাল অনুযায়ী তারিখ আপডেট হয়েছে'
@@ -267,6 +295,7 @@ html body.ink-mode #status.status.not-connected{
         $('month').value = S.month || '';
         $('monthHead').textContent = S.month || 'রোস্টার সম্পাদনা';
         render();
+        updateOverview();
         setPicker();
         cleanSnapshot=snapshot(); dirty=false; updateChangeUI();
       } catch {
@@ -274,6 +303,7 @@ html body.ink-mode #status.status.not-connected{
       }
     }
 
+    function updateOverview(){if(!S)return;const employees=S.employees||[],days=S.days||[];const count=code=>employees.reduce((sum,emp)=>sum+(emp.shifts||[]).filter(x=>x===code).length,0);$("kpiEmployees").textContent=employees.length;$("kpiDays").textContent=days.length;$("kpiA").textContent=count("A");$("kpiBC").textContent=count("B")+" / "+count("C");}
     function snapshot(){return JSON.stringify(S);}
     function diffChanges(){
       if(!cleanSnapshot)return [];
@@ -403,7 +433,7 @@ html body.ink-mode #status.status.not-connected{
       });
       $('editor').querySelectorAll('[data-rmemp]').forEach(x => x.onclick = e => {
         S.employees.splice(+e.target.dataset.rmemp, 1);
-        markDirty(); render();
+        markDirty(); render(); updateOverview();
       });
       $('editor').querySelectorAll('.edit').forEach(x => x.onclick = () => pick(x));
     }
@@ -462,7 +492,7 @@ html body.ink-mode #status.status.not-connected{
         isoDate
       });
       S.employees.forEach(emp => emp.shifts.push('OFF'));
-      markDirty(); render();
+      markDirty(); render(); updateOverview();
     };
 
     $('addEmp').onclick = () => {
@@ -478,7 +508,7 @@ html body.ink-mode #status.status.not-connected{
         name = 'নতুন কর্মী ' + suffix;
       }
       S.employees.push({ name, shifts: S.days.map(() => 'OFF') });
-      markDirty(); render();
+      markDirty(); render(); updateOverview();
     };
 
     $('download').onclick = () => {
