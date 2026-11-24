@@ -506,8 +506,17 @@ body.admin-page #editor thead th:first-child{
     function render() {
       $('monthHead').textContent = S.month || 'রোস্টার সম্পাদনা'; $('month').value = S.month || '';
       const total=S.days.length;
-      const start=editorView==='week'?Math.min(weekStart,Math.max(0,total-1)):0;
-      const end=editorView==='week'?Math.min(start+7,total):total;
+      const weekStartIndex = index => {
+        let i=Math.max(0,Math.min(Number(index)||0,total-1));
+        while(i>0 && S.days[i]?.weekday!=='শুক্রবার') i--;
+        return i;
+      };
+      const nextWeekStart = index => {
+        for(let i=index+1;i<total;i++) if(S.days[i]?.weekday==='শুক্রবার') return i;
+        return total;
+      };
+      const start=editorView==='week'&&total?weekStartIndex(weekStart):0;
+      const end=editorView==='week'?nextWeekStart(start):total;
       const visibleDays=S.days.map((day,index)=>({day,index})).slice(start,end);
       const h = '<tr><th scope="col" aria-label="কর্মী" title="কর্মী">📹</th>' + visibleDays.map(({day:d,index:i}) => '<th scope="col"><input aria-label="তারিখ '+(i+1)+'" value="'+esc(d.date)+'" data-day="'+i+'"><small><input aria-label="সপ্তাহের দিন '+(i+1)+'" value="'+esc(d.weekday)+'" data-wd="'+i+'" readonly title="তারিখ অনুযায়ী স্বয়ংক্রিয়"></small><button class="remove" type="button" data-rmday="'+i+'" aria-label="তারিখ '+esc(d.date)+' বাদ দিন">বাদ</button></th>').join('') + '</tr>';
       const b = S.employees.map((emp,ei) => '<tr><th scope="row"><input aria-label="কর্মী '+(ei+1)+'-এর নাম" value="'+esc(emp.name)+'" data-name="'+ei+'" maxlength="80"></th>' + visibleDays.map(({day, index:di}) => '<td><button type="button" class="edit" data-ei="'+ei+'" data-di="'+di+'" aria-label="'+esc(emp.name)+': '+esc(day.date||di+1)+' তারিখের শিফট '+esc(emp.shifts[di])+'">'+esc(emp.shifts[di])+'</button></td>').join('') + '</tr>').join('');
@@ -515,7 +524,12 @@ body.admin-page #editor thead th:first-child{
       $('monthView').setAttribute('aria-pressed',String(editorView==='month'));
       $('weekView').setAttribute('aria-pressed',String(editorView==='week'));
       $('weekNav').hidden=editorView!=='week';
-      if(editorView==='week'&&total){$('weekLabel').textContent=(start+1)+'–'+end+' / '+total;$('prevWeek').disabled=start===0;$('nextWeek').disabled=end>=total;}
+      if(editorView==='week'&&total){
+        const toBangla=n=>String(n).replace(/[0-9]/g,d=>'০১২৩৪৫৬৭৮৯'[Number(d)]);
+        $('weekLabel').textContent=toBangla(S.days[start].date)+'–'+toBangla(S.days[end-1].date)+' তারিখ';
+        $('prevWeek').disabled=start===0;
+        $('nextWeek').disabled=end>=total;
+      }
     }
     // One delegated listener pair replaces per-cell handlers on large rosters.
     $('editor').addEventListener('change', e => {
@@ -575,10 +589,27 @@ body.admin-page #editor thead th:first-child{
       document.addEventListener('keydown',pickerKeydown);
       requestAnimationFrame(()=>{document.addEventListener('pointerdown',outsidePicker);(p.querySelector('.selected')||p.querySelector('.shift-option'))?.focus();});
     }
+    function getWeekStartIndex(index){
+      if(!S?.days?.length) return 0;
+      let i=Math.max(0,Math.min(Number(index)||0,S.days.length-1));
+      while(i>0 && S.days[i]?.weekday!=='শুক্রবার') i--;
+      return i;
+    }
+    function getPreviousWeekStart(index){
+      if(!S?.days?.length || index<=0) return 0;
+      let i=index-1;
+      while(i>0 && S.days[i]?.weekday!=='শুক্রবার') i--;
+      return i;
+    }
+    function getNextWeekStart(index){
+      if(!S?.days?.length) return 0;
+      for(let i=index+1;i<S.days.length;i++) if(S.days[i]?.weekday==='শুক্রবার') return i;
+      return index;
+    }
     $('monthView').addEventListener('click',()=>{editorView='month';render();});
-    $('weekView').addEventListener('click',()=>{editorView='week';weekStart=Math.floor(weekStart/7)*7;render();});
-    $('prevWeek').addEventListener('click',()=>{weekStart=Math.max(0,weekStart-7);render();});
-    $('nextWeek').addEventListener('click',()=>{if(S)weekStart=Math.min(Math.max(0,S.days.length-1),weekStart+7);render();});
+    $('weekView').addEventListener('click',()=>{editorView='week';weekStart=getWeekStartIndex(weekStart);render();});
+    $('prevWeek').addEventListener('click',()=>{weekStart=getPreviousWeekStart(getWeekStartIndex(weekStart));render();});
+    $('nextWeek').addEventListener('click',()=>{weekStart=getNextWeekStart(getWeekStartIndex(weekStart));render();});
 
 
     $('month').onchange=e=>{S.month=e.target.value;$('monthHead').textContent=S.month;markDirty()};
