@@ -158,6 +158,7 @@ function updateMonthHistoryUI(){
 async function load(){
   const auth = await window.RosterAuthReady();
   if (!auth?.authenticated) return;
+  const loadingStartedAt=performance.now();
   try{
     await fetchSchedule('/api/roster','current');
     const previousKey = previousMonthKey(CURRENT_MONTH_KEY);
@@ -175,6 +176,10 @@ async function load(){
     }
   }catch{
     toast('রোস্টার লোড করা যায়নি',true);
+  }finally{
+    // Keep the initial skeleton on screen long enough to be perceived.
+    const remaining=420-(performance.now()-loadingStartedAt);
+    if(remaining>0) await new Promise(resolve=>setTimeout(resolve,remaining));
   }
 }
 
