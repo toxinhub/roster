@@ -532,60 +532,6 @@ body.admin-page.ink-mode #save{
 }
 
 
-/* Night shift refinement — visual-only C shift treatment. */
-body.admin-page #editor .edit.shift-c,
-body.admin-page .picker .shift-option.shift-c{
-  position:relative;
-  overflow:hidden;
-  background:linear-gradient(145deg,#EAF1FC 0%,#DCE8F8 58%,#D3E2F5 100%)!important;
-  color:#203C68!important;
-  border-color:#AFC5E8!important;
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.78),0 2px 6px rgba(40,72,120,.08);
-}
-body.admin-page #editor .edit.shift-c::after,
-body.admin-page .picker .shift-option.shift-c::after{
-  content:"☾";
-  position:absolute;
-  top:2px;
-  right:5px;
-  font-size:9px;
-  line-height:1;
-  font-weight:700;
-  color:#5376A8;
-  opacity:.78;
-  pointer-events:none;
-}
-body.admin-page #editor .edit.shift-c{
-  font-weight:850!important;
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.82),inset 0 -2px 0 rgba(79,119,177,.08),0 2px 6px rgba(40,72,120,.08);
-}
-body.admin-page .picker .shift-option.shift-c{
-  border-width:1px!important;
-}
-body.admin-page .picker .shift-option.shift-c.selected{
-  border-color:#527CB9!important;
-  outline-color:#527CB9!important;
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.75),0 0 0 4px rgba(82,124,185,.16)!important;
-}
-body.admin-page.ink-mode #editor .edit.shift-c,
-body.admin-page.ink-mode .picker .shift-option.shift-c{
-  background:linear-gradient(145deg,#263A59 0%,#20334F 58%,#1B2C45 100%)!important;
-  color:#D8E8FF!important;
-  border-color:#49658E!important;
-  box-shadow:inset 0 1px 0 rgba(205,225,255,.08),0 2px 8px rgba(0,0,0,.18);
-}
-body.admin-page.ink-mode #editor .edit.shift-c::after,
-body.admin-page.ink-mode .picker .shift-option.shift-c::after{
-  color:#A9C8F5;
-  opacity:.9;
-}
-body.admin-page.ink-mode .picker .shift-option.shift-c.selected{
-  border-color:#9ABBEA!important;
-  outline-color:#9ABBEA!important;
-  box-shadow:inset 0 1px 0 rgba(205,225,255,.1),0 0 0 4px rgba(154,187,234,.17)!important;
-}
-
-
 /* DARK MODE CONTRAST PASS — admin only.
    Keep the existing page canvas unchanged; replace near-black UI surfaces,
    soften borders/shadows, and preserve the established shift-color system. */
@@ -1164,6 +1110,19 @@ html body.admin-page.ink-mode textarea,
 html body.admin-page.ink-mode button{
   transition:background-color .24s ease,border-color .24s ease,color .24s ease,box-shadow .24s ease;
 }
+
+
+/* Unified shift palette — same colors in public roster, admin grid and picker. */
+html body.admin-page #editor .edit.shift-a,html body.admin-page .picker .shift-option.shift-a{background:#F6B6AD!important;color:#17202A!important;border-color:#E39B91!important}
+html body.admin-page #editor .edit.shift-b,html body.admin-page .picker .shift-option.shift-b{background:#F8DE7E!important;color:#17202A!important;border-color:#D6B94F!important}
+html body.admin-page #editor .edit.shift-c,html body.admin-page .picker .shift-option.shift-c{background:#A9D8E9!important;color:#17202A!important;border-color:#7BB8CF!important}
+html body.admin-page #editor .edit.shift-off,html body.admin-page .picker .shift-option.shift-off{background:#B7E4C7!important;color:#17202A!important;border-color:#8FD0A4!important}
+html body.admin-page #editor .edit.shift-l,html body.admin-page .picker .shift-option.shift-l{background:#D8C8EA!important;color:#17202A!important;border-color:#B9A8D2!important}
+html body.admin-page.ink-mode #editor .edit.shift-a,html body.admin-page.ink-mode .picker .shift-option.shift-a,
+html body.admin-page.ink-mode #editor .edit.shift-b,html body.admin-page.ink-mode .picker .shift-option.shift-b,
+html body.admin-page.ink-mode #editor .edit.shift-c,html body.admin-page.ink-mode .picker .shift-option.shift-c,
+html body.admin-page.ink-mode #editor .edit.shift-off,html body.admin-page.ink-mode .picker .shift-option.shift-off,
+html body.admin-page.ink-mode #editor .edit.shift-l,html body.admin-page.ink-mode .picker .shift-option.shift-l{color:#17202A!important}
 
 </style></head>
 <body class="admin-page" data-required-role="admin">
