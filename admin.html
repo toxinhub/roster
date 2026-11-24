@@ -1132,6 +1132,86 @@ html body.admin-page.ink-mode #editor .edit.shift-c,html body.admin-page.ink-mod
 html body.admin-page.ink-mode #editor .edit.shift-off,html body.admin-page.ink-mode .picker .shift-option.shift-off{background:#B7E4C7!important;color:#17202A!important;border-color:#8FD0A4!important}
 html body.admin-page.ink-mode #editor .edit.shift-l,html body.admin-page.ink-mode .picker .shift-option.shift-l{background:#D8C8EA!important;color:#17202A!important;border-color:#B9A8D2!important}
 
+
+
+/* ADMIN EDITOR SKELETON — mirrors the real employee/date/shift table. */
+body.admin-page .grid-scroll{position:relative}
+body.admin-page .grid-scroll.is-loading{
+  min-height:min(66vh,440px);
+  overflow:hidden;
+  background:var(--adm-surface);
+}
+body.admin-page .grid-scroll.is-loading #editor{visibility:hidden}
+body.admin-page .editor-skeleton{
+  position:absolute;
+  inset:0 auto auto 0;
+  z-index:2;
+  display:grid;
+  grid-template-columns:142px repeat(31,76px);
+  grid-template-rows:72px repeat(6,60px);
+  width:max-content;
+  min-width:100%;
+  overflow:hidden;
+  background:var(--adm-surface);
+  pointer-events:none;
+}
+body.admin-page .editor-skeleton-cell{
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-width:0;
+  box-sizing:border-box;
+  border-right:1px solid var(--adm-line);
+  border-bottom:1px solid var(--adm-line);
+  background:var(--adm-surface);
+}
+body.admin-page .editor-skeleton-cell.is-head{background:var(--adm-soft)}
+body.admin-page .editor-skeleton-cell.is-name{justify-content:flex-start;padding:0 12px}
+body.admin-page .admin-skeleton-mark,
+body.admin-page .admin-skeleton-date,
+body.admin-page .admin-skeleton-weekday,
+body.admin-page .admin-skeleton-name,
+body.admin-page .admin-skeleton-shift{
+  display:block;
+  flex:none;
+  border-radius:5px;
+  background:color-mix(in srgb,var(--adm-muted) 23%,transparent);
+}
+body.admin-page .admin-skeleton-mark{width:25px;height:25px;border-radius:7px;opacity:.72}
+body.admin-page .admin-skeleton-date{width:34px;height:12px;margin:0 auto 7px}
+body.admin-page .admin-skeleton-weekday{width:23px;height:7px;margin:0 auto}
+body.admin-page .admin-skeleton-name{width:68%;max-width:104px;height:12px}
+body.admin-page .admin-skeleton-shift{width:50px;height:34px;border-radius:7px;opacity:.78}
+body.admin-page .editor-skeleton::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:3;
+  pointer-events:none;
+  background:linear-gradient(105deg,transparent 34%,rgba(255,255,255,.42) 50%,transparent 66%);
+  background-size:220% 100%;
+  animation:adminEditorShimmer 2.35s ease-in-out infinite;
+}
+@keyframes adminEditorShimmer{
+  from{background-position:110% 0}
+  to{background-position:-110% 0}
+}
+body.admin-page.ink-mode .editor-skeleton::after{
+  background-image:linear-gradient(105deg,transparent 34%,rgba(255,255,255,.12) 50%,transparent 66%);
+}
+@media(max-width:700px){
+  body.admin-page .grid-scroll.is-loading{min-height:min(58vh,420px)}
+  body.admin-page .editor-skeleton{
+    grid-template-columns:126px repeat(31,70px);
+    grid-template-rows:68px repeat(6,56px);
+  }
+  body.admin-page .admin-skeleton-shift{width:46px;height:32px}
+  body.admin-page .admin-skeleton-name{max-width:92px}
+}
+@media(prefers-reduced-motion:reduce){
+  body.admin-page .editor-skeleton::after{animation:none!important}
+}
 </style></head>
 <body class="admin-page" data-required-role="admin">
   <div class="app">
@@ -1185,7 +1265,8 @@ html body.admin-page.ink-mode #editor .edit.shift-l,html body.admin-page.ink-mod
         </div>
         <p class="muted">মাস ও সাল নির্বাচন করলে শিরোনাম স্বয়ংক্রিয়ভাবে আপডেট হবে। নিচের টেবিল থেকে প্রতিটি তারিখ ও দিন পরিবর্তন করুন।</p>
 
-        <div class="grid-scroll">
+        <div class="grid-scroll" id="editorScroll">
+          <div class="editor-skeleton" id="editorSkeleton" aria-hidden="true"></div>
           <table id="editor" aria-label="ডিউটি রোস্টার সম্পাদনা"></table>
         </div>
 
@@ -1299,9 +1380,39 @@ html body.admin-page.ink-mode #editor .edit.shift-l,html body.admin-page.ink-mod
       }
     }
 
+    function setEditorLoading(active) {
+      const scroll = $('editorScroll');
+      const skeleton = $('editorSkeleton');
+      if (!scroll || !skeleton) return;
+      if (!active) {
+        scroll.classList.remove('is-loading');
+        skeleton.replaceChildren();
+        return;
+      }
+      const cells = [];
+      for (let row = 0; row < 7; row++) {
+        for (let col = 0; col < 32; col++) {
+          let detail = '';
+          if (row === 0 && col === 0) {
+            detail = '<i class="admin-skeleton-mark"></i>';
+          } else if (row === 0) {
+            detail = '<i class="admin-skeleton-date"></i><i class="admin-skeleton-weekday"></i>';
+          } else if (col === 0) {
+            detail = '<i class="admin-skeleton-name"></i>';
+          } else {
+            detail = '<i class="admin-skeleton-shift"></i>';
+          }
+          cells.push('<div class="admin-skeleton-cell '+(row===0?'is-head':'')+' '+(col===0?'is-name':'')+'">'+detail+'</div>');
+        }
+      }
+      skeleton.innerHTML = cells.join('');
+      scroll.classList.add('is-loading');
+    }
+
     async function load() {
       const auth = await window.RosterAuthReady();
       if (!auth?.authenticated || auth.role !== 'admin') return;
+      setEditorLoading(true);
       try {
         const r = await window.RosterAPI.request('/api/roster?v=' + Date.now(), { cache: 'no-store' });
         if (!r.ok) throw new Error('roster load failed');
@@ -1313,6 +1424,8 @@ html body.admin-page.ink-mode #editor .edit.shift-l,html body.admin-page.ink-mod
         cleanSnapshot=snapshot(); dirty=false; updateChangeUI();
       } catch {
         toast('নিরাপদ সার্ভার থেকে রোস্টার লোড হয়নি', true);
+      } finally {
+        setEditorLoading(false);
       }
     }
 
