@@ -47,3 +47,25 @@ Write origins (`ADMIN_WRITE_ORIGINS`) are checked separately for Admin save/arch
 - The login rate limiter uses KV and is best-effort under simultaneous requests.
 - Production and Preview currently share the same KV namespace. Consider a separate Production namespace after the migration.
 - Existing copies in Git history, browser caches, forks, and external caches are not erased by deleting the current public files.
+
+## Durable Object coordination
+
+The single roster is one coordination unit, so all authenticated API writes are routed through one named `RosterCoordinator` Durable Object. It serializes:
+- Login attempt check-and-increment operations.
+- Current-roster revision checks and saves.
+- Archive existence checks and creation.
+- Session revocation writes.
+
+Workers KV remains the existing persistent data store; this change does not migrate or rewrite roster/archive data. The Durable Object serializes compound operations before they reach KV. All API reads are routed through the same object location to reduce cross-location KV staleness.
+
+Deploy the Worker from this directory with Wrangler after reviewing the PR:
+
+```sh
+npx wrangler deploy --config wrangler.toml
+```
+
+The first SQLite-backed class migration is additive (`v1`) and does not delete the existing KV namespace. Keep the KV binding: it remains the durable source of roster and archive values. Do not remove the Durable Object binding or set `REQUIRE_COORDINATOR=false` in production; doing so falls back to best-effort KV-only writes.
+
+`ALLOWED_ORIGINS` may include the stable read-only Pages preview origin. `ADMIN_WRITE_ORIGINS` must remain limited to production frontends. Preview deployments must never be granted Admin write access to the shared KV namespace.
+
+Wrangler configuration contains no password or session-secret values. Existing Worker secrets must remain configured in Cloudflare.
