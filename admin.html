@@ -292,6 +292,110 @@ body.admin-page.ink-mode #editor .edit.shift-off,body.admin-page.ink-mode .picke
 body.admin-page.ink-mode #editor .edit.shift-l,body.admin-page.ink-mode .picker .shift-option.shift-l{background:#493447!important;color:#EBCBE5!important;border-color:#70516B!important}
 @media(prefers-reduced-motion:reduce){body.admin-page #editor .edit,body.admin-page .picker .shift-option{transition:none!important}}
 
+
+/* Final visual polish: clearer hierarchy, calmer surfaces, and visible save state. */
+body.admin-page .topbar{
+  min-height:58px;
+  padding-top:8px;
+  padding-bottom:8px;
+  background:color-mix(in srgb,var(--adm-surface) 88%,transparent);
+}
+body.admin-page .topbar .brand{gap:10px;min-width:0}
+body.admin-page .topbar .brand-icon{
+  display:grid;place-items:center;width:32px;height:32px;flex:0 0 32px;
+  border:1px solid var(--adm-line);border-radius:10px;
+  background:var(--adm-soft);color:var(--adm-accent);font-size:17px;
+}
+body.admin-page .topbar .brand strong{font-size:14px;letter-spacing:-.02em}
+body.admin-page .topbar .brand small{display:block;margin-top:2px;color:var(--adm-muted);letter-spacing:.02em}
+body.admin-page .top-actions{display:flex;align-items:center;gap:7px}
+body.admin-page .top-actions .icon-btn,
+body.admin-page .top-actions .back{
+  min-height:32px;display:inline-flex;align-items:center;justify-content:center;
+  border:1px solid var(--adm-line);border-radius:8px;background:var(--adm-surface);
+  color:var(--adm-ink);text-decoration:none;padding:5px 10px;
+}
+body.admin-page .top-actions .icon-btn{width:34px;padding:0;font-size:15px}
+body.admin-page .admin-note{
+  border-left:3px solid var(--adm-accent);
+  color:var(--adm-ink);
+}
+body.admin-page .security-panel{
+  background:linear-gradient(110deg,var(--adm-surface),var(--adm-soft));
+}
+body.admin-page .security-panel #status{
+  display:inline-flex;align-items:center;gap:5px;
+  border-radius:7px!important;font-size:9px!important;font-weight:750;
+}
+body.admin-page .security-panel #status:before{
+  content:"";width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.8;
+}
+body.admin-page .editor-panel>.section-head h2{letter-spacing:-.025em}
+body.admin-page .editor-panel .form-grid input{
+  transition:border-color .15s ease,box-shadow .15s ease,background .15s ease;
+}
+body.admin-page .editor-panel .form-grid input:focus{
+  border-color:var(--adm-accent);outline:0;
+  box-shadow:0 0 0 3px color-mix(in srgb,var(--adm-accent) 13%,transparent);
+}
+body.admin-page .view-switch button,
+body.admin-page .week-nav button,
+body.admin-page .actions button,
+body.admin-page .form-row button{
+  transition:background .15s ease,border-color .15s ease,color .15s ease,transform .15s ease,box-shadow .15s ease;
+}
+body.admin-page .actions button:hover,
+body.admin-page .form-row button:not(:disabled):hover,
+body.admin-page .week-nav button:hover,
+body.admin-page .view-switch button:not([aria-pressed=true]):hover{
+  border-color:var(--adm-accent);transform:translateY(-1px);
+}
+body.admin-page .editor-meta{
+  gap:8px;
+  background:var(--adm-soft);
+}
+body.admin-page .change-status{display:inline-flex;align-items:center;gap:5px}
+body.admin-page .change-status.clean{color:var(--adm-muted)}
+body.admin-page .change-status.dirty{color:#a96612}
+body.admin-page.ink-mode .change-status.dirty{color:#efbd70}
+body.admin-page #save{
+  box-shadow:0 2px 7px color-mix(in srgb,var(--adm-accent) 18%,transparent);
+}
+body.admin-page.has-unsaved-changes #save{
+  box-shadow:0 0 0 3px color-mix(in srgb,var(--adm-accent) 17%,transparent),0 4px 12px color-mix(in srgb,var(--adm-accent) 20%,transparent);
+}
+body.admin-page.has-unsaved-changes .editor-meta{
+  border-color:color-mix(in srgb,#bd781b 42%,var(--adm-line));
+}
+body.admin-page .change-summary{
+  border-color:color-mix(in srgb,#bd781b 28%,var(--adm-line));
+}
+body.admin-page #editor tbody tr:hover th,
+body.admin-page #editor tbody tr:hover td{
+  background:color-mix(in srgb,var(--adm-soft) 62%,var(--adm-surface));
+}
+body.admin-page #editor tbody tr:hover .edit{filter:brightness(.985)}
+body.admin-page footer{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  color:var(--adm-muted);font-size:10px;
+}
+body.admin-page footer a{color:var(--adm-accent);text-decoration:none;font-weight:650}
+body.admin-page footer a:hover{text-decoration:underline}
+@media(max-width:520px){
+  body.admin-page .topbar{min-height:52px}
+  body.admin-page .topbar .brand-icon{width:29px;height:29px;flex-basis:29px}
+  body.admin-page .top-actions .back{padding:5px 7px;font-size:9px}
+  body.admin-page .security-panel #status{font-size:8px!important}
+  body.admin-page footer{align-items:flex-start;font-size:9px}
+}
+@media(prefers-reduced-motion:reduce){
+  body.admin-page .top-actions *,
+  body.admin-page .actions *,
+  body.admin-page .form-row *,
+  body.admin-page .view-switch *,
+  body.admin-page .week-nav *{transition:none!important}
+}
+
 </style></head>
 <body class="admin-page" data-required-role="admin">
   <div class="app">
@@ -311,7 +415,7 @@ body.admin-page.ink-mode #editor .edit.shift-l,body.admin-page.ink-mode .picker 
 
     <main class="page-shell">
       <section class="admin-note">
-        <b>নিরাপত্তা:</b> Save করলে রোস্টার private Cloudflare KV storage-এ সংরক্ষিত হবে। Admin পরিবর্তনগুলো Worker API দিয়ে যাচাই ও সংরক্ষণ করা হয়।
+        পরিবর্তনগুলো আগে এখানে দেখা যাবে। নিশ্চিত হলে <b>নিরাপদে Save</b> চাপুন।
       </section>
 
       <section class="panel security-panel">
@@ -319,7 +423,7 @@ body.admin-page.ink-mode #editor .edit.shift-l,body.admin-page.ink-mode .picker 
           <div><span class="eyebrow">SECURITY</span><h2>নিরাপদ Admin সংযোগ</h2></div>
           <span id="status" class="status connected">Admin access যাচাইকৃত</span>
         </div>
-        <p class="muted">এই প্যানেলে আলাদা Admin password প্রয়োজন। সেশন যাচাই ও রোস্টার সংরক্ষণ Worker API-এর মাধ্যমে হয়। Session মেয়াদ ৮ ঘণ্টা।</p>
+        <p class="muted">Admin সেশন সক্রিয় থাকলেই রোস্টার সম্পাদনা ও সংরক্ষণ করা যাবে।</p>
       </section>
 
       <section class="panel editor-panel">
@@ -359,7 +463,7 @@ body.admin-page.ink-mode #editor .edit.shift-l,body.admin-page.ink-mode .picker 
 
     <footer>
       <a href="index.html">← লাইভ রোস্টার</a>
-      <span>Admin changes save to private storage</span>
+      <span>পরিবর্তনগুলো private storage-এ সংরক্ষিত হয়</span>
     </footer>
   </div>
 
@@ -520,7 +624,7 @@ body.admin-page.ink-mode #editor .edit.shift-l,body.admin-page.ink-mode .picker 
       return out;
     }
     function markDirty(){dirty=snapshot()!==cleanSnapshot;updateChangeUI()}
-    function updateChangeUI(){const el=$('changeStatus'),summary=$('changeSummary');if(!el||!summary)return;const changes=diffChanges();el.textContent=dirty?`● ${changes.length||1}টি পরিবর্তন করা হয়েছে`:'● কোনো পরিবর্তন নেই';el.className='change-status '+(dirty?'dirty':'clean');$('clearChanges').disabled=!dirty;if(!dirty){summary.hidden=true;summary.innerHTML='';return}summary.hidden=false;summary.innerHTML='<strong>Save করার আগে পরিবর্তনগুলো:</strong><ul>'+changes.slice(0,12).map(x=>'<li>'+esc(x)+'</li>').join('')+(changes.length>12?'<li>আরও '+(changes.length-12)+'টি পরিবর্তন…</li>':'')+'</ul>'}
+    function updateChangeUI(){const el=$('changeStatus'),summary=$('changeSummary');if(!el||!summary)return;const changes=diffChanges();document.body.classList.toggle('has-unsaved-changes',dirty);el.textContent=dirty?`● ${changes.length||1}টি পরিবর্তন করা হয়েছে`:'● কোনো পরিবর্তন নেই';el.className='change-status '+(dirty?'dirty':'clean');$('clearChanges').disabled=!dirty;if(!dirty){summary.hidden=true;summary.innerHTML='';return}summary.hidden=false;summary.innerHTML='<strong>Save করার আগে পরিবর্তনগুলো:</strong><ul>'+changes.slice(0,12).map(x=>'<li>'+esc(x)+'</li>').join('')+(changes.length>12?'<li>আরও '+(changes.length-12)+'টি পরিবর্তন…</li>':'')+'</ul>'}
 
     function render() {
       $('monthHead').textContent = S.month || 'রোস্টার সম্পাদনা'; $('month').value = S.month || '';
