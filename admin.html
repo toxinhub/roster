@@ -112,6 +112,11 @@ body[data-required-role="admin"] input:focus-visible,body[data-required-role="ad
 @media(max-width:420px){.admin-overview{grid-template-columns:repeat(2,minmax(0,1fr))}}
 
 /* Phase 2 — roster editing ergonomics */
+/* Phase 2 compact toolbar */
+.roster-tools{grid-template-columns:minmax(160px,1.4fr) minmax(110px,.8fr) minmax(100px,.7fr) minmax(130px,.9fr) auto}
+@media(max-width:900px){.roster-tools{grid-template-columns:1fr 1fr}.roster-tools label:first-child{grid-column:1/-1}.roster-tools button{grid-column:1/-1}}
+@media(max-width:700px){.roster-tools{grid-template-columns:1fr 1fr}.roster-tools label:first-child{grid-column:1/-1}.roster-tools label:nth-child(4){grid-column:1/-1}.roster-tools button{grid-column:1/-1}}
+
 .roster-tools{display:grid;grid-template-columns:minmax(180px,1.5fr) minmax(130px,.8fr) minmax(130px,.8fr) auto;gap:9px;align-items:end;margin:14px 0}
 .roster-tools label{display:grid;gap:5px;color:var(--muted);font-size:10px;font-weight:800}
 .roster-tools input,.roster-tools select{min-height:40px;padding:8px 10px;border:1px solid var(--line-strong);border-radius:9px;background:var(--panel-soft);color:var(--ink);min-width:0}
@@ -179,6 +184,14 @@ body[data-required-role="admin"] input:focus-visible,body[data-required-role="ad
 
         <p class="muted">মাস ও সাল নির্বাচন করলে শিরোনাম স্বয়ংক্রিয়ভাবে আপডেট হবে। নিচের টেবিল থেকে প্রতিটি তারিখ ও দিন পরিবর্তন করুন।</p>
 
+        <div class="roster-tools" aria-label="Roster filters and bulk editing">
+          <label>কর্মী খুঁজুন<input id="employeeSearch" type="search" placeholder="নাম লিখুন…" autocomplete="off"></label>
+          <label>Shift Filter<select id="shiftFilter"><option value="ALL">সব Shift</option><option value="A">A Shift</option><option value="B">B Shift</option><option value="C">C Shift</option><option value="OFF">OFF</option><option value="L">Leave</option></select></label>
+          <label>তারিখ<select id="bulkDate"></select></label>
+          <label>নতুন Shift<select id="bulkShift"><option value="">Shift নির্বাচন</option></select></label>
+          <button type="button" id="bulkApply">প্রয়োগ</button>
+        </div>
+        <p class="roster-result-count" id="rosterResultCount" aria-live="polite"></p>
         <div class="grid-scroll">
           <table id="editor"></table>
         </div>
@@ -395,6 +408,10 @@ body[data-required-role="admin"] input:focus-visible,body[data-required-role="ad
       const previousDate = bulkDate.value;
       bulkDate.innerHTML = S.days.map((d,i) => '<option value="'+i+'">'+esc(d.date)+' · '+esc(d.weekday)+'</option>').join('');
       if (S.days.length) bulkDate.value = S.days.some((d,i)=>String(i)===previousDate) ? previousDate : '0';
+      const bulkShift = $('bulkShift');
+      const previousShift = bulkShift.value;
+      bulkShift.innerHTML = '<option value="">Shift নির্বাচন</option>'+Object.entries(S.shiftTypes||{}).map(([code,v])=>'<option value="'+esc(code)+'">'+esc(code)+' — '+esc(v.label)+'</option>').join('');
+      if (Object.prototype.hasOwnProperty.call(S.shiftTypes||{},previousShift)) bulkShift.value=previousShift;
       applyRosterFilters();
 
       $('editor').querySelectorAll('[data-day]').forEach(x => x.onchange = e => {
@@ -496,11 +513,8 @@ body[data-required-role="admin"] input:focus-visible,body[data-required-role="ad
     $('bulkApply').addEventListener('click',()=>{
       const dayIndex=Number($('bulkDate').value);
       if(!Number.isInteger(dayIndex)||!S.days[dayIndex]){toast('আগে একটি তারিখ নির্বাচন করুন।',true);return;}
-      const choices=Object.entries(S.shiftTypes||{}).map(([code,v])=>code+' — '+v.label).join('\n');
-      const code=prompt('নির্বাচিত তারিখে সব কর্মীর জন্য Shift code লিখুন:\n'+choices);
-      if(code===null)return;
-      const normalized=code.trim().toUpperCase();
-      if(!Object.prototype.hasOwnProperty.call(S.shiftTypes,normalized)){toast('সঠিক Shift code দিন।',true);return;}
+      const normalized=$('bulkShift').value;
+      if(!Object.prototype.hasOwnProperty.call(S.shiftTypes||{},normalized)){toast('নতুন Shift নির্বাচন করুন।',true);return;}
       if(!confirm(S.days[dayIndex].date+' তারিখে '+S.employees.length+' জন কর্মীর Shift '+normalized+' করবেন?'))return;
       S.employees.forEach(emp=>{emp.shifts[dayIndex]=normalized;});
       markDirty();render();updateOverview();toast('Bulk shift update হয়েছে। Save করতে ভুলবেন না।');
