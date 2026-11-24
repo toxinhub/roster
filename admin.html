@@ -1146,7 +1146,7 @@ body.admin-page .editor-skeleton{
   position:absolute;
   inset:0 auto auto 0;
   z-index:2;
-  display:grid;
+  display:none;
   grid-template-columns:142px repeat(31,76px);
   grid-template-rows:72px repeat(6,60px);
   width:max-content;
@@ -1155,6 +1155,7 @@ body.admin-page .editor-skeleton{
   background:var(--adm-surface);
   pointer-events:none;
 }
+body.admin-page .grid-scroll.is-loading .editor-skeleton{display:grid}
 body.admin-page .editor-skeleton-cell{
   position:relative;
   display:flex;
