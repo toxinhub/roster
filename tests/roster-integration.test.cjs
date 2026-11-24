@@ -38,6 +38,13 @@ class MemoryKV {
   async get(key) { return this.values.has(key) ? this.values.get(key) : null; }
   async put(key, value) { this.values.set(key, String(value)); }
   async delete(key) { this.values.delete(key); }
+  async list(options = {}) {
+    const keys = [...this.values.keys()]
+      .filter(key => key.startsWith(options.prefix || ""))
+      .sort()
+      .map(name => ({ name }));
+    return { keys, list_complete: true, cursor: undefined };
+  }
 }
 
 function makeEnv() {
@@ -49,7 +56,8 @@ function makeEnv() {
     deleteValue: coordinator.deleteValue.bind(coordinator),
     consumeLoginAttempt: coordinator.consumeLoginAttempt.bind(coordinator),
     saveSchedule: coordinator.saveSchedule.bind(coordinator),
-    createArchive: coordinator.createArchive.bind(coordinator)
+    createArchive: coordinator.createArchive.bind(coordinator),
+    listArchives: coordinator.listArchives.bind(coordinator)
   };
   return {
     kv,
@@ -156,6 +164,22 @@ test("admin save accepts the current version and rejects a stale second writer",
   assert.equal(conflict.status, 409);
   assert.equal((await conflict.json()).error, "WRITE_CONFLICT");
   assert.deepEqual(JSON.parse(await kv.get("schedule")), first);
+});
+
+test("archive index lists only saved month keys in newest-first order and requires a session", async () => {
+  const { env, kv } = makeEnv();
+  const denied = await call(env, "/api/archives");
+  assert.equal(denied.status, 401);
+
+  await kv.put("archive:2026-09", JSON.stringify(sampleRoster()));
+  await kv.put("archive:2026-11", JSON.stringify(sampleRoster()));
+  await kv.put("archive:invalid", "{}");
+  await kv.put("schedule", JSON.stringify(sampleRoster()));
+
+  const token = await login(env, "site-test-password");
+  const response = await call(env, "/api/archives", { token });
+  assert.equal(response.status, 200);
+  assert.deepEqual((await response.json()).months, ["2026-11", "2026-09"]);
 });
 
 test("archive creation is idempotently protected and the saved archive is readable", async () => {
