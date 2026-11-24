@@ -396,6 +396,141 @@ body.admin-page footer a:hover{text-decoration:underline}
   body.admin-page .week-nav *{transition:none!important}
 }
 
+
+/* Final interaction polish: shift picker, table rhythm, and mobile touch targets. */
+body.admin-page .picker{
+  isolation:isolate;
+  border-color:color-mix(in srgb,var(--adm-line) 78%,var(--adm-accent));
+  box-shadow:0 18px 52px rgba(0,0,0,.24),0 2px 8px rgba(0,0,0,.08);
+}
+body.admin-page .picker-scrim{
+  background:rgba(8,16,20,.48);
+  -webkit-backdrop-filter:blur(2px);
+  backdrop-filter:blur(2px);
+}
+body.admin-page .picker-head{
+  min-height:30px;
+  line-height:1.35;
+}
+body.admin-page .picker .shift-option{
+  min-height:56px;
+  -webkit-tap-highlight-color:transparent;
+  touch-action:manipulation;
+}
+body.admin-page .picker .shift-option:active{
+  transform:scale(.97);
+}
+body.admin-page .picker .shift-option:focus-visible{
+  outline:2px solid var(--adm-accent)!important;
+  outline-offset:2px;
+}
+body.admin-page .picker .shift-option.selected{
+  border-width:2px!important;
+  outline:2px solid var(--adm-accent)!important;
+  outline-offset:1px;
+  box-shadow:0 0 0 4px color-mix(in srgb,var(--adm-accent) 12%,transparent);
+}
+body.admin-page .picker-close{
+  display:grid;
+  place-items:center;
+  width:32px;
+  height:32px;
+  flex:0 0 32px;
+  border:1px solid var(--adm-line);
+  border-radius:8px;
+  background:var(--adm-soft);
+  font-size:21px;
+  transition:background .14s ease,border-color .14s ease;
+}
+body.admin-page .picker-close:hover{
+  border-color:var(--adm-accent);
+  background:var(--adm-soft);
+}
+body.admin-page #editor{
+  border-top:1px solid var(--adm-line);
+}
+body.admin-page #editor thead th{
+  vertical-align:middle;
+  line-height:1.3;
+}
+body.admin-page #editor tbody th,
+body.admin-page #editor tbody td{
+  transition:background-color .12s ease;
+}
+body.admin-page #editor tbody th input{
+  text-overflow:ellipsis;
+}
+body.admin-page #editor .edit{
+  -webkit-tap-highlight-color:transparent;
+  touch-action:manipulation;
+}
+body.admin-page #editor .edit:active{
+  transform:scale(.96);
+}
+body.admin-page .grid-scroll{
+  scrollbar-width:thin;
+  scrollbar-color:var(--adm-line) transparent;
+}
+body.admin-page .grid-scroll::-webkit-scrollbar{
+  width:8px;
+  height:8px;
+}
+body.admin-page .grid-scroll::-webkit-scrollbar-thumb{
+  border:2px solid transparent;
+  border-radius:99px;
+  background:var(--adm-line);
+  background-clip:padding-box;
+}
+body.admin-page .top-actions .icon-btn,
+body.admin-page .top-actions .back,
+body.admin-page .actions button,
+body.admin-page .form-row button,
+body.admin-page .view-switch button,
+body.admin-page .week-nav button{
+  -webkit-tap-highlight-color:transparent;
+  touch-action:manipulation;
+}
+body.admin-page .top-actions .icon-btn:active,
+body.admin-page .top-actions .back:active,
+body.admin-page .actions button:active,
+body.admin-page .form-row button:not(:disabled):active,
+body.admin-page .view-switch button:active,
+body.admin-page .week-nav button:active{
+  transform:translateY(1px);
+}
+body.admin-page.ink-mode .security-panel{
+  background:linear-gradient(110deg,var(--adm-surface),color-mix(in srgb,var(--adm-soft) 88%,var(--adm-accent)));
+}
+body.admin-page.ink-mode #save{
+  color:#14251f;
+}
+@media(max-width:700px){
+  body.admin-page .picker .shift-option{min-height:60px}
+  body.admin-page .picker-head{font-size:11px}
+  body.admin-page #editor tbody th input{overflow:hidden;text-overflow:ellipsis}
+  body.admin-page .grid-scroll{scrollbar-width:thin}
+}
+@media(max-width:360px){
+  body.admin-page .picker{gap:5px;padding-left:8px;padding-right:8px}
+  body.admin-page .picker .shift-option{min-height:54px}
+  body.admin-page .picker .shift-option small{font-size:7px}
+  body.admin-page .topbar .brand{gap:7px}
+  body.admin-page .top-actions{gap:5px}
+  body.admin-page .top-actions .back{font-size:8px;padding-inline:6px}
+}
+@media(hover:hover) and (pointer:fine){
+  body.admin-page #editor tbody tr:hover th,
+  body.admin-page #editor tbody tr:hover td{
+    background:color-mix(in srgb,var(--adm-soft) 68%,var(--adm-surface));
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  body.admin-page .picker .shift-option,
+  body.admin-page .picker-close,
+  body.admin-page #editor tbody th,
+  body.admin-page #editor tbody td{transition:none!important}
+}
+
 </style></head>
 <body class="admin-page" data-required-role="admin">
   <div class="app">
