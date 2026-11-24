@@ -136,6 +136,58 @@ body.admin-page #editor .edit{width:52px;min-width:52px;min-height:40px;font-fam
  body.admin-page #editor tbody th input{min-height:38px;font-size:14px}
  body.admin-page #editor .edit{width:50px;min-width:50px;min-height:40px;font-size:13px}
 }
+
+/* Compact all admin chrome while preserving the roster shift grid and picker sizes. */
+body.admin-page .admin-note{margin-bottom:8px;padding:7px 10px;font-size:10px;line-height:1.4;border-radius:9px}
+body.admin-page main.page-shell{margin-top:11px!important;margin-bottom:14px!important}
+body.admin-page .panel{margin-bottom:8px;padding:11px 13px;border-radius:11px}
+body.admin-page .section-head{gap:8px;margin-bottom:7px}
+body.admin-page .section-head h2{font-size:15px;line-height:1.25}
+body.admin-page .eyebrow{font-size:8px;letter-spacing:.1em}
+body.admin-page .muted{margin:4px 0 7px;font-size:10px;line-height:1.4}
+body.admin-page .form-grid{gap:7px;margin-bottom:7px}
+body.admin-page .form-grid label{gap:3px;font-size:10px}
+body.admin-page .form-grid input{min-height:32px;padding:5px 8px;font-size:11px;border-radius:7px}
+body.admin-page .actions{gap:5px}
+body.admin-page .actions button,body.admin-page .form-row button{min-height:31px;padding:5px 9px;font-size:10px;border-radius:7px}
+body.admin-page #save{min-width:118px}
+body.admin-page .view-tools{gap:6px;margin-bottom:6px}
+body.admin-page .view-switch,body.admin-page .week-nav{gap:4px}
+body.admin-page .view-switch button,body.admin-page .week-nav button{min-height:27px;padding:4px 8px;font-size:9px;border-radius:6px}
+body.admin-page .week-nav{font-size:9px}
+body.admin-page .week-nav button{min-width:26px}
+body.admin-page .editor-meta{min-height:30px;margin-top:7px;padding:4px 7px;border-radius:7px}
+body.admin-page .change-status,body.admin-page .quiet{font-size:9px}
+body.admin-page .change-summary{margin-top:5px;padding:7px 9px;font-size:9px;line-height:1.4}
+body.admin-page .change-summary ul{margin:3px 0 0;padding-left:16px}
+body.admin-page .form-row{gap:6px;margin-top:7px}
+body.admin-page #status.status{padding:3px 6px;font-size:8px}
+body.admin-page footer{padding:6px 0 9px;font-size:10px}
+body.admin-page .topbar .brand strong{font-size:14px}
+body.admin-page .topbar .brand small{font-size:9px}
+body.admin-page .topbar .icon-btn,body.admin-page .topbar .back{font-size:10px}
+@media(max-width:700px){
+ body.admin-page main.page-shell{margin-top:7px!important;margin-bottom:10px!important}
+ body.admin-page .panel{margin-bottom:7px;padding:9px 9px;border-radius:10px}
+ body.admin-page .admin-note{margin-bottom:7px;padding:6px 8px;font-size:9px}
+ body.admin-page .section-head{gap:6px;margin-bottom:6px}
+ body.admin-page .section-head h2{font-size:14px}
+ body.admin-page .muted{margin:3px 0 6px;font-size:9px;line-height:1.35}
+ body.admin-page .form-grid{gap:6px;margin-bottom:6px}
+ body.admin-page .form-grid label{font-size:9px}
+ body.admin-page .form-grid input{min-height:30px;padding:4px 7px;font-size:11px}
+ body.admin-page .section-head .actions{gap:4px}
+ body.admin-page .section-head .actions button{min-height:29px;padding:4px 7px;font-size:9px}
+ body.admin-page .view-tools{margin-bottom:5px}
+ body.admin-page .view-switch button,body.admin-page .week-nav button{min-height:25px;padding:3px 7px;font-size:9px}
+ body.admin-page .editor-meta{min-height:28px;padding:4px 6px}
+ body.admin-page .change-status,body.admin-page .quiet{font-size:8px}
+ body.admin-page .change-summary{padding:6px 8px;font-size:8px}
+ body.admin-page .form-row{gap:5px;margin-top:6px}
+ body.admin-page .form-row button{min-height:31px;padding:4px 7px;font-size:9px}
+ body.admin-page #save{min-width:0}
+ body.admin-page footer{padding:5px 0 max(9px,env(safe-area-inset-bottom));font-size:9px}
+}
 </style></head>
 <body class="admin-page" data-required-role="admin">
   <div class="app">
