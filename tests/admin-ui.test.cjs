@@ -26,5 +26,6 @@ test("roster management controls are present and uniquely identified", () => {
     assert.equal(count, 1, id + " should exist exactly once");
   }
   assert.match(html, /id="roster-editor"/);
-  assert.match(html, /id="overview"/);\n  assert.match(html, /id="archive-history"/);
+  assert.match(html, /id="overview"/);
+  assert.match(html, /id="archive-history"/);
 });
