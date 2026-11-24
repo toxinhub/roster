@@ -273,6 +273,25 @@ body.admin-page #editor thead th:first-child{
   }
 }
 
+
+/* Unified soft shift palette for grid cells and the shift picker. */
+body.admin-page #editor .edit{border:1px solid!important;font-weight:750!important;transition:background-color .16s ease,border-color .16s ease,box-shadow .16s ease,transform .16s ease!important}
+body.admin-page #editor .edit.shift-a,body.admin-page .picker .shift-option.shift-a{background:#E5F2E8!important;color:#28613B!important;border-color:#C6DFC9!important}
+body.admin-page #editor .edit.shift-b,body.admin-page .picker .shift-option.shift-b{background:#FFF1D6!important;color:#805414!important;border-color:#F0D9A8!important}
+body.admin-page #editor .edit.shift-c,body.admin-page .picker .shift-option.shift-c{background:#E4EFF8!important;color:#285477!important;border-color:#C6DCEC!important}
+body.admin-page #editor .edit.shift-off,body.admin-page .picker .shift-option.shift-off{background:#ECEDEF!important;color:#555B63!important;border-color:#D9DCE0!important}
+body.admin-page #editor .edit.shift-l,body.admin-page .picker .shift-option.shift-l{background:#F4E8F2!important;color:#75476D!important;border-color:#E5D1E1!important}
+body.admin-page #editor .edit:hover{filter:brightness(.975);box-shadow:0 2px 7px rgba(25,40,48,.09);transform:translateY(-1px)}
+body.admin-page .picker .shift-option{border:1px solid!important;transition:filter .16s ease,box-shadow .16s ease,transform .16s ease!important}
+body.admin-page .picker .shift-option:hover{filter:brightness(.975);transform:translateY(-1px)}
+body.admin-page .picker .shift-option.selected{outline:2px solid var(--adm-accent)!important;outline-offset:1px;box-shadow:0 0 0 3px color-mix(in srgb,var(--adm-accent) 13%,transparent)}
+body.admin-page.ink-mode #editor .edit.shift-a,body.admin-page.ink-mode .picker .shift-option.shift-a{background:#294536!important;color:#C5E8D0!important;border-color:#456C53!important}
+body.admin-page.ink-mode #editor .edit.shift-b,body.admin-page.ink-mode .picker .shift-option.shift-b{background:#4A3B25!important;color:#F3D89D!important;border-color:#78613A!important}
+body.admin-page.ink-mode #editor .edit.shift-c,body.admin-page.ink-mode .picker .shift-option.shift-c{background:#263F52!important;color:#C7E1F4!important;border-color:#42647C!important}
+body.admin-page.ink-mode #editor .edit.shift-off,body.admin-page.ink-mode .picker .shift-option.shift-off{background:#343B40!important;color:#D3D9DD!important;border-color:#505B62!important}
+body.admin-page.ink-mode #editor .edit.shift-l,body.admin-page.ink-mode .picker .shift-option.shift-l{background:#493447!important;color:#EBCBE5!important;border-color:#70516B!important}
+@media(prefers-reduced-motion:reduce){body.admin-page #editor .edit,body.admin-page .picker .shift-option{transition:none!important}}
+
 </style></head>
 <body class="admin-page" data-required-role="admin">
   <div class="app">
@@ -519,7 +538,7 @@ body.admin-page #editor thead th:first-child{
       const end=editorView==='week'?nextWeekStart(start):total;
       const visibleDays=S.days.map((day,index)=>({day,index})).slice(start,end);
       const h = '<tr><th scope="col" aria-label="কর্মী" title="কর্মী">📹</th>' + visibleDays.map(({day:d,index:i}) => '<th scope="col"><input aria-label="তারিখ '+(i+1)+'" value="'+esc(d.date)+'" data-day="'+i+'"><small><input aria-label="সপ্তাহের দিন '+(i+1)+'" value="'+esc(d.weekday)+'" data-wd="'+i+'" readonly title="তারিখ অনুযায়ী স্বয়ংক্রিয়"></small><button class="remove" type="button" data-rmday="'+i+'" aria-label="তারিখ '+esc(d.date)+' বাদ দিন">বাদ</button></th>').join('') + '</tr>';
-      const b = S.employees.map((emp,ei) => '<tr><th scope="row"><input aria-label="কর্মী '+(ei+1)+'-এর নাম" value="'+esc(emp.name)+'" data-name="'+ei+'" maxlength="80"></th>' + visibleDays.map(({day, index:di}) => '<td><button type="button" class="edit" data-ei="'+ei+'" data-di="'+di+'" aria-label="'+esc(emp.name)+': '+esc(day.date||di+1)+' তারিখের শিফট '+esc(emp.shifts[di])+'">'+esc(emp.shifts[di])+'</button></td>').join('') + '</tr>').join('');
+      const b = S.employees.map((emp,ei) => '<tr><th scope="row"><input aria-label="কর্মী '+(ei+1)+'-এর নাম" value="'+esc(emp.name)+'" data-name="'+ei+'" maxlength="80"></th>' + visibleDays.map(({day, index:di}) => '<td><button type="button" class="edit shift-'+String(emp.shifts[di]||'').toLowerCase()+'" data-ei="'+ei+'" data-di="'+di+'" aria-label="'+esc(emp.name)+': '+esc(day.date||di+1)+' তারিখের শিফট '+esc(emp.shifts[di])+'">'+esc(emp.shifts[di])+'</button></td>').join('') + '</tr>').join('');
       $('editor').innerHTML = '<thead>'+h+'</thead><tbody>'+b+'</tbody>';
       $('monthView').setAttribute('aria-pressed',String(editorView==='month'));
       $('weekView').setAttribute('aria-pressed',String(editorView==='week'));
