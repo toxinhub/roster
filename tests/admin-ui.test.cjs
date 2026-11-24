@@ -31,9 +31,9 @@ test("roster management controls are present and uniquely identified", () => {
   assert.match(html, /id="status"/);
 });
 
-test("desktop roster toolbar allocates one column per editor control", () => {
-  assert.match(
-    html,
-    /\.roster-tools\{display:grid;grid-template-columns:minmax\(150px,1\.4fr\) minmax\(120px,\.8fr\) minmax\(105px,\.7fr\) minmax\(130px,\.9fr\) auto;/
-  );
+test("admin layout uses balanced sizing without stale sidebar offsets", () => {
+  assert.doesNotMatch(html, /topbar\{margin-left:232px\}|page-shell\{max-width:none;margin-left:250px/);
+  assert.match(html, /page-shell\{width:min\(100% - 40px,1160px\);max-width:1160px;margin:20px auto 32px;padding:0\}/);
+  assert.match(html, /@media\(max-width:600px\)[\s\S]*?page-shell\{width:calc\(100% - 20px\)/);
+  assert.match(html, /#editor\{min-width:680px\}/);
 });
