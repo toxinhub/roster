@@ -931,7 +931,7 @@ body[data-required-role="admin"] .archive-stat strong{font-size:16px}
           const weekdayLabel = document.createElement('small');
           weekdayLabel.className = 'archive-day-weekday';
           const weekdayNames = ['রবিবার','সোমবার','মঙ্গলবার','বুধবার','বৃহস্পতিবার','শুক্রবার','শনিবার'];
-          const parsedDate = /^\\d{4}-\\d{2}-\\d{2}$/.test(day.isoDate || '')
+          const parsedDate = /^\d{4}-\d{2}-\d{2}$/.test(day.isoDate || '')
             ? new Date(day.isoDate + 'T00:00:00Z')
             : null;
           weekdayLabel.textContent = day.weekday || (parsedDate && !Number.isNaN(parsedDate.getTime())
