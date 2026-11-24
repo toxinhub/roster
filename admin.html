@@ -324,54 +324,76 @@ html body[data-required-role="admin"] select:focus-visible{outline:2px solid var
 @media(prefers-reduced-motion:reduce){
  html body[data-required-role="admin"] *,html body[data-required-role="admin"] *::before,html body[data-required-role="admin"] *::after{transition:none!important;animation:none!important;scroll-behavior:auto!important}
 }
+
+/* Minimal roster-editor surface */
+html body[data-required-role="admin"] .topbar{min-height:58px;padding:9px max(16px,calc((100vw - 1180px)/2));}
+html body[data-required-role="admin"] .brand-icon{width:34px;height:34px;flex-basis:34px;border-radius:9px;font-size:16px;}
+html body[data-required-role="admin"] .brand strong{font-size:14px;}
+html body[data-required-role="admin"] .brand small{display:none;}
+html body[data-required-role="admin"] .page-shell{width:min(100% - 28px,1180px);margin:18px auto 28px;}
+html body[data-required-role="admin"] #roster-editor{margin:0;border-radius:12px;box-shadow:0 3px 14px rgba(15,23,42,.035)!important;}
+html body[data-required-role="admin"] #roster-editor .section-head{padding:14px 17px;}
+html body[data-required-role="admin"] #roster-editor .section-head h2{font-size:17px;}
+html body[data-required-role="admin"] #roster-editor .form-grid{grid-template-columns:minmax(0,1fr) minmax(180px,.55fr);gap:10px;margin:14px 17px 12px;max-width:680px;}
+html body[data-required-role="admin"] #roster-editor .grid-scroll{margin:0 17px;max-height:calc(100vh - 300px);min-height:220px;}
+html body[data-required-role="admin"] #roster-editor .editor-meta{margin:11px 17px 0;}
+html body[data-required-role="admin"] #roster-editor .change-summary{margin:8px 17px 0;}
+html body[data-required-role="admin"] #roster-editor #tools{justify-content:flex-end;margin:12px 17px 16px;}
+html body[data-required-role="admin"] #roster-editor #save{min-width:150px;min-height:42px;}
+html body[data-required-role="admin"] .legacy-admin-controls{display:none!important;}
+html body[data-required-role="admin"] #archive-history{display:none!important;}
+html body[data-required-role="admin"] .top-actions .icon-btn,
+html body[data-required-role="admin"] .top-actions .back{display:none!important;}
+@media(max-width:640px){
+ html body[data-required-role="admin"] .topbar{min-height:52px;padding:8px 12px;}
+ html body[data-required-role="admin"] .page-shell{width:calc(100% - 16px);margin:10px auto 18px;}
+ html body[data-required-role="admin"] #roster-editor .section-head{padding:12px;}
+ html body[data-required-role="admin"] #roster-editor .form-grid{grid-template-columns:1fr 1fr;margin:12px;gap:8px;}
+ html body[data-required-role="admin"] #roster-editor .grid-scroll{margin:0 10px;max-height:calc(100dvh - 285px);min-height:190px;}
+ html body[data-required-role="admin"] #roster-editor .editor-meta{margin:9px 10px 0;padding:9px;}
+ html body[data-required-role="admin"] #roster-editor #tools{margin:10px;}
+ html body[data-required-role="admin"] #roster-editor #save{width:100%;}
+}
 </style></head>
 <body data-required-role="admin">
   <div class="app admin-app">
     <header class="topbar">
-      <div class="brand" aria-label="রোস্টার এডমিন">
+      <div class="brand" aria-label="রোস্টার এডিটর">
         <span class="brand-icon" aria-hidden="true">R</span>
-        <div><strong>রোস্টার এডমিন</strong><small>CCTV - PJL · ডিউটি ব্যবস্থাপনা</small></div>
+        <div><strong>রোস্টার এডিটর</strong><small>ডিউটি ব্যবস্থাপনা</small></div>
       </div>
-      <div class="top-actions">
-        <span id="status" class="status connected">Admin</span>
-        <button class="icon-btn" id="theme" type="button" aria-label="থিম পরিবর্তন" title="Ink Mode">☾</button>
-        <a class="back" href="index.html">লাইভ রোস্টার ↗</a>
-      </div>
+      <div class="top-actions"><span id="status" class="status connected">Admin</span></div>
     </header>
     <main class="page-shell">
       <section class="panel" id="roster-editor">
         <div class="section-head">
-          <div><span class="eyebrow">DUTY ROSTER · EDITOR</span><h2 id="monthHead">রোস্টার সম্পাদনা</h2></div>
+          <div><span class="eyebrow">DUTY ROSTER</span><h2 id="monthHead">রোস্টার সম্পাদনা</h2></div>
           <div class="actions"><button id="addDay" type="button">＋ তারিখ যোগ</button></div>
         </div>
         <div class="form-grid">
           <label>রোস্টারের শিরোনাম<input id="month" maxlength="80"></label>
           <label>মাস ও সাল<input id="monthPicker" type="month"></label>
         </div>
-        <div class="roster-tools" aria-label="Roster filters and bulk editing">
-          <label>কর্মী খুঁজুন<input id="employeeSearch" type="search" placeholder="নাম লিখুন…" autocomplete="off"></label>
-          <label>Shift Filter<select id="shiftFilter"><option value="ALL">সব Shift</option><option value="A">A Shift</option><option value="B">B Shift</option><option value="C">C Shift</option><option value="OFF">OFF</option><option value="L">Leave</option></select></label>
-          <label>তারিখ<select id="bulkDate"></select></label>
-          <label>নতুন Shift<select id="bulkShift"><option value="">Shift নির্বাচন</option></select></label>
-          <button type="button" id="bulkApply">নির্বাচিত Shift প্রয়োগ</button>
+        <div class="legacy-admin-controls" aria-hidden="true">
+          <button class="icon-btn" id="theme" type="button">থিম</button>
+          <input id="employeeSearch" type="search">
+          <select id="shiftFilter"><option value="ALL">সব Shift</option></select>
+          <select id="bulkDate"></select><select id="bulkShift"><option value="">Shift</option></select>
+          <button id="bulkApply" type="button">Apply</button>
+          <p id="rosterResultCount"></p>
+          <button id="download" type="button">Download</button>
+          <select id="archiveMonth"><option value="">Archive</option></select>
+          <button id="refreshArchives" type="button">Refresh</button>
+          <button id="downloadArchive" type="button" disabled>Download archive</button>
+          <div id="archivePreview"></div>
         </div>
-        <p class="roster-result-count" id="rosterResultCount" aria-live="polite"></p>
         <div class="grid-scroll"><table id="editor"></table></div>
-        <div class="editor-meta"><span id="changeStatus" class="change-status clean">● কোনো পরিবর্তন নেই</span><button id="clearChanges" class="quiet" type="button" disabled>পরিবর্তন বাতিল</button></div>
+        <div class="editor-meta">
+          <span id="changeStatus" class="change-status clean">● কোনো পরিবর্তন নেই</span>
+          <button id="clearChanges" class="quiet" type="button" disabled>পরিবর্তন বাতিল</button>
+        </div>
         <div id="changeSummary" class="change-summary" hidden></div>
-        <div class="form-row" id="tools"><button class="primary" id="save" type="button">✓ নিরাপদে Save</button><button id="download" type="button">JSON Download ↓</button></div>
-      </section>
-      <section class="panel" id="archive-history">
-        <div class="section-head">
-          <div><span class="eyebrow">HISTORY · READ ONLY</span><h2>Archive & History</h2></div>
-          <span class="muted">সংরক্ষিত রোস্টার</span>
-        </div>
-        <div class="form-row archive-controls">
-          <label>সংরক্ষিত মাস<select id="archiveMonth" aria-label="সংরক্ষিত Archive মাস"><option value="">Archive তালিকা লোড হচ্ছে…</option></select></label>
-          <button id="refreshArchives" type="button">তালিকা রিফ্রেশ ↻</button>
-          <button id="downloadArchive" type="button" disabled>JSON Download ↓</button>
-        </div>
-        <div id="archivePreview" class="archive-preview" role="status" aria-live="polite">সংরক্ষিত Archive খোঁজা হচ্ছে…</div>
+        <div class="form-row" id="tools"><button class="primary" id="save" type="button">✓ পরিবর্তন সংরক্ষণ</button></div>
       </section>
     </main>
   </div>
