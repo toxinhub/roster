@@ -177,6 +177,16 @@ test("archive snapshot comparison ignores object key order but preserves array o
   assert.notEqual(stableStringify([1, 2]), stableStringify([2, 1]));
 });
 
+test("Wrangler keeps preview origins read-only and requires the coordinator", () => {
+  const config = fs.readFileSync(new URL("../cloudflare/wrangler.toml", "file://" + __filename), "utf8");
+  const writeOrigins = config.match(/^ADMIN_WRITE_ORIGINS\s*=\s*"([^"]+)"/m)?.[1] || "";
+  assert.ok(writeOrigins.includes("https://toxinhub.github.io"));
+  assert.ok(writeOrigins.includes("https://roster-bps.pages.dev"));
+  assert.doesNotMatch(writeOrigins, /preview|dc30fdd7|fix-roster-data-integrity/);
+  assert.match(config, /^REQUIRE_COORDINATOR\s*=\s*"true"$/m);
+  assert.match(config, /new_sqlite_classes\s*=\s*\["RosterCoordinator"\]/);
+});
+
 test("Pages API proxy preserves preview origin and restricts methods", () => {
   const proxy = fs.readFileSync(new URL("../functions/api/[[path]].js", "file://" + __filename), "utf8");
   assert.doesNotThrow(() => new vm.Script(proxy.replace("export async function", "async function")));
