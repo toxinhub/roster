@@ -141,6 +141,38 @@ body.admin-page footer { margin-top:auto; }
   body.admin-page footer { padding-bottom:max(16px, env(safe-area-inset-bottom)); }
 }
 @media(prefers-reduced-motion:reduce) { body.admin-page *, body.admin-page *::before, body.admin-page *::after { scroll-behavior:auto !important; transition-duration:.01ms !important; animation-duration:.01ms !important; } }
+
+/* Spacing balance — admin only */
+body.admin-page .page-shell { margin:16px auto 22px; }
+body.admin-page .admin-note {
+  margin-bottom:12px;
+  padding:11px 15px;
+  line-height:1.55;
+}
+body.admin-page .panel {
+  margin-bottom:12px;
+  padding:clamp(14px,1.7vw,19px);
+}
+body.admin-page .section-head { margin-bottom:10px; gap:12px; }
+body.admin-page .section-head h2 { margin-top:2px; }
+body.admin-page .muted { margin:7px 0 10px; line-height:1.55; }
+body.admin-page .form-grid { gap:10px; margin-bottom:8px; }
+body.admin-page .form-grid label { gap:6px; }
+body.admin-page .editor-meta { margin-top:10px; }
+body.admin-page .change-summary { margin-top:7px; padding:9px 11px; }
+body.admin-page .form-row { margin-top:12px; gap:8px; }
+body.admin-page footer { padding-top:8px; padding-bottom:13px; }
+@media(max-width:700px) {
+  body.admin-page .page-shell { margin:10px auto 18px; }
+  body.admin-page .admin-note { margin-bottom:10px; padding:10px 12px; }
+  body.admin-page .panel { margin-bottom:10px; padding:12px 11px; }
+  body.admin-page .section-head { margin-bottom:9px; gap:8px; }
+  body.admin-page .muted { margin:6px 0 9px; }
+  body.admin-page .form-grid { gap:8px; margin-bottom:7px; }
+  body.admin-page .editor-meta { margin-top:9px; }
+  body.admin-page .form-row { margin-top:10px; gap:7px; }
+}
+
 </style></head>
 <body class="admin-page" data-required-role="admin">
   <div class="app">
