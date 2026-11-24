@@ -89,7 +89,7 @@ html body.ink-mode #status.status.not-connected{
 /* Admin Operations Dashboard — Phase 1 foundation */
 :root{--adm-deep:#102D30;--adm-teal:#193B3D;--adm-ivory:#F2E9D8;--adm-gold:#D8B77A;--adm-green:#75B89A;--adm-coral:#D77B78}
 body[data-required-role="admin"]{background:linear-gradient(145deg,#edf3f2,#f5f1e9 65%,#e8eeeb)}
-body[data-required-role="admin"] .topbar{margin:0}body[data-required-role="admin"] .page-shell{max-width:1160px;margin:20px auto 32px;padding:0}
+body[data-required-role="admin"] .topbar{margin-left:232px}body[data-required-role="admin"] .page-shell{max-width:none;margin-left:250px;padding:24px clamp(16px,3vw,38px)}
 
 /* Phase 2 — roster editing ergonomics */
 /* Phase 2 compact toolbar */
@@ -116,96 +116,6 @@ body[data-required-role="admin"] .topbar{margin:0}body[data-required-role="admin
 
 .archive-controls{display:flex;align-items:end;flex-wrap:wrap;gap:9px}.archive-controls label{display:grid;gap:5px;min-width:180px;color:var(--muted);font-size:10px;font-weight:800}.archive-controls input{min-height:40px;padding:8px 10px;border:1px solid var(--line-strong);border-radius:9px;background:var(--panel-soft);color:var(--ink)}.archive-preview{margin-top:12px;padding:13px;border:1px solid var(--line);border-radius:11px;background:var(--panel-soft);color:var(--ink);font-size:12px;line-height:1.65}.archive-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:10px}.archive-stat{padding:10px;border:1px solid var(--line);border-radius:9px;background:var(--panel)}.archive-stat strong{display:block;font-size:18px;color:var(--ink)}.archive-stat small{font-size:9px;color:var(--muted)}.archive-preview .archive-shifts{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}.archive-shifts span{padding:5px 8px;border:1px solid var(--line);border-radius:7px;font-size:10px;font-weight:800}
 @media(max-width:600px){.archive-controls{display:grid;grid-template-columns:1fr 1fr}.archive-controls label{grid-column:1/-1}.archive-controls button{width:100%}.archive-stats{grid-template-columns:repeat(3,minmax(0,1fr))}}
-
-/* Minimal admin layout — balanced desktop and mobile sizing */
-:root{--adm-deep:#102D30;--adm-teal:#193B3D;--adm-ivory:#F2E9D8;--adm-gold:#D8B77A;--adm-green:#75B89A;--adm-coral:#D77B78}
-body[data-required-role="admin"]{background:linear-gradient(145deg,#edf3f2,#f5f1e9 65%,#e8eeeb)}
-body[data-required-role="admin"] .topbar{height:56px;margin:0;padding:0 max(16px,calc((100vw - 1180px)/2));}
-body[data-required-role="admin"] .page-shell{width:min(100% - 40px,1160px);max-width:1160px;margin:20px auto 32px;padding:0;}
-body[data-required-role="admin"] .panel{max-width:none;margin:0 0 14px;padding:18px 20px;border-radius:14px;box-shadow:0 8px 24px rgba(16,40,42,.055)}
-body[data-required-role="admin"] .section-head{gap:12px;margin-bottom:13px}
-body[data-required-role="admin"] .section-head h2{font-size:17px;line-height:1.3}
-body[data-required-role="admin"] .eyebrow{font-size:9px;letter-spacing:.12em}
-body[data-required-role="admin"] .form-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;max-width:760px}
-body[data-required-role="admin"] .form-grid label,
-body[data-required-role="admin"] .form-row label,
-body[data-required-role="admin"] .roster-tools label,
-body[data-required-role="admin"] .archive-controls label{font-size:10px;gap:5px}
-body[data-required-role="admin"] input,
-body[data-required-role="admin"] select{min-height:38px;padding:7px 10px;font-size:12px;border-radius:8px}
-body[data-required-role="admin"] .roster-tools{grid-template-columns:minmax(170px,1.35fr) minmax(112px,.85fr) minmax(100px,.7fr) minmax(120px,.8fr) auto;gap:8px;margin:13px 0 10px}
-body[data-required-role="admin"] .roster-tools input,
-body[data-required-role="admin"] .roster-tools select,
-body[data-required-role="admin"] .roster-tools button{min-height:38px;font-size:11px}
-body[data-required-role="admin"] .roster-tools button{padding:7px 13px}
-body[data-required-role="admin"] .grid-scroll{max-height:min(66vh,680px);border-radius:9px}
-body[data-required-role="admin"] #editor{font-size:11px}
-body[data-required-role="admin"] #editor th{padding:8px 7px;font-size:10px;white-space:nowrap}
-body[data-required-role="admin"] #editor td{padding:5px}
-body[data-required-role="admin"] #editor th:first-child{min-width:138px}
-body[data-required-role="admin"] #editor .edit{min-width:42px;min-height:36px;padding:6px 8px;font-size:12px;border-radius:7px}
-body[data-required-role="admin"] .roster-result-count{font-size:10px;margin:0 0 8px}
-body[data-required-role="admin"] .editor-meta{margin-top:10px;padding:8px 10px}
-body[data-required-role="admin"] .change-status{font-size:10px}
-body[data-required-role="admin"] .quiet{font-size:10px}
-body[data-required-role="admin"] #tools{margin-top:12px;gap:8px}
-body[data-required-role="admin"] #tools button{min-height:38px;padding:8px 13px;font-size:11px}
-body[data-required-role="admin"] .archive-controls{gap:8px}
-body[data-required-role="admin"] .archive-controls label{min-width:190px;max-width:260px}
-body[data-required-role="admin"] .archive-controls button{min-height:38px;padding:7px 12px;font-size:11px}
-body[data-required-role="admin"] .archive-preview{margin-top:10px;padding:11px 12px;font-size:11px}
-body[data-required-role="admin"] .archive-stat{padding:9px}
-body[data-required-role="admin"] .archive-stat strong{font-size:16px}
-@media(max-width:900px){
- body[data-required-role="admin"] .topbar{height:48px;padding:0 14px}
- body[data-required-role="admin"] .page-shell{width:calc(100% - 28px);margin:14px auto 24px}
- body[data-required-role="admin"] .roster-tools{grid-template-columns:repeat(2,minmax(0,1fr))}
- body[data-required-role="admin"] .roster-tools label:first-child{grid-column:1/-1}
- body[data-required-role="admin"] .roster-tools button{grid-column:1/-1}
-}
-@media(max-width:600px){
- body[data-required-role="admin"] .topbar{height:46px;padding:0 10px}
- body[data-required-role="admin"] .brand{gap:7px}
- body[data-required-role="admin"] .brand strong{font-size:11px}
- body[data-required-role="admin"] .top-actions{gap:5px}
- body[data-required-role="admin"] .top-actions #status{font-size:8px;padding:3px 6px!important}
- body[data-required-role="admin"] .top-actions .back{min-height:28px;padding:5px 8px;font-size:10px}
- body[data-required-role="admin"] .page-shell{width:calc(100% - 20px);margin:10px auto 18px}
- body[data-required-role="admin"] .panel{padding:13px 12px;margin-bottom:10px;border-radius:11px}
- body[data-required-role="admin"] .section-head{align-items:center;margin-bottom:11px}
- body[data-required-role="admin"] .section-head h2{font-size:15px}
- body[data-required-role="admin"] .actions{gap:5px}
- body[data-required-role="admin"] .actions button{min-height:32px;padding:6px 8px;font-size:10px}
- body[data-required-role="admin"] .form-grid{grid-template-columns:1fr;gap:8px}
- body[data-required-role="admin"] .roster-tools{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin:11px 0 8px}
- body[data-required-role="admin"] .roster-tools label:first-child{grid-column:1/-1}
- body[data-required-role="admin"] .roster-tools label:nth-child(2){grid-column:1/-1}
- body[data-required-role="admin"] .roster-tools button{grid-column:1/-1}
- body[data-required-role="admin"] .roster-tools input,
- body[data-required-role="admin"] .roster-tools select,
- body[data-required-role="admin"] .roster-tools button{min-height:36px;font-size:11px}
- body[data-required-role="admin"] .grid-scroll{max-height:62vh}
- body[data-required-role="admin"] #editor{min-width:680px}
- body[data-required-role="admin"] #editor th:first-child{min-width:112px}
- body[data-required-role="admin"] #editor th{padding:7px 5px;font-size:9px}
- body[data-required-role="admin"] #editor td{padding:4px}
- body[data-required-role="admin"] #editor .edit{min-width:38px;min-height:34px;padding:5px 6px;font-size:11px}
- body[data-required-role="admin"] .editor-meta{gap:6px;padding:7px 8px}
- body[data-required-role="admin"] .change-status{font-size:9px}
- body[data-required-role="admin"] .quiet{font-size:9px}
- body[data-required-role="admin"] #tools{display:grid;grid-template-columns:1fr 1fr;margin-top:10px}
- body[data-required-role="admin"] #tools button{width:100%;min-height:36px;padding:7px 8px;font-size:10px}
- body[data-required-role="admin"] .archive-controls{display:grid;grid-template-columns:1fr 1fr;gap:7px}
- body[data-required-role="admin"] .archive-controls label{grid-column:1/-1;max-width:none;min-width:0}
- body[data-required-role="admin"] .archive-controls button{width:100%;min-height:36px;padding:7px 8px;font-size:10px}
- body[data-required-role="admin"] .archive-preview{padding:9px;font-size:10px}
- body[data-required-role="admin"] .archive-stats{gap:5px}
- body[data-required-role="admin"] .archive-stat{padding:7px 6px}
- body[data-required-role="admin"] .archive-stat strong{font-size:14px}
- body[data-required-role="admin"] .archive-stat small{font-size:8px}
-}
-@media(prefers-reduced-motion:reduce){body[data-required-role="admin"] *{scroll-behavior:auto!important;transition:none!important}}
-
 </style></head>
 <body data-required-role="admin">
   <div class="app">
