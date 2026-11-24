@@ -1138,6 +1138,44 @@ html body[data-required-role="admin"] .top-actions .back{display:none!important;
     applyTheme();
     load();
   </script>
-
+<script>
+/* One-time recovery helper: import the existing public September archive into private KV. */
+(async function(){
+  const shell=document.querySelector('.page-shell');
+  if(!shell || !window.RosterAPI) return;
+  const auth = await window.RosterAuthReady();
+  if (!auth?.authenticated || auth.role !== 'admin') return;
+  try {
+    const check=await window.RosterAPI.request('/api/archive?month=2026-09',{cache:'no-store'});
+    if(check.ok || check.status!==404) return;
+    const box=document.createElement('section');
+    box.className='panel';
+    box.style.marginBottom='16px';
+    box.innerHTML='<div class="section-head"><div><span class="eyebrow">ONE-TIME RECOVERY</span><h2>সেপ্টেম্বর ২০২৬ আর্কাইভ সংরক্ষণ</h2></div></div><p style="color:var(--muted);font-size:13px;line-height:1.6">বর্তমান প্রকাশ্য archive ফাইল থেকে সেপ্টেম্বরের রোস্টার নিরাপদ KV-তে কপি করবে। বর্তমান অক্টোবর রোস্টার বদলাবে না। কাজ সফল হওয়ার পর প্রকাশ্য archive ফাইল সরানো যাবে।</p><button id="importSeptemberArchive" class="primary" type="button">সেপ্টেম্বরের ডেটা নিরাপদে সংরক্ষণ</button><p id="archiveImportStatus" role="status" style="margin-top:8px;font-size:12px"></p>';
+    shell.insertBefore(box,shell.firstChild);
+    const button=box.querySelector('#importSeptemberArchive');
+    const status=box.querySelector('#archiveImportStatus');
+    button.addEventListener('click',async()=>{
+      button.disabled=true; status.textContent='ডেটা কপি হচ্ছে…';
+      try {
+        const source=await fetch('archive/2026-09.json?recovery='+Date.now(),{cache:'no-store'});
+        if(!source.ok) throw new Error('সেপ্টেম্বরের পুরোনো ফাইল পাওয়া যায়নি');
+        const data=await source.json();
+        const saved=await window.RosterAPI.request('/api/admin/archive',{
+          method:'POST',headers:{'Content-Type':'application/json'},cache:'no-store',
+          body:JSON.stringify({month:'2026-09',data})
+        });
+        const result=await saved.json().catch(()=>({}));
+        if(!saved.ok) throw new Error(result.error==='ARCHIVE_EXISTS'?'সেপ্টেম্বরের আর্কাইভ আগে থেকেই সংরক্ষিত আছে':(result.error||'সংরক্ষণ করা যায়নি'));
+        status.textContent='সেপ্টেম্বরের রোস্টার নিরাপদে সংরক্ষিত হয়েছে। এখন সাইটে গিয়ে সেপ্টেম্বর মাস খুলে যাচাই করো।';
+        button.textContent='সংরক্ষণ সম্পন্ন'; 
+      } catch(error) {
+        status.textContent=error.message||'সংরক্ষণ করা যায়নি।';
+        button.disabled=false;
+      }
+    });
+  } catch {}
+})();
+</script>
 </body>
 </html>
