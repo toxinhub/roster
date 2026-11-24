@@ -22,7 +22,7 @@ test("every literal admin DOM lookup has a matching element id", () => {
 
 test("roster management controls are present and uniquely identified", () => {
   for (const id of ["employeeSearch", "shiftFilter", "bulkDate", "bulkShift", "bulkApply", "rosterResultCount", "kpiEmployees", "kpiDays", "kpiA", "kpiBC"]) {
-    const count = [...html.matchAll(new RegExp(`\\\\bid=[\"']${id}[\"']`, "g"))].length;
+    const count = html.split(`id="${id}"`).length - 1;
     assert.equal(count, 1, id + " should exist exactly once");
   }
   assert.match(html, /id="roster-editor"/);
