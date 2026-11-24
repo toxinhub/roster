@@ -21,13 +21,14 @@ test("every literal admin DOM lookup has a matching element id", () => {
 });
 
 test("roster management controls are present and uniquely identified", () => {
-  for (const id of ["employeeSearch", "shiftFilter", "bulkDate", "bulkShift", "bulkApply", "rosterResultCount", "kpiEmployees", "kpiDays", "kpiA", "kpiBC", "archiveMonth", "loadArchive", "downloadArchive", "archivePreview"]) {
+  for (const id of ["employeeSearch", "shiftFilter", "bulkDate", "bulkShift", "bulkApply", "rosterResultCount", "archiveMonth", "loadArchive", "downloadArchive", "archivePreview"]) {
     const count = html.split(`id="${id}"`).length - 1;
     assert.equal(count, 1, id + " should exist exactly once");
   }
   assert.match(html, /id="roster-editor"/);
-  assert.match(html, /id="overview"/);
   assert.match(html, /id="archive-history"/);
+  assert.doesNotMatch(html, /class="admin-sidebar"|class="admin-overview"|id="security"/);
+  assert.match(html, /id="status"/);
 });
 
 test("desktop roster toolbar allocates one column per editor control", () => {
