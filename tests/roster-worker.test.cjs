@@ -41,6 +41,32 @@ function roster(overrides = {}) {
 
 const validRoster = loadValidator();
 
+function loadWeekSpillover() {
+  const start = workerSource.indexOf("function withWeekSpillover");
+  const end = workerSource.indexOf("async function handler", start);
+  assert.ok(start >= 0 && end > start, "withWeekSpillover helper must exist in Worker source");
+  const context = {};
+  vm.runInNewContext(workerSource.slice(start, end) + "\\nthis.withWeekSpillover = withWeekSpillover;", context);
+  return context.withWeekSpillover;
+}
+const withWeekSpillover = loadWeekSpillover();
+
+test("extends the live month through Thursday and preserves employee shift indexes", () => {
+  const days = Array.from({ length: 30 }, (_, index) => {
+    const date = new Date(Date.UTC(2026, 10, index + 1));
+    const numeric = String(date.getUTCDate()).replace(/[0-9]/g, d => "০১২৩৪৫৬৭৮৯"[Number(d)]);
+    const weekday = ["রবিবার", "সোমবার", "মঙ্গলবার", "বুধবার", "বৃহস্পতিবার", "শুক্রবার", "শনিবার"][date.getUTCDay()];
+    return { date: numeric, weekday, isoDate: date.toISOString().slice(0, 10) };
+  });
+  const original = roster({ days, employees: [{ name: "কর্মী A", shifts: Array(30).fill("A") }] });
+  const extended = withWeekSpillover(original);
+  assert.equal(extended.days.length, 33);
+  assert.deepEqual(extended.days.slice(-3).map(day => day.isoDate), ["2026-12-01", "2026-12-02", "2026-12-03"]);
+  assert.equal(extended.employees[0].shifts.length, 33);
+  assert.deepEqual(extended.employees[0].shifts.slice(-3), ["OFF", "OFF", "OFF"]);
+  assert.equal(original.days.length, 30, "the stored source object must remain unchanged");
+});
+
 test("accepts a valid roster", () => {
   assert.equal(validRoster(roster()), true);
 });
