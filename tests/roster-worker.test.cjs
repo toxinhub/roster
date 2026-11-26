@@ -170,7 +170,7 @@ test("Admin prevents cross-month day additions and more than 100 employees", () 
   const adminHtml = fs.readFileSync(new URL("../admin.html", "file://" + __filename), "utf8");
   assert.match(adminHtml, /নির্বাচিত মাসের বাইরে নতুন তারিখ যোগ করা যাবে না/);
   assert.match(adminHtml, /S\.employees\.length >= 100/);
-  assert.match(adminHtml, /সব তারিখ একই মাসের হতে হবে/);
+  assert.match(adminHtml, /পরবর্তী মাসের বৃহস্পতিবার পর্যন্ত/);
 });
 
 test("Worker exposes a session-protected archive index and archive key filter", () => {
@@ -252,5 +252,7 @@ test("Admin month switching maps each employee's shifts by the matching row inde
   const syncMonth = adminHtml.slice(start, end);
   assert.match(syncMonth, /oldEmployees\.forEach\(\(emp,\s*ei\)\s*=>/);
   assert.match(syncMonth, /oldShiftByDate\[ei\]/);
-  assert.match(syncMonth, /archivePending\.delete\(newKey\)/);
+  assert.match(syncMonth, /totalRosterDays = daysInMonth \+ spilloverDays/);
+  assert.match(syncMonth, /oldShiftByDate\[ei\]/);
+  assert.match(syncMonth, /byDate\.get\(d\.isoDate\)/);
 });
