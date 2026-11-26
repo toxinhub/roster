@@ -179,15 +179,13 @@ test("Worker exposes a session-protected archive index and archive key filter", 
   assert.ok(workerSource.includes("MONTH_ARCHIVED"));
 });
 
-test("Admin Archive History lists saved months and does not accept arbitrary month input", () => {
+test("Admin retains guarded month archive handling when switching roster months", () => {
   const adminHtml = fs.readFileSync(new URL("../admin.html", "file://" + __filename), "utf8");
-  assert.match(adminHtml, /id="archiveMonth" aria-label="সংরক্ষিত Archive মাস"/);
-  assert.match(adminHtml, /\/api\/archives/);
-  assert.match(adminHtml, /refreshArchiveList\(false\)/);
-  assert.match(adminHtml, /মোট ডিউটি/);
-  assert.match(adminHtml, /archiveRequestId/);
-  assert.match(adminHtml, /archive-table-wrap/);
-  assert.match(adminHtml, /এই মাসটি Archive-এ সংরক্ষিত/);
+  assert.match(adminHtml, /const archivePending = new Map\(\)/);
+  assert.match(adminHtml, /async function archiveIfNeeded\(\)/);
+  assert.match(adminHtml, /\/api\/admin\/archive/);
+  assert.match(adminHtml, /\/api\/archive\?month=/);
+  assert.match(adminHtml, /ARCHIVE_EXISTS/);
 });
 
 test("archive snapshot comparison ignores object key order but preserves array order", () => {
