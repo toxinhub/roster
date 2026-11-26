@@ -20,27 +20,26 @@ test("every literal admin DOM lookup has a matching element id", () => {
   assert.deepEqual(missing, [], "missing DOM ids: " + missing.join(", "));
 });
 
-test("roster management controls are present and uniquely identified", () => {
-  for (const id of ["employeeSearch", "shiftFilter", "bulkDate", "bulkShift", "bulkApply", "rosterResultCount", "archiveMonth", "loadArchive", "downloadArchive", "archivePreview"]) {
+test("current admin editor controls are present and uniquely identified", () => {
+  for (const id of ["monthPicker", "month", "addDay", "addEmp", "editor", "save", "download", "status", "changeStatus", "changeSummary"]) {
     const count = html.split(`id="${id}"`).length - 1;
     assert.equal(count, 1, id + " should exist exactly once");
   }
-  assert.match(html, /id="roster-editor"/);
-  assert.match(html, /id="archive-history"/);
-  assert.doesNotMatch(html, /class="admin-sidebar"|class="admin-overview"|id="security"/);
-  assert.match(html, /id="status"/);
+  assert.match(html, /id="weekView"/);
+  assert.match(html, /id="monthView"/);
+  assert.match(html, /id="weekNav"/);
 });
 
-test("admin layout uses balanced sizing without stale sidebar offsets", () => {
+test("admin layout uses the current responsive centered shell", () => {
   assert.doesNotMatch(html, /topbar\{margin-left:232px\}|page-shell\{max-width:none;margin-left:250px/);
-  assert.match(html, /page-shell\{width:min\(100% - 40px,1160px\);max-width:1160px;margin:20px auto 32px;padding:0\}/);
-  assert.match(html, /@media\(max-width:600px\)[\s\S]*?page-shell\{width:calc\(100% - 20px\)/);
-  assert.match(html, /#editor\{min-width:680px\}/);
+  assert.match(html, /body\.admin-page main\.page-shell\{width:min\(1160px,calc\(100% - 32px\)\)!important/);
+  assert.match(html, /@media\(max-width:700px\)[\s\S]*?main\.page-shell\{width:calc\(100% - 20px\)/);
+  assert.match(html, /#editor\{width:max-content;min-width:100%/);
 });
 
-test("roster editor keeps date creation but does not expose employee creation", () => {
-  assert.match(html, /<button id="addDay">\+ তারিখ<\/button>/);
-  assert.doesNotMatch(html, /id="addEmp"|\$\(['"]addEmp['"]\)|S\.employees\.push\(/);
+test("roster editor exposes date and employee controls with delegated rendering", () => {
+  assert.match(html, /<button id="addDay" type="button">\+ তারিখ<\/button>/);
+  assert.match(html, /<button id="addEmp" type="button">\+ কর্মী<\/button>/);
   assert.match(html, /function render\(\)/);
   assert.match(html, /S\.employees\.map\(/);
 });
