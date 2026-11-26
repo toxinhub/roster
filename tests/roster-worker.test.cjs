@@ -61,9 +61,9 @@ test("extends the live month through Thursday and preserves employee shift index
   const original = roster({ days, employees: [{ name: "কর্মী A", shifts: Array(30).fill("A") }] });
   const extended = withWeekSpillover(original);
   assert.equal(extended.days.length, 33);
-  assert.deepEqual(extended.days.slice(-3).map(day => day.isoDate), ["2026-12-01", "2026-12-02", "2026-12-03"]);
+  assert.equal(JSON.stringify(extended.days.slice(-3).map(day => day.isoDate)), JSON.stringify(["2026-12-01", "2026-12-02", "2026-12-03"]));
   assert.equal(extended.employees[0].shifts.length, 33);
-  assert.deepEqual(extended.employees[0].shifts.slice(-3), ["OFF", "OFF", "OFF"]);
+  assert.equal(JSON.stringify(extended.employees[0].shifts.slice(-3)), JSON.stringify(["OFF", "OFF", "OFF"]));
   assert.equal(original.days.length, 30, "the stored source object must remain unchanged");
 });
 
