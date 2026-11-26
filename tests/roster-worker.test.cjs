@@ -87,14 +87,25 @@ test("rejects unsupported shift codes and malformed colors", () => {
   assert.equal(validRoster(roster({ shiftTypes })), false);
 });
 
-test("rejects rosters with more than 31 days", () => {
-  const days = Array.from({ length: 32 }, (_, index) => {
+test("accepts a month roster extended through the next month's Thursday", () => {
+  const days = Array.from({ length: 33 }, (_, index) => {
     const date = new Date(Date.UTC(2026, 10, index + 1));
     const numeric = String(date.getUTCDate()).replace(/[0-9]/g, d => "০১২৩৪৫৬৭৮৯"[Number(d)]);
     const weekday = ["রবিবার", "সোমবার", "মঙ্গলবার", "বুধবার", "বৃহস্পতিবার", "শুক্রবার", "শনিবার"][date.getUTCDay()];
     return { date: numeric, weekday, isoDate: date.toISOString().slice(0, 10) };
   });
-  assert.equal(validRoster(roster({ days, employees: [{ name: "কর্মী A", shifts: Array(32).fill("OFF") }] })), false);
+  assert.equal(days.at(-1).isoDate, "2026-12-03");
+  assert.equal(validRoster(roster({ days, employees: [{ name: "কর্মী A", shifts: Array(33).fill("OFF") }] })), true);
+});
+
+test("rejects rosters longer than the maximum weekly extension", () => {
+  const days = Array.from({ length: 38 }, (_, index) => {
+    const date = new Date(Date.UTC(2026, 10, index + 1));
+    const numeric = String(date.getUTCDate()).replace(/[0-9]/g, d => "০১২৩৪৫৬৭৮৯"[Number(d)]);
+    const weekday = ["রবিবার", "সোমবার", "মঙ্গলবার", "বুধবার", "বৃহস্পতিবার", "শুক্রবার", "শনিবার"][date.getUTCDay()];
+    return { date: numeric, weekday, isoDate: date.toISOString().slice(0, 10) };
+  });
+  assert.equal(validRoster(roster({ days, employees: [{ name: "কর্মী A", shifts: Array(38).fill("OFF") }] })), false);
 });
 
 test("rejects a visible date label that differs from the ISO date", () => {
