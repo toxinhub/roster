@@ -337,6 +337,32 @@ function validRoster(data) {
   if (data.updatedAt != null && (typeof data.updatedAt !== "string" || data.updatedAt.length > 100)) return false;
   return true;
 }
+function withWeekSpillover(data) {
+  if (!data || !Array.isArray(data.days) || !data.days.length) return data;
+  const firstMonth = data.days[0].isoDate.slice(0, 7);
+  const last = data.days[data.days.length - 1];
+  if (last.isoDate.slice(0, 7) !== firstMonth) return data;
+  const [year, month, day] = last.isoDate.split("-").map(Number);
+  const monthEnd = new Date(Date.UTC(year, month, 0));
+  if (day !== monthEnd.getUTCDate()) return data;
+  const extraDays = (4 - monthEnd.getUTCDay() + 7) % 7;
+  if (!extraDays) return data;
+  const weekdays = ["রবিবার", "সোমবার", "মঙ্গলবার", "বুধবার", "বৃহস্পতিবার", "শুক্রবার", "শনিবার"];
+  const toBangla = value => String(value).replace(/[0-9]/g, digit => "০১২৩৪৫৬৭৮৯"[Number(digit)]);
+  const nextDays = Array.from({ length: extraDays }, (_, index) => {
+    const date = new Date(Date.UTC(year, month - 1, day + index + 1));
+    return { date: toBangla(date.getUTCDate()), weekday: weekdays[date.getUTCDay()], isoDate: date.toISOString().slice(0, 10) };
+  });
+  return {
+    ...data,
+    days: [...data.days, ...nextDays],
+    employees: (data.employees || []).map(employee => ({
+      ...employee,
+      shifts: [...(Array.isArray(employee.shifts) ? employee.shifts : []), ...Array(extraDays).fill("OFF")]
+    }))
+  };
+}
+
 async function handler(request, env) {
   const url = new URL(request.url);
   const path = url.pathname;
@@ -405,7 +431,7 @@ async function handler(request, env) {
     if (!await requireRole(request, env, store, "site")) return json({ error: "AUTH_REQUIRED" }, 401);
     const raw = await store.get("schedule");
     if (!raw) return json({ error: "ROSTER_NOT_SEEDED" }, 503);
-    try { return json(JSON.parse(raw)); } catch { return json({ error: "ROSTER_INVALID" }, 503); }
+    try { return json(withWeekSpillover(JSON.parse(raw))); } catch { return json({ error: "ROSTER_INVALID" }, 503); }
   }
   if (path === "/api/archives" && request.method === "GET") {
     if (!await requireRole(request, env, store, "site")) return json({ error: "AUTH_REQUIRED" }, 401);
