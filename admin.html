@@ -1327,6 +1327,11 @@ body.admin-page.ink-mode .editor-skeleton::after{
       const weekdays = ['রবিবার','সোমবার','মঙ্গলবার','বুধবার','বৃহস্পতিবার','শুক্রবার','শনিবার'];
       const toBangla = n => String(n).replace(/0/g,'০').replace(/1/g,'১').replace(/2/g,'২').replace(/3/g,'৩').replace(/4/g,'৪').replace(/5/g,'৫').replace(/6/g,'৬').replace(/7/g,'৭').replace(/8/g,'৮').replace(/9/g,'৯');
       const daysInMonth = new Date(Date.UTC(year, month, 0)).getUTCDate();
+      const lastWeekday = new Date(Date.UTC(year, month - 1, daysInMonth)).getUTCDay();
+      // Extend the month through Thursday so the final Friday–Thursday
+      // operational week is never cut off by a calendar-month boundary.
+      const spilloverDays = (4 - lastWeekday + 7) % 7;
+      const totalRosterDays = daysInMonth + spilloverDays;
       const oldDays = Array.isArray(S.days) ? S.days : [];
       const oldEmployees = Array.isArray(S.employees) ? S.employees : [];
 
@@ -1358,7 +1363,7 @@ body.admin-page.ink-mode .editor-skeleton::after{
       });
 
       S.month = monthName;
-      S.days = Array.from({length:daysInMonth}, (_,i) => {
+      S.days = Array.from({length:totalRosterDays}, (_,i) => {
         const day = i + 1;
         const isoDate = year + '-' + String(month).padStart(2,'0') + '-' + String(day).padStart(2,'0');
         const date = new Date(Date.UTC(year, month - 1, day));
@@ -1378,9 +1383,9 @@ body.admin-page.ink-mode .editor-skeleton::after{
       $('monthHead').textContent = monthName;
       render();
       markDirty();
-      toast(oldDays.length === daysInMonth
-        ? 'মাস ও সাল অনুযায়ী তারিখ আপডেট হয়েছে'
-        : daysInMonth + ' দিনের রোস্টার তৈরি হয়েছে');
+      toast(spilloverDays
+        ? daysInMonth + ' দিনের মাস + পরবর্তী মাসের ' + spilloverDays + ' দিন যুক্ত হয়েছে'
+        : 'মাস ও সাল অনুযায়ী সম্পূর্ণ সপ্তাহের রোস্টার আপডেট হয়েছে');
     }
 
     function setPicker() {
@@ -1606,8 +1611,8 @@ body.admin-page.ink-mode .editor-skeleton::after{
     $('monthPicker').onchange = syncMonth;
 
     $('addDay').onclick = () => {
-      if (S.days.length >= 31) {
-        toast('একটি মাসের রোস্টারে সর্বোচ্চ ৩১টি তারিখ রাখা যাবে।', true);
+      if (S.days.length >= 37) {
+        toast('একটি মাসের রোস্টারে সর্বোচ্চ ৩৭টি তারিখ (পরবর্তী মাসের বৃহস্পতিবারসহ) রাখা যাবে।', true);
         return;
       }
       const lastIso = [...S.days].reverse().find(d => {
@@ -1723,16 +1728,24 @@ body.admin-page.ink-mode .editor-skeleton::after{
       if(saving||!S)return;S.month=$('month').value.trim();
       const names=S.employees.map(emp=>String(emp.name||'').trim()),normalizedNames=names.map(name=>name.toLocaleLowerCase());
       if(!S.month||S.month.length>80){toast('রোস্টারের শিরোনাম ১–৮০ অক্ষরের মধ্যে হতে হবে।',true);return;}
-      if(!Array.isArray(S.days)||S.days.length<1||S.days.length>31){toast('রোস্টারে ১ থেকে ৩১টি তারিখ থাকতে হবে।',true);return;}
+      if(!Array.isArray(S.days)||S.days.length<1||S.days.length>37){toast('রোস্টারে ১ থেকে ৩৭টি তারিখ থাকতে হবে।',true);return;}
       if(S.employees.length>100){toast('একটি রোস্টারে সর্বোচ্চ ১০০ জন কর্মী রাখা যাবে।',true);return;}
       if(names.some(name=>!name||name.length>80)){toast('প্রতিটি কর্মীর নাম ১–৮০ অক্ষরের মধ্যে হতে হবে।',true);return;}
       if(new Set(normalizedNames).size!==normalizedNames.length){toast('প্রতিটি কর্মীর নাম আলাদা হতে হবে।',true);return;}
       const rosterMonth=S.days[0]?.isoDate?.slice(0,7),seenDates=new Set();let previousDate='';
       const invalidDates=!rosterMonth||S.days.some(day=>{const iso=String(day?.isoDate||'');
-        if(!/^\d{4}-\d{2}-\d{2}$/.test(iso)||iso.slice(0,7)!==rosterMonth||seenDates.has(iso)||(previousDate&&iso<=previousDate))return true;
+        if(!/^\d{4}-\d{2}-\d{2}$/.test(iso)||seenDates.has(iso)||(previousDate&&iso<=previousDate))return true;
         const parsed=new Date(iso+'T00:00:00.000Z');if(!Number.isFinite(parsed.getTime())||parsed.toISOString().slice(0,10)!==iso)return true;
+        const [ry,rm]=rosterMonth.split('-').map(Number);
+        const nextMonthDate=new Date(Date.UTC(ry,rm,1));
+        const nextMonth=nextMonthDate.getUTCFullYear()+'-'+String(nextMonthDate.getUTCMonth()+1).padStart(2,'0');
+        const dateMonth=iso.slice(0,7);
+        if(dateMonth!==rosterMonth&&dateMonth!==nextMonth)return true;
         seenDates.add(iso);previousDate=iso;return false;});
-      if(invalidDates){toast('তারিখগুলো যাচাই করুন: একই মাসের বৈধ ও ধারাবাহিক ISO তারিখ হতে হবে।',true);return;}
+      const lastRosterDate=S.days[S.days.length-1]?.isoDate;
+      const lastRosterWeekday=lastRosterDate?new Date(lastRosterDate+'T00:00:00.000Z').getUTCDay():-1;
+      const hasNextMonthDays=S.days.some(day=>day.isoDate?.slice(0,7)!==rosterMonth);
+      if(invalidDates||(hasNextMonthDays&&lastRosterWeekday!==4)){toast('তারিখগুলো যাচাই করুন: রোস্টার এক মাস এবং প্রয়োজনে পরবর্তী মাসের বৃহস্পতিবার পর্যন্ত হতে পারবে।',true);return;}
       const allowedShifts=new Set(Object.keys(S.shiftTypes||{}));
       if(S.employees.some(emp=>!Array.isArray(emp.shifts)||emp.shifts.length!==S.days.length||emp.shifts.some(code=>!allowedShifts.has(code)))){toast('এক বা একাধিক কর্মীর Shift ডেটা অসম্পূর্ণ বা অবৈধ।',true);return;}
       saving=true;const saveButton=$('save');saveButton.disabled=true;saveButton.textContent='সংরক্ষণ হচ্ছে…';S.updatedAt=new Date().toISOString();
