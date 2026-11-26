@@ -46,7 +46,7 @@ function loadWeekSpillover() {
   const end = workerSource.indexOf("async function handler", start);
   assert.ok(start >= 0 && end > start, "withWeekSpillover helper must exist in Worker source");
   const context = {};
-  vm.runInNewContext(workerSource.slice(start, end) + "\\nthis.withWeekSpillover = withWeekSpillover;", context);
+  vm.runInNewContext(workerSource.slice(start, end) + "\nthis.withWeekSpillover = withWeekSpillover;", context);
   return context.withWeekSpillover;
 }
 const withWeekSpillover = loadWeekSpillover();
