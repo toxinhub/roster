@@ -277,7 +277,7 @@ async function clearFailedAttempts(request, env) {
 function validRoster(data) {
   if (!data || typeof data !== "object" || Array.isArray(data)) return false;
   if (typeof data.month !== "string" || !data.month.trim() || data.month.length > 80) return false;
-  if (!Array.isArray(data.days) || data.days.length < 1 || data.days.length > 31) return false;
+  if (!Array.isArray(data.days) || data.days.length < 1 || data.days.length > 37) return false;
   if (!Array.isArray(data.employees) || data.employees.length > 100) return false;
   if (!data.shiftTypes || typeof data.shiftTypes !== "object" || Array.isArray(data.shiftTypes)) return false;
 
@@ -305,10 +305,22 @@ function validRoster(data) {
     const weekdays = ["রবিবার", "সোমবার", "মঙ্গলবার", "বুধবার", "বৃহস্পতিবার", "শুক্রবার", "শনিবার"];
     if (!Number.isInteger(numericDate) || numericDate !== parsed.getUTCDate()) return false;
     if (day.weekday !== weekdays[parsed.getUTCDay()]) return false;
-    if (dates.size && day.isoDate.slice(0, 7) !== previousDate.slice(0, 7)) return false;
+    const rosterMonth = data.days[0].isoDate.slice(0, 7);
+    const [rosterYear, rosterMonthNumber] = rosterMonth.split("-").map(Number);
+    const nextMonthDate = new Date(Date.UTC(rosterYear, rosterMonthNumber, 1));
+    const nextMonth = nextMonthDate.getUTCFullYear() + "-" + String(nextMonthDate.getUTCMonth() + 1).padStart(2, "0");
+    const dateMonth = day.isoDate.slice(0, 7);
+    if (dateMonth !== rosterMonth && dateMonth !== nextMonth) return false;
     if (dates.has(day.isoDate) || (previousDate && day.isoDate <= previousDate)) return false;
     dates.add(day.isoDate);
     previousDate = day.isoDate;
+  }
+
+  const rosterMonth = data.days[0].isoDate.slice(0, 7);
+  const hasNextMonthDays = data.days.some(day => day.isoDate.slice(0, 7) !== rosterMonth);
+  if (hasNextMonthDays) {
+    const lastDay = new Date(data.days[data.days.length - 1].isoDate + "T00:00:00.000Z");
+    if (lastDay.getUTCDay() !== 4) return false;
   }
 
   const names = new Set();
