@@ -286,6 +286,7 @@ function render(){
     return '<div class="day-head '+(isToday?'is-today ':'')+(weekStart?'week-start ':'')+(weekEnd?'week-end':'')+'" data-iso="'+esc(d.isoDate)+'">'+
       '<span>'+esc(d.weekday||'')+'</span>'+
       '<strong>'+esc(d.date||'')+'</strong>'+
+      (d.isoDate.slice(0,7)!==days[0]?.isoDate?.slice(0,7)?'<small class="month-spillover-label">'+esc(monthLabel(d.isoDate.slice(0,7)))+'</small>':'')+
       (isToday?'<em>আজ</em>':'')+
     '</div>';
   }).join('');
