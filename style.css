@@ -7447,3 +7447,6 @@ html body .legend .today-duty-indicator i:nth-child(3){animation-delay:.56s;}
       repeating-linear-gradient(to right,transparent 0 77px,#C1BEB5 77px 78px) 88px 0/calc(100% - 88px) 100% repeat-x;
   }
 }
+
+/* Distinguish dates carried into the next calendar month. */
+.month-spillover-label{display:block;margin-top:2px;font-size:9px;font-weight:650;line-height:1.1;opacity:.78;letter-spacing:0}
